@@ -16,9 +16,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.masuta.gogreat.presentation.auth.SignInScreen
 import com.masuta.gogreat.presentation.launch_training.LaunchTrainingScreen
 import com.masuta.gogreat.presentation.main.MainScreen
 import com.masuta.gogreat.presentation.new_training.NewTrainingScreen
@@ -80,7 +82,7 @@ fun Navigation(items: List<BottomNavigationItem>) {
                 }
             }
         ) {
-            NavHost(navController = navController, startDestination = "main") {
+            NavHost(navController = navController, startDestination = "sign-in") {
                 composable(route = "main") {
                     MainScreen()
                 }
@@ -92,6 +94,9 @@ fun Navigation(items: List<BottomNavigationItem>) {
                 }
                 composable(route = "profile") {
                     ProfileScreen()
+                }
+                composable(route = "sign-in") {
+                    SignInScreen(viewModel = viewModel(), navController = navController)
                 }
             }
         }
