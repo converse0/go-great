@@ -56,7 +56,7 @@ fun SignUpScreen(viewModel: SignUpViewModel, navController: NavHostController) {
 
 @Composable
 fun SignUpForm(viewModel: SignUpViewModel, navController: NavHostController) {
-//    val context = LocalContext.current
+    val context = LocalContext.current
 
     var username by remember { mutableStateOf("") }
     Text(
@@ -145,7 +145,19 @@ fun SignUpForm(viewModel: SignUpViewModel, navController: NavHostController) {
             CoroutineScope(Dispatchers.Main).launch {
                 val resp = viewModel.signUp(username, email,password,passwordConfirm)
                 if (resp) {
-                    navController.navigate("sign-in")
+                    val res = viewModel.signIn(User(email = email, password = password))
+                    if (res["status"] as Boolean) {
+                        viewModel.setToken(context = context, token = res["loginResponse"] as LoginResponse?)
+                        navController.navigate("about")
+                    } else {
+                        res["message"]?.let {
+                            Toast.makeText(
+                                context,
+                                it as String,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
                 }
             }
         },

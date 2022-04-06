@@ -24,6 +24,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.masuta.gogreat.domain.model.refreshUserToken
 import com.masuta.gogreat.domain.model.userToken
+import com.masuta.gogreat.presentation.auth.AboutScreen
 import com.masuta.gogreat.presentation.auth.LaunchScreen
 import com.masuta.gogreat.presentation.auth.SignInScreen
 import com.masuta.gogreat.presentation.auth.SignUpScreen
@@ -135,6 +136,9 @@ fun Navigation(items: List<BottomNavigationItem>) {
                 }
                 composable(route = "launch-screen") {
                     LaunchScreen(navController = navController)
+                }
+                composable(route = "about") {
+                    AboutScreen(viewModel = viewModel(), navController = navController)
                 }
             }
         }

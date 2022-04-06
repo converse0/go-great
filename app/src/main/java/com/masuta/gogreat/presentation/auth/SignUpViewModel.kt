@@ -2,6 +2,7 @@ package com.masuta.gogreat.presentation.auth
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.masuta.gogreat.domain.model.LoginResponse
 import com.masuta.gogreat.domain.model.User
 import com.masuta.gogreat.domain.use_case.Authorization
 import kotlinx.coroutines.launch
@@ -40,7 +41,6 @@ class SignUpViewModel: ViewModel(){
     }
 
 
-
    suspend fun signUp(username:String?, email: String?, password: String?, passwordConfirm: String?): Boolean {
         if (checkUsername(username) &&
             checkEmail(email) &&
@@ -58,4 +58,19 @@ class SignUpViewModel: ViewModel(){
        return false
 
    }
+
+    //
+
+    suspend fun signIn(user: User): Map<String, Any?> {
+        return authorization.login(user)
+    }
+
+    fun setToken(context: Context, token: LoginResponse?) {
+        val sharedPref = context.getSharedPreferences("user", Context.MODE_PRIVATE)
+        val editor = sharedPref.edit()
+        editor.putString("accessToken", token!!.accessToken)
+        editor.putString("refreshToken", token.refreshToken)
+
+        editor.apply()
+    }
 }
