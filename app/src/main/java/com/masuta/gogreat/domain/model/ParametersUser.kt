@@ -1,5 +1,6 @@
 package com.masuta.gogreat.domain.model
 
+@kotlinx.serialization.Serializable
 data class ParametersUser(
     val activity: UserActivity = UserActivity.BASIC,
     val age: Int,

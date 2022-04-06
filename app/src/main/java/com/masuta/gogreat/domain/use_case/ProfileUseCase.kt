@@ -32,24 +32,29 @@ class ProfileUseCase {
             }
 
             install(HttpTimeout) {
-                requestTimeoutMillis = 5000
-                connectTimeoutMillis = 5000
-                socketTimeoutMillis = 5000
+                requestTimeoutMillis = 30000
+                connectTimeoutMillis = 30000
+                socketTimeoutMillis = 30000
             }
-            install(Auth) {
-                bearer {
-                    BearerTokens(accessToken = userToken!!, refreshToken = refreshUserToken!!)
-                }
-                // Configure authentication
-            }
+//            install(Auth) {
+//                bearer {
+//                    BearerTokens(accessToken = userToken!!, refreshToken = refreshUserToken!!)
+//                }
+//                // Configure authentication
+//            }
         }
     }
     /** do http request post to url user/params */
     suspend fun updateParameters(params: ParametersUser): String {
+        println("accessToken: ${userToken}")
+        println("refreshToken: ${refreshUserToken}")
         val client = makeClient()
         val response = client
-            .post<String>("https://gogreat.masuta.com/user/parameters") {
+            .post<String>("https://boilerplate-go-trening.herokuapp.com/user/parameters") {
             contentType(ContentType.Application.Json)
+                headers {
+                    append("Authorization", "Bearer ${userToken}")
+                }
             body = params
         }
         return response

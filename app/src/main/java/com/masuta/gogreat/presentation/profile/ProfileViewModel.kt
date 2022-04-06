@@ -11,19 +11,23 @@ import kotlinx.coroutines.launch
 class ProfileViewModel :ViewModel() {
 
     fun setParameters(
-        age: Int,
+        age: Int?,
         weight: Int,
         height: Int,
         desiredWeight: Int,
         timesEat: Int
     ) {
-     val parametersUser = ParametersUser(age = age,
-         weight = weight, height = height,
-         desiredWeight = desiredWeight, eat = timesEat, gender = 1)
-        val pUseCase = ProfileUseCase()
-        viewModelScope.launch {
-           val resp =  pUseCase.updateParameters(parametersUser)
-            println(resp)
+        if (age != null) {
+            val parametersUser = ParametersUser(
+                age = age,
+                weight = weight, height = height,
+                desiredWeight = desiredWeight, eat = timesEat, gender = 1
+            )
+            val pUseCase = ProfileUseCase()
+            viewModelScope.launch {
+                val resp = pUseCase.updateParameters(parametersUser)
+                println(resp)
+            }
         }
     }
 }

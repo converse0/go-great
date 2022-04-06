@@ -75,9 +75,10 @@ fun ProfileSection(viewModel: ProfileViewModel) {
             Spacer(modifier = Modifier.height(20.dp))
             ProfileInfo(timesEat, age, weight, height, desiredWeight)
             Spacer(Modifier.height(40.dp))
+
             TextButton(
                 onClick = {
-                   viewModel.setParameters(age.value.toInt(),
+                   viewModel.setParameters(age.value.toIntOrNull(),
                        weight.value.toInt(),
                        height.value.toInt(),
                        desiredWeight.value.toInt(),
