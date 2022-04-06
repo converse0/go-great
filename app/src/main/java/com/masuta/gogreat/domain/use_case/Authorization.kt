@@ -70,6 +70,7 @@ class Authorization {
             contentType(ContentType.Application.Json)
             body = user
         }
+        println(response.status.description)
         if (response.status.value==201) {
             return true
         }
