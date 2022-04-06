@@ -22,7 +22,8 @@ class ProfileViewModel :ViewModel() {
          desiredWeight = desiredWeight, eat = timesEat, gender = 1)
         val pUseCase = ProfileUseCase()
         viewModelScope.launch {
-            pUseCase.updateParameters(parametersUser)
+           val resp =  pUseCase.updateParameters(parametersUser)
+            println(resp)
         }
     }
 }
