@@ -134,6 +134,7 @@ fun SignInForm(viewModel: SignInViewModel, navController: NavHostController) {
             CoroutineScope(Dispatchers.Main).launch {
                 val resp = viewModel.signIn(user)
                 if(resp["status"] as Boolean){
+
                     viewModel.setToken(context = context, token = resp["loginResponse"] as LoginResponse?)
                     navController.navigate("main")
                 } else {
