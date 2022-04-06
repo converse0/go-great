@@ -1,32 +1,34 @@
 package com.masuta.gogreat.presentation.profile
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.masuta.gogreat.R
+import androidx.compose.ui.unit.sp
 import com.masuta.gogreat.presentation.components.DropdownDemo
+import com.masuta.gogreat.presentation.ui.theme.SportTheme
 
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(viewModel: ProfileViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -34,87 +36,260 @@ fun ProfileScreen() {
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth()
         ) {
             IconButton(onClick = { /*TODO*/ }) {
                 Icon(imageVector = Icons.Default.KeyboardArrowLeft, contentDescription = "Back")
             }
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(imageVector = Icons.Default.Settings, contentDescription = "Settings")
-            }
+            Text(
+                text = "Profile",
+                style = MaterialTheme.typography.h4,
+                modifier = Modifier.padding(start = 8.dp)
+            )
         }
         Spacer(modifier = Modifier.height(12.dp))
-        ProfileSection()
+        ProfileSection(viewModel)
     }
 }
 
 @Composable
-fun ProfileSection() {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
-        contentAlignment = Alignment.TopCenter
+fun ProfileSection(viewModel: ProfileViewModel) {
+
+    val timesEat = remember{ mutableStateOf("2-3 times a day") }
+    val age = remember{ mutableStateOf("25") }
+    val weight = remember{ mutableStateOf("70") }
+    val height = remember{ mutableStateOf("170") }
+    val desiredWeight = remember{ mutableStateOf("70") }
+
+    LazyColumn(
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)
     ) {
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 75.dp, start = 8.dp, end = 8.dp),
-            elevation = 4.dp,
-            shape = RoundedCornerShape(16.dp),
-        ) {
-            Column(
-                modifier = Modifier
-                    .padding(top = 75.dp, end = 8.dp, start = 8.dp, bottom = 8.dp),
+        items(1) {
+            ProfileAvatar()
+            Spacer(modifier = Modifier.height(10.dp))
+            Text(
+                text = "Maria",
+                style = MaterialTheme.typography.h5,
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(modifier = Modifier.height(20.dp))
+            ProfileInfo(timesEat, age, weight, height, desiredWeight)
+            Spacer(Modifier.height(40.dp))
+            TextButton(
+                onClick = {
+                   viewModel.setParameters(age.value.toInt(),
+                       weight.value.toInt(),
+                       height.value.toInt(),
+                       desiredWeight.value.toInt(),
+                       timesEat.value.toInt())
+                },
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray),
+                modifier = Modifier.fillMaxWidth().padding(bottom = 60.dp)
             ) {
-                Text(
-                    text = "UserName",
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.h5,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                )
-                Divider()
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceAround,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                ) {
-                    ProfileInfo(title = "Height(sm)", info = "199")
-                    ProfileInfo(title = "Sex", info = "Male")
-                    ProfileInfo(title = "Weight(kg)", info = "88.7")
-                }
+                Text(text = "Save", color = Color.White, modifier = Modifier.padding(vertical = 16.dp))
             }
         }
-        ProfileAvatar(
-            image = R.drawable.avatar_male
+    }
+}
+
+@Composable
+fun ProfileInfo(timesEat: MutableState<String>, age: MutableState<String>, weight: MutableState<String>, height: MutableState<String>, desiredWeight: MutableState<String>) {
+
+
+
+    Column(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Text(
+            text = "Gender",
+            style = MaterialTheme.typography.body1
+        )
+        Spacer(Modifier.height(10.dp))
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceAround,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            /* CheckBox */
+        }
+        Spacer(Modifier.height(10.dp))
+        Text(
+            text = "Age",
+            style = MaterialTheme.typography.body1
+        )
+        OutlinedTextField(
+            value = age.value,
+            onValueChange = {age.value = it},
+            modifier = Modifier.fillMaxWidth()
+                .onFocusChanged { focused ->
+                    if (focused.isFocused) {
+                        age.value = ""
+                    }},
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+        )
+        Spacer(Modifier.height(10.dp))
+        Text(text = "Weight")
+        OutlinedTextField(
+            value = weight.value,
+            onValueChange = {weight.value = it},
+            modifier = Modifier.fillMaxWidth()
+                .onFocusChanged { focused ->
+                    if (focused.isFocused) {
+                        weight.value = ""
+                    }},
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+        )
+        Spacer(Modifier.height(10.dp))
+        Text(text = "Height")
+        OutlinedTextField(
+            value = height.value,
+            onValueChange = {height.value = it},
+            modifier = Modifier.fillMaxWidth()
+                .onFocusChanged { focused ->
+                if (focused.isFocused) {
+                    height.value = ""
+                }},
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+        )
+        Spacer(Modifier.height(20.dp))
+        Text(
+            text = "Physical activity",
+            style = MaterialTheme.typography.body1
+        )
+        Spacer(Modifier.height(20.dp))
+        LineSelectPoint()
+        Spacer(Modifier.height(20.dp))
+        Text(
+            text = "Physical activity",
+            style = MaterialTheme.typography.body1
+        )
+        Spacer(Modifier.height(20.dp))
+        LineSelectPoint()
+        Spacer(Modifier.height(20.dp))
+        Text(
+            text = "How often do you prefer to eat?",
+            style = MaterialTheme.typography.body1
+        )
+        OutlinedTextField(
+            value = timesEat.value,
+            onValueChange = {timesEat.value = it},
+            modifier = Modifier.fillMaxWidth().onFocusChanged { focused ->
+                if (focused.isFocused) {
+                    timesEat.value = ""
+                }
+            },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+        )
+        Spacer(Modifier.height(10.dp))
+        Text(
+            text = "Desired weight",
+            style = MaterialTheme.typography.body1
+        )
+        OutlinedTextField(
+            value = desiredWeight.value,
+            onValueChange = {desiredWeight.value = it},
+            modifier = Modifier.fillMaxWidth().onFocusChanged { focused ->
+                if (focused.isFocused) {
+                    desiredWeight.value = ""
+                }
+            }
         )
     }
 }
 
 @Composable
-fun ProfileAvatar(
-    image: Int
+fun LineSelectPoint() {
+    Column(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Divider(
+                color = Color.Gray
+            )
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(20.dp)
+                        .clip(CircleShape)
+                        .background(color = Color.DarkGray)
+                )
+                Box(
+                    modifier = Modifier
+                        .size(10.dp)
+                        .clip(CircleShape)
+                        .background(color = Color.Gray)
+                )
+                Box(
+                    modifier = Modifier
+                        .size(10.dp)
+                        .clip(CircleShape)
+                        .background(color = Color.Gray)
+                )
+                Box(
+                    modifier = Modifier
+                        .size(10.dp)
+                        .clip(CircleShape)
+                        .background(color = Color.Gray)
+                )
+            }
+        }
+        Spacer(Modifier.height(10.dp))
+        Card(
+            backgroundColor = Color.Gray,
+            shape = RoundedCornerShape(14.dp),
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.padding(horizontal = 40.dp, vertical = 10.dp)
+            ) {
+                Text(text = "Basic", fontSize = 14.sp)
+                Text(text = "No Activity", fontSize = 12.sp)
+            }
+        }
+    }
+}
+
+
+@Composable
+fun ProfileAvatar() {
+    Box(
+        contentAlignment = Alignment.TopCenter,
+    ) {
+        Box(
+            modifier = Modifier
+                .size(150.dp)
+                .clip(shape = CircleShape)
+                .background(color = Color.Gray)
+        )
+        ChangeProfileAvatarButton(modifier = Modifier.align(Alignment.BottomEnd))
+    }
+}
+
+@Composable
+fun ChangeProfileAvatarButton(
+    modifier: Modifier
 ) {
     Box(
-        modifier = Modifier
-            .size(150.dp)
-            .background(color = Color.White)
-            .padding(8.dp)
-    ) {
-        Image(
-            painter = painterResource(id = image),
-            contentDescription = "Avatar Female",
-            modifier = Modifier
-                .fillMaxSize()
-                .clip(CircleShape)
-                .background(color = Color.Transparent)
-                .border(width = 2.dp, color = Color.LightGray, shape = CircleShape)
-        )
+        contentAlignment = Alignment.TopCenter,
+        modifier = modifier
+            .size(50.dp)
+            .clip(CircleShape)
+            .border(width = 1.dp, color = Color.Black, shape = CircleShape)
+    ){
+        IconButton(onClick = { /*TODO*/ }) {
+            Icon(
+                imageVector = Icons.Default.Create,
+                contentDescription = null,
+                modifier = Modifier.padding(4.dp)
+            )
+        }
     }
 }
 
@@ -259,5 +434,13 @@ fun MessageList() {
 
         }
 
+    }
+}
+
+@Preview
+@Composable
+fun ProfilePreview() {
+    SportTheme {
+       // ProfileScreen()
     }
 }

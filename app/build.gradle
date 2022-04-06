@@ -87,6 +87,9 @@ dependencies {
 //    implementation "io.ktor:ktor-client-content-negotiation:0.0.1"
 
 
+    // SharedPreferences
+    implementation 'androidx.preference:preference-ktx:1.2.0'
+
     //Dagger - Hilt
     implementation "com.google.dagger:hilt-android:2.40.5"
     kapt "com.google.dagger:hilt-android-compiler:2.40.5"

@@ -1,5 +1,6 @@
 package com.masuta.gogreat.presentation.auth
 
+import android.content.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.OutlinedButton
@@ -7,6 +8,7 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import com.masuta.gogreat.domain.model.User
 import kotlinx.coroutines.CoroutineScope
@@ -25,6 +27,8 @@ fun SignInScreen(viewModel: SignInViewModel, navController: NavHostController) {
 
 @Composable
 fun SignInForm(viewModel: SignInViewModel, navController: NavHostController) {
+    val context = LocalContext.current
+
     var email by remember { mutableStateOf("") }
     OutlinedTextField(value = email, onValueChange ={email = it} )
     var password by remember { mutableStateOf("") }
@@ -32,7 +36,9 @@ fun SignInForm(viewModel: SignInViewModel, navController: NavHostController) {
     OutlinedButton(onClick = {
         val user = User(email=email, password=password)
         CoroutineScope(Dispatchers.Main).launch {
-            if(viewModel.signIn(user)){
+            val resp = viewModel.signIn(user)
+            if(resp.first){
+                viewModel.setToken(context = context, token = resp.second)
                 navController.navigate("main")
             }
         }

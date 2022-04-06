@@ -1,5 +1,6 @@
 package com.masuta.gogreat.presentation
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -15,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
@@ -45,6 +47,19 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+}
+
+fun getToken(context: Context): String {
+    val sharedPref = context.getSharedPreferences("user", Context.MODE_PRIVATE)
+    return sharedPref.getString("token", "")!!
+}
+
+fun choseStartScreen(context: Context): String {
+       val token = getToken(context)
+    if (token.isEmpty()) {
+        return "sign-in"
+    }
+    return "main"
 }
 
 @Composable
@@ -82,7 +97,7 @@ fun Navigation(items: List<BottomNavigationItem>) {
                 }
             }
         ) {
-            NavHost(navController = navController, startDestination = "sign-in") {
+            NavHost(navController = navController, startDestination =choseStartScreen(LocalContext.current)) {
                 composable(route = "main") {
                     MainScreen()
                 }
