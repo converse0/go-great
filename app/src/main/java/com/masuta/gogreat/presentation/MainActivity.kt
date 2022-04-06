@@ -108,7 +108,7 @@ fun Navigation(items: List<BottomNavigationItem>) {
                     LaunchTrainingScreen()
                 }
                 composable(route = "profile") {
-                    ProfileScreen()
+                    ProfileScreen(viewModel = viewModel())
                 }
                 composable(route = "sign-in") {
                     SignInScreen(viewModel = viewModel(), navController = navController)
