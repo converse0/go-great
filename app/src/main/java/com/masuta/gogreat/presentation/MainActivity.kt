@@ -110,7 +110,11 @@ fun Navigation(items: List<BottomNavigationItem>) {
                 }
             }
         ) {
-            NavHost(navController = navController, startDestination =choseStartScreen(LocalContext.current)) {
+            NavHost(
+                navController = navController,
+//                startDestination = choseStartScreen(LocalContext.current)
+                startDestination = "launch-screen"
+            ) {
                 composable(route = "main") {
                     MainScreen()
                 }

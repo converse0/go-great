@@ -10,6 +10,14 @@ import kotlinx.coroutines.launch
 class SignUpViewModel: ViewModel(){
     private val authorization = Authorization()
 
+    private fun checkUsername(username: String?): Boolean {
+        return when(username) {
+            "" -> false
+            null -> false
+            else -> true
+        }
+    }
+
     private fun checkEmail(email: String?): Boolean {
         return when (email) {
             "" -> false
@@ -33,12 +41,13 @@ class SignUpViewModel: ViewModel(){
 
 
 
-   suspend fun signUp(email: String?, password: String?, passwordConfirm: String?): Boolean {
-        if (checkEmail(email) &&
+   suspend fun signUp(username:String?, email: String?, password: String?, passwordConfirm: String?): Boolean {
+        if (checkUsername(username) &&
+            checkEmail(email) &&
             checkPassword(password) &&
             checkPasswordConfirm(password,
                 passwordConfirm)) {
-            val user = User(email!!, password!!)
+            val user = User(username!!, email!!, password!!)
 
                 val resp = authorization.signup(user)
                 if(resp) {

@@ -50,7 +50,7 @@ fun SignInScreen(
         ) {
             IconButton(
                 onClick = {
-                // navController.navigate("launch-screen")
+                    navController.navigate("launch-screen")
                 }
             ) {
                 Icon(imageVector = Icons.Default.KeyboardArrowLeft, contentDescription = "Back")
@@ -110,10 +110,12 @@ fun SignInForm(viewModel: SignInViewModel, navController: NavHostController) {
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier.fillMaxWidth()
     ) {
+        var checked by remember { mutableStateOf(false) }
+
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Checkbox(checked = false, onCheckedChange = {})
+            Checkbox(checked = checked, onCheckedChange = { checked = !checked })
             Text(
                 text = "Remember me"
             )
