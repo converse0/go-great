@@ -1,6 +1,7 @@
 package com.masuta.gogreat.presentation.auth
 
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -25,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.masuta.gogreat.domain.model.LoginResponse
 import com.masuta.gogreat.domain.model.User
 import com.masuta.gogreat.presentation.ui.theme.SportTheme
 import kotlinx.coroutines.CoroutineScope
@@ -129,9 +131,17 @@ fun SignInForm(viewModel: SignInViewModel, navController: NavHostController) {
             val user = User(email=email, password=password)
             CoroutineScope(Dispatchers.Main).launch {
                 val resp = viewModel.signIn(user)
-                if(resp.first){
-                    viewModel.setToken(context = context, token = resp.second)
+                if(resp["status"] as Boolean){
+                    viewModel.setToken(context = context, token = resp["loginResponse"] as LoginResponse?)
                     navController.navigate("main")
+                } else {
+                    resp["message"]?.let {
+                        Toast.makeText(
+                            context,
+                            it as String,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             }
         },

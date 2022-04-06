@@ -24,6 +24,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.masuta.gogreat.domain.model.refreshUserToken
 import com.masuta.gogreat.domain.model.userToken
+import com.masuta.gogreat.presentation.auth.LaunchScreen
 import com.masuta.gogreat.presentation.auth.SignInScreen
 import com.masuta.gogreat.presentation.auth.SignUpScreen
 import com.masuta.gogreat.presentation.launch_training.LaunchTrainingScreen
@@ -127,6 +128,9 @@ fun Navigation(items: List<BottomNavigationItem>) {
                 }
                 composable(route = "sign-up") {
                     SignUpScreen(viewModel = viewModel(), navController = navController)
+                }
+                composable(route = "launch-screen") {
+                    LaunchScreen(navController = navController)
                 }
             }
         }

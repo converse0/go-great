@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -21,7 +22,7 @@ import com.masuta.gogreat.presentation.ui.theme.SportTheme
 
 @Composable
 fun LaunchScreen(
-//    navController: NavHostController
+    navController: NavHostController
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -47,7 +48,7 @@ fun LaunchScreen(
         Spacer(Modifier.height(20.dp))
         TextButton(
             onClick = {
-                // navController.navigate('sign-in')
+                 navController.navigate("sign-in")
             },
             colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray),
             modifier = Modifier.fillMaxWidth()
@@ -57,7 +58,7 @@ fun LaunchScreen(
         Spacer(Modifier.height(20.dp))
         TextButton(
             onClick = {
-                      // navController.navigate('sign-up')
+                navController.navigate("sign-up")
             },
             colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray),
             modifier = Modifier.fillMaxWidth()
@@ -76,6 +77,6 @@ fun LaunchScreen(
 @Composable
 fun LaunchScreenPreview() {
     SportTheme {
-        LaunchScreen()
+        LaunchScreen(navController = NavHostController(LocalContext.current))
     }
 }
