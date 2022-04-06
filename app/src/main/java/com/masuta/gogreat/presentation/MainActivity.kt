@@ -71,7 +71,7 @@ fun choseStartScreen(context: Context): String {
     refreshUserToken = r
 
     if (token.isEmpty()) {
-        return "sign-in"
+        return "launch-screen"
     }
     return "main"
 }
@@ -113,8 +113,7 @@ fun Navigation(items: List<BottomNavigationItem>) {
         ) {
             NavHost(
                 navController = navController,
-//                startDestination = choseStartScreen(LocalContext.current)
-                startDestination = "launch-screen"
+                startDestination = choseStartScreen(LocalContext.current)
             ) {
                 composable(route = "main") {
                     MainScreen()
