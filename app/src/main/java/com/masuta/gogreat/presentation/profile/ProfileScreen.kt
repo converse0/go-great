@@ -15,16 +15,19 @@ import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.masuta.gogreat.presentation.components.DropdownDemo
+import com.masuta.gogreat.presentation.components.InputTextField
 import com.masuta.gogreat.presentation.ui.theme.SportTheme
 
 @Composable
@@ -62,7 +65,9 @@ fun ProfileSection(viewModel: ProfileViewModel) {
     val desiredWeight = remember{ mutableStateOf("70") }
 
     LazyColumn(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp)
     ) {
         items(1) {
             ProfileAvatar()
@@ -85,7 +90,9 @@ fun ProfileSection(viewModel: ProfileViewModel) {
                        timesEat.value.toInt())
                 },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray),
-                modifier = Modifier.fillMaxWidth().padding(bottom = 60.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 60.dp)
             ) {
                 Text(text = "Save", color = Color.White, modifier = Modifier.padding(vertical = 16.dp))
             }
@@ -93,10 +100,11 @@ fun ProfileSection(viewModel: ProfileViewModel) {
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ProfileInfo(timesEat: MutableState<String>, age: MutableState<String>, weight: MutableState<String>, height: MutableState<String>, desiredWeight: MutableState<String>) {
 
-
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -114,43 +122,28 @@ fun ProfileInfo(timesEat: MutableState<String>, age: MutableState<String>, weigh
             /* CheckBox */
         }
         Spacer(Modifier.height(10.dp))
-        Text(
+        InputTextField(
             text = "Age",
-            style = MaterialTheme.typography.body1
-        )
-        OutlinedTextField(
             value = age.value,
-            onValueChange = {age.value = it},
-            modifier = Modifier.fillMaxWidth()
-                .onFocusChanged { focused ->
-                    if (focused.isFocused) {
-                        age.value = ""
-                    }},
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+            keyboardController = keyboardController,
+            keyboardType = KeyboardType.Number,
+            onChangeValue = { age.value = it }
         )
         Spacer(Modifier.height(10.dp))
-        Text(text = "Weight")
-        OutlinedTextField(
+        InputTextField(
+            text = "Weight",
             value = weight.value,
-            onValueChange = {weight.value = it},
-            modifier = Modifier.fillMaxWidth()
-                .onFocusChanged { focused ->
-                    if (focused.isFocused) {
-                        weight.value = ""
-                    }},
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+            keyboardController = keyboardController,
+            keyboardType = KeyboardType.Number,
+            onChangeValue = { weight.value = it }
         )
         Spacer(Modifier.height(10.dp))
-        Text(text = "Height")
-        OutlinedTextField(
+        InputTextField(
+            text = "Height",
             value = height.value,
-            onValueChange = {height.value = it},
-            modifier = Modifier.fillMaxWidth()
-                .onFocusChanged { focused ->
-                if (focused.isFocused) {
-                    height.value = ""
-                }},
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+            keyboardController = keyboardController,
+            keyboardType = KeyboardType.Number,
+            onChangeValue = { height.value = it }
         )
         Spacer(Modifier.height(20.dp))
         Text(
@@ -167,33 +160,20 @@ fun ProfileInfo(timesEat: MutableState<String>, age: MutableState<String>, weigh
         Spacer(Modifier.height(20.dp))
         LineSelectPoint()
         Spacer(Modifier.height(20.dp))
-        Text(
+        InputTextField(
             text = "How often do you prefer to eat?",
-            style = MaterialTheme.typography.body1
-        )
-        OutlinedTextField(
             value = timesEat.value,
-            onValueChange = {timesEat.value = it},
-            modifier = Modifier.fillMaxWidth().onFocusChanged { focused ->
-                if (focused.isFocused) {
-                    timesEat.value = ""
-                }
-            },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+            keyboardController = keyboardController,
+            keyboardType = KeyboardType.Number,
+            onChangeValue = { timesEat.value = it }
         )
         Spacer(Modifier.height(10.dp))
-        Text(
+        InputTextField(
             text = "Desired weight",
-            style = MaterialTheme.typography.body1
-        )
-        OutlinedTextField(
             value = desiredWeight.value,
-            onValueChange = {desiredWeight.value = it},
-            modifier = Modifier.fillMaxWidth().onFocusChanged { focused ->
-                if (focused.isFocused) {
-                    desiredWeight.value = ""
-                }
-            }
+            keyboardController = keyboardController,
+            keyboardType = KeyboardType.Number,
+            onChangeValue = { desiredWeight.value = it }
         )
     }
 }

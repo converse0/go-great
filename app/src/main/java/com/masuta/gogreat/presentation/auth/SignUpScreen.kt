@@ -8,10 +8,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -19,6 +21,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.masuta.gogreat.domain.model.LoginResponse
 import com.masuta.gogreat.domain.model.User
+import com.masuta.gogreat.presentation.components.InputTextField
 import com.masuta.gogreat.presentation.ui.theme.SportTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -54,80 +57,58 @@ fun SignUpScreen(viewModel: SignUpViewModel, navController: NavHostController) {
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SignUpForm(viewModel: SignUpViewModel, navController: NavHostController) {
     val context = LocalContext.current
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     var username by remember { mutableStateOf("") }
-    Text(
-        text = "Username",
-        style = MaterialTheme.typography.body1,
-        fontWeight = FontWeight.Bold
-    )
-    OutlinedTextField(
+    InputTextField(
+        text = "UserName",
         value = username,
-        onValueChange = { username = it},
-        modifier = Modifier
-            .fillMaxWidth()
-            .onFocusChanged {
-                if (it.isFocused) {
-                    username = ""
-                }
-            }
+        keyboardController = keyboardController,
+        onChangeValue = { username = it},
     )
+//    Text(
+//        text = "Username",
+//        style = MaterialTheme.typography.body1,
+//        fontWeight = FontWeight.Bold
+//    )
+//    OutlinedTextField(
+//        value = username,
+//        onValueChange = { username = it},
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .onFocusChanged {
+//                if (it.isFocused) {
+//                    username = ""
+//                }
+//            }
+//    )
     Spacer(modifier = Modifier.height(16.dp))
     var email by remember { mutableStateOf("") }
-    Text(
+    InputTextField(
         text = "Email",
-        style = MaterialTheme.typography.body1,
-        fontWeight = FontWeight.Bold
-    )
-    OutlinedTextField(
         value = email,
-        onValueChange = { email = it },
-        modifier = Modifier
-            .fillMaxWidth()
-            .onFocusChanged {
-                if (it.isFocused) {
-                    email = ""
-                }
-            }
+        keyboardController = keyboardController,
+        onChangeValue = { email = it},
     )
     Spacer(modifier = Modifier.height(16.dp))
     var password by remember { mutableStateOf("") }
     var passwordConfirm by remember { mutableStateOf("") }
-    Text(
+    InputTextField(
         text = "Password",
-        style = MaterialTheme.typography.body1,
-        fontWeight = FontWeight.Bold
-    )
-    OutlinedTextField(
         value = password,
-        onValueChange = { password = it },
-        modifier = Modifier
-            .fillMaxWidth()
-            .onFocusChanged {
-                if (it.isFocused) {
-                    password = ""
-                }
-            }
+        keyboardController = keyboardController,
+        onChangeValue = { password = it},
     )
     Spacer(modifier = Modifier.height(16.dp))
-    Text(
+    InputTextField(
         text = "Confirm password",
-        style = MaterialTheme.typography.body1,
-        fontWeight = FontWeight.Bold
-    )
-    OutlinedTextField(
         value = passwordConfirm,
-        onValueChange = { passwordConfirm = it },
-        modifier = Modifier
-            .fillMaxWidth()
-            .onFocusChanged {
-                if (it.isFocused) {
-                    passwordConfirm = ""
-                }
-            }
+        keyboardController = keyboardController,
+        onChangeValue = { passwordConfirm = it},
     )
     var checked by remember { mutableStateOf(false) }
     Row(

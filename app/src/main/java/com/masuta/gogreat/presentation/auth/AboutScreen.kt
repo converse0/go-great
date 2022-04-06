@@ -11,15 +11,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.masuta.gogreat.presentation.components.InputTextField
 import com.masuta.gogreat.presentation.profile.LineSelectPoint
 import com.masuta.gogreat.presentation.ui.theme.SportTheme
 
@@ -59,6 +62,7 @@ fun AboutScreen(
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun AboutForm(
     viewModel: AboutViewModel,
@@ -70,6 +74,7 @@ fun AboutForm(
     val timesEat = remember { mutableStateOf("") }
     val desiredWeight = remember { mutableStateOf("") }
 
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     LazyColumn(
         modifier = Modifier.fillMaxWidth()
@@ -92,49 +97,25 @@ fun AboutForm(
                 /* CheckBox */
             }
             Spacer(Modifier.height(10.dp))
-            Text(
+            InputTextField(
                 text = "Age",
-                style = MaterialTheme.typography.body1
-            )
-            OutlinedTextField(
                 value = age.value,
-                onValueChange = { age.value = it },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .onFocusChanged { focused ->
-                        if (focused.isFocused) {
-                            age.value = ""
-                        }
-                    },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                keyboardController = keyboardController,
+                onChangeValue = { age.value = it},
             )
             Spacer(Modifier.height(10.dp))
-            Text(text = "Weight")
-            OutlinedTextField(
+            InputTextField(
+                text = "Weight",
                 value = weight.value,
-                onValueChange = { weight.value = it },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .onFocusChanged { focused ->
-                        if (focused.isFocused) {
-                            weight.value = ""
-                        }
-                    },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                keyboardController = keyboardController,
+                onChangeValue = { weight.value = it},
             )
             Spacer(Modifier.height(10.dp))
-            Text(text = "Height")
-            OutlinedTextField(
+            InputTextField(
+                text = "Height",
                 value = height.value,
-                onValueChange = { height.value = it },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .onFocusChanged { focused ->
-                        if (focused.isFocused) {
-                            height.value = ""
-                        }
-                    },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                keyboardController = keyboardController,
+                onChangeValue = { height.value = it},
             )
             Spacer(Modifier.height(20.dp))
             Text(
@@ -151,37 +132,18 @@ fun AboutForm(
             Spacer(Modifier.height(20.dp))
             LineSelectPoint()
             Spacer(Modifier.height(20.dp))
-            Text(
+            InputTextField(
                 text = "How often do you prefer to eat?",
-                style = MaterialTheme.typography.body1
-            )
-            OutlinedTextField(
                 value = timesEat.value,
-                onValueChange = { timesEat.value = it },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .onFocusChanged { focused ->
-                        if (focused.isFocused) {
-                            timesEat.value = ""
-                        }
-                    },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                keyboardController = keyboardController,
+                onChangeValue = { timesEat.value = it},
             )
             Spacer(Modifier.height(10.dp))
-            Text(
+            InputTextField(
                 text = "Desired weight",
-                style = MaterialTheme.typography.body1
-            )
-            OutlinedTextField(
                 value = desiredWeight.value,
-                onValueChange = { desiredWeight.value = it },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .onFocusChanged { focused ->
-                        if (focused.isFocused) {
-                            desiredWeight.value = ""
-                        }
-                    }
+                keyboardController = keyboardController,
+                onChangeValue = { desiredWeight.value = it},
             )
             TextButton(
                 onClick = {

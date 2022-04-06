@@ -13,12 +13,14 @@ import androidx.compose.material.icons.filled.Facebook
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -28,6 +30,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.masuta.gogreat.domain.model.LoginResponse
 import com.masuta.gogreat.domain.model.User
+import com.masuta.gogreat.presentation.components.InputTextField
 import com.masuta.gogreat.presentation.ui.theme.SportTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -66,44 +69,26 @@ fun SignInScreen(
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SignInForm(viewModel: SignInViewModel, navController: NavHostController) {
     val context = LocalContext.current
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     var email by remember { mutableStateOf("email") }
-    Text(
+    InputTextField(
         text = "Email",
-        style = MaterialTheme.typography.body1,
-        fontWeight = FontWeight.Bold
+        value = email,
+        keyboardController = keyboardController,
+        onChangeValue = { email = it},
     )
-    OutlinedTextField(value = email,
-        modifier = Modifier
-            .fillMaxWidth()
-            .onFocusChanged {
-                if (it.isFocused) {
-                    email = ""
-                }
-            },
-        onValueChange ={ email = it }
-    )
-
     Spacer(modifier = Modifier.height(16.dp))
     var password by remember { mutableStateOf("password") }
-    Text(
+    InputTextField(
         text = "Password",
-        style = MaterialTheme.typography.body1,
-        fontWeight = FontWeight.Bold
-    )
-    OutlinedTextField(
         value = password,
-        onValueChange ={password = it},
-        modifier = Modifier
-            .fillMaxWidth()
-            .onFocusChanged {
-                if (it.isFocused) {
-                    password = ""
-                }
-            }
+        keyboardController = keyboardController,
+        onChangeValue = { password = it},
     )
     Row(
         verticalAlignment = Alignment.CenterVertically,
