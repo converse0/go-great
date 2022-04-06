@@ -22,6 +22,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.masuta.gogreat.domain.model.refreshUserToken
+import com.masuta.gogreat.domain.model.userToken
 import com.masuta.gogreat.presentation.auth.SignInScreen
 import com.masuta.gogreat.presentation.auth.SignUpScreen
 import com.masuta.gogreat.presentation.launch_training.LaunchTrainingScreen
@@ -52,11 +54,20 @@ class MainActivity : ComponentActivity() {
 
 fun getToken(context: Context): String {
     val sharedPref = context.getSharedPreferences("user", Context.MODE_PRIVATE)
-    return sharedPref.getString("token", "")!!
+    return sharedPref.getString("accessToken", "")!!
+}
+
+fun getTokenR(context: Context): String {
+    val sharedPref = context.getSharedPreferences("user", Context.MODE_PRIVATE)
+    return sharedPref.getString("refreshToken", "")!!
 }
 
 fun choseStartScreen(context: Context): String {
        val token = getToken(context)
+    userToken=token
+    val r = getTokenR(context)
+    refreshUserToken = r
+
     if (token.isEmpty()) {
         return "sign-in"
     }

@@ -46,7 +46,7 @@ class Authorization {
     }
 
     /** do http post request /login */
-    suspend fun login(user:User): Pair<Boolean, String> {
+    suspend fun login(user:User): Pair<Boolean, LoginResponse?> {
         val client = makeClient()
 
         val response: Response = client
@@ -57,9 +57,9 @@ class Authorization {
         response.data?.let {
             println(it.accessToken)
 
-            return Pair(true, it.accessToken)
+            return Pair(true, it)
         }
-        return Pair(false, "")
+        return Pair(false, null)
     }
 
     /** do http post request /signup */

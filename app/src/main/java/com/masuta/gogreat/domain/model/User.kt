@@ -26,3 +26,6 @@ data class Response(
     val status: Boolean,
     val data: LoginResponse? = null
 )
+
+var userToken: String? = null
+var refreshUserToken: String? = null
