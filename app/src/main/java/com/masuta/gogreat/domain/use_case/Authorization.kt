@@ -46,7 +46,7 @@ class Authorization {
     }
 
     /** do http post request /login */
-    suspend fun login(user:User): Pair<Boolean, LoginResponse?> {
+    suspend fun login(user:User): Map<String, Any?> {
         val client = makeClient()
 
         val response: Response = client
@@ -54,12 +54,22 @@ class Authorization {
             contentType(ContentType.Application.Json)
             body = user
         }
+
         response.data?.let {
             println(it.accessToken)
 
-            return Pair(true, it)
+            return mapOf<String,Any?>(
+                "status" to response.status,
+                "message" to response.message,
+                "loginResponse" to it
+            )
         }
-        return Pair(false, null)
+        return mapOf<String,Any?>(
+            "status" to response.status,
+            "message" to response.message,
+            "loginResponse" to null
+        )
+
     }
 
     /** do http post request /signup */

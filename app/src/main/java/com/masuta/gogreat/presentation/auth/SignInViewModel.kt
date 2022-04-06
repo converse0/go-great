@@ -10,7 +10,7 @@ class SignInViewModel: ViewModel() {
 
     private val authorization = Authorization()
 
-    suspend fun signIn(user: User): Pair<Boolean, LoginResponse?> {
+    suspend fun signIn(user: User): Map<String, Any?> {
         return authorization.login(user)
     }
 
