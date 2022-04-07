@@ -139,6 +139,12 @@ fun SignUpForm(viewModel: SignUpViewModel, navController: NavHostController) {
                             ).show()
                         }
                     }
+                } else {
+                    Toast.makeText(
+                        context,
+                        "Sign up failed, fill all fields, and enter the same password twice",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         },
