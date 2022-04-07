@@ -145,13 +145,6 @@ fun SignInForm(viewModel: SignInViewModel, navController: NavHostController) {
             modifier = Modifier.padding(vertical = 16.dp)
         )
     }
-    Text(
-        text = "or",
-        textAlign = TextAlign.Center,
-        modifier = Modifier
-            .fillMaxWidth()
-    )
-    SocialItems()
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -166,44 +159,6 @@ fun SignInForm(viewModel: SignInViewModel, navController: NavHostController) {
                     navController.navigate("sign-up")
                 }
         )
-    }
-}
-
-@Composable
-fun SocialItems() {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 40.dp)
-    ) {
-        SocialItem(itemName = "facebook", icon = Icons.Default.Facebook)
-        SocialItem(itemName = "facebook", icon = Icons.Default.Facebook)
-        SocialItem(itemName = "facebook", icon = Icons.Default.Facebook)
-    }
-}
-
-@Composable
-fun SocialItem(
-    itemName: String,
-    icon: ImageVector
-) {
-    IconButton(onClick = { /*TODO*/ }) {
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .size(40.dp)
-                .background(color = Color.Black, shape = CircleShape)
-                .padding(8.dp)
-                .clip(shape = CircleShape)
-        ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = itemName,
-                tint = Color.White
-            )
-        }
     }
 }
 

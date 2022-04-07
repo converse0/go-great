@@ -151,7 +151,7 @@ fun SignUpForm(viewModel: SignUpViewModel, navController: NavHostController) {
         colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 40.dp)
+            .padding(vertical = 40.dp)
     ) {
         Text(
             text = "Sign Up",
@@ -160,7 +160,7 @@ fun SignUpForm(viewModel: SignUpViewModel, navController: NavHostController) {
             modifier = Modifier.padding(vertical = 16.dp)
         )
     }
-    SocialItems()
+
     Text(
         text = "By signing up, you agree to our Privacy Policy"
     )
