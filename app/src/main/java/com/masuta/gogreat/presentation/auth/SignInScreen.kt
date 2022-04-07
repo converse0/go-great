@@ -88,7 +88,7 @@ fun SignInForm(viewModel: SignInViewModel, navController: NavHostController) {
         text = "Password",
         value = password,
         keyboardController = keyboardController,
-        onChangeValue = { password = it},
+        onChangeValue = { password = it },
     )
     Row(
         verticalAlignment = Alignment.CenterVertically,

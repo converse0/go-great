@@ -28,6 +28,8 @@ import com.masuta.gogreat.presentation.auth.AboutScreen
 import com.masuta.gogreat.presentation.auth.LaunchScreen
 import com.masuta.gogreat.presentation.auth.SignInScreen
 import com.masuta.gogreat.presentation.auth.SignUpScreen
+import com.masuta.gogreat.presentation.diet.DietScreen
+import com.masuta.gogreat.presentation.health.HealthScreen
 import com.masuta.gogreat.presentation.launch_training.LaunchTrainingScreen
 import com.masuta.gogreat.presentation.main.MainScreen
 import com.masuta.gogreat.presentation.new_training.NewTrainingScreen
@@ -44,8 +46,8 @@ class MainActivity : ComponentActivity() {
                 Navigation(
                     listOf(
                         BottomNavigationItem(route = "main", icon = Icons.Default.Home),
-                        BottomNavigationItem(route = "new-training", icon = Icons.Default.Add),
-                        BottomNavigationItem(route = "launch-training", icon = Icons.Default.PlayArrow),
+                        BottomNavigationItem(route = "diet", icon = Icons.Default.Add),
+                        BottomNavigationItem(route = "health", icon = Icons.Default.PlayArrow),
                         BottomNavigationItem(route = "profile", icon = Icons.Default.Person)
                     )
                 )
@@ -138,6 +140,12 @@ fun Navigation(items: List<BottomNavigationItem>) {
                 }
                 composable(route = "about") {
                     AboutScreen(viewModel = viewModel(), navController = navController)
+                }
+                composable(route = "diet") {
+                    DietScreen()
+                }
+                composable(route = "health") {
+                    HealthScreen()
                 }
             }
         }
