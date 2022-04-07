@@ -1,5 +1,7 @@
 package com.masuta.gogreat.domain.use_case
 
+import android.provider.ContactsContract.CommonDataKinds.Email
+import com.masuta.gogreat.domain.model.LoginResponse
 import com.masuta.gogreat.domain.model.ParametersUser
 import com.masuta.gogreat.domain.model.refreshUserToken
 import com.masuta.gogreat.domain.model.userToken
@@ -12,6 +14,28 @@ import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
 import io.ktor.http.*
+import kotlinx.serialization.Serializable
+
+@kotlinx.serialization.Serializable
+data class UserProfileResp(val id: String,
+                           val email: String,
+                           val username: String,
+                           var isverified: Boolean)
+
+@Serializable
+data class ResponseProf(
+    val message: String,
+    val status: Boolean,
+    val data: UserProfileResp? = null
+)
+
+@Serializable
+data class ResponseParams(
+    val message: String,
+    val status: Boolean,
+    val data: ParametersUser? = null
+)
+
 
 class ProfileUseCase {
 
@@ -58,5 +82,28 @@ class ProfileUseCase {
             body = params
         }
         return response
+    }
+    /** do http request get to url user/parameters */
+    suspend fun getParameters(): ParametersUser {
+        val client = makeClient()
+
+        val prof = client
+            .get<ResponseProf>("https://boilerplate-go.herokuapp.com/profile") {
+            contentType(ContentType.Application.Json)
+                headers {
+                    append("Authorization", "Bearer ${userToken}")
+                }
+        }
+        println("userToken: ${userToken}")
+        println(prof.data!!.id)
+        val response = client.get<ResponseParams>(
+            "https://boilerplate-go-trening.herokuapp.com/user/parameters?id=${prof.data!!.id}") {
+            contentType(ContentType.Application.Json)
+                headers {
+                    append("Authorization", "Bearer ${userToken}")
+                }
+        }
+        println(response)
+        return response.data!!
     }
 }

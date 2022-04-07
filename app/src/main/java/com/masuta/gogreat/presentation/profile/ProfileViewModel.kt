@@ -30,4 +30,10 @@ class ProfileViewModel :ViewModel() {
             }
         }
     }
+    suspend fun getParameters(): ParametersUser {
+        val pUseCase = ProfileUseCase()
+        val resp = pUseCase.getParameters()
+        println(resp)
+        return resp
+    }
 }

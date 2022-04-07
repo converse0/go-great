@@ -2,10 +2,10 @@ package com.masuta.gogreat.domain.model
 
 @kotlinx.serialization.Serializable
 data class ParametersUser(
-    val activity: UserActivity = UserActivity.BASIC,
+    val activity: String = "Basic",//UserActivity = UserActivity.BASIC,
     val age: Int,
     val desiredWeight: Int,
-    val diet: UserDiet = UserDiet.BALANCED,
+    val diet: String = "Balanced",//UserDiet = UserDiet.BALANCED,
     val eat: Int,
     val gender: Int,
     val height: Int,

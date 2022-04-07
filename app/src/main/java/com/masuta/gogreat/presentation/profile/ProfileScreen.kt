@@ -29,6 +29,8 @@ import androidx.compose.ui.unit.sp
 import com.masuta.gogreat.presentation.components.DropdownDemo
 import com.masuta.gogreat.presentation.components.InputTextField
 import com.masuta.gogreat.presentation.ui.theme.SportTheme
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @Composable
 fun ProfileScreen(viewModel: ProfileViewModel) {
@@ -55,14 +57,25 @@ fun ProfileScreen(viewModel: ProfileViewModel) {
     }
 }
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun ProfileSection(viewModel: ProfileViewModel) {
-
     val timesEat = remember{ mutableStateOf("2-3 times a day") }
     val age = remember{ mutableStateOf("25") }
     val weight = remember{ mutableStateOf("70") }
     val height = remember{ mutableStateOf("170") }
     val desiredWeight = remember{ mutableStateOf("70") }
+    val scope = rememberCoroutineScope()
+    scope.launch {
+        val params = viewModel.getParameters()
+        timesEat.value = params.eat.toString()
+        age.value = params.age.toString()
+        weight.value = params.weight.toString()
+        height.value = params.height.toString()
+        desiredWeight.value = params.desiredWeight.toString()
+    }
+
+
 
     LazyColumn(
         modifier = Modifier
