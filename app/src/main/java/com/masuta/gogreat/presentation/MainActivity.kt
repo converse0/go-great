@@ -118,10 +118,10 @@ fun Navigation(items: List<BottomNavigationItem>) {
                 startDestination = choseStartScreen(LocalContext.current)
             ) {
                 composable(route = "main") {
-                    MainScreen()
+                    MainScreen(navController = navController)
                 }
                 composable(route = "new-training") {
-                    NewTrainingScreen()
+                    NewTrainingScreen(navController = navController)
                 }
                 composable(route = "launch-training") {
                     LaunchTrainingScreen()
@@ -155,14 +155,6 @@ fun Navigation(items: List<BottomNavigationItem>) {
 data class BottomNavigationItem (
     val route: String,
     val icon: ImageVector,
-        )
-
-@Preview
-@Composable
-fun NavigationPreview() {
-    SportTheme {
-        NewTrainingScreen()
-    }
-}
+)
 
 

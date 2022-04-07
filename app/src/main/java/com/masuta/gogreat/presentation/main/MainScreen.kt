@@ -1,6 +1,11 @@
 package com.masuta.gogreat.presentation.main
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -8,10 +13,16 @@ import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import com.masuta.gogreat.domain.model.TrainingExercise
+import com.masuta.gogreat.domain.model.Trening
 import com.masuta.gogreat.presentation.ui.theme.Purple200
 import com.masuta.gogreat.presentation.ui.theme.SportTheme
 import com.masuta.gogreat.presentation.components.DropdownDemo
@@ -19,6 +30,161 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+
+@Composable
+fun MainScreen(
+    navController: NavHostController
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color.White)
+            .padding(20.dp)
+    ) {
+        Text(
+            text = "Workouts",
+            style = MaterialTheme.typography.h4,
+            fontWeight = FontWeight.W400
+        )
+        LazyColumn(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            item {
+                Text(
+                    text = "Create your workout today according to your personal preferences",
+                    style = MaterialTheme.typography.body1,
+                    modifier = Modifier.padding(vertical = 10.dp)
+                )
+                TextButton(
+                    onClick = {
+                         navController.navigate("new-training")
+                    },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    Text(text = "Create new training", color = Color.White, modifier = Modifier.padding(vertical = 16.dp))
+                }
+                WorkoutsSection()
+            }
+        }
+    }
+}
+
+@Composable
+fun WorkoutsSection() {
+    val listTrainings = listOf(
+        Trening(
+            listOf(TrainingExercise(1, "2", "some", "12")),
+            "20",
+            "Dumbbell lifting"
+        ),
+        Trening(
+            listOf(TrainingExercise(1, "2", "some", "12")),
+            "20",
+            "Dumbbell lifting"
+        ),
+        Trening(
+            listOf(TrainingExercise(1, "2", "some", "12")),
+            "20",
+            "Dumbbell lifting"
+        ),
+    )
+
+    if (listTrainings.isNotEmpty()) {
+        Text(
+            text = "My workouts",
+            style = MaterialTheme.typography.h5,
+            fontWeight = FontWeight.W300,
+            modifier = Modifier
+                .padding(vertical = 20.dp)
+        )
+        WorkoutsList(workouts = listTrainings)
+    }
+}
+
+@Composable
+fun WorkoutsList(
+    workouts: List<Trening>
+) {
+    LazyRow() {
+        items(workouts) { workout ->
+            WorkoutItem(workout = workout)
+        }
+    }
+}
+
+@Composable
+fun WorkoutItem(
+    workout: Trening
+) {
+    Card(
+        shape = RoundedCornerShape(16.dp),
+        backgroundColor = Color.Gray,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(200.dp)
+            .padding(horizontal = 20.dp)
+    ) {
+        Column(
+            verticalArrangement = Arrangement.Bottom,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp)
+        ) {
+            Text(
+                text = workout.name,
+                style = MaterialTheme.typography.h5,
+                fontWeight = FontWeight.W700
+            )
+            Spacer(Modifier.height(10.dp))
+            Text(
+                text = "27 March 2017 ${workout.interval} min",
+                style = MaterialTheme.typography.body1,
+                fontWeight = FontWeight.W300
+            )
+        }
+    }
+}
+
+//@Composable
+//fun MainScreen() {
+//    Column(modifier = Modifier.padding(7.dp)) {
+//        Card(
+//            elevation = 12.dp,
+//            modifier = Modifier.fillMaxWidth()
+//        ) {
+//            Row(horizontalArrangement = Arrangement.SpaceAround) {
+//                FormatedText("Running")
+//                FormatedText("2022/05/12")
+//                FormatedText("1h")
+//                IconButton(onClick = { /*TODO*/ }, modifier = Modifier
+//                    .padding(2.dp)
+//                    .padding(start = 50.dp)) {
+//                    Icon(imageVector = Icons.Default.PlayArrow,
+//                        contentDescription = "", tint = Color.Green)
+//                }
+//            }
+//
+//
+//        }
+//        CountDownTraining(120)
+//        var text by remember { mutableStateOf("3467") }
+//
+//        TextField(
+//            value = text,
+//            onValueChange = { text = it },
+//            label = { Text("Label") },
+//            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+//        )
+//
+//        DropdownDemo(
+//            items = listOf("A", "B", "C", "D", "E", "F"),
+//        )
+//
+//    }
+//
+//}
 
 @Composable
 fun FormatedText(text:String) {
@@ -29,48 +195,6 @@ fun FormatedText(text:String) {
         color = Purple200
     )
 }
-
-@Composable
-fun MainScreen() {
-    Column(modifier = Modifier.padding(7.dp)) {
-        Card(
-            elevation = 12.dp,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Row(horizontalArrangement = Arrangement.SpaceAround) {
-                FormatedText("Running")
-                FormatedText("2022/05/12")
-                FormatedText("1h")
-                IconButton(onClick = { /*TODO*/ }, modifier = Modifier
-                    .padding(2.dp)
-                    .padding(start = 50.dp)) {
-                    Icon(imageVector = Icons.Default.PlayArrow,
-                        contentDescription = "", tint = Color.Green)
-                }
-            }
-
-
-        }
-        CountDownTraining(120)
-        var text by remember { mutableStateOf("3467") }
-
-        TextField(
-            value = text,
-            onValueChange = { text = it },
-            label = { Text("Label") },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-        )
-
-        DropdownDemo(
-            items = listOf("A", "B", "C", "D", "E", "F"),
-        )
-
-    }
-
-}
-
-
-
 
 //@Composable
 //fun DropdownDemo() {
@@ -143,19 +267,4 @@ fun CountDownTraining(sec: Int) {
         }
     }
 
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    SportTheme {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colors.background
-        ) {
-            MainScreen()
-        }
-
-    }
 }
