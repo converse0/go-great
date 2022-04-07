@@ -23,9 +23,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.masuta.gogreat.domain.model.UserActivity
+import com.masuta.gogreat.domain.model.UserDiet
 import com.masuta.gogreat.presentation.components.DropdownDemo
 import com.masuta.gogreat.presentation.components.InputTextField
 import com.masuta.gogreat.presentation.ui.theme.SportTheme
@@ -65,6 +69,11 @@ fun ProfileSection(viewModel: ProfileViewModel) {
     val weight = remember{ mutableStateOf("70") }
     val height = remember{ mutableStateOf("170") }
     val desiredWeight = remember{ mutableStateOf("70") }
+
+    val gender = remember { mutableStateOf(0) }
+    val diet = remember { mutableStateOf(UserDiet.BALANCED) }
+    val activity = remember { mutableStateOf(UserActivity.BASIC) }
+
     val scope = rememberCoroutineScope()
     scope.launch {
         val params = viewModel.getParameters()
@@ -74,8 +83,6 @@ fun ProfileSection(viewModel: ProfileViewModel) {
         height.value = params.height.toString()
         desiredWeight.value = params.desiredWeight.toString()
     }
-
-
 
     LazyColumn(
         modifier = Modifier
@@ -88,10 +95,21 @@ fun ProfileSection(viewModel: ProfileViewModel) {
             Text(
                 text = "Maria",
                 style = MaterialTheme.typography.h5,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(20.dp))
-            ProfileInfo(timesEat, age, weight, height, desiredWeight)
+            ProfileInfo(
+                timesEat = timesEat,
+                age = age,
+                weight = weight,
+                height = height,
+                desiredWeight = desiredWeight,
+                gender = gender,
+                diet = diet,
+                activity = activity
+            )
             Spacer(Modifier.height(40.dp))
 
             TextButton(
@@ -115,7 +133,16 @@ fun ProfileSection(viewModel: ProfileViewModel) {
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun ProfileInfo(timesEat: MutableState<String>, age: MutableState<String>, weight: MutableState<String>, height: MutableState<String>, desiredWeight: MutableState<String>) {
+fun ProfileInfo(
+    timesEat: MutableState<String>,
+    age: MutableState<String>,
+    weight: MutableState<String>,
+    height: MutableState<String>,
+    desiredWeight: MutableState<String>,
+    gender: MutableState<Int>,
+    activity: MutableState<UserActivity>,
+    diet: MutableState<UserDiet>
+) {
 
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -127,13 +154,7 @@ fun ProfileInfo(timesEat: MutableState<String>, age: MutableState<String>, weigh
             style = MaterialTheme.typography.body1
         )
         Spacer(Modifier.height(10.dp))
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceAround,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            /* CheckBox */
-        }
+        GenderChoisen(selected = gender.value, onGenderSelect = { gender.value = it })
         Spacer(Modifier.height(10.dp))
         InputTextField(
             text = "Age",
@@ -164,14 +185,14 @@ fun ProfileInfo(timesEat: MutableState<String>, age: MutableState<String>, weigh
             style = MaterialTheme.typography.body1
         )
         Spacer(Modifier.height(20.dp))
-        LineSelectPoint()
+        PhysicalActivitySection(selected = activity.value, onPhysicalActivitySelect = { activity.value = it })
         Spacer(Modifier.height(20.dp))
         Text(
             text = "Physical activity",
             style = MaterialTheme.typography.body1
         )
         Spacer(Modifier.height(20.dp))
-        LineSelectPoint()
+        DietSection(selected = diet.value, onDietSelect = { diet.value = it })
         Spacer(Modifier.height(20.dp))
         InputTextField(
             text = "How often do you prefer to eat?",
@@ -187,6 +208,96 @@ fun ProfileInfo(timesEat: MutableState<String>, age: MutableState<String>, weigh
             keyboardController = keyboardController,
             keyboardType = KeyboardType.Number,
             onChangeValue = { desiredWeight.value = it }
+        )
+    }
+}
+
+@Composable
+fun DietSection(
+    selected: UserDiet,
+    onDietSelect: (UserDiet) -> Unit
+) {
+    Column {
+        DefaultRadioButton(
+            text = UserDiet.BALANCED.value,
+            selected = selected == UserDiet.BALANCED,
+            onSelect = { onDietSelect(UserDiet.BALANCED) })
+        DefaultRadioButton(
+            text = UserDiet.LOW_FAT.value,
+            selected = selected == UserDiet.LOW_FAT,
+            onSelect = { onDietSelect(UserDiet.LOW_FAT) })
+        DefaultRadioButton(
+            text = UserDiet.LOW_CARBS.value,
+            selected = selected == UserDiet.LOW_CARBS,
+            onSelect = { onDietSelect(UserDiet.LOW_CARBS) })
+        DefaultRadioButton(
+            text = UserDiet.LOW_PROTEIN.value,
+            selected = selected == UserDiet.LOW_PROTEIN,
+            onSelect = { onDietSelect(UserDiet.LOW_PROTEIN) })
+    }
+}
+
+@Composable
+fun PhysicalActivitySection(
+    selected: UserActivity,
+    onPhysicalActivitySelect: (UserActivity) -> Unit
+) {
+    Column() {
+        DefaultRadioButton(
+            text = UserActivity.BASIC.value,
+            selected = selected == UserActivity.BASIC,
+            onSelect = { onPhysicalActivitySelect(UserActivity.BASIC) })
+        DefaultRadioButton(
+            text = UserActivity.LOW.value,
+            selected = selected == UserActivity.LOW,
+            onSelect = { onPhysicalActivitySelect(UserActivity.LOW) })
+        DefaultRadioButton(
+            text = UserActivity.LIGHT.value,
+            selected = selected == UserActivity.LIGHT,
+            onSelect = { onPhysicalActivitySelect(UserActivity.LIGHT) })
+        DefaultRadioButton(
+            text = UserActivity.MEDIUM.value,
+            selected = selected == UserActivity.MEDIUM,
+            onSelect = { onPhysicalActivitySelect(UserActivity.MEDIUM) })
+        DefaultRadioButton(
+            text = UserActivity.HIGH.value,
+            selected = selected == UserActivity.HIGH,
+            onSelect = { onPhysicalActivitySelect(UserActivity.HIGH) })
+    }
+}
+
+@Composable
+fun GenderChoisen(
+    selected: Int,
+    onGenderSelect: (Int) -> Unit
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceAround,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        DefaultRadioButton(text = "Male", selected = selected == 0, onSelect = { onGenderSelect(0) })
+        DefaultRadioButton(text = "Female", selected = selected == 1, onSelect = { onGenderSelect(1) })
+    }
+}
+
+@Composable
+fun DefaultRadioButton(
+    text: String,
+    selected: Boolean,
+    onSelect: () -> Unit
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        RadioButton(
+            selected = selected,
+            onClick = onSelect
+        )
+        Spacer(modifier = Modifier.width(4.dp))
+        Text(
+            text = text,
+            style = MaterialTheme.typography.body1
         )
     }
 }
@@ -253,19 +364,23 @@ fun LineSelectPoint() {
 
 @Composable
 fun ProfileAvatar() {
-    Box(
-        contentAlignment = Alignment.TopCenter,
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxWidth()
     ) {
         Box(
-            modifier = Modifier
-                .size(150.dp)
-                .clip(shape = CircleShape)
-                .background(color = Color.Gray)
-        )
-        ChangeProfileAvatarButton(modifier = Modifier.align(Alignment.BottomEnd))
+            contentAlignment = Alignment.TopCenter,
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(150.dp)
+                    .clip(shape = CircleShape)
+                    .background(color = Color.Gray)
+            )
+            ChangeProfileAvatarButton(modifier = Modifier.align(Alignment.BottomEnd))
+        }
     }
 }
-
 @Composable
 fun ChangeProfileAvatarButton(
     modifier: Modifier
@@ -284,5 +399,15 @@ fun ChangeProfileAvatarButton(
                 modifier = Modifier.padding(4.dp)
             )
         }
+    }
+}
+
+@Preview
+@Composable
+fun ProfileScreenPreview() {
+    SportTheme() {
+        ProfileScreen(
+            viewModel = viewModel()
+        )
     }
 }
