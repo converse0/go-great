@@ -26,15 +26,12 @@ fun LaunchScreen(
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxSize().padding(20.dp)
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color.White)
+            .padding(20.dp)
     ) {
-        Box(
-          modifier = Modifier
-              .padding(vertical = 60.dp)
-              .size(200.dp)
-              .clip(RoundedCornerShape(16.dp))
-              .background(color = Color.Gray, shape = RoundedCornerShape(16.dp))
-        )
         Text(
             text = "Hello!",
             style = MaterialTheme.typography.h3,
