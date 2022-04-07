@@ -18,59 +18,56 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
+import androidx.navigation.NavHostController
 import com.masuta.gogreat.Exercise
 import com.masuta.gogreat.R
 import com.masuta.gogreat.presentation.components.BackgroundSurface
+import com.masuta.gogreat.presentation.profile.ProfileSection
+import com.masuta.gogreat.presentation.ui.theme.SportTheme
 
 @Composable
-fun NewTrainingScreen() {
+fun NewTrainingScreen(
+    navController: NavHostController
+) {
+    var newExercise by remember { mutableStateOf(false) }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(color = Color.White)
-            .padding(bottom = 50.dp)
-    ){
+    ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
+            modifier = Modifier.fillMaxWidth()
         ) {
-            IconButton(
-                onClick = { /*TODO*/ }
-            ) {
-                Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
+            IconButton(onClick = { navController.navigate("main") }) {
+                Icon(imageVector = Icons.Default.KeyboardArrowLeft, contentDescription = "Back")
             }
-            Button(
-                onClick = { /*TODO*/ },
-                modifier = Modifier.padding(end = 8.dp),
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Green)
-            ) {
-                Text("Save")
-            }
+            Text(
+                text = "New training",
+                style = MaterialTheme.typography.h4,
+                modifier = Modifier.padding(start = 8.dp)
+            )
         }
-        LazyColumn{
-            items(1) {
-                BackgroundSurface() {
-                    PersonSection()
-                }
-                BackgroundSurface() {
-                    ListExercise()
-                }
-            }
-        }
+        Spacer(modifier = Modifier.height(12.dp))
+        PersonSection(onNewExerciseScreen = { newExercise = true })
+    }
+    if (newExercise) {
+        NewExerciseScreen(onClose = { newExercise = false })
     }
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun PersonSection() {
-
+fun PersonSection(
+    onNewExerciseScreen: () -> Unit
+) {
     val constraints = ConstraintSet {
         val topGuidLine = createGuidelineFromTop(0.2f)
         val bottomGuidLine = createGuidelineFromBottom(0.4f)
@@ -119,20 +116,19 @@ fun PersonSection() {
                 .layoutId("person")
                 .fillMaxSize(0.5f)
         )
-        IconButtonAddExercise(modifier = Modifier.layoutId("shoulder"))
-        IconButtonAddExercise(modifier = Modifier.layoutId("breast"))
-        IconButtonAddExercise(modifier = Modifier.layoutId("forearm"))
-        IconButtonAddExercise(modifier = Modifier.layoutId("legUp"))
-        IconButtonAddExercise(modifier = Modifier.layoutId("legDown"))
+        IconButtonAddExercise(modifier = Modifier.layoutId("shoulder"), onClick = onNewExerciseScreen)
+        IconButtonAddExercise(modifier = Modifier.layoutId("breast"), onClick = onNewExerciseScreen)
+        IconButtonAddExercise(modifier = Modifier.layoutId("forearm"), onClick = onNewExerciseScreen)
+        IconButtonAddExercise(modifier = Modifier.layoutId("legUp"), onClick = onNewExerciseScreen)
+        IconButtonAddExercise(modifier = Modifier.layoutId("legDown"), onClick = onNewExerciseScreen)
     }
 }
 
 @Composable
 fun IconButtonAddExercise(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
 ) {
-    val openWindow = remember { mutableStateOf(false) }
-
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
@@ -141,231 +137,166 @@ fun IconButtonAddExercise(
             .size(20.dp)
     ) {
         IconButton(
-            onClick = { openWindow.value = true }
+            onClick = onClick
         ) {
             Icon(imageVector = Icons.Default.Add, contentDescription = null, tint = Color.Black)
         }
     }
-    if (openWindow.value) {
-        DialogAddExercise(onDismissClick = { openWindow.value = false})
-    }
 }
 
 @Composable
-fun DialogAddExercise(
-    onDismissClick: () -> Unit
+fun NewExerciseScreen(
+    onClose: () -> Unit
 ) {
-    AlertDialog(
-        onDismissRequest = onDismissClick,
-        title = {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color.White)
+            .padding(20.dp)
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxWidth()
+        ) {
             Text(
-                text = "Настройка упражнения для выбранной группы мышц",
-                style = MaterialTheme.typography.h6,
-                modifier = Modifier.padding(top = 8.dp)
+                text = "New Exercise",
+                style = MaterialTheme.typography.h4,
+                fontWeight = FontWeight.W400
             )
-        },
-        text = {
-            DialogAddExerciseContent()
-        },
-        buttons = {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.End
-            ) {
-                Button(
-                    onClick = onDismissClick,
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Green),
-                ) {
-                    Text(text = "Сохранить")
-                }
+            IconButton(onClick = onClose) {
+                Icon(Icons.Default.Close, contentDescription = "Close")
             }
         }
-    )
-}
-
-@Composable
-fun DialogAddExerciseContent() {
-
-    val mod = Modifier
-        .padding(bottom = 8.dp)
-        .fillMaxWidth()
-
-    var exerciseName by remember { mutableStateOf("") }
-    var approach by remember { mutableStateOf("") }
-    var countPerApproach by remember { mutableStateOf("") }
-    var weight by remember { mutableStateOf("") }
-    var restBetweenApproach by remember { mutableStateOf("") }
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 16.dp)
-    ) {
-        TextField(
-            value = exerciseName,
-            onValueChange = { exerciseName = it },
-            placeholder = { Text(text = "Выберите упражнение") },
-            modifier = mod,
-            colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent)
-        )
-        TextField(
-            value = approach,
-            onValueChange = { approach = it },
-            placeholder = { Text(text = "Выберите количество подходов") },
-            modifier = mod,
-            colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
-            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
-        )
-        TextField(
-            value = countPerApproach,
-            onValueChange = { countPerApproach = it },
-            placeholder = { Text(text = "Повторения в каждом подходе") },
-            modifier = mod,
-            colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
-            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
-        )
-        TextField(
-            value = weight,
-            onValueChange = { weight = it },
-            placeholder = { Text(text = "Вес в каждом повторении") },
-            modifier = mod,
-            colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
-            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
-        )
-        TextField(
-            value = restBetweenApproach,
-            onValueChange = { restBetweenApproach = it },
-            placeholder = { Text(text = "Отдых между подходами") },
-            modifier = mod,
-            colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
-            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
-        )
+        Spacer(modifier = Modifier.height(20.dp))
+        NewExerciseParameters()
     }
 }
 
 @Composable
-fun ListExercise() {
-    val exerciseList = listOf(
-        Exercise(
-            "Отжимание",
-            5,
-            25,
-            60,
-            30
-        ),
-        Exercise(
-            "Приседание",
-            5,
-            25,
-            60,
-            30
-        ),
-        Exercise(
-            "Подтягивание",
-            5,
-            25,
-            60,
-            30
-        )
+fun NewExerciseParameters() {
+    val sessions = remember { mutableStateOf(3) }
+    val repetitions = remember { mutableStateOf(14) }
+    val weight = remember { mutableStateOf(20) }
+    val recoveryTime = remember { mutableStateOf(30) }
 
-    )
-
-    Column(
-        modifier = Modifier.padding(8.dp)
+    LazyColumn(
+        modifier = Modifier.fillMaxWidth()
     ) {
-        exerciseList.forEach { item -> 
-            ItemExercise(item = item)
+        item {
+            Text(
+                text = "Number of session",
+                style = MaterialTheme.typography.body1,
+            )
+            NumberSession(selected = sessions.value, onSessionSelect = { sessions.value = it })
+            Text(
+                text = "Number of repetitions",
+                style = MaterialTheme.typography.body1,
+                modifier = Modifier.padding(10.dp)
+            )
+            NumberRepetitions(selected = repetitions.value, onRepetitionSelect = { repetitions.value = it })
+            Text(
+                text = "Chose weight, kg",
+                style = MaterialTheme.typography.body1,
+                modifier = Modifier.padding(10.dp)
+            )
+            NumberWeight(selected = weight.value, onWeightSelect = { weight.value = it })
+            Text(
+                text = "Choose recovery time, sec",
+                style = MaterialTheme.typography.body1,
+                modifier = Modifier.padding(10.dp)
+            )
+            NumberRecoveryTime(selected = recoveryTime.value, onTimeSelect = { recoveryTime.value = it })
+            TextButton(
+                onClick = {
+                    /*TODO*/
+                },
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(40.dp)
+            ) {
+                Text(text = "Submit", color = Color.White, modifier = Modifier.padding(vertical = 16.dp))
+            }
         }
+
     }
-//    LazyColumn(
-//        modifier = Modifier.padding(8.dp)
-//    ) {
-//        items(exerciseList) { item ->
-//            ItemExercise(item)
-//        }
-//    }
 }
 
 @Composable
-fun ItemExercise(
-    item: Exercise
+fun NumberSession(
+    selected: Int,
+    onSessionSelect: (Int) -> Unit
 ) {
-    var addedNewField by remember { mutableStateOf(false) }
-    var restTime by remember { mutableStateOf("30") }
-    var showInteractionItems by remember { mutableStateOf(false) }
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        DefaultRadioButton(text = "3", selected = selected == 3, onSelect = { onSessionSelect(3) })
+        DefaultRadioButton(text = "4", selected = selected == 4, onSelect = { onSessionSelect(4) })
+    }
+}
 
-    Card(
-        modifier = Modifier
-            .padding(8.dp),
-        elevation = 4.dp,
-        shape = RoundedCornerShape(16.dp)
-    ){
-        Column() {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(text = item.name, modifier = Modifier.padding(start = 8.dp))
-                if (!addedNewField) {
-                    IconButton(onClick = { addedNewField = true }) {
-                        Icon(imageVector = Icons.Default.KeyboardArrowDown, contentDescription = null)
-                    }
-                } else {
-                    IconButton(onClick = { addedNewField = false }) {
-                        Icon(imageVector = Icons.Default.KeyboardArrowUp, contentDescription = null)
-                    }
-                }
-            }
-            if (addedNewField) {
-                Divider()
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    if (showInteractionItems) {
-                        Text(text = "Введите перерыв: ", modifier = Modifier
-                            .weight(1f)
-                            .padding(start = 8.dp))
-                        OutlinedTextField(
-                            value = restTime,
-                            onValueChange = { restTime = it },
-                            colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
-                            modifier = Modifier
-                                .width(100.dp)
-                                .weight(1f),
-                            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
-                        )
-                        IconButton(
-                            onClick = { showInteractionItems = false }
-                        ) {
-                            Icon(Icons.Default.Check, contentDescription = null, tint = Color.Green)
-                        }
-                        IconButton(
-                            onClick = { addedNewField = false }
-                        ) {
-                            Icon(Icons.Default.Close, contentDescription = null, tint = Color.Red)
-                        }
+@Composable
+fun NumberRepetitions(
+    selected: Int,
+    onRepetitionSelect: (Int) -> Unit
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        DefaultRadioButton(text = "14", selected = selected == 14, onSelect = { onRepetitionSelect(14) })
+        DefaultRadioButton(text = "15", selected = selected == 15, onSelect = { onRepetitionSelect(15) })
+    }
+}
 
-                    } else {
-                        Text(
-                            text = "Перерыв $restTime секунд",
-                            modifier = Modifier
-                                .weight(1f)
-                                .padding(start = 8.dp)
-                        )
-                        IconButton(onClick = { showInteractionItems = true }) {
-                            Icon(Icons.Default.Edit, contentDescription = null)
-                        }
-                    }
-                }
-            }
-        }
+@Composable
+fun NumberWeight(
+    selected: Int,
+    onWeightSelect: (Int) -> Unit
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        DefaultRadioButton(text = "20", selected = selected == 20, onSelect = { onWeightSelect(20) })
+        DefaultRadioButton(text = "25", selected = selected == 25, onSelect = { onWeightSelect(25) })
+    }
+}
+
+@Composable
+fun NumberRecoveryTime(
+    selected: Int,
+    onTimeSelect: (Int) -> Unit
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        DefaultRadioButton(text = "30", selected = selected == 30, onSelect = { onTimeSelect(30) })
+        DefaultRadioButton(text = "60", selected = selected == 60, onSelect = { onTimeSelect(60) })
+    }
+}
+
+
+@Composable
+fun DefaultRadioButton(
+    text: String,
+    selected: Boolean,
+    onSelect: () -> Unit
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        RadioButton(
+            selected = selected,
+            onClick = onSelect
+        )
+        Spacer(modifier = Modifier.width(4.dp))
+        Text(
+            text = text,
+            style = MaterialTheme.typography.body1
+        )
     }
 }
