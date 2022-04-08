@@ -145,6 +145,7 @@ fun AboutForm(
                 text = "How often do you prefer to eat?",
                 value = timesEat.value,
                 keyboardController = keyboardController,
+                keyboardType = KeyboardType.Number,
                 onChangeValue = { timesEat.value = it},
             )
             Spacer(Modifier.height(10.dp))
@@ -152,6 +153,7 @@ fun AboutForm(
                 text = "Desired weight",
                 value = desiredWeight.value,
                 keyboardController = keyboardController,
+                keyboardType = KeyboardType.Number,
                 onChangeValue = { desiredWeight.value = it},
             )
             TextButton(
