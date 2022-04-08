@@ -2,10 +2,8 @@ package com.masuta.gogreat.presentation.profile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.masuta.gogreat.domain.model.ParametersUser
 import com.masuta.gogreat.domain.use_case.ProfileUseCase
-import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.launch
 
 class ProfileViewModel :ViewModel() {
@@ -25,12 +23,12 @@ class ProfileViewModel :ViewModel() {
             )
             val pUseCase = ProfileUseCase()
             viewModelScope.launch {
-                val resp = pUseCase.updateParameters(parametersUser)
+                val resp = pUseCase.createParameters(parametersUser)
                 println(resp)
             }
         }
     }
-    suspend fun getParameters(): ParametersUser {
+    suspend fun getParameters(): ParametersUser? {
         val pUseCase = ProfileUseCase()
         val resp = pUseCase.getParameters()
         println(resp)

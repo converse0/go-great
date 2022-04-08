@@ -23,7 +23,7 @@ class AboutViewModel: ViewModel() {
             )
             val pUseCase = ProfileUseCase()
             viewModelScope.launch {
-                val resp = pUseCase.updateParameters(parametersUser)
+                val resp = pUseCase.createParameters(parametersUser)
                 println(resp)
             }
         }

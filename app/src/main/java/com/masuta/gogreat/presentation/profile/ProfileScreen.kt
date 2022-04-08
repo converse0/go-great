@@ -77,11 +77,17 @@ fun ProfileSection(viewModel: ProfileViewModel) {
     val scope = rememberCoroutineScope()
     scope.launch {
         val params = viewModel.getParameters()
-        timesEat.value = params.eat.toString()
-        age.value = params.age.toString()
-        weight.value = params.weight.toString()
-        height.value = params.height.toString()
-        desiredWeight.value = params.desiredWeight.toString()
+        params?.let {
+            timesEat.value = it.eat.toString()
+            age.value = it.age.toString()
+            weight.value = it.weight.toString()
+            height.value = it.height.toString()
+            desiredWeight.value = it.desiredWeight.toString()
+        }
+        if (params == null) {
+
+        }
+
     }
 
     LazyColumn(
