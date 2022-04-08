@@ -1,20 +1,25 @@
 package com.masuta.gogreat.presentation.diet
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.masuta.gogreat.R
 import com.masuta.gogreat.presentation.BottomNavigationItem
 import com.masuta.gogreat.presentation.auth.SignInForm
 import com.masuta.gogreat.presentation.ui.theme.SportTheme
@@ -60,31 +65,19 @@ fun DietScreen(
                 .background(color = Color.White)
                 .padding(20.dp)
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                IconButton(
-                    onClick = {
-//                    navController.navigate("launch-screen")
-                    }
-                ) {
-                    Icon(imageVector = Icons.Default.KeyboardArrowLeft, contentDescription = "Back")
-                }
-                Text(
-                    text = "My diet",
-                    style = MaterialTheme.typography.h4,
-                    modifier = Modifier.padding(start = 8.dp)
-                )
-            }
+            Text(
+                text = "My diet",
+                style = MaterialTheme.typography.h3,
+                modifier = Modifier.fillMaxWidth().padding(16.dp)
+            )
             Spacer(modifier = Modifier.height(40.dp))
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.5f)
                     .clip(RoundedCornerShape(16.dp))
-                    .background(color = Color.Gray, shape = RoundedCornerShape(16.dp))
-            )
+            ) {
+                Image(painter = painterResource(id = R.drawable.muscle_dieta), contentDescription = "Image")
+            }
             Spacer(modifier = Modifier.height(40.dp))
             Text(
                 text = "Coming soon!",
@@ -92,5 +85,18 @@ fun DietScreen(
                 fontWeight = FontWeight.W700
             )
         }
+    }
+}
+
+@Preview
+@Composable
+fun DietScreenPreview() {
+    SportTheme() {
+        DietScreen(
+            navController = NavHostController(LocalContext.current),
+            selected = "diet",
+            onSelect = {},
+            menuItems = listOf(BottomNavigationItem("main", Icons.Default.Home))
+        )
     }
 }
