@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.masuta.gogreat.domain.model.LoginResponse
 import com.masuta.gogreat.domain.model.User
+import com.masuta.gogreat.domain.model.refreshUserToken
+import com.masuta.gogreat.domain.model.userToken
 import com.masuta.gogreat.domain.use_case.Authorization
 import kotlinx.coroutines.launch
 
@@ -70,7 +72,8 @@ class SignUpViewModel: ViewModel(){
         val editor = sharedPref.edit()
         editor.putString("accessToken", token!!.accessToken)
         editor.putString("refreshToken", token.refreshToken)
-
+        userToken = token.accessToken
+        refreshUserToken = token.refreshToken
         editor.apply()
     }
 }
