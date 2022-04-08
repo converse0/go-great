@@ -68,6 +68,7 @@ class ProfileUseCase {
     suspend fun createParameters(params: ParametersUser): String {
         println("accessToken: ${userToken}")
         println("refreshToken: ${refreshUserToken}")
+        println("params: ${params}")
         val client = makeClient()
         val response = client
             .post<String>("https://boilerplate-go-trening.herokuapp.com/user/parameters") {
@@ -83,21 +84,9 @@ class ProfileUseCase {
     suspend fun getParameters(): ParametersUser? {
         val client = makeClient()
 
-        val prof = client
-            .get<ResponseProf>("https://boilerplate-go.herokuapp.com/profile") {
-            contentType(ContentType.Application.Json)
-                headers {
-                    append("Authorization", "Bearer ${userToken}")
-                }
-        }
-        println("prof: ${prof}")
-        if (prof.status == null) {
-            return null
-        }
         println("userToken: ${userToken}")
-        println(prof.data!!.id)
         val response = client.get<ResponseParams>(
-            "https://boilerplate-go-trening.herokuapp.com/user/parameters?id=${prof.data!!.id}") {
+            "https://boilerplate-go-trening.herokuapp.com/user/parameters") {
             contentType(ContentType.Application.Json)
                 headers {
                     append("Authorization", "Bearer ${userToken}")
