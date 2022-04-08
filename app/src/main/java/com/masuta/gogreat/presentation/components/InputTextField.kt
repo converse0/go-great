@@ -22,6 +22,7 @@ fun InputTextField(
     value: String,
     keyboardController: SoftwareKeyboardController?,
     keyboardType: KeyboardType = KeyboardType.Text,
+    enabled: Boolean = true,
     onChangeValue: (String) -> Unit
 ) {
     Text(
@@ -32,6 +33,7 @@ fun InputTextField(
     OutlinedTextField(
         value = value,
         onValueChange = { onChangeValue(it) },
+        enabled = enabled,
         modifier = Modifier
             .fillMaxWidth()
             .onFocusChanged {

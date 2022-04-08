@@ -163,7 +163,10 @@ fun AboutForm(
                         weight.value.toInt(),
                         height.value.toInt(),
                         desiredWeight.value.toInt(),
-                        timesEat.value.toInt()
+                        timesEat.value.toInt(),
+//                        diet = diet.value,
+//                        activity = physicalActivity.value,
+//                        gender = gender.value
                     )
                     navController.navigate("main")
                 },

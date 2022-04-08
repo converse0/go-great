@@ -82,7 +82,7 @@ fun ProfileScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = { navController.navigate("main") }) {
                     Icon(imageVector = Icons.Default.KeyboardArrowLeft, contentDescription = "Back")
                 }
                 Text(
@@ -110,8 +110,8 @@ fun ProfileSection(
     val desiredWeight = remember{ mutableStateOf("70") }
 
     val gender = remember { mutableStateOf(0) }
-    val diet = remember { mutableStateOf(UserDiet.BALANCED) }
-    val activity = remember { mutableStateOf(UserActivity.BASIC) }
+    val diet = remember { mutableStateOf("Balanced") }
+    val activity = remember { mutableStateOf("Basic") }
 
     val scope = rememberCoroutineScope()
     scope.launch {
@@ -122,6 +122,9 @@ fun ProfileSection(
             weight.value = it.weight.toString()
             height.value = it.height.toString()
             desiredWeight.value = it.desiredWeight.toString()
+//            gender.value = it.gender
+//            diet.value = it.diet
+//            activity.value = it.activity
         }
         if (params == null) {
             navController.navigate("about")
@@ -154,23 +157,7 @@ fun ProfileSection(
                 diet = diet,
                 activity = activity
             )
-            Spacer(Modifier.height(40.dp))
-
-            TextButton(
-                onClick = {
-                   viewModel.setParameters(age.value.toIntOrNull(),
-                       weight.value.toInt(),
-                       height.value.toInt(),
-                       desiredWeight.value.toInt(),
-                       timesEat.value.toInt())
-                },
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 60.dp)
-            ) {
-                Text(text = "Save", color = Color.White, modifier = Modifier.padding(vertical = 16.dp))
-            }
+            Spacer(Modifier.height(60.dp))
         }
     }
 }
@@ -184,8 +171,8 @@ fun ProfileInfo(
     height: MutableState<String>,
     desiredWeight: MutableState<String>,
     gender: MutableState<Int>,
-    activity: MutableState<UserActivity>,
-    diet: MutableState<UserDiet>
+    activity: MutableState<String>,
+    diet: MutableState<String>
 ) {
 
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -198,13 +185,14 @@ fun ProfileInfo(
             style = MaterialTheme.typography.body1
         )
         Spacer(Modifier.height(10.dp))
-        GenderChoisen(selected = gender.value, onGenderSelect = { gender.value = it })
+        GenderChoisen(selected = gender.value)
         Spacer(Modifier.height(10.dp))
         InputTextField(
             text = "Age",
             value = age.value,
             keyboardController = keyboardController,
             keyboardType = KeyboardType.Number,
+            enabled = false,
             onChangeValue = { age.value = it }
         )
         Spacer(Modifier.height(10.dp))
@@ -213,34 +201,41 @@ fun ProfileInfo(
             value = weight.value,
             keyboardController = keyboardController,
             keyboardType = KeyboardType.Number,
+            enabled = false,
             onChangeValue = { weight.value = it }
         )
         Spacer(Modifier.height(10.dp))
         InputTextField(
             text = "Height",
             value = height.value,
+            enabled = false,
             keyboardController = keyboardController,
             keyboardType = KeyboardType.Number,
             onChangeValue = { height.value = it }
         )
         Spacer(Modifier.height(20.dp))
-        Text(
-            text = "Physical activity",
-            style = MaterialTheme.typography.body1
+        InputTextField(
+            text = "Physical Activity",
+            value = activity.value,
+            enabled = false,
+            keyboardController = keyboardController,
+            keyboardType = KeyboardType.Number,
+            onChangeValue = { timesEat.value = it }
         )
         Spacer(Modifier.height(20.dp))
-        PhysicalActivitySection(selected = activity.value, onPhysicalActivitySelect = { activity.value = it })
-        Spacer(Modifier.height(20.dp))
-        Text(
-            text = "Physical activity",
-            style = MaterialTheme.typography.body1
+        InputTextField(
+            text = "Diet",
+            value = diet.value,
+            enabled = false,
+            keyboardController = keyboardController,
+            keyboardType = KeyboardType.Number,
+            onChangeValue = { timesEat.value = it }
         )
-        Spacer(Modifier.height(20.dp))
-        DietSection(selected = diet.value, onDietSelect = { diet.value = it })
         Spacer(Modifier.height(20.dp))
         InputTextField(
             text = "How often do you prefer to eat?",
             value = timesEat.value,
+            enabled = false,
             keyboardController = keyboardController,
             keyboardType = KeyboardType.Number,
             onChangeValue = { timesEat.value = it }
@@ -249,6 +244,7 @@ fun ProfileInfo(
         InputTextField(
             text = "Desired weight",
             value = desiredWeight.value,
+            enabled = false,
             keyboardController = keyboardController,
             keyboardType = KeyboardType.Number,
             onChangeValue = { desiredWeight.value = it }
@@ -257,71 +253,16 @@ fun ProfileInfo(
 }
 
 @Composable
-fun DietSection(
-    selected: UserDiet,
-    onDietSelect: (UserDiet) -> Unit
-) {
-    Column {
-        DefaultRadioButton(
-            text = UserDiet.BALANCED.value,
-            selected = selected == UserDiet.BALANCED,
-            onSelect = { onDietSelect(UserDiet.BALANCED) })
-        DefaultRadioButton(
-            text = UserDiet.LOW_FAT.value,
-            selected = selected == UserDiet.LOW_FAT,
-            onSelect = { onDietSelect(UserDiet.LOW_FAT) })
-        DefaultRadioButton(
-            text = UserDiet.LOW_CARBS.value,
-            selected = selected == UserDiet.LOW_CARBS,
-            onSelect = { onDietSelect(UserDiet.LOW_CARBS) })
-        DefaultRadioButton(
-            text = UserDiet.LOW_PROTEIN.value,
-            selected = selected == UserDiet.LOW_PROTEIN,
-            onSelect = { onDietSelect(UserDiet.LOW_PROTEIN) })
-    }
-}
-
-@Composable
-fun PhysicalActivitySection(
-    selected: UserActivity,
-    onPhysicalActivitySelect: (UserActivity) -> Unit
-) {
-    Column() {
-        DefaultRadioButton(
-            text = UserActivity.BASIC.value,
-            selected = selected == UserActivity.BASIC,
-            onSelect = { onPhysicalActivitySelect(UserActivity.BASIC) })
-        DefaultRadioButton(
-            text = UserActivity.LOW.value,
-            selected = selected == UserActivity.LOW,
-            onSelect = { onPhysicalActivitySelect(UserActivity.LOW) })
-        DefaultRadioButton(
-            text = UserActivity.LIGHT.value,
-            selected = selected == UserActivity.LIGHT,
-            onSelect = { onPhysicalActivitySelect(UserActivity.LIGHT) })
-        DefaultRadioButton(
-            text = UserActivity.MEDIUM.value,
-            selected = selected == UserActivity.MEDIUM,
-            onSelect = { onPhysicalActivitySelect(UserActivity.MEDIUM) })
-        DefaultRadioButton(
-            text = UserActivity.HIGH.value,
-            selected = selected == UserActivity.HIGH,
-            onSelect = { onPhysicalActivitySelect(UserActivity.HIGH) })
-    }
-}
-
-@Composable
 fun GenderChoisen(
     selected: Int,
-    onGenderSelect: (Int) -> Unit
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceAround,
         modifier = Modifier.fillMaxWidth()
     ) {
-        DefaultRadioButton(text = "Male", selected = selected == 0, onSelect = { onGenderSelect(0) })
-        DefaultRadioButton(text = "Female", selected = selected == 1, onSelect = { onGenderSelect(1) })
+        DefaultRadioButton(text = "Male", selected = selected == 0)
+        DefaultRadioButton(text = "Female", selected = selected == 1)
     }
 }
 
@@ -329,14 +270,13 @@ fun GenderChoisen(
 fun DefaultRadioButton(
     text: String,
     selected: Boolean,
-    onSelect: () -> Unit
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
         RadioButton(
             selected = selected,
-            onClick = onSelect
+            onClick = null
         )
         Spacer(modifier = Modifier.width(4.dp))
         Text(

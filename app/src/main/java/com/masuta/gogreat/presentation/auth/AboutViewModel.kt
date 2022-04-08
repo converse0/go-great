@@ -13,13 +13,18 @@ class AboutViewModel: ViewModel() {
         weight: Int,
         height: Int,
         desiredWeight: Int,
-        timesEat: Int
+        timesEat: Int,
+//        activity: String,
+//        diet: String,
+//        gender: Int
     ) {
         if (age != null) {
             val parametersUser = ParametersUser(
                 age = age,
                 weight = weight, height = height,
-                desiredWeight = desiredWeight, eat = timesEat, gender = 1
+                desiredWeight = desiredWeight, eat = timesEat,
+                gender = 1,
+//                activity = activity, diet = diet
             )
             val pUseCase = ProfileUseCase()
             viewModelScope.launch {
