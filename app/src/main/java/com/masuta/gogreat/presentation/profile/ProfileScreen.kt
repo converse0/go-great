@@ -78,19 +78,11 @@ fun ProfileScreen(
                 .fillMaxSize()
                 .background(color = Color.White)
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                IconButton(onClick = { navController.navigate("main") }) {
-                    Icon(imageVector = Icons.Default.KeyboardArrowLeft, contentDescription = "Back")
-                }
-                Text(
-                    text = "Profile",
-                    style = MaterialTheme.typography.h4,
-                    modifier = Modifier.padding(start = 8.dp)
-                )
-            }
+            Text(
+                text = "Profile",
+                style = MaterialTheme.typography.h3,
+                modifier = Modifier.padding(16.dp)
+            )
             Spacer(modifier = Modifier.height(12.dp))
             ProfileSection(viewModel, navController)
         }
@@ -103,11 +95,11 @@ fun ProfileSection(
     viewModel: ProfileViewModel,
     navController: NavHostController
 ) {
-    val timesEat = remember{ mutableStateOf("2-3 times a day") }
-    val age = remember{ mutableStateOf("25") }
-    val weight = remember{ mutableStateOf("70") }
-    val height = remember{ mutableStateOf("170") }
-    val desiredWeight = remember{ mutableStateOf("70") }
+    val timesEat = remember{ mutableStateOf("") }
+    val age = remember{ mutableStateOf("") }
+    val weight = remember{ mutableStateOf("") }
+    val height = remember{ mutableStateOf("") }
+    val desiredWeight = remember{ mutableStateOf("") }
 
     val gender = remember { mutableStateOf(0) }
     val diet = remember { mutableStateOf("Balanced") }
