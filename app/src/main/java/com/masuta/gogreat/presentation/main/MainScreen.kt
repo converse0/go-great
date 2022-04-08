@@ -11,6 +11,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -23,6 +24,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.domain.model.Trening
+import com.masuta.gogreat.presentation.BottomNavigationItem
 import com.masuta.gogreat.presentation.ui.theme.Purple200
 import com.masuta.gogreat.presentation.ui.theme.SportTheme
 import com.masuta.gogreat.presentation.components.DropdownDemo
@@ -33,39 +35,73 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun MainScreen(
-    navController: NavHostController
+    navController: NavHostController,
+    selected: String,
+    onSelect: (String) -> Unit,
+    menuItems: List<BottomNavigationItem>
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color.White)
-            .padding(20.dp)
-    ) {
-        Text(
-            text = "Workouts",
-            style = MaterialTheme.typography.h4,
-            fontWeight = FontWeight.W400
-        )
-        LazyColumn(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            item {
-                Text(
-                    text = "Create your workout today according to your personal preferences",
-                    style = MaterialTheme.typography.body1,
-                    modifier = Modifier.padding(vertical = 10.dp)
-                )
-                TextButton(
-                    onClick = {
-                         navController.navigate("new-training")
-                    },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray),
-                    modifier = Modifier
-                        .fillMaxWidth()
+    Scaffold(
+        bottomBar = {
+            BottomAppBar(
+                backgroundColor = Color.LightGray
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceAround,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = "Create new training", color = Color.White, modifier = Modifier.padding(vertical = 16.dp))
+                    menuItems.forEach { item ->
+                        IconButton(onClick = {
+                            navController.navigate(item.route)
+                            onSelect(item.route)
+                        }) {
+                            Icon(
+                                imageVector = item.icon,
+                                contentDescription = item.route,
+                                tint = if (item.route == selected) Color.Green else Color.Black
+                            )
+                        }
+                    }
                 }
-                WorkoutsSection()
+            }
+        }
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = Color.White)
+                .padding(20.dp)
+        ) {
+            Text(
+                text = "Workouts",
+                style = MaterialTheme.typography.h4,
+                fontWeight = FontWeight.W400
+            )
+            LazyColumn(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                item {
+                    Text(
+                        text = "Create your workout today according to your personal preferences",
+                        style = MaterialTheme.typography.body1,
+                        modifier = Modifier.padding(vertical = 10.dp)
+                    )
+                    TextButton(
+                        onClick = {
+                            navController.navigate("new-training")
+                        },
+                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ) {
+                        Text(
+                            text = "Create new training",
+                            color = Color.White,
+                            modifier = Modifier.padding(vertical = 16.dp)
+                        )
+                    }
+                    WorkoutsSection()
+                }
             }
         }
     }
