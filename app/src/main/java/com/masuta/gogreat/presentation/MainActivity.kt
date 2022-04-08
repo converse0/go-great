@@ -83,71 +83,39 @@ fun Navigation(items: List<BottomNavigationItem>) {
     val navController = rememberNavController()
     var selected by remember { mutableStateOf("main") }
 
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colors.background
+    NavHost(
+        navController = navController,
+        startDestination = choseStartScreen(LocalContext.current)
     ) {
-        Scaffold(
-            bottomBar = {
-                BottomAppBar(
-                    backgroundColor = Color.LightGray
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceAround,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        items.forEach { item ->
-                            IconButton(onClick = {
-                                navController.navigate(item.route)
-                                selected = item.route
-                            }) {
-                                Icon(
-                                    imageVector = item.icon,
-                                    contentDescription = item.route,
-                                    tint = if (item.route == selected) Color.Green else Color.Black
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-        ) {
-            NavHost(
-                navController = navController,
-                startDestination = choseStartScreen(LocalContext.current)
-            ) {
-                composable(route = "main") {
-                    MainScreen(navController = navController)
-                }
-                composable(route = "new-training") {
-                    NewTrainingScreen(navController = navController)
-                }
-                composable(route = "launch-training") {
-                    LaunchTrainingScreen()
-                }
-                composable(route = "profile") {
-                    ProfileScreen(viewModel = viewModel())
-                }
-                composable(route = "sign-in") {
-                    SignInScreen(viewModel = viewModel(), navController = navController)
-                }
-                composable(route = "sign-up") {
-                    SignUpScreen(viewModel = viewModel(), navController = navController)
-                }
-                composable(route = "launch-screen") {
-                    LaunchScreen(navController = navController)
-                }
-                composable(route = "about") {
-                    AboutScreen(viewModel = viewModel(), navController = navController)
-                }
-                composable(route = "diet") {
-                    DietScreen()
-                }
-                composable(route = "health") {
-                    HealthScreen()
-                }
-            }
+        composable(route = "main") {
+            MainScreen(navController = navController, menuItems = items, selected = selected, onSelect = { selected = it })
+        }
+        composable(route = "new-training") {
+            NewTrainingScreen(navController = navController, menuItems = items, selected = selected, onSelect = { selected = it })
+        }
+        composable(route = "launch-training") {
+            LaunchTrainingScreen()
+        }
+        composable(route = "profile") {
+            ProfileScreen(viewModel = viewModel(), navController = navController, menuItems = items, selected = selected, onSelect = { selected = it })
+        }
+        composable(route = "sign-in") {
+            SignInScreen(viewModel = viewModel(), navController = navController)
+        }
+        composable(route = "sign-up") {
+            SignUpScreen(viewModel = viewModel(), navController = navController)
+        }
+        composable(route = "launch-screen") {
+            LaunchScreen(navController = navController)
+        }
+        composable(route = "about") {
+            AboutScreen(viewModel = viewModel(), navController = navController)
+        }
+        composable(route = "diet") {
+            DietScreen(navController = navController, menuItems = items, selected = selected, onSelect = { selected = it })
+        }
+        composable(route = "health") {
+            HealthScreen(navController = navController, menuItems = items, selected = selected, onSelect = { selected = it })
         }
     }
 }

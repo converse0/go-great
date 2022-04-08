@@ -27,39 +27,72 @@ import androidx.constraintlayout.compose.ConstraintSet
 import androidx.navigation.NavHostController
 import com.masuta.gogreat.Exercise
 import com.masuta.gogreat.R
+import com.masuta.gogreat.presentation.BottomNavigationItem
 import com.masuta.gogreat.presentation.components.BackgroundSurface
 import com.masuta.gogreat.presentation.profile.ProfileSection
 import com.masuta.gogreat.presentation.ui.theme.SportTheme
 
 @Composable
 fun NewTrainingScreen(
-    navController: NavHostController
+    navController: NavHostController,
+    selected: String,
+    onSelect: (String) -> Unit,
+    menuItems: List<BottomNavigationItem>
 ) {
     var newExercise by remember { mutableStateOf(false) }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color.White)
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            IconButton(onClick = { navController.navigate("main") }) {
-                Icon(imageVector = Icons.Default.KeyboardArrowLeft, contentDescription = "Back")
+    Scaffold(
+        bottomBar = {
+            BottomAppBar(
+                backgroundColor = Color.LightGray
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceAround,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    menuItems.forEach { item ->
+                        IconButton(onClick = {
+                            navController.navigate(item.route)
+                            onSelect(item.route)
+                        }) {
+                            Icon(
+                                imageVector = item.icon,
+                                contentDescription = item.route,
+                                tint = if (item.route == selected) Color.Green else Color.Black
+                            )
+                        }
+                    }
+                }
             }
-            Text(
-                text = "New training",
-                style = MaterialTheme.typography.h4,
-                modifier = Modifier.padding(start = 8.dp)
-            )
         }
-        Spacer(modifier = Modifier.height(12.dp))
-        PersonSection(onNewExerciseScreen = { newExercise = true })
-    }
-    if (newExercise) {
-        NewExerciseScreen(onClose = { newExercise = false })
+    ) {
+
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = Color.White)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                IconButton(onClick = { navController.navigate("main") }) {
+                    Icon(imageVector = Icons.Default.KeyboardArrowLeft, contentDescription = "Back")
+                }
+                Text(
+                    text = "New training",
+                    style = MaterialTheme.typography.h4,
+                    modifier = Modifier.padding(start = 8.dp)
+                )
+            }
+            Spacer(modifier = Modifier.height(12.dp))
+            PersonSection(onNewExerciseScreen = { newExercise = true })
+        }
+        if (newExercise) {
+            NewExerciseScreen(onClose = { newExercise = false })
+        }
     }
 }
 
