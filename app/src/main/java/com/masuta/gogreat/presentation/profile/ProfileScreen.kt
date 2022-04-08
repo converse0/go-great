@@ -92,14 +92,17 @@ fun ProfileScreen(
                 )
             }
             Spacer(modifier = Modifier.height(12.dp))
-            ProfileSection(viewModel)
+            ProfileSection(viewModel, navController)
         }
     }
 }
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
-fun ProfileSection(viewModel: ProfileViewModel) {
+fun ProfileSection(
+    viewModel: ProfileViewModel,
+    navController: NavHostController
+) {
     val timesEat = remember{ mutableStateOf("2-3 times a day") }
     val age = remember{ mutableStateOf("25") }
     val weight = remember{ mutableStateOf("70") }
@@ -121,9 +124,8 @@ fun ProfileSection(viewModel: ProfileViewModel) {
             desiredWeight.value = it.desiredWeight.toString()
         }
         if (params == null) {
-
+            navController.navigate("about")
         }
-
     }
 
     LazyColumn(
