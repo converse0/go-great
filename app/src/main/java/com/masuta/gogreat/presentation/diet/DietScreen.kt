@@ -76,7 +76,11 @@ fun DietScreen(
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(16.dp))
             ) {
-                Image(painter = painterResource(id = R.drawable.muscle_dieta), contentDescription = "Image")
+                Image(
+                    painter = painterResource(id = R.drawable.muscle_dieta),
+                    contentDescription = "Image",
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
             Spacer(modifier = Modifier.height(40.dp))
             Text(

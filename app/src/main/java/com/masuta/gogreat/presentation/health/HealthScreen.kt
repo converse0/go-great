@@ -73,7 +73,11 @@ fun HealthScreen(
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(16.dp))
             ) {
-                Image(painter = painterResource(id = R.drawable.sport_health), contentDescription = "Health")
+                Image(
+                    painter = painterResource(id = R.drawable.sport_health),
+                    contentDescription = "Health",
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
             Spacer(modifier = Modifier.height(40.dp))
             Text(
