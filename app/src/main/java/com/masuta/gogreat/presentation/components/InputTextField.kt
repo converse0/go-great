@@ -34,13 +34,7 @@ fun InputTextField(
         value = value,
         onValueChange = { onChangeValue(it) },
         enabled = enabled,
-        modifier = Modifier
-            .fillMaxWidth()
-            .onFocusChanged {
-                if (it.isFocused) {
-                    onChangeValue("")
-                }
-            },
+        modifier = Modifier.fillMaxWidth(),
         keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
         keyboardOptions = KeyboardOptions.Default.copy(
             imeAction = ImeAction.Done,

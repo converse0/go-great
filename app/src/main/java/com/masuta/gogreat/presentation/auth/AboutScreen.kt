@@ -159,11 +159,11 @@ fun AboutForm(
             TextButton(
                 onClick = {
                     viewModel.setParameters(
-                        age.value.toIntOrNull(),
-                        weight.value.toInt(),
-                        height.value.toInt(),
-                        desiredWeight.value.toInt(),
-                        timesEat.value.toInt(),
+                        age = if(age.value.isNotEmpty()) age.value.toIntOrNull() else 0,
+                        weight = if (weight.value.isNotEmpty()) weight.value.toInt() else 0,
+                        height = if (height.value.isNotEmpty()) height.value.toInt() else 0,
+                        desiredWeight = if (desiredWeight.value.isNotEmpty()) desiredWeight.value.toInt() else 0 ,
+                        timesEat = if(timesEat.value.isNotEmpty()) timesEat.value.toInt() else 0,
 //                        diet = diet.value,
 //                        activity = physicalActivity.value,
 //                        gender = gender.value

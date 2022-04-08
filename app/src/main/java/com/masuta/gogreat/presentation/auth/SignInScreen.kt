@@ -75,7 +75,7 @@ fun SignInForm(viewModel: SignInViewModel, navController: NavHostController) {
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    var email by remember { mutableStateOf("email") }
+    var email by remember { mutableStateOf("") }
     InputTextField(
         text = "Email",
         value = email,
@@ -83,7 +83,7 @@ fun SignInForm(viewModel: SignInViewModel, navController: NavHostController) {
         onChangeValue = { email = it},
     )
     Spacer(modifier = Modifier.height(16.dp))
-    var password by remember { mutableStateOf("password") }
+    var password by remember { mutableStateOf("") }
     InputTextField(
         text = "Password",
         value = password,
