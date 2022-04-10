@@ -1,8 +1,6 @@
 package com.masuta.gogreat.domain.use_case
 
-import com.masuta.gogreat.domain.model.ParametersUser
-import com.masuta.gogreat.domain.model.refreshUserToken
-import com.masuta.gogreat.domain.model.userToken
+import com.masuta.gogreat.domain.model.*
 import io.ktor.client.*
 import io.ktor.client.engine.android.*
 import io.ktor.client.features.*
@@ -29,7 +27,7 @@ data class ResponseProf(
 data class ResponseParams(
     val message: String?= null,
     val status: Boolean?= null,
-    val data: ParametersUser? = null
+    val data: ParametersUserGet? = null
 )
 
 
@@ -65,10 +63,10 @@ class ProfileUseCase {
         }
     }
     /** do http request post to url user/params */
-    suspend fun createParameters(params: ParametersUser): String {
-        println("accessToken: ${userToken}")
-        println("refreshToken: ${refreshUserToken}")
-        println("params: ${params}")
+    suspend fun createParameters(params: ParametersUserSet): String {
+        println("accessToken: $userToken")
+        println("refreshToken: $refreshUserToken")
+        println("params: $params")
         val client = makeClient()
         val response = client
             .post<String>("https://boilerplate-go-trening.herokuapp.com/user/parameters") {
@@ -81,10 +79,10 @@ class ProfileUseCase {
         return response
     }
     /** do http request get to url user/parameters */
-    suspend fun getParameters(): ParametersUser? {
+    suspend fun getParameters(): Pair<ParametersUserGet?, String?> {
         val client = makeClient()
 
-        println("userToken: ${userToken}")
+        println("userToken: $userToken")
         val response = client.get<ResponseParams>(
             "https://boilerplate-go-trening.herokuapp.com/user/parameters") {
             contentType(ContentType.Application.Json)
@@ -93,9 +91,10 @@ class ProfileUseCase {
                 }
         }
         println(response)
+
         if (response.status == null) {
-            return null
+            return Pair(null, response.message)
         }
-        return response.data!!
+        return Pair(response.data, null)
     }
 }

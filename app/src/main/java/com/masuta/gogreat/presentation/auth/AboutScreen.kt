@@ -164,9 +164,9 @@ fun AboutForm(
                         height = if (height.value.isNotEmpty()) height.value.toInt() else 0,
                         desiredWeight = if (desiredWeight.value.isNotEmpty()) desiredWeight.value.toInt() else 0 ,
                         timesEat = if(timesEat.value.isNotEmpty()) timesEat.value.toInt() else 0,
-//                        diet = diet.value,
-//                        activity = physicalActivity.value,
-//                        gender = gender.value
+                        diet = diet.value,
+                      activity = physicalActivity.value,
+                        gender = gender.value
                     )
                     navController.navigate("main")
                 },
@@ -191,10 +191,10 @@ fun DietSection(
     onDietSelect: (UserDiet) -> Unit
 ) {
     Column {
-        DefaultRadioButton(text = UserDiet.BALANCED.value, selected = selected == UserDiet.BALANCED, onSelect = { onDietSelect(UserDiet.BALANCED) })
-        DefaultRadioButton(text = UserDiet.LOW_FAT.value, selected = selected == UserDiet.LOW_FAT, onSelect = { onDietSelect(UserDiet.LOW_FAT) })
-        DefaultRadioButton(text = UserDiet.LOW_CARBS.value, selected = selected == UserDiet.LOW_CARBS, onSelect = { onDietSelect(UserDiet.LOW_CARBS) })
-        DefaultRadioButton(text = UserDiet.LOW_PROTEIN.value, selected = selected == UserDiet.LOW_PROTEIN, onSelect = { onDietSelect(UserDiet.LOW_PROTEIN) })
+        DefaultRadioButton(text = UserDiet.BALANCED.toString().lowercase(), selected = selected == UserDiet.BALANCED, onSelect = { onDietSelect(UserDiet.BALANCED) })
+        DefaultRadioButton(text = UserDiet.LOW_FAT.toString().lowercase(), selected = selected == UserDiet.LOW_FAT, onSelect = { onDietSelect(UserDiet.LOW_FAT) })
+        DefaultRadioButton(text = UserDiet.LOW_CARBS.toString().lowercase(), selected = selected == UserDiet.LOW_CARBS, onSelect = { onDietSelect(UserDiet.LOW_CARBS) })
+        DefaultRadioButton(text = UserDiet.LOW_PROTEIN.toString().lowercase(), selected = selected == UserDiet.LOW_PROTEIN, onSelect = { onDietSelect(UserDiet.LOW_PROTEIN) })
     }
 }
 
@@ -204,11 +204,11 @@ fun PhysicalActivitySection(
     onPhysicalActivitySelect: (UserActivity) -> Unit
 ) {
     Column() {
-        DefaultRadioButton(text = UserActivity.BASIC.value, selected = selected == UserActivity.BASIC, onSelect = { onPhysicalActivitySelect(UserActivity.BASIC) })
-        DefaultRadioButton(text = UserActivity.LOW.value, selected = selected == UserActivity.LOW, onSelect = { onPhysicalActivitySelect(UserActivity.LOW) })
-        DefaultRadioButton(text = UserActivity.LIGHT.value, selected = selected == UserActivity.LIGHT, onSelect = { onPhysicalActivitySelect(UserActivity.LIGHT) })
-        DefaultRadioButton(text = UserActivity.MEDIUM.value, selected = selected == UserActivity.MEDIUM, onSelect = { onPhysicalActivitySelect(UserActivity.MEDIUM) })
-        DefaultRadioButton(text = UserActivity.HIGH.value, selected = selected == UserActivity.HIGH, onSelect = { onPhysicalActivitySelect(UserActivity.HIGH) })
+        DefaultRadioButton(text = UserActivity.BASIC.toString().lowercase(), selected = selected == UserActivity.BASIC, onSelect = { onPhysicalActivitySelect(UserActivity.BASIC) })
+        DefaultRadioButton(text = UserActivity.LOW.toString().lowercase(), selected = selected == UserActivity.LOW, onSelect = { onPhysicalActivitySelect(UserActivity.LOW) })
+        DefaultRadioButton(text = UserActivity.LIGHT.toString().lowercase(), selected = selected == UserActivity.LIGHT, onSelect = { onPhysicalActivitySelect(UserActivity.LIGHT) })
+        DefaultRadioButton(text = UserActivity.MEDIUM.toString().lowercase(), selected = selected == UserActivity.MEDIUM, onSelect = { onPhysicalActivitySelect(UserActivity.MEDIUM) })
+        DefaultRadioButton(text = UserActivity.HIGH.toString().lowercase(), selected = selected == UserActivity.HIGH, onSelect = { onPhysicalActivitySelect(UserActivity.HIGH) })
     }
 }
 

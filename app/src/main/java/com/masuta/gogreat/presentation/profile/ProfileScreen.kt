@@ -1,42 +1,40 @@
 package com.masuta.gogreat.presentation.profile
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Create
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.masuta.gogreat.domain.model.UserActivity
 import com.masuta.gogreat.domain.model.UserDiet
 import com.masuta.gogreat.presentation.BottomNavigationItem
-import com.masuta.gogreat.presentation.components.DropdownDemo
 import com.masuta.gogreat.presentation.components.InputTextField
-import com.masuta.gogreat.presentation.ui.theme.SportTheme
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
+
+
+fun String.firstCharToUpperCase(): String {
+    return this.substring(0, 1).uppercase() + this.substring(1)
+}
+
+fun String.normalizeString(): String {
+    return this.replace("_", " ")
+}
 
 @Composable
 fun ProfileScreen(
@@ -89,7 +87,10 @@ fun ProfileScreen(
     }
 }
 
-@SuppressLint("CoroutineCreationDuringComposition")
+val routeTo :(navController: NavHostController, route:String) -> Unit = { navController, route ->
+    navController.navigate(route)
+}
+
 @Composable
 fun ProfileSection(
     viewModel: ProfileViewModel,
@@ -102,26 +103,17 @@ fun ProfileSection(
     val desiredWeight = remember{ mutableStateOf("") }
 
     val gender = remember { mutableStateOf(0) }
-    val diet = remember { mutableStateOf("Balanced") }
-    val activity = remember { mutableStateOf("Basic") }
-
-    val scope = rememberCoroutineScope()
-    scope.launch {
-        val params = viewModel.getParameters()
-        params?.let {
-            timesEat.value = it.eat.toString()
-            age.value = it.age.toString()
-            weight.value = it.weight.toString()
-            height.value = it.height.toString()
-            desiredWeight.value = it.desiredWeight.toString()
-//            gender.value = it.gender
-//            diet.value = it.diet
-//            activity.value = it.activity
-        }
-        if (params == null) {
-            navController.navigate("about")
-        }
+    val diet = remember { mutableStateOf(0) }
+    val activity = remember { mutableStateOf(0) }
+    val fail = remember {
+        mutableStateOf(false)
     }
+    if (!fail.value) {
+        viewModel.getParameters(timesEat, age, weight, height, desiredWeight,
+            gender,diet, activity, routeTo, navController, fail)
+    }
+
+
 
     LazyColumn(
         modifier = Modifier
@@ -163,8 +155,8 @@ fun ProfileInfo(
     height: MutableState<String>,
     desiredWeight: MutableState<String>,
     gender: MutableState<Int>,
-    activity: MutableState<String>,
-    diet: MutableState<String>
+    activity: MutableState<Int>,
+    diet: MutableState<Int>
 ) {
 
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -208,7 +200,9 @@ fun ProfileInfo(
         Spacer(Modifier.height(20.dp))
         InputTextField(
             text = "Physical Activity",
-            value = activity.value,
+            value = UserActivity.values()[activity.value]
+                .toString().lowercase()
+                .firstCharToUpperCase().normalizeString(),
             enabled = false,
             keyboardController = keyboardController,
             keyboardType = KeyboardType.Number,
@@ -217,7 +211,9 @@ fun ProfileInfo(
         Spacer(Modifier.height(20.dp))
         InputTextField(
             text = "Diet",
-            value = diet.value,
+            value = UserDiet.values()[diet.value]
+                .toString().lowercase()
+                .firstCharToUpperCase().normalizeString(),
             enabled = false,
             keyboardController = keyboardController,
             keyboardType = KeyboardType.Number,
