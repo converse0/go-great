@@ -24,6 +24,8 @@ import com.masuta.gogreat.domain.model.UserActivity
 import com.masuta.gogreat.domain.model.UserDiet
 import com.masuta.gogreat.presentation.components.InputTextField
 import com.masuta.gogreat.presentation.profile.LineSelectPoint
+import com.masuta.gogreat.presentation.profile.firstCharToUpperCase
+import com.masuta.gogreat.presentation.profile.normalizeString
 import com.masuta.gogreat.presentation.ui.theme.SportTheme
 
 @Composable
@@ -204,11 +206,28 @@ fun PhysicalActivitySection(
     onPhysicalActivitySelect: (UserActivity) -> Unit
 ) {
     Column() {
-        DefaultRadioButton(text = UserActivity.BASIC.toString().lowercase(), selected = selected == UserActivity.BASIC, onSelect = { onPhysicalActivitySelect(UserActivity.BASIC) })
-        DefaultRadioButton(text = UserActivity.LOW.toString().lowercase(), selected = selected == UserActivity.LOW, onSelect = { onPhysicalActivitySelect(UserActivity.LOW) })
-        DefaultRadioButton(text = UserActivity.LIGHT.toString().lowercase(), selected = selected == UserActivity.LIGHT, onSelect = { onPhysicalActivitySelect(UserActivity.LIGHT) })
-        DefaultRadioButton(text = UserActivity.MEDIUM.toString().lowercase(), selected = selected == UserActivity.MEDIUM, onSelect = { onPhysicalActivitySelect(UserActivity.MEDIUM) })
-        DefaultRadioButton(text = UserActivity.HIGH.toString().lowercase(), selected = selected == UserActivity.HIGH, onSelect = { onPhysicalActivitySelect(UserActivity.HIGH) })
+        DefaultRadioButton(text = UserActivity.BASIC.toString()
+            .lowercase().firstCharToUpperCase()
+            .normalizeString(),
+            selected = selected == UserActivity.BASIC,
+            onSelect = { onPhysicalActivitySelect(UserActivity.BASIC) })
+        DefaultRadioButton(text = UserActivity.LOW.toString()
+            .lowercase().firstCharToUpperCase()
+            .normalizeString(),
+            selected = selected == UserActivity.LOW,
+            onSelect = { onPhysicalActivitySelect(UserActivity.LOW) })
+        DefaultRadioButton(text = UserActivity.LIGHT.toString().lowercase()
+            .firstCharToUpperCase().normalizeString(),
+            selected = selected == UserActivity.LIGHT,
+            onSelect = { onPhysicalActivitySelect(UserActivity.LIGHT) })
+        DefaultRadioButton(text = UserActivity.MEDIUM.toString().lowercase()
+            .firstCharToUpperCase().normalizeString(),
+            selected = selected == UserActivity.MEDIUM,
+            onSelect = { onPhysicalActivitySelect(UserActivity.MEDIUM) })
+        DefaultRadioButton(text = UserActivity.HIGH.toString().lowercase()
+            .firstCharToUpperCase().normalizeString(),
+            selected = selected == UserActivity.HIGH,
+            onSelect = { onPhysicalActivitySelect(UserActivity.HIGH) })
     }
 }
 

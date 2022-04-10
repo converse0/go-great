@@ -169,7 +169,7 @@ fun ProfileInfo(
             style = MaterialTheme.typography.body1
         )
         Spacer(Modifier.height(10.dp))
-        GenderChoisen(selected = gender.value)
+        GenderChosen(selected = gender.value)
         Spacer(Modifier.height(10.dp))
         InputTextField(
             text = "Age",
@@ -241,7 +241,7 @@ fun ProfileInfo(
 }
 
 @Composable
-fun GenderChoisen(
+fun GenderChosen(
     selected: Int,
 ) {
     Row(
