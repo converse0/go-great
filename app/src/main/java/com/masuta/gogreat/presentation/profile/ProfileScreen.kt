@@ -1,5 +1,6 @@
 package com.masuta.gogreat.presentation.profile
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -15,17 +16,22 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.masuta.gogreat.R
 import com.masuta.gogreat.domain.model.UserActivity
 import com.masuta.gogreat.domain.model.UserDiet
 import com.masuta.gogreat.presentation.BottomNavigationItem
 import com.masuta.gogreat.presentation.components.InputTextField
+import com.masuta.gogreat.presentation.ui.theme.SportTheme
 
 
 fun String.firstCharToUpperCase(): String {
@@ -121,7 +127,7 @@ fun ProfileSection(
             .padding(horizontal = 8.dp)
     ) {
         items(1) {
-            ProfileAvatar()
+            ProfileAvatar(gender = gender.value)
             Spacer(modifier = Modifier.height(10.dp))
             Text(
                 text = "Maria",
@@ -335,7 +341,9 @@ fun LineSelectPoint() {
 
 
 @Composable
-fun ProfileAvatar() {
+fun ProfileAvatar(
+    gender: Int
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxWidth()
@@ -348,29 +356,32 @@ fun ProfileAvatar() {
                     .size(150.dp)
                     .clip(shape = CircleShape)
                     .background(color = Color.Gray)
-            )
-            ChangeProfileAvatarButton(modifier = Modifier.align(Alignment.BottomEnd))
+            ) {
+                if (gender == 0) {
+                    Image(
+                        painter = painterResource(id = R.drawable.avatar_male),
+                        contentDescription = "Male Avatar",
+                        contentScale = ContentScale.Inside,
+                        modifier = Modifier
+                            .size(150.dp)
+                            .clip(shape = CircleShape)
+                            .padding(10.dp)
+                    )
+                } else {
+                    Image(
+                        painter = painterResource(id = R.drawable.avatar_female),
+                        contentDescription = "Female Avatar",
+                        contentScale = ContentScale.Inside,
+                        modifier = Modifier
+                            .size(150.dp)
+                            .clip(shape = CircleShape)
+                            .padding(10.dp)
+                    )
+                }
+            }
         }
     }
 }
-@Composable
-fun ChangeProfileAvatarButton(
-    modifier: Modifier
-) {
-    Box(
-        contentAlignment = Alignment.TopCenter,
-        modifier = modifier
-            .size(50.dp)
-            .clip(CircleShape)
-            .border(width = 1.dp, color = Color.Black, shape = CircleShape)
-    ){
-        IconButton(onClick = { /*TODO*/ }) {
-            Icon(
-                imageVector = Icons.Default.Create,
-                contentDescription = null,
-                modifier = Modifier.padding(4.dp)
-            )
-        }
-    }
-}
+
+
 
