@@ -2,16 +2,22 @@ package com.masuta.gogreat.presentation.auth
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.masuta.gogreat.domain.handlers.Login
+import com.masuta.gogreat.domain.handlers.SignUp
 import com.masuta.gogreat.domain.model.LoginResponse
 import com.masuta.gogreat.domain.model.User
 import com.masuta.gogreat.domain.model.refreshUserToken
 import com.masuta.gogreat.domain.model.userToken
-import com.masuta.gogreat.domain.use_case.Authorization
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-
-class SignUpViewModel: ViewModel(){
-    private val authorization = Authorization()
+@HiltViewModel
+class SignUpViewModel @Inject constructor(
+    private val signUp: SignUp,
+    private val login: Login
+) : ViewModel() {
+//    private val authorization = Authorization()
 
     private fun checkUsername(username: String?): Boolean {
         return when(username) {
@@ -51,7 +57,7 @@ class SignUpViewModel: ViewModel(){
                 passwordConfirm)) {
             val user = User(username!!, email!!, password!!)
 
-                val resp = authorization.signup(user)
+                val resp = signUp(user)
                 if(resp) {
                     return true
                 }
@@ -64,7 +70,7 @@ class SignUpViewModel: ViewModel(){
     //
 
     suspend fun signIn(user: User): Map<String, Any?> {
-        return authorization.login(user)
+        return login(user)
     }
 
     fun setToken(context: Context, token: LoginResponse?) {

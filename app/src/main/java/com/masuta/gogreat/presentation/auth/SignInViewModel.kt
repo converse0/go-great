@@ -2,18 +2,23 @@ package com.masuta.gogreat.presentation.auth
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
+import com.masuta.gogreat.domain.handlers.Login
 import com.masuta.gogreat.domain.model.LoginResponse
 import com.masuta.gogreat.domain.model.User
 import com.masuta.gogreat.domain.model.refreshUserToken
 import com.masuta.gogreat.domain.model.userToken
-import com.masuta.gogreat.domain.use_case.Authorization
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class SignInViewModel: ViewModel() {
+@HiltViewModel
+class SignInViewModel @Inject constructor(
+    private val login: Login
+): ViewModel() {
 
-    private val authorization = Authorization()
+//    private val authorization = Authorization()
 
     suspend fun signIn(user: User): Map<String, Any?> {
-        return authorization.login(user)
+        return login(user)
     }
 
     fun setToken(context: Context, token: LoginResponse?) {

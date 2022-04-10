@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -97,19 +98,19 @@ fun Navigation(items: List<BottomNavigationItem>) {
             LaunchTrainingScreen()
         }
         composable(route = "profile") {
-            ProfileScreen(viewModel = viewModel(), navController = navController, menuItems = items, selected = selected, onSelect = { selected = it })
+            ProfileScreen(viewModel = hiltViewModel(), navController = navController, menuItems = items, selected = selected, onSelect = { selected = it })
         }
         composable(route = "sign-in") {
-            SignInScreen(viewModel = viewModel(), navController = navController)
+            SignInScreen(viewModel = hiltViewModel(), navController = navController)
         }
         composable(route = "sign-up") {
-            SignUpScreen(viewModel = viewModel(), navController = navController)
+            SignUpScreen(viewModel = hiltViewModel(), navController = navController)
         }
         composable(route = "launch-screen") {
             LaunchScreen(navController = navController)
         }
         composable(route = "about") {
-            AboutScreen(viewModel = viewModel(), navController = navController)
+            AboutScreen(viewModel = hiltViewModel(), navController = navController)
         }
         composable(route = "diet") {
             DietScreen(navController = navController, menuItems = items, selected = selected, onSelect = { selected = it })
