@@ -41,6 +41,7 @@ class ProfileViewModel @Inject constructor(
         }
     }
     fun getParameters(
+        username: MutableState<String>,
         timesEat: MutableState<String>,
         age: MutableState<String>,
         weight: MutableState<String>,
@@ -57,6 +58,8 @@ class ProfileViewModel @Inject constructor(
             val (resp, message) = getUserParams()
             if (resp != null) {
                 println(resp.age)
+                println(resp.username)
+                username.value = resp.username
                 age.value = resp.age.toString()
                 timesEat.value = resp.eat.toString()
                 weight.value = resp.weight.toString()

@@ -14,6 +14,7 @@ data class ParametersUserSet(
 
 @kotlinx.serialization.Serializable
 data class ParametersUserGet(
+    val username: String, // test
     val activity: String = "Basic",//UserActivity = UserActivity.BASIC,
     val age: Int,
     val desiredWeight: Int,

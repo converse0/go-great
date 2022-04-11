@@ -102,6 +102,7 @@ fun ProfileSection(
     viewModel: ProfileViewModel,
     navController: NavHostController
 ) {
+    val username = remember { mutableStateOf("") }
     val timesEat = remember{ mutableStateOf("") }
     val age = remember{ mutableStateOf("") }
     val weight = remember{ mutableStateOf("") }
@@ -115,7 +116,7 @@ fun ProfileSection(
         mutableStateOf(false)
     }
     if (!fail.value) {
-        viewModel.getParameters(timesEat, age, weight, height, desiredWeight,
+        viewModel.getParameters(username, timesEat, age, weight, height, desiredWeight,
             gender,diet, activity, routeTo, navController, fail)
     }
 
@@ -130,7 +131,7 @@ fun ProfileSection(
             ProfileAvatar(gender = gender.value)
             Spacer(modifier = Modifier.height(10.dp))
             Text(
-                text = "Maria",
+                text = username.value,
                 style = MaterialTheme.typography.h5,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
