@@ -4,22 +4,9 @@ import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -90,7 +77,7 @@ fun Navigation(items: List<BottomNavigationItem>) {
         startDestination = choseStartScreen(LocalContext.current)
     ) {
         composable(route = "main") {
-            MainScreen(navController = navController, menuItems = items, selected = selected, onSelect = { selected = it })
+            MainScreen(navController = navController,viewModel = hiltViewModel(),  menuItems = items, selected = selected, onSelect = { selected = it })
         }
         composable(route = "new-training") {
             NewTrainingScreen(navController = navController, menuItems = items, selected = selected, onSelect = { selected = it })

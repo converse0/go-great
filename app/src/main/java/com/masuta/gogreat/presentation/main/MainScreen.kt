@@ -8,7 +8,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -20,17 +19,15 @@ import com.masuta.gogreat.domain.model.Training
 import com.masuta.gogreat.presentation.BottomNavigationItem
 import com.masuta.gogreat.presentation.components.BottomMenuBar
 import com.masuta.gogreat.presentation.ui.theme.Purple200
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 @Composable
 fun MainScreen(
     navController: NavHostController,
     selected: String,
     onSelect: (String) -> Unit,
-    menuItems: List<BottomNavigationItem>
+    menuItems: List<BottomNavigationItem>,
+    viewModel: MainViewModel
 ) {
     Scaffold(
         bottomBar = {
@@ -72,6 +69,7 @@ fun MainScreen(
                         )
                     }
                     WorkoutsSection()
+                    CountDownTraining(sec = 30, viewModel = viewModel)
                 }
             }
         }
@@ -263,32 +261,38 @@ fun FormatedText(text:String) {
 //}
 
 @Composable
-fun CountDownTraining(sec: Int) {
-    var text by remember {
+fun CountDownTraining(sec: Int, viewModel: MainViewModel) {
+    var text = remember {
         mutableStateOf("Start")
     }
+    var counter by remember {
+        mutableStateOf(0)
+    }
+
     Spacer(modifier = Modifier.height(50.0.dp))
     Row(horizontalArrangement = Arrangement.Center,
         modifier = Modifier.fillMaxWidth()) {
-        val col by remember {
+        var col by remember {
             mutableStateOf(Color(0xFF2ABD20))
         }
+        viewModel.init(sec)
         FloatingActionButton(
-            //col = Color(0xFF0E4E09)
             onClick = {
-                val job = CoroutineScope(Dispatchers.Main).launch {
-                    val seq = 0..sec
-                    for (i in seq.reversed()) {
-                        delay(1000)
-                        if(i % 10 == 0) println("ping $i")
-                        text = i.toString()
-                    }
+                counter++
+                if (counter % 2 == 1) {
+                    text.value = "Stop"
+                    viewModel.start(text)
+                    col = Color(0xFFE53935)
+                } else {
+                    text.value = "Start"
+                    viewModel.stop()
+                    col = Color(0xFF2ABD20)
                 }
             },
             backgroundColor = col,
             modifier = Modifier.size(150.dp)
         ) {
-            Text(text, fontSize = 20.sp)
+            Text(text.value, fontSize = 20.sp)
         }
     }
 
