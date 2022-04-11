@@ -9,7 +9,8 @@ data class TrainingExercise(
     val name: String,
     val relax: String,
     val type: String,
-    val uid: String
+    val uid: String,
+    val image: String = "",
 )
 
 enum class ExerciseType(val value: Int) {

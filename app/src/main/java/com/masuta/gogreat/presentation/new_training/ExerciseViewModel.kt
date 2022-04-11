@@ -1,22 +1,26 @@
 package com.masuta.gogreat.presentation.new_training
 
+import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.masuta.gogreat.domain.model.Training
+import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.domain.repository.TrainRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class NewTrainingViewModel @Inject constructor(
+class ExerciseViewModel @Inject constructor(
     private val repository: TrainRepository
 ): ViewModel() {
 
-    fun saveTrain(newTrain: Training) {
+    fun getExercises(id: Long, exercisesList: MutableState<List<TrainingExercise>>) {
         viewModelScope.launch {
-            repository.save(newTrain)
+            val resp = repository.findById(id)
+
+            if(resp.data != null) {
+                exercisesList.value = resp.data
+            }
         }
     }
-
 }

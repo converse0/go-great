@@ -3,12 +3,14 @@ package com.masuta.gogreat.di
 import com.masuta.gogreat.data.remote.Client
 import com.masuta.gogreat.data.repository.AuthRepositoryImpl
 import com.masuta.gogreat.data.repository.ProfileRepositoryImpl
+import com.masuta.gogreat.data.repository.TrainRepositoryImpl
 import com.masuta.gogreat.domain.handlers.CreateUserParams
 import com.masuta.gogreat.domain.handlers.GetUserParams
 import com.masuta.gogreat.domain.handlers.Login
 import com.masuta.gogreat.domain.handlers.SignUp
 import com.masuta.gogreat.domain.repository.AuthRepository
 import com.masuta.gogreat.domain.repository.ProfileRepository
+import com.masuta.gogreat.domain.repository.TrainRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -59,6 +61,12 @@ object AppModule {
     @Singleton
     fun provideProfileRepository(client: Client): ProfileRepository {
         return ProfileRepositoryImpl(client)
+    }
+
+    @Provides
+    @Singleton
+    fun provideTrainRepository(client: Client): TrainRepository {
+        return TrainRepositoryImpl(client)
     }
 
 }

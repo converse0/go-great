@@ -21,6 +21,7 @@ import com.masuta.gogreat.presentation.diet.DietScreen
 import com.masuta.gogreat.presentation.health.HealthScreen
 import com.masuta.gogreat.presentation.launch_training.LaunchTrainingScreen
 import com.masuta.gogreat.presentation.main.MainScreen
+import com.masuta.gogreat.presentation.new_training.ExerciseScreen
 import com.masuta.gogreat.presentation.new_training.NewTrainingScreen
 import com.masuta.gogreat.presentation.profile.ProfileScreen
 import com.masuta.gogreat.presentation.ui.theme.SportTheme
@@ -80,7 +81,7 @@ fun Navigation(items: List<BottomNavigationItem>) {
             MainScreen(navController = navController,viewModel = hiltViewModel(),  menuItems = items, selected = selected, onSelect = { selected = it })
         }
         composable(route = "new-training") {
-            NewTrainingScreen(navController = navController, menuItems = items, selected = selected, onSelect = { selected = it })
+            NewTrainingScreen(navController = navController, viewModel = hiltViewModel())
         }
         composable(route = "launch-training") {
             LaunchTrainingScreen()
@@ -105,6 +106,9 @@ fun Navigation(items: List<BottomNavigationItem>) {
         }
         composable(route = "health") {
             HealthScreen(navController = navController, menuItems = items, selected = selected, onSelect = { selected = it })
+        }
+        composable(route = "list-exercise") {
+            ExerciseScreen(navController = navController, viewModel = hiltViewModel(), id = 0)
         }
     }
 }
