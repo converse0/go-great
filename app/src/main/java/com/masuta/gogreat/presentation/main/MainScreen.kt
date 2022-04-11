@@ -6,28 +6,19 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.masuta.gogreat.domain.model.TrainingExercise
-import com.masuta.gogreat.domain.model.Trening
+import com.masuta.gogreat.domain.model.Training
 import com.masuta.gogreat.presentation.BottomNavigationItem
 import com.masuta.gogreat.presentation.ui.theme.Purple200
-import com.masuta.gogreat.presentation.ui.theme.SportTheme
-import com.masuta.gogreat.presentation.components.DropdownDemo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -110,18 +101,36 @@ fun MainScreen(
 @Composable
 fun WorkoutsSection() {
     val listTrainings = listOf(
-        Trening(
-            listOf(TrainingExercise(1, "2", "some", "12")),
+        Training(
+            listOf(TrainingExercise(1, "2", 3,
+                12, name = "Squat", relax = "20s", type = "weight",uid= ""),
+                TrainingExercise(1, "2", 3,
+                    12, name = "Deadlift", relax = "20s", type = "weight",uid= ""),
+                TrainingExercise(1, "2", 3, 12,
+                    name = "Bench press",relax = "20s", type = "weight",uid= "")
+            ),
             "20",
             "Dumbbell lifting"
         ),
-        Trening(
-            listOf(TrainingExercise(1, "2", "some", "12")),
+        Training(
+            listOf(TrainingExercise(1, "2", 3,
+                12, name = "Squat", relax = "20s", type = "weight",uid= ""),
+                TrainingExercise(1, "2", 3,
+                    12, name = "Deadlift", relax = "20s", type = "weight",uid= ""),
+                TrainingExercise(1, "2", 3, 12,
+                    name = "Bench press",relax = "20s", type = "weight",uid= "")
+            ),
             "20",
             "Dumbbell lifting"
         ),
-        Trening(
-            listOf(TrainingExercise(1, "2", "some", "12")),
+        Training(
+            listOf(TrainingExercise(1, "2", 3,
+                12, name = "Squat", relax = "20s", type = "weight",uid= ""),
+                TrainingExercise(1, "2", 3,
+                    12, name = "Deadlift", relax = "20s", type = "weight",uid= ""),
+                TrainingExercise(1, "2", 3, 12,
+                    name = "Bench press",relax = "20s", type = "weight",uid= "")
+            ),
             "20",
             "Dumbbell lifting"
         ),
@@ -141,7 +150,7 @@ fun WorkoutsSection() {
 
 @Composable
 fun WorkoutsList(
-    workouts: List<Trening>
+    workouts: List<Training>
 ) {
     LazyRow() {
         items(workouts) { workout ->
@@ -152,7 +161,7 @@ fun WorkoutsList(
 
 @Composable
 fun WorkoutItem(
-    workout: Trening
+    workout: Training
 ) {
     Card(
         shape = RoundedCornerShape(16.dp),
