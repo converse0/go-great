@@ -23,6 +23,7 @@ import androidx.navigation.NavHostController
 import com.masuta.gogreat.R
 import com.masuta.gogreat.presentation.BottomNavigationItem
 import com.masuta.gogreat.presentation.auth.SignInForm
+import com.masuta.gogreat.presentation.components.BottomMenuBar
 import com.masuta.gogreat.presentation.ui.theme.SportTheme
 
 @Composable
@@ -34,28 +35,7 @@ fun DietScreen(
 ) {
     Scaffold(
         bottomBar = {
-            BottomAppBar(
-                backgroundColor = Color.LightGray
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceAround,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    menuItems.forEach { item ->
-                        IconButton(onClick = {
-                            navController.navigate(item.route)
-                            onSelect(item.route)
-                        }) {
-                            Icon(
-                                imageVector = item.icon,
-                                contentDescription = item.route,
-                                tint = if (item.route == selected) Color.Green else Color.Black
-                            )
-                        }
-                    }
-                }
-            }
+            BottomMenuBar(navController = navController, selected = selected, onSelect = onSelect, menuItems = menuItems)
         }
     ) {
 
@@ -69,7 +49,9 @@ fun DietScreen(
             Text(
                 text = "My diet",
                 style = MaterialTheme.typography.h3,
-                modifier = Modifier.fillMaxWidth().padding(16.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
             )
             Spacer(modifier = Modifier.height(40.dp))
             Box(
@@ -94,18 +76,5 @@ fun DietScreen(
                 fontWeight = FontWeight.W700
             )
         }
-    }
-}
-
-@Preview
-@Composable
-fun DietScreenPreview() {
-    SportTheme() {
-        DietScreen(
-            navController = NavHostController(LocalContext.current),
-            selected = "diet",
-            onSelect = {},
-            menuItems = listOf(BottomNavigationItem("main", Icons.Default.Home))
-        )
     }
 }

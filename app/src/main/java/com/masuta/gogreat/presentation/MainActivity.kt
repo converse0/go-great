@@ -23,6 +23,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.masuta.gogreat.R
 import com.masuta.gogreat.domain.model.refreshUserToken
 import com.masuta.gogreat.domain.model.userToken
 import com.masuta.gogreat.presentation.auth.AboutScreen
@@ -46,10 +47,10 @@ class MainActivity : ComponentActivity() {
             SportTheme {
                 Navigation(
                     listOf(
-                        BottomNavigationItem(route = "main", icon = Icons.Default.Home),
-                        BottomNavigationItem(route = "diet", icon = Icons.Default.Add),
-                        BottomNavigationItem(route = "health", icon = Icons.Default.PlayArrow),
-                        BottomNavigationItem(route = "profile", icon = Icons.Default.Person)
+                        BottomNavigationItem(route = "main", icon = R.drawable.ic_house, title = "Main Page"),
+                        BottomNavigationItem(route = "diet", icon = R.drawable.ic_fork_spoon, title = "My Diet"),
+                        BottomNavigationItem(route = "health", icon = R.drawable.ic_heart_pulse, title = "My Health"),
+                        BottomNavigationItem(route = "profile", icon = R.drawable.ic_profile, title = "Profile")
                     )
                 )
             }
@@ -122,8 +123,9 @@ fun Navigation(items: List<BottomNavigationItem>) {
 }
 
 data class BottomNavigationItem (
+    val title: String,
     val route: String,
-    val icon: ImageVector,
+    val icon: Int,
 )
 
 

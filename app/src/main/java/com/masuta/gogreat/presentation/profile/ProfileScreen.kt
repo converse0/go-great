@@ -30,6 +30,7 @@ import com.masuta.gogreat.R
 import com.masuta.gogreat.domain.model.UserActivity
 import com.masuta.gogreat.domain.model.UserDiet
 import com.masuta.gogreat.presentation.BottomNavigationItem
+import com.masuta.gogreat.presentation.components.BottomMenuBar
 import com.masuta.gogreat.presentation.components.InputTextField
 import com.masuta.gogreat.presentation.ui.theme.SportTheme
 
@@ -52,28 +53,7 @@ fun ProfileScreen(
 ) {
     Scaffold(
         bottomBar = {
-            BottomAppBar(
-                backgroundColor = Color.LightGray
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceAround,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    menuItems.forEach { item ->
-                        IconButton(onClick = {
-                            navController.navigate(item.route)
-                            onSelect(item.route)
-                        }) {
-                            Icon(
-                                imageVector = item.icon,
-                                contentDescription = item.route,
-                                tint = if (item.route == selected) Color.Green else Color.Black
-                            )
-                        }
-                    }
-                }
-            }
+            BottomMenuBar(navController = navController, selected = selected, onSelect = onSelect, menuItems = menuItems)
         }
     ) {
 
