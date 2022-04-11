@@ -69,7 +69,6 @@ fun MainScreen(
                         )
                     }
                     WorkoutsSection()
-                    CountDownTraining(sec = 30, viewModel = viewModel)
                 }
             }
         }
@@ -260,9 +259,12 @@ fun FormatedText(text:String) {
 //    }
 //}
 
+//                     CountDownTraining(sec = 30, viewModel = viewModel)
+
+
 @Composable
 fun CountDownTraining(sec: Int, viewModel: MainViewModel) {
-    var text = remember {
+    val text = remember {
         mutableStateOf("Start")
     }
     var counter by remember {

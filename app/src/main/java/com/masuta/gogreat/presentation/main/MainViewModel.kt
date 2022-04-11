@@ -9,9 +9,11 @@ class MainViewModel: ViewModel() {
     private var globSec = 0
     private var count = 0
     private var job: Job? = null
+
     fun init(sec:Int) {
         globSec = sec
     }
+
     fun start( text: MutableState<String>) {
         job = CoroutineScope(Dispatchers.Main).launch {
             val seq = 0..globSec - count
@@ -26,7 +28,6 @@ class MainViewModel: ViewModel() {
         }
     }
     fun stop() {
-
         job?.cancel()
     }
 }
