@@ -81,7 +81,7 @@ fun NewTrainingScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             item {
-                PersonSection(onNewExercise = { navController.navigate("list-exercise") })
+                PersonSection(onNewExercise = { navController.navigate("list-exercise/${it.value}") })
                 Text(
                     text = "Please, press + to choose a group of muscles and add exercise",
                     style = MaterialTheme.typography.body1
@@ -230,7 +230,7 @@ fun ExercisesItem(
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun PersonSection(
-    onNewExercise: () -> Unit
+    onNewExercise: (ExerciseType) -> Unit
 ) {
     val constraints = ConstraintSet {
         val topGuidLine = createGuidelineFromTop(0.2f)
@@ -286,7 +286,7 @@ fun PersonSection(
                 ExerciseType.LEGS -> "legDown"
                 ExerciseType.OTHER -> "forearm"
             }
-            IconButtonAddExercise(modifier = Modifier.layoutId(layoutId), onClick = onNewExercise)
+            IconButtonAddExercise(modifier = Modifier.layoutId(layoutId), onClick = { onNewExercise(type) })
         }
 
 //        IconButtonAddExercise(modifier = Modifier.layoutId("shoulder"), onClick = onNewExercise)

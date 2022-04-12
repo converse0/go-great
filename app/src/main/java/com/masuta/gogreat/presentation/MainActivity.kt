@@ -107,8 +107,8 @@ fun Navigation(items: List<BottomNavigationItem>) {
         composable(route = "health") {
             HealthScreen(navController = navController, menuItems = items, selected = selected, onSelect = { selected = it })
         }
-        composable(route = "list-exercise") {
-            ExerciseScreen(navController = navController, viewModel = hiltViewModel())
+        composable(route = "list-exercise/{typeId}") {
+            ExerciseScreen(navController = navController, viewModel = hiltViewModel(), typeId = it.arguments?.getString("typeId"))
         }
     }
 }

@@ -41,15 +41,17 @@ import io.ktor.util.reflect.*
 fun ExerciseScreen(
     navController: NavHostController,
     viewModel: ExerciseViewModel,
-    id: Long = 2
+    typeId: String?
 ) {
+    println(typeId)
+    
     val selectedItems = remember { mutableStateOf(listOf(-1)) }
     val newExercise = remember{ mutableStateOf(false) }
     val exercisesList = remember { mutableStateOf(emptyList<TrainingExercise>())  }
 
     val selectedExerciseId = remember{ mutableStateOf(0) }
 
-    viewModel.getExercises(id, exercisesList)
+    viewModel.getExercises(typeId!!.toLong(), exercisesList)
 
     Column(
         modifier = Modifier
