@@ -2,6 +2,7 @@ package com.masuta.gogreat.presentation.new_training
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
@@ -41,7 +42,13 @@ fun NewTrainingScreen(
 
     val openModal = remember { mutableStateOf(false) }
     val name = remember { mutableStateOf("") }
-    val listExercises = remember { mutableStateOf(emptyList<TrainingExercise>()) }
+    val listExercises = remember { mutableStateOf(listOf(TrainingExercise(1, "2", 3,
+        12, name = "Squat", relax = "20s", type = "weight",uid= ""),
+        TrainingExercise(1, "2", 3,
+            12, name = "Deadlift", relax = "20s", type = "weight",uid= ""),
+        TrainingExercise(1, "2", 3, 12,
+            name = "Bench press",relax = "20s", type = "weight",uid= "")
+    )) }
   
     Column(
         modifier = Modifier
@@ -169,27 +176,30 @@ fun ExercisesList(
     listExercises: MutableState<List<TrainingExercise>>
 ) {
     listExercises.value.forEach { exercise ->
-        ExercisesItem(title = exercise.name)
+        ExercisesItem(exercise)
     }
 }
 
 @Composable
 fun ExercisesItem(
-    image: String = "",
-    title: String
+    ex: TrainingExercise,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .clip(RoundedCornerShape(16.dp))
+            .clip(RoundedCornerShape(16.dp)),
     ) {
         Image(painter = painterResource(id = R.drawable.muscle_dieta), contentDescription = null)
         Text(
-            text = title,
+            text = ex.name,
             style = MaterialTheme.typography.h4,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(horizontal = 16.dp).clickable {
+                //TODO
+
+            }
         )
     }
 }
