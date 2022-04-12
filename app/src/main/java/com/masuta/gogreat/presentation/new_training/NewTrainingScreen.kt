@@ -37,6 +37,7 @@ import com.masuta.gogreat.domain.model.ExerciseType
 import com.masuta.gogreat.domain.model.Training
 import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.presentation.ui.theme.SportTheme
+import com.skydoves.landscapist.glide.GlideImage
 
 private fun replaceString(str: String) = str.replace(" ", "_")
 
@@ -209,20 +210,31 @@ fun ExercisesItem(
             .padding(8.dp)
             .clip(RoundedCornerShape(16.dp)),
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.muscle_dieta),
-            contentDescription = null,
+        GlideImage(
+            imageModel = ex.image,
             contentScale = ContentScale.Crop,
-            modifier = Modifier.width(200.dp).height(100.dp)
+            modifier = Modifier
+                .width(200.dp)
+                .height(100.dp)
         )
+//        Image(
+//            painter = painterResource(id = R.drawable.muscle_dieta),
+//            contentDescription = null,
+//            contentScale = ContentScale.Crop,
+//            modifier = Modifier
+//                .width(200.dp)
+//                .height(100.dp)
+//        )
         Text(
             text = ex.name,
             style = MaterialTheme.typography.h4,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(horizontal = 16.dp).clickable {
-                //TODO
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .clickable {
+                    //TODO
 
-            }
+                }
         )
     }
 }

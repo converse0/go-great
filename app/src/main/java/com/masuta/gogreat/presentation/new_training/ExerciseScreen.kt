@@ -27,6 +27,7 @@ import androidx.navigation.NavHostController
 import com.masuta.gogreat.R
 import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.presentation.components.DropdownDemo
+import com.skydoves.landscapist.glide.GlideImage
 import io.ktor.util.reflect.*
 
 // local data
@@ -96,6 +97,7 @@ fun ExerciseScreen(
             onSubmit = {
                 selectedItems.value += selectedExerciseId.value
                 newExercise.value = false
+                navController.navigate("new-training")
             }
         )
     }
@@ -135,14 +137,21 @@ fun ExerciseItem(
             .height(100.dp)
             .clickable { onClick() }
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.sport_health),
-            contentDescription = null,
+        GlideImage(
+            imageModel = exercise.image,
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .width(200.dp)
                 .height(100.dp)
         )
+//        Image(
+//            painter = painterResource(id = R.drawable.sport_health),
+//            contentDescription = null,
+//            contentScale = ContentScale.Crop,
+//            modifier = Modifier
+//                .width(200.dp)
+//                .height(100.dp)
+//        )
         Text(
             text = exercise.name,
             style = MaterialTheme.typography.h4,
