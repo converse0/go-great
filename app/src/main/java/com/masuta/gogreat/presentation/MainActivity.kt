@@ -25,6 +25,7 @@ import com.masuta.gogreat.presentation.new_training.ExerciseScreen
 import com.masuta.gogreat.presentation.new_training.NewTrainingScreen
 import com.masuta.gogreat.presentation.profile.ProfileScreen
 import com.masuta.gogreat.presentation.ui.theme.SportTheme
+import com.masuta.gogreat.presentation.workout.WorkoutScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -109,6 +110,9 @@ fun Navigation(items: List<BottomNavigationItem>) {
         }
         composable(route = "list-exercise/{typeId}") {
             ExerciseScreen(navController = navController, viewModel = hiltViewModel(), typeId = it.arguments?.getString("typeId"))
+        }
+        composable(route = "workout") {
+            WorkoutScreen(navController = navController, viewModel = hiltViewModel())
         }
     }
 }

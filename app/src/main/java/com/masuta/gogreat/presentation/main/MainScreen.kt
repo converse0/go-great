@@ -1,6 +1,7 @@
 package com.masuta.gogreat.presentation.main
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -68,7 +69,7 @@ fun MainScreen(
                             modifier = Modifier.padding(vertical = 16.dp)
                         )
                     }
-                    WorkoutsSection(viewModel = viewModel)
+                    WorkoutsSection(viewModel = viewModel, navController = navController)
                 }
             }
         }
@@ -77,7 +78,8 @@ fun MainScreen(
 
 @Composable
 fun WorkoutsSection(
-    viewModel: MainViewModel
+    viewModel: MainViewModel,
+    navController: NavHostController
 ) {
 //    val listTrainings = listOf(
 //        Training(
@@ -127,24 +129,26 @@ fun WorkoutsSection(
             modifier = Modifier
                 .padding(vertical = 20.dp)
         )
-        WorkoutsList(workouts = listTrainings.value)
+        WorkoutsList(workouts = listTrainings.value, navController = navController)
     }
 }
 
 @Composable
 fun WorkoutsList(
-    workouts: List<Training>
+    workouts: List<Training>,
+    navController: NavHostController
 ) {
     LazyRow() {
         items(workouts) { workout ->
-            WorkoutItem(workout = workout)
+            WorkoutItem(workout = workout, onSelectItem = { navController.navigate("workout") })
         }
     }
 }
 
 @Composable
 fun WorkoutItem(
-    workout: Training
+    workout: Training,
+    onSelectItem: () -> Unit
 ) {
     Card(
         shape = RoundedCornerShape(16.dp),
@@ -153,6 +157,7 @@ fun WorkoutItem(
             .fillMaxWidth()
             .height(200.dp)
             .padding(horizontal = 20.dp)
+            .clickable { onSelectItem() }
     ) {
         Column(
             verticalArrangement = Arrangement.Bottom,
