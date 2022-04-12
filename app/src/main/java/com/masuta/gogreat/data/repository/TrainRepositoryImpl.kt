@@ -83,6 +83,10 @@ class TrainRepositoryImpl @Inject constructor(
         return localTrainingEx.values.toList()
     }
 
+    override suspend fun clearLocalExerciseData() {
+        localTrainingEx = mutableMapOf()
+    }
+
     override fun delete(newTrain: Training) {
         TODO("Not yet implemented")
     }
