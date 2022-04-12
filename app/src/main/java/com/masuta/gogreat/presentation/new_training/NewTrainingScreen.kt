@@ -209,7 +209,7 @@ fun ExercisesItem(
             imageModel = ex.image,
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .width(170.dp)
+                .width(150.dp)
                 .height(100.dp)
         )
 //        Image(
@@ -222,7 +222,7 @@ fun ExercisesItem(
 //        )
         Text(
             text = ex.name,
-            style = MaterialTheme.typography.h4,
+            style = MaterialTheme.typography.h5,
             fontWeight = FontWeight.Light,
             modifier = Modifier
                 .padding(horizontal = 15.dp)
