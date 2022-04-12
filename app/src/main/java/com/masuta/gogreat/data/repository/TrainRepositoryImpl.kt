@@ -27,6 +27,7 @@ class TrainRepositoryImpl @Inject constructor(
                 append("Authorization", "Bearer $userToken")
             }
         }.let {
+            println("findAll: $it")
             return it!!
         }
     }
@@ -42,7 +43,7 @@ class TrainRepositoryImpl @Inject constructor(
                     append("Authorization", "Bearer $userToken")
                 }
             }!!
-            println(resp)
+            println(   "findById: $resp" )
             return resp
         }
     }
@@ -55,7 +56,7 @@ class TrainRepositoryImpl @Inject constructor(
             }
             body = newTrain
         }
-        println(resp)
+        println("save: $resp")
 
     }
 
