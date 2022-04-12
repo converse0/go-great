@@ -21,7 +21,7 @@ class TrainRepositoryImpl @Inject constructor(
        httpClient = client.makeClient()
     }
     override suspend fun findAll(): TrainingResponse {
-        httpClient?.get<TrainingResponse>("$url/user/trainings") {
+        httpClient?.get<TrainingResponse>("$url/user/trenings") {
             contentType(ContentType.Application.Json)
             headers {
                 append("Authorization", "Bearer $token")
