@@ -33,13 +33,17 @@ class TrainRepositoryImpl @Inject constructor(
 
     override suspend fun findById(id: Long): ExerciseResponse {
         ExerciseType.values()[id.toInt()].let {
-            return httpClient?.get<ExerciseResponse>(
-                "$url/user/exercises/default?type=${id.toString().lowercase()}") {
+            val type = it.toString().lowercase()
+            println(type)
+            val resp = httpClient?.get<ExerciseResponse>(
+                "$url/user/exercises/default?type=${type}") {
                 contentType(ContentType.Application.Json)
                 headers {
                     append("Authorization", "Bearer $token")
                 }
             }!!
+            println(resp)
+            return resp
         }
     }
 
@@ -64,14 +68,18 @@ class TrainRepositoryImpl @Inject constructor(
     override suspend fun saveLocalEx(ex: TrainingExercise): Int {
         val id = localTrainingEx.size.plus(1)
         localTrainingEx = localTrainingEx.plus(id to ex)
+        println(localTrainingEx)
         return id
     }
 
     override suspend fun getLocalEx(id: Int): TrainingExercise? {
-    localTrainingEx.get(id).let {
-        return it
+        localTrainingEx.get(id).let {
+            return it
+        }
     }
 
+    override suspend fun getAllLocalEx(): List<TrainingExercise> {
+        return localTrainingEx.values.toList()
     }
 
     override fun delete(newTrain: Training) {

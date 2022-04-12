@@ -68,7 +68,7 @@ fun MainScreen(
                             modifier = Modifier.padding(vertical = 16.dp)
                         )
                     }
-                    WorkoutsSection()
+                    WorkoutsSection(viewModel = viewModel)
                 }
             }
         }
@@ -76,44 +76,50 @@ fun MainScreen(
 }
 
 @Composable
-fun WorkoutsSection() {
-    val listTrainings = listOf(
-        Training(
-            listOf(TrainingExercise(1, "2", 3,
-                12, name = "Squat", relax = "20s", type = "weight",uid= ""),
-                TrainingExercise(1, "2", 3,
-                    12, name = "Deadlift", relax = "20s", type = "weight",uid= ""),
-                TrainingExercise(1, "2", 3, 12,
-                    name = "Bench press",relax = "20s", type = "weight",uid= "")
-            ),
-            "20",
-            "Dumbbell lifting"
-        ),
-        Training(
-            listOf(TrainingExercise(1, "2", 3,
-                12, name = "Squat", relax = "20s", type = "weight",uid= ""),
-                TrainingExercise(1, "2", 3,
-                    12, name = "Deadlift", relax = "20s", type = "weight",uid= ""),
-                TrainingExercise(1, "2", 3, 12,
-                    name = "Bench press",relax = "20s", type = "weight",uid= "")
-            ),
-            "20",
-            "Dumbbell lifting"
-        ),
-        Training(
-            listOf(TrainingExercise(1, "2", 3,
-                12, name = "Squat", relax = "20s", type = "weight",uid= ""),
-                TrainingExercise(1, "2", 3,
-                    12, name = "Deadlift", relax = "20s", type = "weight",uid= ""),
-                TrainingExercise(1, "2", 3, 12,
-                    name = "Bench press",relax = "20s", type = "weight",uid= "")
-            ),
-            "20",
-            "Dumbbell lifting"
-        ),
-    )
+fun WorkoutsSection(
+    viewModel: MainViewModel
+) {
+//    val listTrainings = listOf(
+//        Training(
+//            listOf(TrainingExercise(1, "2", 3,
+//                12, name = "Squat", relax = "20s", type = "weight",uid= ""),
+//                TrainingExercise(1, "2", 3,
+//                    12, name = "Deadlift", relax = "20s", type = "weight",uid= ""),
+//                TrainingExercise(1, "2", 3, 12,
+//                    name = "Bench press",relax = "20s", type = "weight",uid= "")
+//            ),
+//            "20",
+//            "Dumbbell lifting"
+//        ),
+//        Training(
+//            listOf(TrainingExercise(1, "2", 3,
+//                12, name = "Squat", relax = "20s", type = "weight",uid= ""),
+//                TrainingExercise(1, "2", 3,
+//                    12, name = "Deadlift", relax = "20s", type = "weight",uid= ""),
+//                TrainingExercise(1, "2", 3, 12,
+//                    name = "Bench press",relax = "20s", type = "weight",uid= "")
+//            ),
+//            "20",
+//            "Dumbbell lifting"
+//        ),
+//        Training(
+//            listOf(TrainingExercise(1, "2", 3,
+//                12, name = "Squat", relax = "20s", type = "weight",uid= ""),
+//                TrainingExercise(1, "2", 3,
+//                    12, name = "Deadlift", relax = "20s", type = "weight",uid= ""),
+//                TrainingExercise(1, "2", 3, 12,
+//                    name = "Bench press",relax = "20s", type = "weight",uid= "")
+//            ),
+//            "20",
+//            "Dumbbell lifting"
+//        ),
+//    )
 
-    if (listTrainings.isNotEmpty()) {
+    val listTrainings = remember { mutableStateOf(emptyList<Training>()) }
+
+    viewModel.getExercises(listTrainings)
+
+    if (listTrainings.value.isNotEmpty()) {
         Text(
             text = "My workouts",
             style = MaterialTheme.typography.h5,
@@ -121,7 +127,7 @@ fun WorkoutsSection() {
             modifier = Modifier
                 .padding(vertical = 20.dp)
         )
-        WorkoutsList(workouts = listTrainings)
+        WorkoutsList(workouts = listTrainings.value)
     }
 }
 

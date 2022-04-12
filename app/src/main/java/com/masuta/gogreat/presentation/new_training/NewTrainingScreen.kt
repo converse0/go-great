@@ -38,6 +38,7 @@ import com.masuta.gogreat.domain.model.Training
 import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.presentation.ui.theme.SportTheme
 
+private fun replaceString(str: String) = str.replace(" ", "_")
 
 @Composable
 fun NewTrainingScreen(
@@ -46,16 +47,17 @@ fun NewTrainingScreen(
 ) {
 
     val openModal = remember { mutableStateOf(false) }
-    val name = remember { mutableStateOf("") }
     val listExercises = remember { mutableStateOf(listOf(
-        TrainingExercise(1, "2", 3,
-        12, name = "Squat", relax = "20s", type = "weight",uid= ""),
-        TrainingExercise(1, "2", 3,
-            12, name = "Deadlift", relax = "20s", type = "weight",uid= ""),
-        TrainingExercise(1, "2", 3, 12,
-            name = "Bench press",relax = "20s", type = "weight",uid= "")
+        TrainingExercise(1, "20s", 3,
+        12, name = "Squat", relax = "20s", type = "other",uid= ""),
+        TrainingExercise(1, "20s", 3,
+            12, name = "Deadlift", relax = "20s", type = "other",uid= ""),
+        TrainingExercise(1, "20s", 3, 12,
+            name = replaceString("Bench press"),relax = "20s", type = "other",uid= "")
     )) }
-  
+
+    viewModel.getLocalExercises(listExercises)
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -111,10 +113,11 @@ fun NewTrainingScreen(
                 viewModel.saveTrain(
                     newTrain = Training(
                         exercises = listExercises.value,
-                        interval = "50",
+                        interval = "50s",
                         name = it
                     )
                 )
+                navController.navigate("main")
             },
             onDismiss = { openModal.value = false }
         )

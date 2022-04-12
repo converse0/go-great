@@ -26,28 +26,30 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.masuta.gogreat.R
 import com.masuta.gogreat.domain.model.TrainingExercise
+import com.masuta.gogreat.presentation.components.DropdownDemo
 import io.ktor.util.reflect.*
+
+// local data
+//         TrainingExercise(1, "2s", 3,
+//            12, name = "Squat", relax = "20s", type = "other",uid= ""),
+//        TrainingExercise(1, "2s", 3,
+//            12, name = "Deadlift", relax = "20s", type = "other",uid= ""),
+//        TrainingExercise(1, "2s", 3, 12,
+//            name = "Bench press",relax = "20s", type = "other",uid= "")
 
 @Composable
 fun ExerciseScreen(
     navController: NavHostController,
     viewModel: ExerciseViewModel,
-    id: Long
+    id: Long = 2
 ) {
     val selectedItems = remember { mutableStateOf(listOf(-1)) }
     val newExercise = remember{ mutableStateOf(false) }
-    val exercisesList = remember { mutableStateOf(listOf(
-        TrainingExercise(1, "2", 3,
-            12, name = "Squat", relax = "20s", type = "weight",uid= ""),
-        TrainingExercise(1, "2", 3,
-            12, name = "Deadlift", relax = "20s", type = "weight",uid= ""),
-        TrainingExercise(1, "2", 3, 12,
-            name = "Bench press",relax = "20s", type = "weight",uid= "")
-    ))  }
+    val exercisesList = remember { mutableStateOf(emptyList<TrainingExercise>())  }
 
     val selectedExerciseId = remember{ mutableStateOf(0) }
 
-//    viewModel.getExercises(id, exercisesList)
+    viewModel.getExercises(id, exercisesList)
 
     Column(
         modifier = Modifier
@@ -86,6 +88,8 @@ fun ExerciseScreen(
     }
     if (newExercise.value) {
         NewExerciseScreen(
+            viewModel = viewModel,
+            exercise = exercisesList.value[selectedExerciseId.value],
             onClose = { newExercise.value = false },
             onSubmit = {
                 selectedItems.value += selectedExerciseId.value
@@ -104,7 +108,6 @@ fun ExerciseList(
 
     exercisesList.value.forEachIndexed { index, exercise ->
         ExerciseItem(
-            id = index,
             exercise = exercise,
             selected = selectedItems.contains(index),
             onClick = {
@@ -116,10 +119,9 @@ fun ExerciseList(
 
 @Composable
 fun ExerciseItem(
-    id: Int,
     exercise: TrainingExercise,
     selected: Boolean,
-    onClick: (Int) -> Unit
+    onClick: () -> Unit
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -129,13 +131,15 @@ fun ExerciseItem(
             .clip(RoundedCornerShape(16.dp))
             .background(color = if (selected) Color.Gray else Color.Transparent)
             .height(100.dp)
-            .clickable { onClick(id) }
+            .clickable { onClick() }
     ) {
         Image(
             painter = painterResource(id = R.drawable.sport_health),
             contentDescription = null,
             contentScale = ContentScale.Crop,
-            modifier = Modifier.width(200.dp).height(100.dp)
+            modifier = Modifier
+                .width(200.dp)
+                .height(100.dp)
         )
         Text(
             text = exercise.name,
@@ -148,6 +152,8 @@ fun ExerciseItem(
 
 @Composable
 fun NewExerciseScreen(
+    viewModel: ExerciseViewModel,
+    exercise: TrainingExercise,
     onClose: () -> Unit,
     onSubmit: () -> Unit
 ) {
@@ -172,48 +178,73 @@ fun NewExerciseScreen(
             }
         }
         Spacer(modifier = Modifier.height(20.dp))
-        NewExerciseParameters(onSubmit = onSubmit)
+        NewExerciseParameters(exercise = exercise, onSubmit = onSubmit, viewModel = viewModel)
     }
 }
 
 @Composable
 fun NewExerciseParameters(
+    viewModel: ExerciseViewModel,
+    exercise: TrainingExercise,
     onSubmit: () -> Unit
 ) {
-    val sessions = remember { mutableStateOf(3) }
-    val repetitions = remember { mutableStateOf(14) }
-    val weight = remember { mutableStateOf(20) }
-    val recoveryTime = remember { mutableStateOf(30) }
+    fun String.toInteger(): Int = this.filter { it.isDigit() }.toInt()
+
+    val count = remember { mutableStateOf(exercise.count) }
+    val duration = remember { mutableStateOf(exercise.duration.toInteger()) }
+    val numberOfSets = remember { mutableStateOf(exercise.numberOfSets) }
+    val numberOfRepetitions = remember { mutableStateOf(exercise.numberOfRepetitions) }
+    val relaxTime = remember { mutableStateOf(exercise.relax.toInteger()) }
+
+    println(exercise)
 
     LazyColumn(
         modifier = Modifier.fillMaxWidth()
     ) {
         item {
             Text(
-                text = "Number of session",
+                text = "Count",
                 style = MaterialTheme.typography.body1,
             )
-            NumberSession(selected = sessions.value, onSessionSelect = { sessions.value = it })
+            DropdownDemo(items = listOf(10, 30, 50), selected = count)
+            Text(
+                text = "Number of sets",
+                style = MaterialTheme.typography.body1,
+                modifier = Modifier.padding(10.dp)
+            )
+            DropdownDemo(items = listOf(3, 4, 5), selected = numberOfSets)
             Text(
                 text = "Number of repetitions",
                 style = MaterialTheme.typography.body1,
                 modifier = Modifier.padding(10.dp)
             )
-            NumberRepetitions(selected = repetitions.value, onRepetitionSelect = { repetitions.value = it })
-            Text(
-                text = "Chose weight, kg",
-                style = MaterialTheme.typography.body1,
-                modifier = Modifier.padding(10.dp)
-            )
-            NumberWeight(selected = weight.value, onWeightSelect = { weight.value = it })
+            DropdownDemo(items = listOf(15, 30, 50), selected = numberOfRepetitions)
             Text(
                 text = "Choose recovery time, sec",
                 style = MaterialTheme.typography.body1,
                 modifier = Modifier.padding(10.dp)
             )
-            NumberRecoveryTime(selected = recoveryTime.value, onTimeSelect = { recoveryTime.value = it })
+            DropdownDemo(items = listOf(20, 30, 50), selected = relaxTime)
+            Text(
+                text = "Duration, sec",
+                style = MaterialTheme.typography.body1,
+                modifier = Modifier.padding(10.dp)
+            )
+            DropdownDemo(items = listOf(20, 30, 50), selected = duration)
             TextButton(
-                onClick = onSubmit,
+                onClick = {
+                    onSubmit()
+                    val ex = exercise.copy(
+                        count = count.value,
+                        duration = "${duration.value}s",
+                        numberOfRepetitions = numberOfRepetitions.value,
+                        relax = "${relaxTime.value}s",
+                        numberOfSets = numberOfSets.value
+                    )
+                    viewModel.saveLocalExercise(ex)
+                    println(exercise)
+                    println(ex)
+                },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray),
                 modifier = Modifier
                     .fillMaxWidth()

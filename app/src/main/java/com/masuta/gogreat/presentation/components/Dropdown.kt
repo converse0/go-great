@@ -17,10 +17,9 @@ import androidx.compose.ui.unit.dp
 import com.masuta.gogreat.presentation.ui.theme.SportTheme
 
 @Composable
-fun DropdownDemo(items: List<String>, indexSel: MutableState<Int> = mutableStateOf(0)) {
+fun DropdownDemo(items: List<Int>, selected: MutableState<Int>) {
     var expanded by remember { mutableStateOf(false) }
     val disabledValue = "B"
-    var selectedIndex by remember { mutableStateOf(0) }
     Box(modifier = Modifier
         .fillMaxSize()
         .wrapContentSize(Alignment.TopStart)
@@ -35,7 +34,7 @@ fun DropdownDemo(items: List<String>, indexSel: MutableState<Int> = mutableState
                 .background(color = Color.Transparent, shape = RoundedCornerShape(10.dp))
                 .padding(10.dp)
         ) {
-            Text(items[selectedIndex])
+            Text(text = selected.value.toString())
             Icon(imageVector = Icons.Default.KeyboardArrowDown, contentDescription = null)
         }
         DropdownMenu(
@@ -48,35 +47,23 @@ fun DropdownDemo(items: List<String>, indexSel: MutableState<Int> = mutableState
             items.forEachIndexed { index, s ->
                 DropdownMenuItem(
                     onClick = {
-                        selectedIndex = index
-                        indexSel.value = index
+                        selected.value = s
                         expanded = false
                     },
                     modifier = Modifier
-                        .background(color = if (selectedIndex == index) Color.Green else Color.Transparent)
+                        .background(color = if (selected.value == s) Color.Green else Color.Transparent)
                 ) {
-                    val disabledText = if (s == disabledValue) {
+                    val disabledText = if (s.toString() == disabledValue) {
                         " (Disabled)"
                     } else {
                         ""
                     }
-                    Text(text = s + disabledText)
+                    Text(text = s.toString() + disabledText)
                 }
                 if (index != items.size - 1) {
                     Divider()
                 }
             }
         }
-    }
-}
-
-
-
-@Preview(showBackground = true)
-@Composable
-fun DropDownPreview() {
-    val list = listOf("Hello", "World", "New", "Party")
-    SportTheme {
-        DropdownDemo(items = list)
     }
 }

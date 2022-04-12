@@ -12,6 +12,7 @@ interface TrainRepository {
     suspend fun saveLocal(newTrain: Training):Int
     suspend fun saveLocalEx(ex: TrainingExercise):Int
     suspend fun getLocalEx(id: Int):TrainingExercise?
+    suspend fun getAllLocalEx(): List<TrainingExercise>
 
     fun delete(newTrain: Training)
 }

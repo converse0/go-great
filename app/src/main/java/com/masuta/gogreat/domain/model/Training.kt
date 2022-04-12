@@ -8,7 +8,7 @@ data class Training(
 
 @kotlinx.serialization.Serializable
 data class TrainingResponse(
-    val data: List<Training>?,
-    val message: String?,
-    val status: Boolean?
+    val data: List<Training>? = null,
+    val message: String? = null,
+    val status: Boolean? = null
 )

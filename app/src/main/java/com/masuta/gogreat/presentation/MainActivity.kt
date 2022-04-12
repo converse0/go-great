@@ -108,7 +108,7 @@ fun Navigation(items: List<BottomNavigationItem>) {
             HealthScreen(navController = navController, menuItems = items, selected = selected, onSelect = { selected = it })
         }
         composable(route = "list-exercise") {
-            ExerciseScreen(navController = navController, viewModel = hiltViewModel(), id = 0)
+            ExerciseScreen(navController = navController, viewModel = hiltViewModel())
         }
     }
 }
