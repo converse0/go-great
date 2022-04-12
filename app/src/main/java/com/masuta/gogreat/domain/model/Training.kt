@@ -3,7 +3,8 @@ package com.masuta.gogreat.domain.model
 data class Training(
     val exercises: List<TrainingExercise>,
     val interval: String,
-    val name: String
+    val name: String,
+    val uid: String? = null
 )
 
 @kotlinx.serialization.Serializable
