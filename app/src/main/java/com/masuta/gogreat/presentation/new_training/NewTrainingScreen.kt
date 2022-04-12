@@ -48,14 +48,7 @@ fun NewTrainingScreen(
 ) {
 
     val openModal = remember { mutableStateOf(false) }
-    val listExercises = remember { mutableStateOf(listOf(
-        TrainingExercise(1, "20s", 3,
-        12, name = "Squat", relax = "20s", type = "other",uid= ""),
-        TrainingExercise(1, "20s", 3,
-            12, name = "Deadlift", relax = "20s", type = "other",uid= ""),
-        TrainingExercise(1, "20s", 3, 12,
-            name = replaceString("Bench press"),relax = "20s", type = "other",uid= "")
-    )) }
+    val listExercises = remember { mutableStateOf(listOf<TrainingExercise>()) }
 
     viewModel.getLocalExercises(listExercises)
 
@@ -94,14 +87,15 @@ fun NewTrainingScreen(
                     onClick = {
                         openModal.value = true
                     },
+                    enabled= listExercises.value.isNotEmpty(),
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray),
                     modifier = Modifier
-                        .fillMaxWidth()
+                        .fillMaxWidth().padding(vertical = 16.dp, horizontal = 16.dp)
                 ) {
                     Text(
                         text = "Save",
                         color = Color.White,
-                        modifier = Modifier.padding(vertical = 16.dp)
+                        modifier = Modifier.padding(vertical = 16.dp, horizontal = 16.dp)
                     )
                 }
                 Spacer(modifier = Modifier.height(10.dp))
@@ -214,7 +208,7 @@ fun ExercisesItem(
             imageModel = ex.image,
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .width(200.dp)
+                .width(170.dp)
                 .height(100.dp)
         )
 //        Image(
@@ -228,18 +222,17 @@ fun ExercisesItem(
         Text(
             text = ex.name,
             style = MaterialTheme.typography.h4,
-            fontWeight = FontWeight.Bold,
+            fontWeight = FontWeight.Light,
             modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .clickable {
-                    //TODO
-
-                }
+                .padding(horizontal = 15.dp)
+//                .clickable {
+//                    //TODO
+//
+//                }
         )
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun PersonSection(
     onNewExercise: (ExerciseType) -> Unit
