@@ -26,6 +26,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.masuta.gogreat.R
 import com.masuta.gogreat.domain.model.TrainingExercise
+import io.ktor.util.reflect.*
 
 @Composable
 fun ExerciseScreen(
@@ -33,13 +34,25 @@ fun ExerciseScreen(
     viewModel: ExerciseViewModel,
     id: Long
 ) {
-    val exercisesList = remember { mutableStateOf(emptyList<TrainingExercise>()) }
+    val selectedItems = remember { mutableStateOf(listOf(-1)) }
+    val newExercise = remember{ mutableStateOf(false) }
+    val exercisesList = remember { mutableStateOf(listOf(
+        TrainingExercise(1, "2", 3,
+            12, name = "Squat", relax = "20s", type = "weight",uid= ""),
+        TrainingExercise(1, "2", 3,
+            12, name = "Deadlift", relax = "20s", type = "weight",uid= ""),
+        TrainingExercise(1, "2", 3, 12,
+            name = "Bench press",relax = "20s", type = "weight",uid= "")
+    ))  }
 
-    viewModel.getExercises(id, exercisesList)
+    val selectedExerciseId = remember{ mutableStateOf(0) }
+
+//    viewModel.getExercises(id, exercisesList)
 
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .padding(16.dp)
             .background(Color.White)
     ) {
         Row(
@@ -62,42 +75,49 @@ fun ExerciseScreen(
             fontWeight = FontWeight.W300
         )
         if (exercisesList.value.isNotEmpty()) {
-            ExerciseList(exercisesList)
+            ExerciseList(
+                exercisesList = exercisesList,
+                selectedItems = selectedItems.value,
+                onNewExercise = {
+                    selectedExerciseId.value = it
+                    newExercise.value = true
+                })
         }
+    }
+    if (newExercise.value) {
+        NewExerciseScreen(
+            onClose = { newExercise.value = false },
+            onSubmit = {
+                selectedItems.value += selectedExerciseId.value
+                newExercise.value = false
+            }
+        )
     }
 }
 
 @Composable
 fun ExerciseList(
     exercisesList: MutableState<List<TrainingExercise>>,
+    selectedItems: List<Int>,
+    onNewExercise: (Int) -> Unit
 ) {
-
-    val newExercise = remember{ mutableStateOf(false) }
 
     exercisesList.value.forEachIndexed { index, exercise ->
         ExerciseItem(
             id = index,
-            title = exercise.name,
-            selected = false,
+            exercise = exercise,
+            selected = selectedItems.contains(index),
             onClick = {
-                newExercise.value = true
+                onNewExercise(index)
             }
         )
     }
-
-    if (newExercise.value) {
-        NewExerciseScreen(
-            onClose = { newExercise.value = false }
-        )
-    }
-
 }
 
 @Composable
 fun ExerciseItem(
-//    image: Int,
     id: Int,
-    title: String,
+    exercise: TrainingExercise,
     selected: Boolean,
     onClick: (Int) -> Unit
 ) {
@@ -105,8 +125,9 @@ fun ExerciseItem(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
-            .background(color = if (selected) Color.Gray else Color.Transparent)
+            .padding(8.dp)
             .clip(RoundedCornerShape(16.dp))
+            .background(color = if (selected) Color.Gray else Color.Transparent)
             .height(100.dp)
             .clickable { onClick(id) }
     ) {
@@ -114,13 +135,13 @@ fun ExerciseItem(
             painter = painterResource(id = R.drawable.sport_health),
             contentDescription = null,
             contentScale = ContentScale.Crop,
-            modifier = Modifier.weight(0.3f)
+            modifier = Modifier.width(200.dp).height(100.dp)
         )
         Text(
-            text = title,
+            text = exercise.name,
             style = MaterialTheme.typography.h4,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.weight(0.7f)
+            modifier = Modifier.padding(horizontal = 16.dp)
         )
     }
 }
@@ -128,6 +149,7 @@ fun ExerciseItem(
 @Composable
 fun NewExerciseScreen(
     onClose: () -> Unit,
+    onSubmit: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -150,12 +172,14 @@ fun NewExerciseScreen(
             }
         }
         Spacer(modifier = Modifier.height(20.dp))
-        NewExerciseParameters()
+        NewExerciseParameters(onSubmit = onSubmit)
     }
 }
 
 @Composable
-fun NewExerciseParameters() {
+fun NewExerciseParameters(
+    onSubmit: () -> Unit
+) {
     val sessions = remember { mutableStateOf(3) }
     val repetitions = remember { mutableStateOf(14) }
     val weight = remember { mutableStateOf(20) }
@@ -189,9 +213,7 @@ fun NewExerciseParameters() {
             )
             NumberRecoveryTime(selected = recoveryTime.value, onTimeSelect = { recoveryTime.value = it })
             TextButton(
-                onClick = {
-                    /*TODO*/
-                },
+                onClick = onSubmit,
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray),
                 modifier = Modifier
                     .fillMaxWidth()

@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -17,10 +19,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -42,7 +47,8 @@ fun NewTrainingScreen(
 
     val openModal = remember { mutableStateOf(false) }
     val name = remember { mutableStateOf("") }
-    val listExercises = remember { mutableStateOf(listOf(TrainingExercise(1, "2", 3,
+    val listExercises = remember { mutableStateOf(listOf(
+        TrainingExercise(1, "2", 3,
         12, name = "Squat", relax = "20s", type = "weight",uid= ""),
         TrainingExercise(1, "2", 3,
             12, name = "Deadlift", relax = "20s", type = "weight",uid= ""),
@@ -109,16 +115,20 @@ fun NewTrainingScreen(
                         name = it
                     )
                 )
-            }
+            },
+            onDismiss = { openModal.value = false }
         )
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun Modal(
-    onSave: (String) -> Unit
+    onSave: (String) -> Unit,
+    onDismiss: () -> Unit
 ) {
     val name = remember { mutableStateOf("") }
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     Box(
         contentAlignment = Alignment.Center,
@@ -128,6 +138,7 @@ fun Modal(
             .fillMaxSize()
             .alpha(0.7f)
             .background(color = Color.Black)
+            .clickable { onDismiss() }
         )
         Card(
             modifier = Modifier
@@ -149,7 +160,11 @@ fun Modal(
                     onValueChange = {
                         name.value = it
                     },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        imeAction = ImeAction.Done,
+                    )
                 )
                 Spacer(Modifier.height(30.dp))
                 TextButton(
@@ -191,7 +206,12 @@ fun ExercisesItem(
             .padding(8.dp)
             .clip(RoundedCornerShape(16.dp)),
     ) {
-        Image(painter = painterResource(id = R.drawable.muscle_dieta), contentDescription = null)
+        Image(
+            painter = painterResource(id = R.drawable.muscle_dieta),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.width(200.dp).height(100.dp)
+        )
         Text(
             text = ex.name,
             style = MaterialTheme.typography.h4,
