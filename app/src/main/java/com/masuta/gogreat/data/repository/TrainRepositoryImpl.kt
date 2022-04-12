@@ -24,7 +24,7 @@ class TrainRepositoryImpl @Inject constructor(
         httpClient?.get<TrainingResponse>("$url/user/trenings") {
             contentType(ContentType.Application.Json)
             headers {
-                append("Authorization", "Bearer $token")
+                append("Authorization", "Bearer $userToken")
             }
         }.let {
             return it!!
@@ -39,7 +39,7 @@ class TrainRepositoryImpl @Inject constructor(
                 "$url/user/exercises/default?type=${type}") {
                 contentType(ContentType.Application.Json)
                 headers {
-                    append("Authorization", "Bearer $token")
+                    append("Authorization", "Bearer $userToken")
                 }
             }!!
             println(resp)
@@ -51,7 +51,7 @@ class TrainRepositoryImpl @Inject constructor(
       val resp = httpClient?.post<String>("$url/user/trening") {
           contentType(ContentType.Application.Json)
             headers {
-                append("Authorization", "Bearer $token")
+                append("Authorization", "Bearer $userToken")
             }
             body = newTrain
         }

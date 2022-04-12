@@ -21,7 +21,7 @@ enum class ExerciseType(val value: Int) {
 
 @kotlinx.serialization.Serializable
 data class ExerciseResponse(
-    val data: List<TrainingExercise>?,
-    val message: String?,
-    val status: Boolean?
+    val data: List<TrainingExercise>? = null,
+    val message: String? = null,
+    val status: Boolean? = null
 )
