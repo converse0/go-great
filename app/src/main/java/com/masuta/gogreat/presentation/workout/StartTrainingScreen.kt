@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -58,9 +59,8 @@ fun StartTrainingScreen(
         ) {
             item {
                 Spacer(modifier = Modifier.height(12.dp))
-                PersonImage()
-                Spacer(modifier = Modifier.height(12.dp))
                 VideoSection()
+                Spacer(modifier = Modifier.height(12.dp))
                 TrainingInfo()
             }
         }
@@ -138,7 +138,7 @@ fun ButtonSection() {
 @SuppressLint("RememberReturnType")
 @Composable
 fun VideoSection() {
-    val videoUrl = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+    val videoUrl = "https://cdn.videvo.net/videvo_files/video/free/2018-09/large_watermarked/180419_Boxing_06_01_preview.mp4"
     val context = LocalContext.current
     val player = remember {
         ExoPlayer.Builder(context).build().apply {
@@ -156,20 +156,15 @@ fun VideoSection() {
         verticalArrangement = Arrangement.Center,
         modifier = Modifier.fillMaxWidth()
     ) {
-        AndroidView(factory = {
-            PlayerView(it).apply {
-                this.player = player
-                useController = true
-                setShowBuffering(PlayerView.SHOW_BUFFERING_ALWAYS)
-            }
-        })
-    }
-}
-
-@Preview
-@Composable
-fun StartTrainScreenPreview() {
-    SportTheme() {
-        StartTrainingScreen(navController = NavHostController(LocalContext.current))
+        AndroidView(
+            factory = {
+                PlayerView(it).apply {
+                    this.player = player
+                    useController = true
+                    setShowBuffering(PlayerView.SHOW_BUFFERING_ALWAYS)
+                }
+            },
+            modifier = Modifier.clip(RoundedCornerShape(16.dp))
+        )
     }
 }
