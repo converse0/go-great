@@ -53,7 +53,6 @@ class MainViewModel @Inject constructor(
                     val resp2 = repository.getTrainingDetail(uid)
                     println("resp2: $resp2")
                     resp2.image?.let {
-
                         trainMap[uid] = it
                     }
                 }
