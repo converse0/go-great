@@ -1,5 +1,7 @@
 package com.masuta.gogreat.presentation.main
 
+import android.content.Context
+import android.media.MediaPlayer
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -23,6 +25,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -30,6 +33,7 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.masuta.gogreat.R
 import com.masuta.gogreat.presentation.ui.theme.SportTheme
 import kotlinx.coroutines.delay
 import java.lang.Math.*
@@ -40,12 +44,14 @@ import kotlin.math.sin
 @Composable
 fun Timer(
     totalTime: Long,
-    inactiveBarColor: Color,
-    activeBarColor: Color,
     modifier: Modifier = Modifier,
+    inactiveBarColor: Color = Color.DarkGray,
+    activeBarColor: Color = Color(0xFF37B900),
     initialValue: Float = 1f,
     strokeWidth: Dp = 5.dp,
 ) {
+    val context = LocalContext.current
+
     var size by remember {
         mutableStateOf(IntSize.Zero)
     }
@@ -64,6 +70,9 @@ fun Timer(
             currentTime -= 100L
             value = currentTime / totalTime.toFloat()
         }
+        if (currentTime/1000L == 5L) {
+            playSound(context)
+        }
         if (currentTime/1000L == 0L) {
             delay(1000L)
             value = 1f
@@ -71,6 +80,7 @@ fun Timer(
             isTimerRunning = false
         }
     }
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.padding(8.dp)
@@ -137,6 +147,10 @@ fun Timer(
         }
     }
 
+}
+
+fun playSound(context: Context) {
+    val mp =  MediaPlayer.create(context, R.raw.beep).start()
 }
 
 @Composable

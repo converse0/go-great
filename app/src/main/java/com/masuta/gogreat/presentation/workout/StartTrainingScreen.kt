@@ -4,21 +4,29 @@ import android.annotation.SuppressLint
 import android.net.Uri
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -30,6 +38,8 @@ import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DefaultDataSource
 import com.masuta.gogreat.domain.model.TrainingExercise
+import com.masuta.gogreat.presentation.main.Timer
+import com.masuta.gogreat.presentation.new_training.toInteger
 import com.masuta.gogreat.presentation.ui.theme.SportTheme
 
 @Composable
@@ -38,6 +48,8 @@ fun StartTrainingScreen(
     viewModel: StartTrainingViewModel,
     exerciseId: String?
 ) {
+
+    val isModalOpen = remember { mutableStateOf(false) }
     val exercise = viewModel.getExerciseById(exerciseId!!)
 
     println("exercise from screen: $exercise")
@@ -68,15 +80,53 @@ fun StartTrainingScreen(
                 Spacer(modifier = Modifier.height(12.dp))
                 VideoSection(url = exercise.video)
                 Spacer(modifier = Modifier.height(12.dp))
-                TrainingInfo(exercise)
+                TrainingInfo(exercise, onOpenModal = { isModalOpen.value = true })
             }
+        }
+    }
+    if (isModalOpen.value) {
+        ModalTimer(exercise.duration.toInteger().toLong(), onDismiss = { isModalOpen.value = false })
+    }
+
+}
+
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+fun ModalTimer(
+    totalTime: Long,
+    onDismiss: () -> Unit
+) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .alpha(0.7f)
+            .background(color = Color.Black)
+            .clickable {  }
+        )
+        IconButton(onClick = onDismiss, modifier = Modifier.align(Alignment.TopEnd)) {
+            Icon(Icons.Default.Close, contentDescription = "Close", tint = Color.White)
+        }
+        Card(
+            modifier = Modifier
+                .padding(16.dp)
+                .height(400.dp)
+                .width(300.dp)
+                .clip(RoundedCornerShape(16.dp))
+        ) {
+            Timer(totalTime = totalTime * 1000L, modifier = Modifier
+                .size(200.dp)
+                .align(Alignment.Center))
         }
     }
 }
 
 @Composable
 fun TrainingInfo(
-    exercise: TrainingExercise
+    exercise: TrainingExercise,
+    onOpenModal: () -> Unit
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -106,7 +156,7 @@ fun TrainingInfo(
             modifier = Modifier.padding(start = 8.dp)
         )
     }
-    ButtonSection()
+    ButtonSection(onOpenModal = onOpenModal)
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -167,14 +217,16 @@ fun DescriptionSection(
 }
 
 @Composable
-fun ButtonSection() {
+fun ButtonSection(
+    onOpenModal: () -> Unit
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier.fillMaxWidth()
     ) {
         TextButton(
-            onClick = { /*TODO*/ },
+            onClick = onOpenModal,
             modifier = Modifier.padding(end = 8.dp),
             colors = ButtonDefaults.buttonColors(backgroundColor = Color.Green),
             shape = RoundedCornerShape(16.dp)

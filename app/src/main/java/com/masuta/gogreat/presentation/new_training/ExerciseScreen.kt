@@ -193,14 +193,14 @@ fun NewExerciseScreen(
     }
 }
 
+fun String.toInteger(): Int = this.filter { it.isDigit() }.toInt()
+
 @Composable
 fun NewExerciseParameters(
     viewModel: ExerciseViewModel,
     exercise: TrainingExercise,
     onSubmit: () -> Unit
 ) {
-    fun String.toInteger(): Int = this.filter { it.isDigit() }.toInt()
-
     val count = remember { mutableStateOf(exercise.count) }
     val duration = remember { mutableStateOf(exercise.duration.toInteger()) }
     val numberOfSets = remember { mutableStateOf(exercise.numberOfSets) }

@@ -43,6 +43,7 @@ fun MainScreen(
                 .fillMaxSize()
                 .background(color = Color.White)
                 .padding(20.dp)
+                .padding(bottom = 40.dp)
         ) {
             Text(
                 text = "Workouts",
