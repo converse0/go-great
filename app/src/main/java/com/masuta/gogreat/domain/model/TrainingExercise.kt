@@ -11,6 +11,10 @@ data class TrainingExercise(
     val type: String,
     val uid: String,
     val image: String = "",
+    val video: String = "",
+    val description: String = "",
+    val technique: String = "",
+    val mistake: String = ""
 )
 
 enum class ExerciseType(val value: Int) {

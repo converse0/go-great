@@ -141,7 +141,7 @@ fun WorkoutsList(
 ) {
     LazyRow() {
         items(workouts) { workout ->
-            WorkoutItem(workout = workout, onSelectItem = { navController.navigate("workout") })
+            WorkoutItem(workout = workout, onSelectItem = { navController.navigate("workout/${it}") })
         }
     }
 }
@@ -149,7 +149,7 @@ fun WorkoutsList(
 @Composable
 fun WorkoutItem(
     workout: Training,
-    onSelectItem: () -> Unit
+    onSelectItem: (String) -> Unit
 ) {
     Card(
         shape = RoundedCornerShape(16.dp),
@@ -158,7 +158,7 @@ fun WorkoutItem(
             .fillMaxWidth()
             .height(200.dp)
             .padding(horizontal = 20.dp)
-            .clickable { onSelectItem() }
+            .clickable { onSelectItem(workout.uid!!) }
     ) {
         workout.image?.let {
             println("image: $it")

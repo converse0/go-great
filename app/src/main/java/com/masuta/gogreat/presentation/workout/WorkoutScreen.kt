@@ -13,6 +13,8 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,16 +36,22 @@ import com.skydoves.landscapist.glide.GlideImage
 @Composable
 fun WorkoutScreen(
     navController: NavHostController,
-    viewModel: WorkoutViewModel
+    viewModel: WorkoutViewModel,
+    uid: String?
 ) {
-    val listExercises = listOf(
-        TrainingExercise(1, "2s", 3,
-            12, name = "Squat", relax = "20s", type = "other",uid= ""),
-        TrainingExercise(1, "2s", 3,
-            12, name = "Deadlift", relax = "20s", type = "other",uid= ""),
-        TrainingExercise(1, "2s", 3, 12,
-            name = "Bench press",relax = "20s", type = "other",uid= "")
-    )
+    println("Training uid: $uid")
+//    val listExercises = listOf(
+//        TrainingExercise(1, "2s", 3,
+//            12, name = "Squat", relax = "20s", type = "other",uid= ""),
+//        TrainingExercise(1, "2s", 3,
+//            12, name = "Deadlift", relax = "20s", type = "other",uid= ""),
+//        TrainingExercise(1, "2s", 3, 12,
+//            name = "Bench press",relax = "20s", type = "other",uid= "")
+//    )
+    val listExercises = remember { mutableStateOf(emptyList<TrainingExercise>()) }
+    val name = remember { mutableStateOf("") }
+    
+    viewModel.getExercises(uid!!, listExercises, name)
 
     Column(
         modifier = Modifier
@@ -59,7 +67,7 @@ fun WorkoutScreen(
                 Icon(imageVector = Icons.Default.KeyboardArrowLeft, contentDescription = "Back")
             }
             Text(
-                text = "New training",
+                text = name.value,
                 style = MaterialTheme.typography.h4,
                 modifier = Modifier.padding(start = 8.dp)
             )
@@ -71,7 +79,7 @@ fun WorkoutScreen(
                 Spacer(modifier = Modifier.height(12.dp))
                 PersonImage()
                 Spacer(modifier = Modifier.height(12.dp))
-                WorkoutListExercises(listExercises, navController)
+                WorkoutListExercises(listExercises.value, navController)
             }
         }
     }
@@ -116,21 +124,21 @@ fun WorkoutExercise(
             .clip(RoundedCornerShape(16.dp))
             .clickable { onSelectExercise() },
     ) {
-//        GlideImage(
-//            imageModel = ex.image,
-//            contentScale = ContentScale.Crop,
-//            modifier = Modifier
-//                .width(150.dp)
-//                .height(100.dp)
-//        )
-        Image(
-            painter = painterResource(id = R.drawable.muscle_dieta),
-            contentDescription = null,
+        GlideImage(
+            imageModel = ex.image,
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .width(150.dp)
                 .height(100.dp)
         )
+//        Image(
+//            painter = painterResource(id = R.drawable.muscle_dieta),
+//            contentDescription = null,
+//            contentScale = ContentScale.Crop,
+//            modifier = Modifier
+//                .width(150.dp)
+//                .height(100.dp)
+//        )
         Text(
             text = ex.name,
             style = MaterialTheme.typography.h5,
