@@ -72,18 +72,45 @@ fun MainScreen(
                             modifier = Modifier.padding(vertical = 16.dp)
                         )
                     }
+                    CurrentWorkoutSection(viewModel = viewModel, navController = navController)
                     WorkoutsSection(viewModel = viewModel, navController = navController)
 //                    CountDownTraining(sec = 50, viewModel = viewModel)
-                    Timer(
-                        totalTime = 10L * 1000L,
-                        inactiveBarColor = Color.DarkGray,
-                        activeBarColor = Color(0xFF37B900),
-                        modifier = Modifier.size(200.dp)
-                    )
+//                    Timer(
+//                        totalTime = 10L * 1000L,
+//                        inactiveBarColor = Color.DarkGray,
+//                        activeBarColor = Color(0xFF37B900),
+//                        modifier = Modifier.size(200.dp)
+//                    )
                 }
             }
         }
     }
+}
+
+@Composable
+fun CurrentWorkoutSection(
+    viewModel: MainViewModel,
+    navController: NavHostController
+) {
+    val currentWorkout = Training(
+            listOf(TrainingExercise(1, "2", 3,
+                12, name = "Squat", relax = "20s", type = "weight",uid= ""),
+                TrainingExercise(1, "2", 3,
+                    12, name = "Deadlift", relax = "20s", type = "weight",uid= ""),
+                TrainingExercise(1, "2", 3, 12,
+                    name = "Bench press",relax = "20s", type = "weight",uid= "")
+            ),
+            "20",
+            "Dumbbell lifting"
+        )
+    Text(
+        text = "Current workout",
+        style = MaterialTheme.typography.h5,
+        fontWeight = FontWeight.W300,
+        modifier = Modifier
+            .padding(vertical = 20.dp)
+    )
+    WorkoutItem(workout = currentWorkout, onSelectItem = { navController.navigate("workout")})
 }
 
 @Composable
