@@ -90,8 +90,8 @@ fun WorkoutListExercises(
     listExercises: List<TrainingExercise>,
     navController: NavHostController
 ) {
-    listExercises.forEach { exercise ->
-        WorkoutExercise(ex = exercise, onSelectExercise = { navController.navigate("start-training") })
+    listExercises.forEachIndexed { index, exercise ->
+        WorkoutExercise(ex = exercise, onSelectExercise = { navController.navigate("start-training/${index + 1}") })
     }
 }
 

@@ -22,12 +22,12 @@ class WorkoutViewModel @Inject constructor(
             listExercises.value = resp.exercises
             name.value = resp.name
 
-//            resp.exercises.forEach { exercise ->
-//                repository.saveLocalEx(exercise)
-//            }
+            resp.exercises.forEach { exercise ->
+                repository.saveLocalEx(exercise)
+            }
 
             // Test
-//            println("local exercises: ${repository.getAllLocalEx()}")
+            println("local exercises: ${repository.getAllLocalEx()}")
         }
     }
 }

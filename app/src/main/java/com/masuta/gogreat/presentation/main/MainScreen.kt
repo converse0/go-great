@@ -73,7 +73,13 @@ fun MainScreen(
                         )
                     }
                     WorkoutsSection(viewModel = viewModel, navController = navController)
-                    CountDownTraining(sec = 50, viewModel = viewModel)
+//                    CountDownTraining(sec = 50, viewModel = viewModel)
+                    Timer(
+                        totalTime = 10L * 1000L,
+                        inactiveBarColor = Color.DarkGray,
+                        activeBarColor = Color(0xFF37B900),
+                        modifier = Modifier.size(200.dp)
+                    )
                 }
             }
         }

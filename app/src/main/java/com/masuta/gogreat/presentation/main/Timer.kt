@@ -104,7 +104,7 @@ fun Timer(
                 text = (currentTime / 1000L).toString(),
                 fontSize = 44.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color.White
+                color = Color.Black
             )
         }
         Row(
@@ -171,7 +171,7 @@ fun TimerPreview() {
             totalTime = 10L * 1000L,
             inactiveBarColor = Color.DarkGray,
             activeBarColor = Color(0xFF37B900),
-            modifier = Modifier.size(200.dp)
+            modifier = Modifier.size(200.dp).padding(bottom = 60.dp)
         )
     }
 }

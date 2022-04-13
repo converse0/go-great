@@ -11,6 +11,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,12 +29,18 @@ import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DefaultDataSource
+import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.presentation.ui.theme.SportTheme
 
 @Composable
 fun StartTrainingScreen(
-    navController: NavHostController
+    navController: NavHostController,
+    viewModel: StartTrainingViewModel,
+    exerciseId: String?
 ) {
+    val exercise = viewModel.getExerciseById(exerciseId!!)
+
+    println("exercise from screen: $exercise")
 
     Column(
         modifier = Modifier
@@ -45,11 +52,11 @@ fun StartTrainingScreen(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
-            IconButton(onClick = { navController.navigate("workout") }) {
+            IconButton(onClick = { navController.navigate("main") }) {
                 Icon(imageVector = Icons.Default.KeyboardArrowLeft, contentDescription = "Back")
             }
             Text(
-                text = "Dumbbell lifting",
+                text = exercise.name,
                 style = MaterialTheme.typography.h4,
                 modifier = Modifier.padding(start = 8.dp)
             )
@@ -59,16 +66,18 @@ fun StartTrainingScreen(
         ) {
             item {
                 Spacer(modifier = Modifier.height(12.dp))
-                VideoSection()
+                VideoSection(url = exercise.video)
                 Spacer(modifier = Modifier.height(12.dp))
-                TrainingInfo()
+                TrainingInfo(exercise)
             }
         }
     }
 }
 
 @Composable
-fun TrainingInfo() {
+fun TrainingInfo(
+    exercise: TrainingExercise
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.padding(vertical = 8.dp)
@@ -93,7 +102,7 @@ fun TrainingInfo() {
             fontWeight = FontWeight.Bold
         )
         Text(
-            text = "10",
+            text = exercise.numberOfRepetitions.toString(),
             modifier = Modifier.padding(start = 8.dp)
         )
     }
@@ -107,6 +116,54 @@ fun TrainingInfo() {
             fontWeight = FontWeight.Bold
         )
     }
+
+    DescriptionSection(description = exercise.description)
+    Spacer(Modifier.height(10.dp))
+    Text(
+        text = "Technique",
+        style = MaterialTheme.typography.h5,
+        fontWeight = FontWeight.Bold
+    )
+    Spacer(Modifier.height(10.dp))
+    TechniqueSection(technique = exercise.technique)
+    Spacer(Modifier.height(10.dp))
+    Text(
+        text = "Common mistakes",
+        style = MaterialTheme.typography.h5,
+        fontWeight = FontWeight.Bold
+    )
+    MistakesSection(mistake = exercise.mistake)
+
+}
+
+@Composable
+fun MistakesSection(
+    mistake: String
+) {
+    Text(
+        text = mistake,
+        style = MaterialTheme.typography.body1
+    )
+}
+
+@Composable
+fun TechniqueSection(
+    technique: String
+) {
+    Text(
+        text = technique,
+        style = MaterialTheme.typography.body1
+    )
+}
+
+@Composable
+fun DescriptionSection(
+    description: String
+) {
+    Text(
+        text = description,
+        style = MaterialTheme.typography.body1
+    )
 }
 
 @Composable
@@ -137,8 +194,10 @@ fun ButtonSection() {
 
 @SuppressLint("RememberReturnType")
 @Composable
-fun VideoSection() {
-    val videoUrl = "https://cdn.videvo.net/videvo_files/video/free/2018-09/large_watermarked/180419_Boxing_06_01_preview.mp4"
+fun VideoSection(
+    url: String
+) {
+    val videoUrl = url.ifEmpty { "https://cdn.videvo.net/videvo_files/video/free/2018-09/large_watermarked/180419_Boxing_06_01_preview.mp4" }
     val context = LocalContext.current
     val player = remember {
         ExoPlayer.Builder(context).build().apply {
@@ -154,7 +213,9 @@ fun VideoSection() {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxWidth().height(200.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(200.dp)
     ) {
         AndroidView(
             factory = {
