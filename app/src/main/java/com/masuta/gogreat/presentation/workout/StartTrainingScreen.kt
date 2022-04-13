@@ -154,7 +154,7 @@ fun VideoSection() {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth().height(200.dp)
     ) {
         AndroidView(
             factory = {
