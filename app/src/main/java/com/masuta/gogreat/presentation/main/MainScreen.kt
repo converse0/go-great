@@ -12,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -72,6 +73,7 @@ fun MainScreen(
                         )
                     }
                     WorkoutsSection(viewModel = viewModel, navController = navController)
+                    CountDownTraining(sec = 50, viewModel = viewModel)
                 }
             }
         }
@@ -285,6 +287,7 @@ fun FormatedText(text:String) {
 
 @Composable
 fun CountDownTraining(sec: Int, viewModel: MainViewModel) {
+    val ctx = LocalContext.current
     val text = remember {
         mutableStateOf("Start")
     }
@@ -304,7 +307,7 @@ fun CountDownTraining(sec: Int, viewModel: MainViewModel) {
                 counter++
                 if (counter % 2 == 1) {
                     text.value = "Stop"
-                    viewModel.start(text)
+                    viewModel.start(text, ctx)
                     col = Color(0xFFE53935)
                 } else {
                     text.value = "Start"

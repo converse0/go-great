@@ -68,7 +68,9 @@ class ProfileViewModel @Inject constructor(
                 gender.value = resp.gender
                 diet.value = UserDiet.valueOf(resp.diet.uppercase()).value
                 activity.value = UserActivity.valueOf(resp.activity.uppercase()).value
-            } else if (message!=null&&message.isNotEmpty()&& message.contains("Authentication failed")) {
+            } else if (message!=null
+                &&message.isNotEmpty()
+                && message.contains("Authentication failed")) {
                 println("null")
                 fail.value = true
                 routeTo(navController, "sign-in")

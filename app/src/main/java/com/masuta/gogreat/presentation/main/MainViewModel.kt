@@ -1,8 +1,12 @@
 package com.masuta.gogreat.presentation.main
 
+import android.content.Context
+import android.media.MediaPlayer
 import androidx.compose.runtime.MutableState
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.masuta.gogreat.R
 import com.masuta.gogreat.domain.model.Training
 import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.domain.repository.TrainRepository
@@ -23,13 +27,17 @@ class MainViewModel @Inject constructor(
         globSec = sec
     }
 
-    fun start( text: MutableState<String>) {
+    fun playSound(context: Context) {
+      val mp =  MediaPlayer.create(context, R.raw.beep).start()
+    }
+
+    fun start( text: MutableState<String>, context: Context) {
         job = CoroutineScope(Dispatchers.Main).launch {
             val seq = 0..globSec - count
             for (i in seq.reversed()) {
                 currSec = i
                 count++
-                if(i % 10 == 0) println("ping $i")
+                if(i % 10 == 0) playSound(context)
                 text.value = i.toString()
                 delay(1000)
             }
