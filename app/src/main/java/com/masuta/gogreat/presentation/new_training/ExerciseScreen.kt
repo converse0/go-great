@@ -141,7 +141,7 @@ fun ExerciseItem(
             imageModel = exercise.image,
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .width(170.dp)
+                .width(150.dp)
                 .height(100.dp)
         )
 //        Image(
@@ -154,7 +154,7 @@ fun ExerciseItem(
 //        )
         Text(
             text = exercise.name,
-            style = MaterialTheme.typography.h4,
+            style = MaterialTheme.typography.h5,
             fontWeight = FontWeight.Light,
             modifier = Modifier.padding(horizontal = 14.dp)
         )
