@@ -19,6 +19,7 @@ import com.masuta.gogreat.domain.model.Training
 import com.masuta.gogreat.presentation.BottomNavigationItem
 import com.masuta.gogreat.presentation.components.BottomMenuBar
 import com.masuta.gogreat.presentation.ui.theme.Purple200
+import com.skydoves.landscapist.glide.GlideImage
 import kotlinx.coroutines.*
 
 @Composable
@@ -154,6 +155,11 @@ fun WorkoutItem(
             .height(200.dp)
             .padding(horizontal = 20.dp)
     ) {
+        workout.image?.let {
+            println("image: $it")
+            GlideImage(imageModel = it,modifier = Modifier.size(200.dp),)
+
+        }
         Column(
             verticalArrangement = Arrangement.Bottom,
             modifier = Modifier

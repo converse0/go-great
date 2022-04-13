@@ -42,9 +42,27 @@ class MainViewModel @Inject constructor(
 
     fun getExercises(list: MutableState<List<Training>>) {
         viewModelScope.launch {
+            repository.startTraining("a7c49f05-d711-4dfb-a605-ec56e1681324")
             val resp = repository.findAll()
-            resp.data?.let {
+            val trainMap: MutableMap<String, String?> = mutableMapOf()
+            resp.data?.let { it ->
+                it.forEach {
+                    trainMap[it.uid!!] = null
+                }
+                trainMap.keys.forEach { uid->
+                    val resp2 = repository.getTrainingDetail(uid)
+                    println("resp2: $resp2")
+                    resp2.image?.let {
+
+                        trainMap[uid] = it
+                    }
+                }
+                println("trainMap: $trainMap")
+                it.forEach {
+                    it.image = trainMap[it.uid!!]
+                }
                 list.value = it
+
             }
         }
     }

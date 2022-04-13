@@ -110,7 +110,8 @@ fun NewTrainingScreen(
                     newTrain = Training(
                         exercises = listExercises.value,
                         interval = "50s",
-                        name = it
+                        name = it,
+                        image = "https://fitseven.ru/wp-content/uploads/2020/07/uprazhneniya-na-press-skruchivaniya.jpg"
                     )
                 )
                 navController.navigate("main")

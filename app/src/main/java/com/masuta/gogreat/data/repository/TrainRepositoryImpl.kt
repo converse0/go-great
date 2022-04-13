@@ -48,6 +48,8 @@ class TrainRepositoryImpl @Inject constructor(
         }
     }
 
+
+
     override suspend fun save(newTrain: Training) {
       val resp = httpClient?.post<String>("$url/user/trening") {
           contentType(ContentType.Application.Json)
@@ -85,6 +87,31 @@ class TrainRepositoryImpl @Inject constructor(
 
     override suspend fun clearLocalExerciseData() {
         localTrainingEx = mutableMapOf()
+    }
+
+    override suspend fun getTrainingDetail(uid: String): Training {
+        httpClient?.get<TrainingDetailsResponse>("$url/user/trening?uid=$uid") {
+            contentType(ContentType.Application.Json)
+            headers {
+                append("Authorization", "Bearer $userToken")
+            }
+        }.let {
+            println("getTrainingDetail: $it")
+            return it!!.data!!
+        }
+
+    }
+
+    override suspend fun startTraining(uid: String) {
+        httpClient?.put<String>("$url/user/trening/status") {
+            contentType(ContentType.Application.Json)
+            headers {
+                append("Authorization", "Bearer $userToken")
+            }
+            body =  mapOf("uid" to uid, "status" to "Start")
+        }?.let {
+            println("startTraining: $it")
+        }
     }
 
     override fun delete(newTrain: Training) {
