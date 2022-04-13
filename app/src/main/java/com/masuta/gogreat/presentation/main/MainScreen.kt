@@ -110,7 +110,7 @@ fun CurrentWorkoutSection(
         modifier = Modifier
             .padding(vertical = 20.dp)
     )
-    WorkoutItem(workout = currentWorkout, onSelectItem = { navController.navigate("workout")})
+    WorkoutItem(workout = currentWorkout, onSelectItem = { navController.navigate("workout/${currentWorkout.uid}")})
 }
 
 @Composable
