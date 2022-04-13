@@ -11,6 +11,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -162,7 +163,10 @@ fun WorkoutItem(
     ) {
         workout.image?.let {
             println("image: $it")
-            GlideImage(imageModel = it,modifier = Modifier.size(200.dp),)
+            GlideImage(imageModel = it,
+                modifier = Modifier.size(200.dp),
+                colorFilter = ColorFilter.lighting(multiply = Color.Gray,add= Color.Black)
+            )
 
         }
         Column(
