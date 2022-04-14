@@ -133,7 +133,15 @@ class TrainRepositoryImpl @Inject constructor(
 
 
     override suspend fun setExerciseParams(uid: String, listExercises: List<TrainingExercise>) {
-
+        httpClient?.put<String>("$url/user/trening/exercises") {
+            contentType(ContentType.Application.Json)
+            headers {
+                append("Authorization", "Bearer $userToken")
+            }
+            body =  mapOf("uid" to uid, "exercises" to listExercises)
+        }?.let {
+            println("setExerciseParams: $it")
+        }
     }
 
     override fun delete(newTrain: Training) {
