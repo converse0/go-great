@@ -15,7 +15,8 @@ interface TrainRepository {
     suspend fun getAllLocalEx(): List<TrainingExercise>
     suspend fun clearLocalExerciseData()
     suspend fun getTrainingDetail(uid: String): Training
-    suspend fun startTraining(uid: String)
     suspend fun getCurrentTraining(): Training?
+    suspend fun setExerciseParams(uid: String, listExercises: List<TrainingExercise>)
+    suspend fun startTraining(uid: String)
     fun delete(newTrain: Training)
 }

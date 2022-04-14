@@ -115,12 +115,11 @@ fun Navigation(items: List<BottomNavigationItem>) {
         composable(route = "workout/{uid}") {
             WorkoutScreen(navController = navController, viewModel = hiltViewModel(), uid = it.arguments?.getString("uid"))
         }
-        composable(route = "start-training/{uid}/{exerciseId}") {
+        composable(route = "start-training/{uid}") {
             StartTrainingScreen(
                 navController = navController,
                 viewModel = hiltViewModel(),
-                uid = it.arguments?.getString("uid"),
-                exerciseId = it.arguments?.getString("exerciseId")
+                uid = it.arguments?.getString("uid")
             )
         }
     }

@@ -17,24 +17,18 @@ class StartTrainingViewModel @Inject constructor(
     private val repository: TrainRepository
 ): ViewModel() {
 
-    fun getExerciseById(id: String): TrainingExercise {
-        var exercise = TrainingExercise(5, "5s", 0,
-            0, "Exercise", "5s", "other", "", )
-
+    fun getExercises(uid: String, listExercises: MutableState<List<TrainingExercise>>) {
         viewModelScope.launch {
-            val resp = repository.getLocalEx(id.toInt())
+            val resp = repository.getTrainingDetail(uid)
             println("Exercise: $resp")
 
-            resp?.let {
-                exercise = it
-            }
+            listExercises.value = resp.exercises
         }
-        return exercise
     }
 
-    fun startTraining(uid: String) {
+    fun setExerciseParams(uid: String, listExercises: List<TrainingExercise>) {
         viewModelScope.launch {
-            repository.startTraining(uid)
+            repository.setExerciseParams(uid, listExercises)
         }
     }
 }

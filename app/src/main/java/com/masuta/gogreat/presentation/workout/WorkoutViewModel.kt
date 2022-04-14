@@ -22,18 +22,24 @@ class WorkoutViewModel @Inject constructor(
             listExercises.value = resp.exercises
             name.value = resp.name
 
-            resp.exercises.forEach { exercise ->
-                repository.saveLocalEx(exercise)
-            }
-
-            // Test
-            println("local exercises: ${repository.getAllLocalEx()}")
+//            resp.exercises.forEach { exercise ->
+//                repository.saveLocalEx(exercise)
+//            }
+//
+//            // Test
+//            println("local exercises: ${repository.getAllLocalEx()}")
         }
     }
 
-    fun clearLocalExercises() {
+//    fun clearLocalExercises() {
+//        viewModelScope.launch {
+//            repository.clearLocalExerciseData()
+//        }
+//    }
+
+    fun startTraining(uid: String) {
         viewModelScope.launch {
-            repository.clearLocalExerciseData()
+            repository.startTraining(uid)
         }
     }
 }

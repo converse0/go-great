@@ -8,6 +8,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -27,15 +28,14 @@ import com.masuta.gogreat.presentation.ui.theme.SportTheme
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun StarTrainingModal(
+fun StartTrainingModal(
+    weight: MutableState<String>,
+    time: MutableState<String>,
+    numberOfSets: MutableState<String>,
+    numberOfRepetitions: MutableState<String>,
     onSave: () -> Unit,
     onDismiss: () -> Unit
 ) {
-    val weight = remember { mutableStateOf("") }
-    val time = remember { mutableStateOf("") }
-    val numberOfSets = remember { mutableStateOf("") }
-
-
     val keyboardController = LocalSoftwareKeyboardController.current
 
     Box(
@@ -75,15 +75,23 @@ fun StarTrainingModal(
                 )
                 Spacer(Modifier.height(10.dp))
                 InputTextField(
-                    text = "Time",
+                    text = "Number of sets",
                     value = numberOfSets.value,
                     keyboardController = keyboardController,
                     onChangeValue = { numberOfSets.value = it },
                     keyboardType = KeyboardType.Number
                 )
+                Spacer(Modifier.height(10.dp))
+                InputTextField(
+                    text = "Number of repetitions",
+                    value = numberOfRepetitions.value,
+                    keyboardController = keyboardController,
+                    onChangeValue = { numberOfRepetitions.value = it },
+                    keyboardType = KeyboardType.Number
+                )
                 Spacer(Modifier.height(30.dp))
                 TextButton(
-                    onClick = onSave,
+                    onClick =  onSave,
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -97,15 +105,4 @@ fun StarTrainingModal(
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun ModalPreview() {
-    SportTheme() {
-        StarTrainingModal(onSave = { /*TODO*/ }) {
-
-        }
-    }
-
 }

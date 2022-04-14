@@ -6,10 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.runtime.Composable
@@ -64,7 +61,6 @@ fun WorkoutScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             IconButton(onClick = {
-                viewModel.clearLocalExercises()
                 navController.navigate("main")
             }) {
                 Icon(imageVector = Icons.Default.KeyboardArrowLeft, contentDescription = "Back")
@@ -83,6 +79,22 @@ fun WorkoutScreen(
                 PersonImage()
                 Spacer(modifier = Modifier.height(12.dp))
                 WorkoutListExercises(listExercises.value, navController, uid)
+                Spacer(Modifier.height(30.dp))
+                TextButton(
+                    onClick = {
+                        viewModel.startTraining(uid)
+                        navController.navigate("start-training/$uid")
+                    },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    Text(
+                        text = "Start training",
+                        color = Color.White,
+                        modifier = Modifier.padding(vertical = 8.dp)
+                    )
+                }
             }
         }
     }
@@ -94,8 +106,8 @@ fun WorkoutListExercises(
     navController: NavHostController,
     uid: String
 ) {
-    listExercises.forEachIndexed { index, exercise ->
-        WorkoutExercise(ex = exercise, onSelectExercise = { navController.navigate("start-training/$uid/${index + 1}") })
+    listExercises.forEach { exercise ->
+        WorkoutExercise(ex = exercise, onSelectExercise = {  })
     }
 }
 

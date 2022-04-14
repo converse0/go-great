@@ -14,9 +14,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -47,52 +45,91 @@ fun StartTrainingScreen(
     navController: NavHostController,
     viewModel: StartTrainingViewModel,
     uid: String?,
-    exerciseId: String?
 ) {
-
+    val isEditModal = remember { mutableStateOf(false) }
     val isModalOpen = remember { mutableStateOf(false) }
-    val exercise = viewModel.getExerciseById(exerciseId!!)
+    val listExercises = remember { mutableStateOf(emptyList<TrainingExercise>()) }
+    val activeExercise = remember { mutableStateOf(0) }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color.White)
-            .padding(20.dp)
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
+    val weight = remember { mutableStateOf("") }
+    val time = remember { mutableStateOf("") }
+    val numberOfSets = remember { mutableStateOf("") }
+    val numberOfRepetitions = remember { mutableStateOf("") }
+
+    viewModel.getExercises(uid!!, listExercises)
+
+    println("List Exercises: ${listExercises.value}")
+    if (listExercises.value.isNotEmpty()) {
+        val exercise by remember { mutableStateOf( listExercises.value[activeExercise.value] ) }
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = Color.White)
+                .padding(20.dp)
         ) {
-            IconButton(onClick = { navController.navigate("workout/${uid}") }) {
-                Icon(imageVector = Icons.Default.KeyboardArrowLeft, contentDescription = "Back")
-            }
-            Text(
-                text = exercise.name,
-                style = MaterialTheme.typography.h4,
-                modifier = Modifier.padding(start = 8.dp)
-            )
-        }
-        LazyColumn(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            item {
-                Spacer(modifier = Modifier.height(12.dp))
-                VideoSection(url = exercise.video)
-                Spacer(modifier = Modifier.height(12.dp))
-                TrainingInfo(
-                    exercise,
-                    onOpenModal = {
-                        viewModel.startTraining(uid!!)
-                        isModalOpen.value = true
-                    }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                IconButton(onClick = { navController.navigate("workout/${uid}") }) {
+                    Icon(imageVector = Icons.Default.KeyboardArrowLeft, contentDescription = "Back")
+                }
+                Text(
+                    text = exercise.name,
+                    style = MaterialTheme.typography.h4,
+                    modifier = Modifier.padding(start = 8.dp)
                 )
             }
+            LazyColumn(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                item {
+                    Spacer(modifier = Modifier.height(12.dp))
+                    VideoSection(url = exercise.video)
+                    Spacer(modifier = Modifier.height(12.dp))
+                    TrainingInfo(
+                        exercise,
+                        onOpenModal = {
+                            isModalOpen.value = true
+                        },
+                        onOpenEdit = {
+                            isEditModal.value = true
+                        }
+                    )
+                }
+            }
+        }
+        if (isModalOpen.value) {
+            ModalTimer(
+                exercise.duration.toInteger().toLong(),
+                onDismiss = { isModalOpen.value = false })
+        }
+        if (isEditModal.value) {
+            StartTrainingModal(
+                weight,
+                time,
+                numberOfSets ,
+                numberOfRepetitions,
+                onSave = {
+                     val listEditExercise = listExercises.value.mapIndexed { index, exercise ->
+                         if (index == activeExercise.value) {
+                             exercise.copy(
+                                 duration = time.value + "s",
+                                 numberOfSets = numberOfSets.value.toInt(),
+                                numberOfRepetitions = numberOfRepetitions.value.toInt()
+                             )
+                         } else {
+                             exercise
+                         }
+                     }
+                    viewModel.setExerciseParams(uid = uid, listExercises = listEditExercise)
+                    isEditModal.value = false
+                },
+                onDismiss = { isEditModal.value = false }
+            )
         }
     }
-    if (isModalOpen.value) {
-        ModalTimer(exercise.duration.toInteger().toLong(), onDismiss = { isModalOpen.value = false })
-    }
-
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -109,7 +146,7 @@ fun ModalTimer(
             .fillMaxSize()
             .alpha(0.7f)
             .background(color = Color.Black)
-            .clickable {  }
+            .clickable { }
         )
         IconButton(onClick = onDismiss, modifier = Modifier.align(Alignment.TopEnd)) {
             Icon(Icons.Default.Close, contentDescription = "Close", tint = Color.White)
@@ -131,7 +168,8 @@ fun ModalTimer(
 @Composable
 fun TrainingInfo(
     exercise: TrainingExercise,
-    onOpenModal: () -> Unit
+    onOpenModal: () -> Unit,
+    onOpenEdit: () -> Unit
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -161,7 +199,7 @@ fun TrainingInfo(
             modifier = Modifier.padding(start = 8.dp)
         )
     }
-    ButtonSection(onOpenModal = onOpenModal)
+    ButtonSection(onOpenModal = onOpenModal, onOpenEdit = onOpenEdit)
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -223,23 +261,29 @@ fun DescriptionSection(
 
 @Composable
 fun ButtonSection(
-    onOpenModal: () -> Unit
+    onOpenModal: () -> Unit,
+    onOpenEdit: () -> Unit
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center,
+        horizontalArrangement = Arrangement.SpaceEvenly,
         modifier = Modifier.fillMaxWidth()
     ) {
         TextButton(
             onClick = onOpenModal,
-            modifier = Modifier.padding(end = 8.dp),
+            modifier = Modifier
+                .width(100.dp)
+                .height(50.dp),
             colors = ButtonDefaults.buttonColors(backgroundColor = Color.Green),
             shape = RoundedCornerShape(16.dp)
         ) {
             Text(text = "I managed!", color = Color.White)
         }
         TextButton(
-            onClick = { /*TODO*/ },
+            onClick = onOpenEdit,
+            modifier = Modifier
+                .width(100.dp)
+                .height(50.dp),
             colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
             border = BorderStroke(1.dp, color = Color.Gray),
             shape = RoundedCornerShape(16.dp)

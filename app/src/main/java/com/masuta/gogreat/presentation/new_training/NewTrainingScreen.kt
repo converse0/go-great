@@ -175,6 +175,7 @@ fun Modal(
                     onClick = {
                         onSave(name.value)
                     },
+                    enabled = name.value.isNotEmpty(),
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray),
                     modifier = Modifier
                         .fillMaxWidth()
