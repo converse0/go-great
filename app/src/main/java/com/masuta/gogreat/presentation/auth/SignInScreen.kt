@@ -90,29 +90,29 @@ fun SignInForm(viewModel: SignInViewModel, navController: NavHostController) {
         keyboardController = keyboardController,
         onChangeValue = { password = it },
     )
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        var checked by remember { mutableStateOf(false) }
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Checkbox(checked = checked, onCheckedChange = { checked = !checked })
-            Text(
-                text = "Remember me"
-            )
-        }
-        Text(
-            text = "Forgot password?",
-            modifier = Modifier
-                .clickable {
-//                    navController.navigate("")
-                }
-        )
-    }
+//    Row(
+//        verticalAlignment = Alignment.CenterVertically,
+//        horizontalArrangement = Arrangement.SpaceBetween,
+//        modifier = Modifier.fillMaxWidth()
+//    ) {
+//        var checked by remember { mutableStateOf(false) }
+//
+//        Row(
+//            verticalAlignment = Alignment.CenterVertically
+//        ) {
+//            Checkbox(checked = checked, onCheckedChange = { checked = !checked })
+//            Text(
+//                text = "Remember me"
+//            )
+//        }
+//        Text(
+//            text = "Forgot password?",
+//            modifier = Modifier
+//                .clickable {
+////                    navController.navigate("")
+//                }
+//        )
+//    }
     TextButton(
         onClick = {
             val user = User(email=email, password=password)

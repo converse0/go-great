@@ -110,17 +110,17 @@ fun SignUpForm(viewModel: SignUpViewModel, navController: NavHostController) {
         keyboardController = keyboardController,
         onChangeValue = { passwordConfirm = it},
     )
-    var checked by remember { mutableStateOf(false) }
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-    ) {
-        Checkbox(checked = checked, onCheckedChange = { checked = !checked })
-        Text(
-            text = "Remember me"
-        )
-    }
+//    var checked by remember { mutableStateOf(false) }
+//    Row(
+//        verticalAlignment = Alignment.CenterVertically,
+//        modifier = Modifier
+//            .fillMaxWidth()
+//    ) {
+//        Checkbox(checked = checked, onCheckedChange = { checked = !checked })
+//        Text(
+//            text = "Remember me"
+//        )
+//    }
     TextButton(
         onClick = {
             CoroutineScope(Dispatchers.Main).launch {
