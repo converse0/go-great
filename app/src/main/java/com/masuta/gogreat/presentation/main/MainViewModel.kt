@@ -73,6 +73,13 @@ class MainViewModel @Inject constructor(
             }
         }
     }
+     fun getCurrentTraining(training: MutableState<Training>) {
+        viewModelScope.launch {
+            repository.getCurrentTraining()?.let {
+                training.value = it
+            }
+        }
+    }
 
     fun clearLocalExercises() {
         viewModelScope.launch {

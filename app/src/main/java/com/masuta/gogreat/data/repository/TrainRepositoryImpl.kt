@@ -114,6 +114,24 @@ class TrainRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getCurrentTraining(): Training? {
+        httpClient?.get<TrainingResponse>("$url/user/trenings?status=Start") {
+            contentType(ContentType.Application.Json)
+            headers {
+                append("Authorization", "Bearer $userToken")
+            }
+        }?.let { tr ->
+            println("getCurrentTraining: $tr")
+            tr.data?.let { train ->
+                train.getOrNull(0)?.let {
+                    return it
+                }
+            }
+        }
+        return null
+    }
+
+
     override fun delete(newTrain: Training) {
         TODO("Not yet implemented")
     }

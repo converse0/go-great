@@ -96,17 +96,11 @@ fun CurrentWorkoutSection(
     viewModel: MainViewModel,
     navController: NavHostController
 ) {
-    val currentWorkout = Training(
-            listOf(TrainingExercise(1, "2", 3,
-                12, name = "Squat", relax = "20s", type = "weight",uid= ""),
-                TrainingExercise(1, "2", 3,
-                    12, name = "Deadlift", relax = "20s", type = "weight",uid= ""),
-                TrainingExercise(1, "2", 3, 12,
-                    name = "Bench press",relax = "20s", type = "weight",uid= "")
-            ),
-            "20",
-            "Dumbbell lifting"
-        )
+    val currentWorkout = remember{ mutableStateOf(Training(
+        name = "",
+        exercises = mutableListOf(),
+        interval = ""
+    )) }
     Text(
         text = "Current workout",
         style = MaterialTheme.typography.h5,
@@ -114,7 +108,10 @@ fun CurrentWorkoutSection(
         modifier = Modifier
             .padding(vertical = 20.dp)
     )
-    WorkoutItem(workout = currentWorkout, onSelectItem = { navController.navigate("workout/${currentWorkout.uid}")})
+    viewModel.getCurrentTraining(currentWorkout)
+    WorkoutItem(workout = currentWorkout.value,
+        onSelectItem = {
+            navController.navigate("workout/${currentWorkout.value.uid}")})
 }
 
 @Composable
@@ -191,6 +188,9 @@ fun WorkoutItem(
     workout: Training,
     onSelectItem: (String) -> Unit
 ) {
+    if (workout.name.isEmpty()) {
+        return
+    }
     Card(
         shape = RoundedCornerShape(16.dp),
         backgroundColor = Color.Gray,
