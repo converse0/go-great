@@ -115,8 +115,13 @@ fun Navigation(items: List<BottomNavigationItem>) {
         composable(route = "workout/{uid}") {
             WorkoutScreen(navController = navController, viewModel = hiltViewModel(), uid = it.arguments?.getString("uid"))
         }
-        composable(route = "start-training/{exerciseId}") {
-            StartTrainingScreen(navController = navController, viewModel = hiltViewModel(), exerciseId = it.arguments?.getString("exerciseId"))
+        composable(route = "start-training/{uid}/{exerciseId}") {
+            StartTrainingScreen(
+                navController = navController,
+                viewModel = hiltViewModel(),
+                uid = it.arguments?.getString("uid"),
+                exerciseId = it.arguments?.getString("exerciseId")
+            )
         }
     }
 }

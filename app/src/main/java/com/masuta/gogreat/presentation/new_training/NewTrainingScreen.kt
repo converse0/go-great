@@ -61,7 +61,10 @@ fun NewTrainingScreen(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
-            IconButton(onClick = { navController.navigate("main") }) {
+            IconButton(onClick = {
+                navController.navigate("main")
+                viewModel.clearLocalExercises()
+            }) {
                 Icon(imageVector = Icons.Default.KeyboardArrowLeft, contentDescription = "Back")
             }
             Text(
@@ -114,6 +117,7 @@ fun NewTrainingScreen(
 //                        image = "https://fitseven.ru/wp-content/uploads/2020/07/uprazhneniya-na-press-skruchivaniya.jpg"
                     )
                 )
+                viewModel.clearLocalExercises()
                 navController.navigate("main")
             },
             onDismiss = { openModal.value = false }

@@ -18,7 +18,6 @@ class NewTrainingViewModel @Inject constructor(
     fun saveTrain(newTrain: Training) {
         viewModelScope.launch {
             repository.save(newTrain)
-            repository.clearLocalExerciseData()
         }
     }
 
@@ -27,6 +26,12 @@ class NewTrainingViewModel @Inject constructor(
             val data = repository.getAllLocalEx()
             list.value = data
             println(data)
+        }
+    }
+
+    fun clearLocalExercises() {
+        viewModelScope.launch {
+            repository.clearLocalExerciseData()
         }
     }
 }

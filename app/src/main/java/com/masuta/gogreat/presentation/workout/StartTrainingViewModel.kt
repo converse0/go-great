@@ -18,7 +18,7 @@ class StartTrainingViewModel @Inject constructor(
 ): ViewModel() {
 
     fun getExerciseById(id: String): TrainingExercise {
-        var exercise: TrainingExercise = TrainingExercise(5, "5s", 0,
+        var exercise = TrainingExercise(5, "5s", 0,
             0, "Exercise", "5s", "other", "", )
 
         viewModelScope.launch {
@@ -30,5 +30,11 @@ class StartTrainingViewModel @Inject constructor(
             }
         }
         return exercise
+    }
+
+    fun startTraining(uid: String) {
+        viewModelScope.launch {
+            repository.startTraining(uid)
+        }
     }
 }

@@ -30,4 +30,10 @@ class WorkoutViewModel @Inject constructor(
             println("local exercises: ${repository.getAllLocalEx()}")
         }
     }
+
+    fun clearLocalExercises() {
+        viewModelScope.launch {
+            repository.clearLocalExerciseData()
+        }
+    }
 }

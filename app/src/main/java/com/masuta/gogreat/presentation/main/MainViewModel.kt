@@ -73,4 +73,10 @@ class MainViewModel @Inject constructor(
             }
         }
     }
+
+    fun clearLocalExercises() {
+        viewModelScope.launch {
+            repository.clearLocalExerciseData()
+        }
+    }
 }

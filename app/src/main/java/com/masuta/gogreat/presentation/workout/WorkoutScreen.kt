@@ -63,7 +63,10 @@ fun WorkoutScreen(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
-            IconButton(onClick = { navController.navigate("main") }) {
+            IconButton(onClick = {
+                viewModel.clearLocalExercises()
+                navController.navigate("main")
+            }) {
                 Icon(imageVector = Icons.Default.KeyboardArrowLeft, contentDescription = "Back")
             }
             Text(
@@ -79,7 +82,7 @@ fun WorkoutScreen(
                 Spacer(modifier = Modifier.height(12.dp))
                 PersonImage()
                 Spacer(modifier = Modifier.height(12.dp))
-                WorkoutListExercises(listExercises.value, navController)
+                WorkoutListExercises(listExercises.value, navController, uid)
             }
         }
     }
@@ -88,10 +91,11 @@ fun WorkoutScreen(
 @Composable
 fun WorkoutListExercises(
     listExercises: List<TrainingExercise>,
-    navController: NavHostController
+    navController: NavHostController,
+    uid: String
 ) {
     listExercises.forEachIndexed { index, exercise ->
-        WorkoutExercise(ex = exercise, onSelectExercise = { navController.navigate("start-training/${index + 1}") })
+        WorkoutExercise(ex = exercise, onSelectExercise = { navController.navigate("start-training/$uid/${index + 1}") })
     }
 }
 

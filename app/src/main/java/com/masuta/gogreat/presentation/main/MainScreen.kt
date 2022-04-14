@@ -33,6 +33,9 @@ fun MainScreen(
     menuItems: List<BottomNavigationItem>,
     viewModel: MainViewModel
 ) {
+
+    viewModel.clearLocalExercises()
+
     Scaffold(
         bottomBar = {
             BottomMenuBar(navController = navController, selected = selected, onSelect = onSelect, menuItems = menuItems)
@@ -218,7 +221,7 @@ fun WorkoutItem(
             )
             Spacer(Modifier.height(10.dp))
             Text(
-                text = "27 March 2017 ${workout.interval} min",
+                text = "27 March 2017 ${workout.interval}",
                 style = MaterialTheme.typography.body1,
                 fontWeight = FontWeight.W300
             )

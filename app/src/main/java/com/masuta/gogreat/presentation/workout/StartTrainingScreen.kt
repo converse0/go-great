@@ -46,13 +46,12 @@ import com.masuta.gogreat.presentation.ui.theme.SportTheme
 fun StartTrainingScreen(
     navController: NavHostController,
     viewModel: StartTrainingViewModel,
+    uid: String?,
     exerciseId: String?
 ) {
 
     val isModalOpen = remember { mutableStateOf(false) }
     val exercise = viewModel.getExerciseById(exerciseId!!)
-
-    println("exercise from screen: $exercise")
 
     Column(
         modifier = Modifier
@@ -64,7 +63,7 @@ fun StartTrainingScreen(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
-            IconButton(onClick = { navController.navigate("main") }) {
+            IconButton(onClick = { navController.navigate("workout/${uid}") }) {
                 Icon(imageVector = Icons.Default.KeyboardArrowLeft, contentDescription = "Back")
             }
             Text(
@@ -80,7 +79,13 @@ fun StartTrainingScreen(
                 Spacer(modifier = Modifier.height(12.dp))
                 VideoSection(url = exercise.video)
                 Spacer(modifier = Modifier.height(12.dp))
-                TrainingInfo(exercise, onOpenModal = { isModalOpen.value = true })
+                TrainingInfo(
+                    exercise,
+                    onOpenModal = {
+                        viewModel.startTraining(uid!!)
+                        isModalOpen.value = true
+                    }
+                )
             }
         }
     }
