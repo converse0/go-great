@@ -17,13 +17,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.domain.model.Training
 import com.masuta.gogreat.presentation.BottomNavigationItem
 import com.masuta.gogreat.presentation.components.BottomMenuBar
 import com.masuta.gogreat.presentation.ui.theme.Purple200
 import com.skydoves.landscapist.glide.GlideImage
-import kotlinx.coroutines.*
 
 @Composable
 fun MainScreen(
@@ -35,6 +33,7 @@ fun MainScreen(
 ) {
 
     viewModel.clearLocalExercises()
+    val listTrainings = remember { mutableStateOf(emptyList<Training>()) }
 
     Scaffold(
         bottomBar = {
@@ -76,8 +75,9 @@ fun MainScreen(
                             modifier = Modifier.padding(vertical = 16.dp)
                         )
                     }
+
                     CurrentWorkoutSection(viewModel = viewModel, navController = navController)
-                    WorkoutsSection(viewModel = viewModel, navController = navController)
+                    WorkoutsSection(viewModel = viewModel, navController = navController, listTrainings = listTrainings)
 //                    CountDownTraining(sec = 50, viewModel = viewModel)
 //                    Timer(
 //                        totalTime = 10L * 1000L,
@@ -117,47 +117,12 @@ fun CurrentWorkoutSection(
 @Composable
 fun WorkoutsSection(
     viewModel: MainViewModel,
-    navController: NavHostController
+    navController: NavHostController,
+    listTrainings: MutableState<List<Training>>
 ) {
-//    val listTrainings = listOf(
-//        Training(
-//            listOf(TrainingExercise(1, "2", 3,
-//                12, name = "Squat", relax = "20s", type = "weight",uid= ""),
-//                TrainingExercise(1, "2", 3,
-//                    12, name = "Deadlift", relax = "20s", type = "weight",uid= ""),
-//                TrainingExercise(1, "2", 3, 12,
-//                    name = "Bench press",relax = "20s", type = "weight",uid= "")
-//            ),
-//            "20",
-//            "Dumbbell lifting"
-//        ),
-//        Training(
-//            listOf(TrainingExercise(1, "2", 3,
-//                12, name = "Squat", relax = "20s", type = "weight",uid= ""),
-//                TrainingExercise(1, "2", 3,
-//                    12, name = "Deadlift", relax = "20s", type = "weight",uid= ""),
-//                TrainingExercise(1, "2", 3, 12,
-//                    name = "Bench press",relax = "20s", type = "weight",uid= "")
-//            ),
-//            "20",
-//            "Dumbbell lifting"
-//        ),
-//        Training(
-//            listOf(TrainingExercise(1, "2", 3,
-//                12, name = "Squat", relax = "20s", type = "weight",uid= ""),
-//                TrainingExercise(1, "2", 3,
-//                    12, name = "Deadlift", relax = "20s", type = "weight",uid= ""),
-//                TrainingExercise(1, "2", 3, 12,
-//                    name = "Bench press",relax = "20s", type = "weight",uid= "")
-//            ),
-//            "20",
-//            "Dumbbell lifting"
-//        ),
-//    )
-
-    val listTrainings = remember { mutableStateOf(emptyList<Training>()) }
-
-    viewModel.getExercises(listTrainings)
+    if (listTrainings.value.isEmpty()) {
+        viewModel.getExercises(listTrainings)
+    }
 
     if (listTrainings.value.isNotEmpty()) {
         Text(
@@ -198,7 +163,7 @@ fun WorkoutItem(
             .fillMaxWidth()
             .height(200.dp)
             .padding(horizontal = 20.dp)
-            .clickable { onSelectItem(workout.uid!!) }
+            .clickable { workout.uid?.let { onSelectItem(it) } }
     ) {
         workout.image?.let {
             println("image: $it")
@@ -214,14 +179,16 @@ fun WorkoutItem(
                 .fillMaxWidth()
                 .padding(20.dp)
         ) {
+            val text = if(workout.name.isEmpty()) "No name" else workout.name
             Text(
-                text = workout.name,
+                text =text,
                 style = MaterialTheme.typography.h5,
                 fontWeight = FontWeight.W700
             )
             Spacer(Modifier.height(10.dp))
+            val internal = if(workout.interval.isEmpty()) "30s" else workout.interval
             Text(
-                text = "27 March 2017 ${workout.interval}",
+                text = "27 March 2017 $internal",
                 style = MaterialTheme.typography.body1,
                 fontWeight = FontWeight.W300
             )

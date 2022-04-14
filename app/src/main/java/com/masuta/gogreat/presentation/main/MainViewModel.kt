@@ -3,12 +3,10 @@ package com.masuta.gogreat.presentation.main
 import android.content.Context
 import android.media.MediaPlayer
 import androidx.compose.runtime.MutableState
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.masuta.gogreat.R
 import com.masuta.gogreat.domain.model.Training
-import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.domain.repository.TrainRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
@@ -50,26 +48,10 @@ class MainViewModel @Inject constructor(
 
     fun getExercises(list: MutableState<List<Training>>) {
         viewModelScope.launch {
-            repository.startTraining("a7c49f05-d711-4dfb-a605-ec56e1681324")
             val resp = repository.findAll()
-            val trainMap: MutableMap<String, String?> = mutableMapOf()
+//            val trainMap: MutableMap<String, String?> = mutableMapOf()
             resp.data?.let { it ->
-                it.forEach {
-                    trainMap[it.uid!!] = null
-                }
-                trainMap.keys.forEach { uid->
-                    val resp2 = repository.getTrainingDetail(uid)
-                    println("resp2: $resp2")
-                    resp2.image?.let {
-                        trainMap[uid] = it
-                    }
-                }
-                println("trainMap: $trainMap")
-                it.forEach {
-                    it.image = trainMap[it.uid!!]
-                }
                 list.value = it
-
             }
         }
     }

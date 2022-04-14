@@ -133,8 +133,7 @@ class TrainRepositoryImpl @Inject constructor(
 
 
     override suspend fun setExerciseParams(uid: String, listExercises: List<TrainingExercise>) {
-        println("Training uid: $uid, exercises: $listExercises")
-        TODO("Not yet implemented")
+
     }
 
     override fun delete(newTrain: Training) {
