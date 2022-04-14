@@ -51,16 +51,16 @@ fun StartTrainingScreen(
     val listExercises = remember { mutableStateOf(emptyList<TrainingExercise>()) }
     val activeExercise = remember { mutableStateOf(0) }
 
-    val weight = remember { mutableStateOf("") }
-    val time = remember { mutableStateOf("") }
-    val numberOfSets = remember { mutableStateOf("") }
-    val numberOfRepetitions = remember { mutableStateOf("") }
-
     viewModel.getExercises(uid!!, listExercises)
 
     println("List Exercises: ${listExercises.value}")
     if (listExercises.value.isNotEmpty()) {
         val exercise by remember { mutableStateOf( listExercises.value[activeExercise.value] ) }
+
+        val weight = remember { mutableStateOf("") }
+        val time = remember { mutableStateOf(exercise.duration.toInteger().toString()) }
+        val numberOfSets = remember { mutableStateOf(exercise.numberOfSets.toString()) }
+        val numberOfRepetitions = remember { mutableStateOf(exercise.numberOfRepetitions.toString()) }
 
         Column(
             modifier = Modifier
