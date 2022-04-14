@@ -34,7 +34,11 @@ fun MainScreen(
 
     viewModel.clearLocalExercises()
     val listTrainings = remember { mutableStateOf(emptyList<Training>()) }
-
+    val currentWorkout = remember{ mutableStateOf(Training(
+        name = "",
+        exercises = mutableListOf(),
+        interval = ""
+    )) }
     Scaffold(
         bottomBar = {
             BottomMenuBar(navController = navController, selected = selected, onSelect = onSelect, menuItems = menuItems)
@@ -76,7 +80,7 @@ fun MainScreen(
                         )
                     }
 
-                    CurrentWorkoutSection(viewModel = viewModel, navController = navController)
+                    CurrentWorkoutSection(viewModel = viewModel, navController = navController, currentWorkout = currentWorkout)
                     WorkoutsSection(viewModel = viewModel, navController = navController, listTrainings = listTrainings)
 //                    CountDownTraining(sec = 50, viewModel = viewModel)
 //                    Timer(
@@ -94,13 +98,10 @@ fun MainScreen(
 @Composable
 fun CurrentWorkoutSection(
     viewModel: MainViewModel,
-    navController: NavHostController
+    navController: NavHostController,
+    currentWorkout: MutableState<Training>
 ) {
-    val currentWorkout = remember{ mutableStateOf(Training(
-        name = "",
-        exercises = mutableListOf(),
-        interval = ""
-    )) }
+
     Text(
         text = "Current workout",
         style = MaterialTheme.typography.h5,
@@ -108,7 +109,9 @@ fun CurrentWorkoutSection(
         modifier = Modifier
             .padding(vertical = 20.dp)
     )
-    viewModel.getCurrentTraining(currentWorkout)
+    if (currentWorkout.value.name=="") {
+        viewModel.getCurrentTraining(currentWorkout)
+    }
     WorkoutItem(workout = currentWorkout.value,
         onSelectItem = {
             navController.navigate("workout/${currentWorkout.value.uid}")})
