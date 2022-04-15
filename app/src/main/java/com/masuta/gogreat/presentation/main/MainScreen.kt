@@ -123,9 +123,9 @@ fun WorkoutsSection(
     navController: NavHostController,
     listTrainings: MutableState<List<Training>>
 ) {
-//    if (listTrainings.value.isEmpty()) {
+    if (listTrainings.value.isEmpty()) {
         viewModel.getExercises(listTrainings)
-//    }
+    }
 
     if (listTrainings.value.isNotEmpty()) {
         Text(
