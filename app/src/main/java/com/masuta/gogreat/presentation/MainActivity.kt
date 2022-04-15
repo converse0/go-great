@@ -88,8 +88,7 @@ fun Navigation(items: List<BottomNavigationItem>) {
         composable(route = "main") {
             MainScreen(navController = navController,viewModel = hiltViewModel(),  menuItems = items, selected = selected, onSelect = { selected = it })
         }
-        composable(route = "test") {
-        }
+
         composable(route = "new-training") {
             NewTrainingScreen(navController = navController, viewModel = hiltViewModel())
         }

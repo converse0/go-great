@@ -27,7 +27,6 @@ class TrainRepositoryImpl @Inject constructor(
                 append("Authorization", "Bearer $userToken")
             }
         }.let {
-            println("findAll: $it")
             return it!!
         }
     }
