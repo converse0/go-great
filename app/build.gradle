@@ -88,13 +88,14 @@ dependencies {
 //    implementation "io.ktor:ktor-client-content-negotiation:0.0.1"
 
     //Glide
+
     implementation "com.github.skydoves:landscapist-glide:1.5.1"
 
     // SharedPreferences
     implementation 'androidx.preference:preference-ktx:1.2.0'
 
     //ExoPlayer
-    implementation 'com.google.android.exoplayer:exoplayer:2.16.1'
+    implementation 'com.google.android.exoplayer:exoplayer:2.17.1'
 
     //Dagger - Hilt
     implementation "com.google.dagger:hilt-android:2.40.5"
