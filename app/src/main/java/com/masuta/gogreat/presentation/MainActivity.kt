@@ -46,6 +46,11 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+    override fun onStart() {
+        super.onStart()
+        println("onStart")
+    }
 }
 
 fun getToken(context: Context): String {
