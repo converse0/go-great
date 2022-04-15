@@ -129,9 +129,8 @@ fun WorkoutsSection(
     listTrainings: MutableState<List<Training>>,
     countTotalWorkout: MutableState<Int>
 ) {
-    if (countTotalWorkout.value == 0) {
         viewModel.getExercises(listTrainings, countTotalWorkout)
-    }
+
 
     if (listTrainings.value.isNotEmpty()) {
         Text(

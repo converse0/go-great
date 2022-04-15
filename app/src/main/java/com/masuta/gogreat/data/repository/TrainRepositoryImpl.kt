@@ -64,6 +64,7 @@ class TrainRepositoryImpl @Inject constructor(
 
     override suspend fun saveLocal(newTrain: Training): String {
         val id = newTrain.uid ?: ""
+        println("saveLocal: $id")
         localTraining = localTraining.plus(id to newTrain)
         return id
     }
@@ -153,7 +154,7 @@ class TrainRepositoryImpl @Inject constructor(
             headers {
                 append("Authorization", "Bearer $userToken")
             }
-            body = data//mapOf("uid" to uid, "exercises" to listExercises)
+            body = data // mapOf("uid" to uid, "exercises" to listExercises)
         }?.let {
             println("setExerciseParams: $it")
         }

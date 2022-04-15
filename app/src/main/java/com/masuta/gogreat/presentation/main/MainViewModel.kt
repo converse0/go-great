@@ -49,9 +49,26 @@ class MainViewModel @Inject constructor(
     fun getExercises(list: MutableState<List<Training>>, countTotalWorkout: MutableState<Int>) {
         viewModelScope.launch {
             val localTrainings = repository.getAllLocalTrainings()
-            if (localTrainings != null) {
+            localTrainings?.let {
+                //list.value = it
+                println("localTrainings: ${it.size}")
+            }
+            if (localTrainings != null
+                &&localTrainings.size!=list.value.size
+                &&list.value.isNotEmpty()) {
+                println("findAll..${list.value.size}..")
+                val resp = repository.findAll()
+                resp.data?.let { training ->
+                    list.value = training
+                    training.forEach { repository.saveLocal(it) }
+                }
+            }
+            else if (localTrainings != null
+                &&list.value.isEmpty()) {
                 list.value = localTrainings
-            } else {
+                println("localTrainings: ${localTrainings.size}")
+            }
+            else if(list.value.isEmpty()){
                 println("findAll....")
                 val resp = repository.findAll()
                 resp.data?.let { training ->
@@ -59,19 +76,21 @@ class MainViewModel @Inject constructor(
                     training.forEach { repository.saveLocal(it) }
                 }
             }
-            countTotalWorkout.value ++
+        //    countTotalWorkout.value ++
         }
     }
      fun getCurrentTraining(
          training: MutableState<Training>,
          countCurrentWorkout: MutableState<Int>
      ) {
+         if(training.value.name.isEmpty()) {
         viewModelScope.launch {
             repository.getCurrentTraining()?.let {
                 training.value = it
             }
-            countCurrentWorkout.value++
+         //   countCurrentWorkout.value++
         }
+         }
     }
 
     fun clearLocalExercises() {
