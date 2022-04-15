@@ -58,13 +58,14 @@ fun StartTrainingScreen(
     val listExercises = viewModel.listExercises
     val indexExercise = viewModel.indexExercise
     val exerciseSets = viewModel.exerciseSets
+    val currentExercise = viewModel.currentExercise.value
 
     if (indexExercise.value == listExercises.value.size) {
         navController.navigate("main")
         return
     }
 
-    val currentExercise by remember { mutableStateOf(listExercises.value[indexExercise.value]) }
+//    val currentExercise by remember { mutableStateOf(listExercises.value[indexExercise.value]) }
 
     val weight = remember { mutableStateOf("") }
     val time = remember { mutableStateOf(currentExercise.duration.toInteger().toString()) }

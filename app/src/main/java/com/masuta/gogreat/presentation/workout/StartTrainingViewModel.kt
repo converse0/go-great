@@ -27,6 +27,8 @@ class StartTrainingViewModel @Inject constructor(
     private val repository: TrainRepository
 ): ViewModel() {
 
+    val default = TrainingExercise(0, "20s", 10, 10, "Test", "20s", "other", "")
+
     private val _listExercises = mutableStateOf(listOf<TrainingExercise>())
     val listExercises: State<List<TrainingExercise>> = _listExercises
 
@@ -36,6 +38,9 @@ class StartTrainingViewModel @Inject constructor(
     private var _exerciseSets = mutableStateOf(0)
     var exerciseSets: State<Int> = _exerciseSets
 
+    private var _currentExercise = mutableStateOf(default)
+    var currentExercise: State<TrainingExercise> = _currentExercise
+
     fun onEvent(event: TrainingEvent) {
         when(event) {
             is TrainingEvent.NextSet -> {
@@ -44,6 +49,7 @@ class StartTrainingViewModel @Inject constructor(
             is TrainingEvent.NextExercise -> {
                 if (_indexExercise.value < _listExercises.value.size) {
                     _indexExercise.value++
+                    _currentExercise.value = _listExercises.value[_indexExercise.value]
                 }
                 println("index: ${_indexExercise.value}")
                 _exerciseSets.value = _listExercises.value[_indexExercise.value].numberOfSets
@@ -63,7 +69,8 @@ class StartTrainingViewModel @Inject constructor(
             resp?.let { it ->
                 _listExercises.value = it.exercises
 //                interval.value = it.interval.toInteger()
-                _exerciseSets.value = it.exercises[indexExercise.value].numberOfSets
+                _currentExercise.value = it.exercises[indexExercise.value]
+                _exerciseSets.value = _currentExercise.value.numberOfSets
                 println("${_exerciseSets.value} ,${_indexExercise.value}")
             }
 //
