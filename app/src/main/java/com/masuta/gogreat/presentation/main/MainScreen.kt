@@ -101,7 +101,6 @@ fun CurrentWorkoutSection(
     navController: NavHostController,
     currentWorkout: MutableState<Training>
 ) {
-
     Text(
         text = "Current workout",
         style = MaterialTheme.typography.h5,
@@ -114,7 +113,7 @@ fun CurrentWorkoutSection(
     }
     WorkoutItem(workout = currentWorkout.value,
         onSelectItem = {
-            navController.navigate("workout/${currentWorkout.value.uid}")})
+            navController.navigate("start-training/${currentWorkout.value.uid}")})
 }
 
 @Composable
