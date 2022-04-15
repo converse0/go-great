@@ -147,12 +147,13 @@ class TrainRepositoryImpl @Inject constructor(
 
 
     override suspend fun setExerciseParams(uid: String, listExercises: List<TrainingExercise>) {
+        val data = TrainingExerciseUpdate(uid=uid, exercises = listExercises)
         httpClient?.put<String>("$url/user/trening/exercises") {
             contentType(ContentType.Application.Json)
             headers {
                 append("Authorization", "Bearer $userToken")
             }
-            body =  mapOf("uid" to uid, "exercises" to listExercises)
+            body = data//mapOf("uid" to uid, "exercises" to listExercises)
         }?.let {
             println("setExerciseParams: $it")
         }

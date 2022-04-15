@@ -94,7 +94,8 @@ fun StartTrainingModal(
                     onClick =  onSave,
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray),
                     modifier = Modifier
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
+//                    enabled = false
                 ) {
                     Text(
                         text = "OK!",

@@ -20,3 +20,9 @@ data class TrainingDetailsResponse(
     val message: String? = null,
     val status: Boolean? = null
 )
+
+@kotlinx.serialization.Serializable
+data class TrainingExerciseUpdate(
+    val exercises: List<TrainingExercise>,
+    val uid: String? = null
+)
