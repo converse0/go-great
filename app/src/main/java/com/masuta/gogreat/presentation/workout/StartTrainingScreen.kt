@@ -51,7 +51,7 @@ fun StartTrainingScreen(
     val listExercises = remember { mutableStateOf(emptyList<TrainingExercise>()) }
     val activeExercise = remember { mutableStateOf(0) }
 
-    viewModel.getExercises(uid!!, listExercises)
+    viewModel.getExercises(uid!!, listExercises, activeExercise)
 
     println("List Exercises: ${listExercises.value}")
     if (listExercises.value.isNotEmpty()) {

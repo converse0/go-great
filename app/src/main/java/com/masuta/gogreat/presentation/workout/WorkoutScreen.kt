@@ -103,8 +103,8 @@ fun WorkoutScreen(
 @Composable
 fun WorkoutListExercises(
     listExercises: List<TrainingExercise>,
-    navController: NavHostController,
-    uid: String
+    navController: NavHostController? = null,
+    uid: String?
 ) {
     listExercises.forEach { exercise ->
         WorkoutExercise(ex = exercise, onSelectExercise = {  })

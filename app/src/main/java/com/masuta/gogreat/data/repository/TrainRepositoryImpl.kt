@@ -58,6 +58,7 @@ class TrainRepositoryImpl @Inject constructor(
             }
             body = newTrain
         }
+        saveLocal(newTrain)
         println("save: $resp")
 
     }
