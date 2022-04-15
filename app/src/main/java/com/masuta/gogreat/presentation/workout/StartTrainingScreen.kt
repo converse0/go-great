@@ -60,7 +60,7 @@ fun StartTrainingScreen(
     val exerciseSets = viewModel.exerciseSets
     val currentExercise = viewModel.currentExercise.value
 
-    if (indexExercise.value == listExercises.value.size) {
+    if (indexExercise.value == listExercises.value.size-1) {
         navController.navigate("main")
         return
     }

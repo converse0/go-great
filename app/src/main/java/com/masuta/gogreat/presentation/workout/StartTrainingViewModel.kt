@@ -47,12 +47,19 @@ class StartTrainingViewModel @Inject constructor(
                 _exerciseSets.value--
             }
             is TrainingEvent.NextExercise -> {
-                if (_indexExercise.value < _listExercises.value.size) {
+                if (_indexExercise.value+1 <= _listExercises.value.size-1) {
+                    println("old index: ${_indexExercise.value}")
+                    println(_listExercises.value[_indexExercise.value])
+                    println(_listExercises.value[_indexExercise.value].numberOfSets)
                     _indexExercise.value++
+                    println("new index: ${_indexExercise.value}")
+
                     _currentExercise.value = _listExercises.value[_indexExercise.value]
+                    _exerciseSets.value = _listExercises.value[_indexExercise.value].numberOfSets
+                } else {
+                    println("end of training")
                 }
                 println("index: ${_indexExercise.value}")
-                _exerciseSets.value = _listExercises.value[_indexExercise.value].numberOfSets
             }
             is TrainingEvent.SetExerciseSets -> {
                 _exerciseSets.value = event.sets
