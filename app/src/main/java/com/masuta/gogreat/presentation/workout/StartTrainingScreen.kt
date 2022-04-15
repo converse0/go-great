@@ -8,14 +8,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -23,24 +20,18 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavHostController
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DefaultDataSource
-import com.google.android.exoplayer2.upstream.Loader
 import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.presentation.main.Timer
 import com.masuta.gogreat.presentation.new_training.toInteger
-import com.masuta.gogreat.presentation.ui.theme.SportTheme
 
 @Composable
 fun StartTrainingScreen(
@@ -59,11 +50,12 @@ fun StartTrainingScreen(
     val indexExercise = viewModel.indexExercise
     val exerciseSets = viewModel.exerciseSets
     val currentExercise = viewModel.currentExercise.value
-
-    if (indexExercise.value == listExercises.value.size-1) {
-        navController.navigate("main")
+    val navigateMain = {        navController.navigate("main")
+    }
+    if (indexExercise.value == listExercises.value.size) {
         return
     }
+
 
 //    val currentExercise by remember { mutableStateOf(listExercises.value[indexExercise.value]) }
 
@@ -102,9 +94,9 @@ fun StartTrainingScreen(
                 TrainingInfo(
                     currentExercise,
                     onOpenModal = {
-                        viewModel.onEvent(TrainingEvent.NextSet)
+                        viewModel.onEvent(TrainingEvent.NextSet, navigateMain)
                         if (exerciseSets.value == 0) {
-                            viewModel.onEvent(TrainingEvent.NextExercise)
+                            viewModel.onEvent(TrainingEvent.NextExercise, navigateMain)
                         }
                         println("Exercise Sets: ${exerciseSets.value}")
                         println("Exercise: ${indexExercise.value}")

@@ -57,7 +57,7 @@ fun TrainingList(viewModel: MainViewModel) {
     val exercises = remember { mutableStateOf(listOf<Training>()) }
     val sets = remember { mutableStateOf(0) }
     val numberOfExercise = remember { mutableStateOf(0) }
-    viewModel.getExercises(exercises)
+//    viewModel.getExercises(exercises, countTotalWorkout)
     if (exercises.value.isEmpty()) {
         Text("No exercises")
         return

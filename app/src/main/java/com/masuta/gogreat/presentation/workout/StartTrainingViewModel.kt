@@ -1,17 +1,11 @@
 package com.masuta.gogreat.presentation.workout
 
-import android.content.Context
-import android.media.MediaPlayer
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.masuta.gogreat.R
-import com.masuta.gogreat.domain.model.Training
 import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.domain.repository.TrainRepository
-import com.masuta.gogreat.presentation.new_training.toInteger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -41,24 +35,34 @@ class StartTrainingViewModel @Inject constructor(
     private var _currentExercise = mutableStateOf(default)
     var currentExercise: State<TrainingExercise> = _currentExercise
 
-    fun onEvent(event: TrainingEvent) {
+    fun onEvent(event: TrainingEvent, navigateMain: () -> Unit) {
+        if (_indexExercise.value>=_listExercises.value.size) {
+            _indexExercise.value++
+            navigateMain()
+            println("=====================FINISHED=====================")
+            return
+        }
         when(event) {
             is TrainingEvent.NextSet -> {
                 _exerciseSets.value--
             }
             is TrainingEvent.NextExercise -> {
-                if (_indexExercise.value+1 <= _listExercises.value.size-1) {
+
                     println("old index: ${_indexExercise.value}")
+                    println("size: ${_listExercises.value.size}")
                     println(_listExercises.value[_indexExercise.value])
                     println(_listExercises.value[_indexExercise.value].numberOfSets)
                     _indexExercise.value++
+                if (_indexExercise.value>=_listExercises.value.size) {
+
+                    println("=====================FINISHED=====================")
+                    return
+                }
                     println("new index: ${_indexExercise.value}")
 
                     _currentExercise.value = _listExercises.value[_indexExercise.value]
                     _exerciseSets.value = _listExercises.value[_indexExercise.value].numberOfSets
-                } else {
-                    println("end of training")
-                }
+
                 println("index: ${_indexExercise.value}")
             }
             is TrainingEvent.SetExerciseSets -> {

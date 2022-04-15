@@ -46,27 +46,31 @@ class MainViewModel @Inject constructor(
         job?.cancel()
     }
 
-    fun getExercises(list: MutableState<List<Training>>) {
+    fun getExercises(list: MutableState<List<Training>>, countTotalWorkout: MutableState<Int>) {
         viewModelScope.launch {
             val localTrainings = repository.getAllLocalTrainings()
             if (localTrainings != null) {
                 list.value = localTrainings
             } else {
+                println("findAll....")
                 val resp = repository.findAll()
                 resp.data?.let { training ->
                     list.value = training
                     training.forEach { repository.saveLocal(it) }
                 }
             }
-//            val trainMap: MutableMap<String, String?> = mutableMapOf()
-            println("Local Trainings: $localTrainings")
+            countTotalWorkout.value ++
         }
     }
-     fun getCurrentTraining(training: MutableState<Training>) {
+     fun getCurrentTraining(
+         training: MutableState<Training>,
+         countCurrentWorkout: MutableState<Int>
+     ) {
         viewModelScope.launch {
             repository.getCurrentTraining()?.let {
                 training.value = it
             }
+            countCurrentWorkout.value++
         }
     }
 

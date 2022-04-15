@@ -39,6 +39,8 @@ fun MainScreen(
         exercises = mutableListOf(),
         interval = ""
     )) }
+    val countCurrentWorkout = remember { mutableStateOf(0) }
+    val countTotalWorkout = remember { mutableStateOf(0) }
     Scaffold(
         bottomBar = {
             BottomMenuBar(navController = navController, selected = selected, onSelect = onSelect, menuItems = menuItems)
@@ -80,8 +82,11 @@ fun MainScreen(
                         )
                     }
 
-                    CurrentWorkoutSection(viewModel = viewModel, navController = navController, currentWorkout = currentWorkout)
-                    WorkoutsSection(viewModel = viewModel, navController = navController, listTrainings = listTrainings)
+                    CurrentWorkoutSection(viewModel = viewModel,
+                        navController = navController,
+                        currentWorkout = currentWorkout, countCurrentWorkout)
+                    WorkoutsSection(viewModel = viewModel, navController = navController,
+                        listTrainings = listTrainings, countTotalWorkout)
 //                    CountDownTraining(sec = 50, viewModel = viewModel)
 //                    Timer(
 //                        totalTime = 10L * 1000L,
@@ -99,7 +104,8 @@ fun MainScreen(
 fun CurrentWorkoutSection(
     viewModel: MainViewModel,
     navController: NavHostController,
-    currentWorkout: MutableState<Training>
+    currentWorkout: MutableState<Training>,
+    countCurrentWorkout: MutableState<Int>
 ) {
 
     Text(
@@ -109,8 +115,8 @@ fun CurrentWorkoutSection(
         modifier = Modifier
             .padding(vertical = 20.dp)
     )
-    if (currentWorkout.value.name=="") {
-        viewModel.getCurrentTraining(currentWorkout)
+    if (countCurrentWorkout.value == 0) {
+        viewModel.getCurrentTraining(currentWorkout, countCurrentWorkout)
     }
     WorkoutItem(workout = currentWorkout.value,
         onSelectItem = {
@@ -121,10 +127,11 @@ fun CurrentWorkoutSection(
 fun WorkoutsSection(
     viewModel: MainViewModel,
     navController: NavHostController,
-    listTrainings: MutableState<List<Training>>
+    listTrainings: MutableState<List<Training>>,
+    countTotalWorkout: MutableState<Int>
 ) {
-    if (listTrainings.value.isEmpty()) {
-        viewModel.getExercises(listTrainings)
+    if (countTotalWorkout.value == 0) {
+        viewModel.getExercises(listTrainings, countTotalWorkout)
     }
 
     if (listTrainings.value.isNotEmpty()) {
