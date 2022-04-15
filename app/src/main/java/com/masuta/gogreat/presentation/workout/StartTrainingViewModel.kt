@@ -3,6 +3,8 @@ package com.masuta.gogreat.presentation.workout
 import android.content.Context
 import android.media.MediaPlayer
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.masuta.gogreat.R
@@ -14,20 +16,55 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+sealed class TrainingEvent {
+    object NextSet: TrainingEvent()
+    object NextExercise: TrainingEvent()
+    data class SetExerciseSets(val sets: Int): TrainingEvent()
+}
+
 @HiltViewModel
 class StartTrainingViewModel @Inject constructor(
     private val repository: TrainRepository
 ): ViewModel() {
 
-    fun getExercises(uid: String, listExercises: MutableState<List<TrainingExercise>>, interval: MutableState<Int>) {
+    private val _listExercises = mutableStateOf(listOf<TrainingExercise>())
+    val listExercises: State<List<TrainingExercise>> = _listExercises
+
+    private var _indexExercise = mutableStateOf(0)
+    var indexExercise: State<Int> = _indexExercise
+
+    private var _exerciseSets = mutableStateOf(0)
+    var exerciseSets: State<Int> = _exerciseSets
+
+    fun onEvent(event: TrainingEvent) {
+        when(event) {
+            is TrainingEvent.NextSet -> {
+                _exerciseSets.value--
+            }
+            is TrainingEvent.NextExercise -> {
+                if (_indexExercise.value < _listExercises.value.size) {
+                    _indexExercise.value++
+                }
+                println("index: ${_indexExercise.value}")
+                _exerciseSets.value = _listExercises.value[_indexExercise.value].numberOfSets
+            }
+            is TrainingEvent.SetExerciseSets -> {
+                _exerciseSets.value = event.sets
+            }
+        }
+    }
+
+    fun getTraining(uid: String) {
         viewModelScope.launch {
 //            val resp = repository.getTrainingDetail(uid)
             val resp = repository.getLocalTrainingByUid(uid)
             println("Exercise: $resp")
 
-            resp?.let {
-                listExercises.value = it.exercises
-                interval.value = it.interval.toInteger()
+            resp?.let { it ->
+                _listExercises.value = it.exercises
+//                interval.value = it.interval.toInteger()
+                _exerciseSets.value = it.exercises[indexExercise.value].numberOfSets
+                println("${_exerciseSets.value} ,${_indexExercise.value}")
             }
 //
 //            listExercises.value = resp.exercises

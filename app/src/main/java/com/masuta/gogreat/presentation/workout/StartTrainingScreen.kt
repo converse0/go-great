@@ -15,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -35,6 +36,7 @@ import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DefaultDataSource
+import com.google.android.exoplayer2.upstream.Loader
 import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.presentation.main.Timer
 import com.masuta.gogreat.presentation.new_training.toInteger
@@ -48,89 +50,104 @@ fun StartTrainingScreen(
 ) {
     val isEditModal = remember { mutableStateOf(false) }
     val isModalOpen = remember { mutableStateOf(false) }
-    val listExercises = remember { mutableStateOf(emptyList<TrainingExercise>()) }
-    val activeExercise = remember { mutableStateOf(0) }
 
-    viewModel.getExercises(uid!!, listExercises, activeExercise)
+    if (viewModel.listExercises.value.isEmpty()) {
+        viewModel.getTraining(uid!!)
+    }
 
-    println("List Exercises: ${listExercises.value}")
-    if (listExercises.value.isNotEmpty()) {
-        val exercise by remember { mutableStateOf( listExercises.value[activeExercise.value] ) }
+    val listExercises = viewModel.listExercises
+    val indexExercise = viewModel.indexExercise
+    val exerciseSets = viewModel.exerciseSets
 
-        val weight = remember { mutableStateOf("") }
-        val time = remember { mutableStateOf(exercise.duration.toInteger().toString()) }
-        val numberOfSets = remember { mutableStateOf(exercise.numberOfSets.toString()) }
-        val numberOfRepetitions = remember { mutableStateOf(exercise.numberOfRepetitions.toString()) }
+    if (indexExercise.value == listExercises.value.size) {
+        navController.navigate("main")
+        return
+    }
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(color = Color.White)
-                .padding(20.dp)
+    val currentExercise by remember { mutableStateOf(listExercises.value[indexExercise.value]) }
+
+    val weight = remember { mutableStateOf("") }
+    val time = remember { mutableStateOf(currentExercise.duration.toInteger().toString()) }
+    val numberOfSets = remember { mutableStateOf(currentExercise.numberOfSets.toString()) }
+    val numberOfRepetitions =
+        remember { mutableStateOf(currentExercise.numberOfRepetitions.toString()) }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color.White)
+            .padding(20.dp)
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                IconButton(onClick = { navController.navigate("workout/${uid}") }) {
-                    Icon(imageVector = Icons.Default.KeyboardArrowLeft, contentDescription = "Back")
-                }
-                Text(
-                    text = exercise.name,
-                    style = MaterialTheme.typography.h4,
-                    modifier = Modifier.padding(start = 8.dp)
-                )
+            IconButton(onClick = { navController.navigate("workout/${uid}") }) {
+                Icon(imageVector = Icons.Default.KeyboardArrowLeft, contentDescription = "Back")
             }
-            LazyColumn(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                item {
-                    Spacer(modifier = Modifier.height(12.dp))
-                    VideoSection(url = exercise.video)
-                    Spacer(modifier = Modifier.height(12.dp))
-                    TrainingInfo(
-                        exercise,
-                        onOpenModal = {
-                            isModalOpen.value = true
-                        },
-                        onOpenEdit = {
-                            isEditModal.value = true
-                        }
-                    )
-                }
-            }
-        }
-        if (isModalOpen.value) {
-            ModalTimer(
-                exercise.duration.toInteger().toLong(),
-                onDismiss = { isModalOpen.value = false })
-        }
-        if (isEditModal.value) {
-            StartTrainingModal(
-                weight,
-                time,
-                numberOfSets ,
-                numberOfRepetitions,
-                onSave = {
-                     val listEditExercise = listExercises.value.mapIndexed { index, exercise ->
-                         if (index == activeExercise.value) {
-                             exercise.copy(
-                                 duration = time.value + "s",
-                                 numberOfSets = numberOfSets.value.toInt(),
-                                numberOfRepetitions = numberOfRepetitions.value.toInt()
-                             )
-                         } else {
-                             exercise
-                         }
-                     }
-                    viewModel.setExerciseParams(uid = uid, listExercises = listEditExercise)
-                    isEditModal.value = false
-                },
-                onDismiss = { isEditModal.value = false }
+            Text(
+                text = currentExercise.name,
+                style = MaterialTheme.typography.h4,
+                modifier = Modifier.padding(start = 8.dp)
             )
         }
+        LazyColumn(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            item {
+                Spacer(modifier = Modifier.height(12.dp))
+                VideoSection(url = currentExercise.video)
+                Spacer(modifier = Modifier.height(12.dp))
+                TrainingInfo(
+                    currentExercise,
+                    onOpenModal = {
+                        viewModel.onEvent(TrainingEvent.NextSet)
+                        if (exerciseSets.value == 0) {
+                            viewModel.onEvent(TrainingEvent.NextExercise)
+                        }
+                        println("Exercise Sets: ${exerciseSets.value}")
+                        println("Exercise: ${indexExercise.value}")
+                        isModalOpen.value = true
+                    },
+                    onOpenEdit = {
+                        isEditModal.value = true
+                    }
+                )
+            }
+        }
+    }
+    if (isModalOpen.value) {
+        ModalTimer(
+            currentExercise.duration.toInteger().toLong(),
+            onDismiss = { isModalOpen.value = false }
+        )
+    }
+    if (isEditModal.value) {
+        StartTrainingModal(
+            weight,
+            time,
+            numberOfSets,
+            numberOfRepetitions,
+            onSave = {
+                val listEditExercise = listExercises.value.mapIndexed { index, exercise ->
+                    if (index == indexExercise.value) {
+                        exercise.copy(
+                            duration = time.value + "s",
+                            numberOfSets = numberOfSets.value.toInt(),
+                            numberOfRepetitions = numberOfRepetitions.value.toInt()
+                        )
+                    } else {
+                        exercise
+                    }
+                }
+                viewModel.setExerciseParams(uid = uid!!, listExercises = listEditExercise)
+                isEditModal.value = false
+            },
+            onDismiss = { isEditModal.value = false }
+        )
     }
 }
+
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -158,9 +175,14 @@ fun ModalTimer(
                 .width(300.dp)
                 .clip(RoundedCornerShape(16.dp))
         ) {
-            Timer(totalTime = totalTime * 1000L, modifier = Modifier
-                .size(200.dp)
-                .align(Alignment.Center))
+            Timer(
+                totalTime = totalTime * 1000L,
+                onTimerEnd = onDismiss,
+                startTimer = true,
+                modifier = Modifier
+                    .size(200.dp)
+                    .align(Alignment.Center),
+            )
         }
     }
 }

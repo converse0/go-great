@@ -44,7 +44,9 @@ import kotlin.math.sin
 @Composable
 fun Timer(
     totalTime: Long,
+    onTimerEnd: () -> Unit,
     modifier: Modifier = Modifier,
+    startTimer: Boolean = false,
     inactiveBarColor: Color = Color.DarkGray,
     activeBarColor: Color = Color(0xFF37B900),
     initialValue: Float = 1f,
@@ -62,7 +64,7 @@ fun Timer(
         mutableStateOf(totalTime)
     }
     var isTimerRunning by remember {
-        mutableStateOf(false)
+        mutableStateOf(startTimer)
     }
     LaunchedEffect(key1 = currentTime, key2 = isTimerRunning) {
         if(currentTime > 0 && isTimerRunning) {
@@ -75,6 +77,7 @@ fun Timer(
         }
         if (currentTime/1000L == 0L) {
             delay(1000L)
+            onTimerEnd()
             value = 1f
             currentTime = totalTime
             isTimerRunning = false
@@ -177,15 +180,15 @@ fun TimerButtonWithText(
     }
 }
 
-@Preview
-@Composable
-fun TimerPreview() {
-    SportTheme() {
-        Timer(
-            totalTime = 10L * 1000L,
-            inactiveBarColor = Color.DarkGray,
-            activeBarColor = Color(0xFF37B900),
-            modifier = Modifier.size(200.dp).padding(bottom = 60.dp)
-        )
-    }
-}
+//@Preview
+//@Composable
+//fun TimerPreview() {
+//    SportTheme() {
+//        Timer(
+//            totalTime = 10L * 1000L,
+//            inactiveBarColor = Color.DarkGray,
+//            activeBarColor = Color(0xFF37B900),
+//            modifier = Modifier.size(200.dp).padding(bottom = 60.dp)
+//        )
+//    }
+//}
