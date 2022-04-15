@@ -35,12 +35,12 @@ class StartTrainingViewModel @Inject constructor(
     private var _currentExercise = mutableStateOf(default)
     var currentExercise: State<TrainingExercise> = _currentExercise
 
-    fun onEvent(event: TrainingEvent, navigateMain: () -> Unit) {
-        if (_indexExercise.value>=_listExercises.value.size) {
+    fun onEvent(event: TrainingEvent, navigateMain: () -> Unit) :Boolean {
+        if (_indexExercise.value==_listExercises.value.size) {
             _indexExercise.value++
-            navigateMain()
+          //  navigateMain()
             println("=====================FINISHED=====================")
-            return
+            return false
         }
         when(event) {
             is TrainingEvent.NextSet -> {
@@ -56,7 +56,7 @@ class StartTrainingViewModel @Inject constructor(
                 if (_indexExercise.value>=_listExercises.value.size) {
 
                     println("=====================FINISHED=====================")
-                    return
+                    return false
                 }
                     println("new index: ${_indexExercise.value}")
 
@@ -69,6 +69,7 @@ class StartTrainingViewModel @Inject constructor(
                 _exerciseSets.value = event.sets
             }
         }
+        return true
     }
 
     fun getTraining(uid: String) {

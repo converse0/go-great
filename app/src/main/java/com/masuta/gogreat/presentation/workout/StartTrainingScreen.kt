@@ -96,7 +96,10 @@ fun StartTrainingScreen(
                     onOpenModal = {
                         viewModel.onEvent(TrainingEvent.NextSet, navigateMain)
                         if (exerciseSets.value == 0) {
-                            viewModel.onEvent(TrainingEvent.NextExercise, navigateMain)
+                           val resp = viewModel.onEvent(TrainingEvent.NextExercise, navigateMain)
+                            if (!resp) {
+                                navigateMain()
+                            }
                         }
                         println("Exercise Sets: ${exerciseSets.value}")
                         println("Exercise: ${indexExercise.value}")
