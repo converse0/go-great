@@ -48,11 +48,18 @@ class MainViewModel @Inject constructor(
 
     fun getExercises(list: MutableState<List<Training>>) {
         viewModelScope.launch {
-            val resp = repository.findAll()
-//            val trainMap: MutableMap<String, String?> = mutableMapOf()
-            resp.data?.let { it ->
-                list.value = it
+            val localTrainings = repository.getAllLocalTrainings()
+            if (localTrainings != null) {
+                list.value = localTrainings
+            } else {
+                val resp = repository.findAll()
+                resp.data?.let { training ->
+                    list.value = training
+                    training.forEach { repository.saveLocal(it) }
+                }
             }
+//            val trainMap: MutableMap<String, String?> = mutableMapOf()
+            println("Local Trainings: $localTrainings")
         }
     }
      fun getCurrentTraining(training: MutableState<Training>) {

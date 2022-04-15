@@ -14,7 +14,7 @@ class TrainRepositoryImpl @Inject constructor(
     private var httpClient: HttpClient? = null
     private val url = "https://boilerplate-go-trening.herokuapp.com"
     private val token = userToken
-    private var localTraining:Map<Int,Training> = mutableMapOf()
+    private var localTraining:Map<String,Training> = mutableMapOf()
     private var localTrainingEx:Map<Int,TrainingExercise> = mutableMapOf()
 
     init {
@@ -62,8 +62,8 @@ class TrainRepositoryImpl @Inject constructor(
 
     }
 
-    override suspend fun saveLocal(newTrain: Training):Int {
-        val id = localTraining.size.plus(1)
+    override suspend fun saveLocal(newTrain: Training): String {
+        val id = newTrain.uid ?: ""
         localTraining = localTraining.plus(id to newTrain)
         return id
     }
@@ -77,6 +77,20 @@ class TrainRepositoryImpl @Inject constructor(
 
     override suspend fun getLocalEx(id: Int): TrainingExercise? {
         localTrainingEx.get(id).let {
+            return it
+        }
+    }
+
+    override suspend fun getAllLocalTrainings(): List<Training>? {
+        return if (localTraining.isNotEmpty()) {
+            localTraining.values.toList()
+        } else {
+            null
+        }
+    }
+
+    override suspend fun getLocalTrainingByUid(uid: String): Training? {
+        localTraining.get(uid).let {
             return it
         }
     }
