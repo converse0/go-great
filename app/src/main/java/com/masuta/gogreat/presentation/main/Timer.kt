@@ -44,6 +44,7 @@ import kotlin.math.sin
 @Composable
 fun Timer(
     totalTime: Long,
+    onAlarmSound: () -> Unit,
     onTimerEnd: () -> Unit,
     modifier: Modifier = Modifier,
     startTimer: Boolean = false,
@@ -52,7 +53,7 @@ fun Timer(
     initialValue: Float = 1f,
     strokeWidth: Dp = 5.dp,
 ) {
-    val context = LocalContext.current
+//    val context = LocalContext.current
 
     var size by remember {
         mutableStateOf(IntSize.Zero)
@@ -73,7 +74,8 @@ fun Timer(
             value = currentTime / totalTime.toFloat()
         }
         if (currentTime/1000L == 5L) {
-            playSound(context)
+//            playSound(context)
+            onAlarmSound()
         }
         if (currentTime/1000L == 0L) {
             delay(1000L)
@@ -149,11 +151,6 @@ fun Timer(
             )
         }
     }
-
-}
-
-fun playSound(context: Context) {
-    val mp =  MediaPlayer.create(context, R.raw.beep).start()
 }
 
 @Composable

@@ -35,6 +35,8 @@ class StartTrainingViewModel @Inject constructor(
     private var _currentExercise = mutableStateOf(default)
     var currentExercise: State<TrainingExercise> = _currentExercise
 
+    var interval: String? = null
+
     fun onEvent(event: TrainingEvent, navigateMain: () -> Unit) :Boolean {
         if (_indexExercise.value==_listExercises.value.size) {
             _indexExercise.value++
@@ -94,6 +96,9 @@ class StartTrainingViewModel @Inject constructor(
     fun setExerciseParams(uid: String, listExercises: List<TrainingExercise>) {
         viewModelScope.launch {
             repository.setExerciseParams(uid, listExercises)
+            println("Old currentExercise: ${_currentExercise.value}")
+            _currentExercise.value = listExercises.get(_indexExercise.value)
+            println("New currentExercise: ${_currentExercise.value}")
         }
     }
 }

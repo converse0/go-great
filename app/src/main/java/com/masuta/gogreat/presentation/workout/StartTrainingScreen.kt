@@ -1,6 +1,8 @@
 package com.masuta.gogreat.presentation.workout
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.media.MediaPlayer
 import android.net.Uri
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -29,6 +31,7 @@ import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DefaultDataSource
+import com.masuta.gogreat.R
 import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.presentation.main.Timer
 import com.masuta.gogreat.presentation.new_training.toInteger
@@ -50,14 +53,12 @@ fun StartTrainingScreen(
     val indexExercise = viewModel.indexExercise
     val exerciseSets = viewModel.exerciseSets
     val currentExercise = viewModel.currentExercise.value
+//    val interval = remember { mutableStateOf("30") }
     val navigateMain = {        navController.navigate("main")
     }
     if (indexExercise.value == listExercises.value.size) {
         return
     }
-
-
-//    val currentExercise by remember { mutableStateOf(listExercises.value[indexExercise.value]) }
 
     val weight = remember { mutableStateOf("") }
     val time = remember { mutableStateOf(currentExercise.duration.toInteger().toString()) }
@@ -93,6 +94,7 @@ fun StartTrainingScreen(
                 Spacer(modifier = Modifier.height(12.dp))
                 TrainingInfo(
                     currentExercise,
+                    exerciseSets = exerciseSets.value,
                     onOpenModal = {
                         viewModel.onEvent(TrainingEvent.NextSet, navigateMain)
                         if (exerciseSets.value == 0) {
@@ -114,7 +116,7 @@ fun StartTrainingScreen(
     }
     if (isModalOpen.value) {
         ModalTimer(
-            currentExercise.duration.toInteger().toLong(),
+            totalTime = currentExercise.relax.toInteger().toLong(),
             onDismiss = { isModalOpen.value = false }
         )
     }
@@ -128,7 +130,7 @@ fun StartTrainingScreen(
                 val listEditExercise = listExercises.value.mapIndexed { index, exercise ->
                     if (index == indexExercise.value) {
                         exercise.copy(
-                            duration = time.value + "s",
+                            relax = time.value + "s",
                             numberOfSets = numberOfSets.value.toInt(),
                             numberOfRepetitions = numberOfRepetitions.value.toInt()
                         )
@@ -151,6 +153,13 @@ fun ModalTimer(
     totalTime: Long,
     onDismiss: () -> Unit
 ) {
+
+    val context = LocalContext.current
+
+    val sound = {
+        playSound(context)
+    }
+
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier.fillMaxSize()
@@ -173,6 +182,7 @@ fun ModalTimer(
         ) {
             Timer(
                 totalTime = totalTime * 1000L,
+                onAlarmSound = sound,
                 onTimerEnd = onDismiss,
                 startTimer = true,
                 modifier = Modifier
@@ -183,9 +193,14 @@ fun ModalTimer(
     }
 }
 
+fun playSound(context: Context) {
+    val mp =  MediaPlayer.create(context, R.raw.beep).start()
+}
+
 @Composable
 fun TrainingInfo(
     exercise: TrainingExercise,
+    exerciseSets: Int,
     onOpenModal: () -> Unit,
     onOpenEdit: () -> Unit
 ) {
@@ -214,6 +229,20 @@ fun TrainingInfo(
         )
         Text(
             text = exercise.numberOfRepetitions.toString(),
+            modifier = Modifier.padding(start = 8.dp)
+        )
+    }
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.padding(vertical = 8.dp)
+    ) {
+        Text(
+            text = "Number of sets",
+            style = MaterialTheme.typography.body1,
+            fontWeight = FontWeight.Bold
+        )
+        Text(
+            text = exerciseSets.toString(),
             modifier = Modifier.padding(start = 8.dp)
         )
     }
