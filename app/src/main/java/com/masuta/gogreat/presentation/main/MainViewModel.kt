@@ -49,15 +49,19 @@ class MainViewModel @Inject constructor(
     fun getExercises(list: MutableState<List<Training>>, countTotalWorkout: MutableState<Int>) {
         viewModelScope.launch {
             val localTrainings = repository.getAllLocalTrainings()
-            localTrainings?.let {
-                //list.value = it
-                println("localTrainings: ${it.size}")
-            }
+
             if (localTrainings != null
                 &&localTrainings.size!=list.value.size
                 &&list.value.isNotEmpty()) {
+                println("list.value: ${list.value.size}")
+                println("localTrainings: ${localTrainings.size}")
+
                 println("findAll..${list.value.size}..")
+
                 val resp = repository.findAll()
+                println("fa size..${resp.data?.size ?: 0}..")
+                repository.clearLocalTrainingData()
+
                 resp.data?.let { training ->
                     list.value = training
                     training.forEach { repository.saveLocal(it) }
@@ -66,13 +70,14 @@ class MainViewModel @Inject constructor(
             else if (localTrainings != null
                 &&list.value.isEmpty()) {
                 list.value = localTrainings
-                println("localTrainings: ${localTrainings.size}")
+                println("localTraining (mem 0): ${localTrainings.size}")
             }
             else if(list.value.isEmpty()){
                 println("findAll....")
                 val resp = repository.findAll()
                 resp.data?.let { training ->
                     list.value = training
+                    repository.clearLocalTrainingData()
                     training.forEach { repository.saveLocal(it) }
                 }
             }

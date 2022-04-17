@@ -103,6 +103,9 @@ class TrainRepositoryImpl @Inject constructor(
     override suspend fun clearLocalExerciseData() {
         localTrainingEx = mutableMapOf()
     }
+    override suspend fun clearLocalTrainingData() {
+        localTraining = mutableMapOf()
+    }
 
     override suspend fun getTrainingDetail(uid: String): Training {
         httpClient?.get<TrainingDetailsResponse>("$url/user/trening?uid=$uid") {
