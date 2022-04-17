@@ -1,9 +1,12 @@
 package com.masuta.gogreat.presentation.workout
 
+import android.content.Context
+import android.media.MediaPlayer
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.masuta.gogreat.R
 import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.domain.repository.TrainRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -98,7 +101,12 @@ class StartTrainingViewModel @Inject constructor(
             repository.setExerciseParams(uid, listExercises)
             println("Old currentExercise: ${_currentExercise.value}")
             _currentExercise.value = listExercises.get(_indexExercise.value)
+            _exerciseSets.value = _currentExercise.value.numberOfSets
             println("New currentExercise: ${_currentExercise.value}")
         }
+    }
+
+    fun playSound(context: Context) {
+        val mp =  MediaPlayer.create(context, R.raw.beep).start()
     }
 }

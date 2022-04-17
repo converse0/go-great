@@ -62,7 +62,7 @@ fun StartTrainingScreen(
 
     val weight = remember { mutableStateOf("") }
     println("duration start new tr:" + currentExercise.duration)
-    val time = remember { mutableStateOf(currentExercise.duration.toInteger().toString()) }
+    val time = remember { mutableStateOf(currentExercise.relax.toInteger().toString()) }
     val numberOfSets = remember { mutableStateOf(currentExercise.numberOfSets.toString()) }
     val numberOfRepetitions =
         remember { mutableStateOf(currentExercise.numberOfRepetitions.toString()) }
@@ -118,6 +118,7 @@ fun StartTrainingScreen(
     if (isModalOpen.value) {
         ModalTimer(
             totalTime = currentExercise.relax.toInteger().toLong(),
+            viewModel = viewModel,
             onDismiss = { isModalOpen.value = false }
         )
     }
@@ -152,13 +153,14 @@ fun StartTrainingScreen(
 @Composable
 fun ModalTimer(
     totalTime: Long,
+    viewModel: StartTrainingViewModel,
     onDismiss: () -> Unit
 ) {
 
     val context = LocalContext.current
 
     val sound = {
-        playSound(context)
+        viewModel.playSound(context)
     }
 
     Box(
@@ -194,10 +196,6 @@ fun ModalTimer(
     }
 }
 
-fun playSound(context: Context) {
-    val mp =  MediaPlayer.create(context, R.raw.beep).start()
-}
-
 @Composable
 fun TrainingInfo(
     exercise: TrainingExercise,
@@ -205,20 +203,20 @@ fun TrainingInfo(
     onOpenModal: () -> Unit,
     onOpenEdit: () -> Unit
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(vertical = 8.dp)
-    ) {
-        Text(
-            text = "Weight",
-            style = MaterialTheme.typography.body1,
-            fontWeight = FontWeight.Bold
-        )
-        Text(
-            text = "5kg",
-            modifier = Modifier.padding(start = 8.dp)
-        )
-    }
+//    Row(
+//        verticalAlignment = Alignment.CenterVertically,
+//        modifier = Modifier.padding(vertical = 8.dp)
+//    ) {
+//        Text(
+//            text = "Weight",
+//            style = MaterialTheme.typography.body1,
+//            fontWeight = FontWeight.Bold
+//        )
+//        Text(
+//            text = "5kg",
+//            modifier = Modifier.padding(start = 8.dp)
+//        )
+//    }
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.padding(vertical = 8.dp)
