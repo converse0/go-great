@@ -1,5 +1,7 @@
 package com.masuta.gogreat.domain.model
 
+import com.masuta.gogreat.utils.validate
+
 @kotlinx.serialization.Serializable
 data class TrainingExercise(
     val count: Int,
@@ -15,7 +17,14 @@ data class TrainingExercise(
     val description: String = "",
     val technique: String = "",
     val mistake: String = ""
-)
+) {
+    fun validation(): TrainingExercise {
+        return this.copy(
+            duration = duration.validate() + "s",
+            relax = relax.validate() + "s"
+        )
+    }
+}
 
 enum class ExerciseType(val value: Int) {
     ARMS(0),

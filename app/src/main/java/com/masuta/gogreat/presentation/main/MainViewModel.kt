@@ -64,7 +64,7 @@ class MainViewModel @Inject constructor(
 
                 resp.data?.let { training ->
                     list.value = training
-                    training.forEach { repository.saveLocal(it) }
+                    training.forEach { repository.saveLocal(it.validateExerciseData()) }
                 }
             }
             else if (localTrainings != null
@@ -78,7 +78,7 @@ class MainViewModel @Inject constructor(
                 resp.data?.let { training ->
                     list.value = training
                     repository.clearLocalTrainingData()
-                    training.forEach { repository.saveLocal(it) }
+                    training.forEach { repository.saveLocal(it.validateExerciseData()) }
                 }
             }
         //    countTotalWorkout.value ++
@@ -91,7 +91,7 @@ class MainViewModel @Inject constructor(
          if(training.value.name.isEmpty()) {
         viewModelScope.launch {
             repository.getCurrentTraining()?.let {
-                training.value = it
+                training.value = it.validateExerciseData()
             }
          //   countCurrentWorkout.value++
         }

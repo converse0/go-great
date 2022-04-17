@@ -6,7 +6,13 @@ data class Training(
     val name: String,
     val uid: String? = null,
     var image: String? = null
-)
+) {
+    fun validateExerciseData(): Training {
+        return this.copy(
+            exercises = exercises.map { it.validation() }
+        )
+    }
+}
 
 @kotlinx.serialization.Serializable
 data class TrainingResponse(
