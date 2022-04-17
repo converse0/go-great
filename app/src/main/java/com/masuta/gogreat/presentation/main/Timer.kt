@@ -67,15 +67,17 @@ fun Timer(
     var isTimerRunning by remember {
         mutableStateOf(startTimer)
     }
+
+    if (currentTime == 5000L) {
+//            playSound(context)
+        onAlarmSound()
+    }
+
     LaunchedEffect(key1 = currentTime, key2 = isTimerRunning) {
         if(currentTime > 0 && isTimerRunning) {
             delay(100L)
             currentTime -= 100L
             value = currentTime / totalTime.toFloat()
-        }
-        if (currentTime/1000L == 5L) {
-//            playSound(context)
-            onAlarmSound()
         }
         if (currentTime/1000L == 0L) {
             delay(1000L)
