@@ -63,7 +63,7 @@ class MainViewModel @Inject constructor(
                 repository.clearLocalTrainingData()
 
                 resp.data?.let { training ->
-                    list.value = training
+                    list.value = training.map { it.validateExerciseData() }
                     training.forEach { repository.saveLocal(it.validateExerciseData()) }
                 }
             }
@@ -76,7 +76,7 @@ class MainViewModel @Inject constructor(
                 println("findAll....")
                 val resp = repository.findAll()
                 resp.data?.let { training ->
-                    list.value = training
+                    list.value = training.map { it.validateExerciseData() }
                     repository.clearLocalTrainingData()
                     training.forEach { repository.saveLocal(it.validateExerciseData()) }
                 }
