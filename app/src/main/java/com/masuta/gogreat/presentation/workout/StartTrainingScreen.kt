@@ -60,6 +60,7 @@ fun StartTrainingScreen(
 //    val currentExercise by remember { mutableStateOf(listExercises.value[indexExercise.value]) }
 
     val weight = remember { mutableStateOf("") }
+    println("duration start new tr:" + currentExercise.duration)
     val time = remember { mutableStateOf(currentExercise.duration.toInteger().toString()) }
     val numberOfSets = remember { mutableStateOf(currentExercise.numberOfSets.toString()) }
     val numberOfRepetitions =

@@ -50,6 +50,7 @@ class TrainRepositoryImpl @Inject constructor(
 
 
     override suspend fun save(newTrain: Training) {
+        println("saveReq: $newTrain")
       val resp = httpClient?.post<String>("$url/user/trening") {
           contentType(ContentType.Application.Json)
             headers {
@@ -58,7 +59,7 @@ class TrainRepositoryImpl @Inject constructor(
             body = newTrain
         }
         saveLocal(newTrain)
-        println("save: $resp")
+        println("saveRes: $resp")
 
     }
 
@@ -151,6 +152,7 @@ class TrainRepositoryImpl @Inject constructor(
 
 
     override suspend fun setExerciseParams(uid: String, listExercises: List<TrainingExercise>) {
+        println("setExerciseParamsReq: $listExercises")
         val data = TrainingExerciseUpdate(uid=uid, exercises = listExercises)
         httpClient?.put<String>("$url/user/trening/exercises") {
             contentType(ContentType.Application.Json)
