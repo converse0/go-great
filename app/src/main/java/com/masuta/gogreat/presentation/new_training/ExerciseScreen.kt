@@ -193,7 +193,7 @@ fun NewExerciseScreen(
     }
 }
 
-fun String.toInteger(): Int = this.filter { it.isDigit() }.toInt()
+fun String.toInteger(): Int = this.filter { it.isDigit() }.toIntOrNull() ?: 0
 
 @Composable
 fun NewExerciseParameters(
