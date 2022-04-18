@@ -1,10 +1,10 @@
 package com.masuta.gogreat.domain.model
 @kotlinx.serialization.Serializable
 data class Training(
-    val exercises: List<TrainingExercise>,
+    var exercises: List<TrainingExercise>,
     val interval: String,
-    val name: String,
-    val uid: String? = null,
+    var name: String,
+    var uid: String? = null,
     var image: String? = null
 ) {
     fun validateExerciseData(): Training {

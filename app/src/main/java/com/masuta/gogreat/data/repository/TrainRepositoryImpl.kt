@@ -66,7 +66,15 @@ class TrainRepositoryImpl @Inject constructor(
     override suspend fun saveLocal(newTrain: Training): String {
         val id = newTrain.uid ?: ""
         println("saveLocal: $id")
-        localTraining = localTraining.plus(id to newTrain)
+        localTraining.get(id)?.apply {
+            this.image = newTrain.image
+            this.uid = id
+            this.name= newTrain.name
+            this.exercises = newTrain.exercises
+
+        } ?: run {
+            localTraining = localTraining.plus(id to newTrain)
+        }
         return id
     }
 
