@@ -48,7 +48,6 @@ class TrainRepositoryImpl @Inject constructor(
     }
 
 
-
     override suspend fun save(newTrain: Training) {
         println("saveReq: $newTrain")
       val resp = httpClient?.post<String>("$url/user/trening") {
@@ -66,6 +65,7 @@ class TrainRepositoryImpl @Inject constructor(
     override suspend fun saveLocal(newTrain: Training): String {
         val id = newTrain.uid ?: ""
         println("saveLocal: $id")
+        println("Old LocalTrainings $localTraining")
         localTraining.get(id)?.apply {
             this.image = newTrain.image
             this.uid = id
@@ -75,6 +75,7 @@ class TrainRepositoryImpl @Inject constructor(
         } ?: run {
             localTraining = localTraining.plus(id to newTrain)
         }
+        println("Old LocalTrainings $localTraining")
         return id
     }
 
@@ -148,9 +149,10 @@ class TrainRepositoryImpl @Inject constructor(
                 append("Authorization", "Bearer $userToken")
             }
         }?.let { tr ->
-            println("getCurrentTraining: $tr")
+
             tr.data?.let { train ->
                 train.getOrNull(0)?.let {
+                    println("getCurrentTraining: $it")
                     return it
                 }
             }

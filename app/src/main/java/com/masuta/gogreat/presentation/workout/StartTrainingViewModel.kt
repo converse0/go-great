@@ -104,7 +104,13 @@ class StartTrainingViewModel @Inject constructor(
             _exerciseSets.value = _currentExercise.value.numberOfSets
             println("New currentExercise: ${_currentExercise.value}")
 
-            repository
+            val training = repository.getLocalTrainingByUid(uid).let {
+                it?.copy(
+                    exercises = listExercises
+                )
+            }
+
+            repository.saveLocal(training!!)
         }
     }
 
