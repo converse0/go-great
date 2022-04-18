@@ -260,7 +260,7 @@ fun PersonSection(
             end.linkTo(parent.end)
         }
         constrain(shoulder) {
-            start.linkTo(person.start, 10.dp)
+            start.linkTo(person.start, 80.dp)
             top.linkTo(topGuidLine)
         }
         constrain(breast) {
@@ -269,7 +269,7 @@ fun PersonSection(
             top.linkTo(shoulder.bottom, 10.dp)
         }
         constrain(forearm) {
-            start.linkTo(person.start, 5.dp)
+            start.linkTo(person.start, 80.dp)
             top.linkTo(breast.bottom, 10.dp)
         }
         constrain(legUp) {
@@ -278,7 +278,7 @@ fun PersonSection(
         }
         constrain(legDown) {
             top.linkTo(legUp.bottom, 40.dp)
-            start.linkTo(person.start, 10.dp)
+            start.linkTo(person.start, 80.dp)
         }
     }
 
