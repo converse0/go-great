@@ -1,8 +1,6 @@
 package com.masuta.gogreat.presentation.workout
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.media.MediaPlayer
 import android.net.Uri
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -25,19 +23,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DefaultDataSource
-import com.masuta.gogreat.R
 import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.presentation.main.Timer
 import com.masuta.gogreat.presentation.new_training.toInteger
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @Composable
 fun StartTrainingScreen(
@@ -103,13 +97,10 @@ fun StartTrainingScreen(
                     currentExercise,
                     exerciseSets = exerciseSets.value,
                     onOpenModal = {
-                            viewModel.onEvent(TrainingEvent.NextSet, navigateMain)
+                            viewModel.onEvent(TrainingEvent.NextSet)
                             if (exerciseSets.value == 0) {
-                                val resp = viewModel.onEvent(TrainingEvent.NextExercise, navigateMain)
-                                if (!resp) {
-                                    viewModel.playFinalSound(context)
-                                    navigateMain()
-                                }
+                                val resp = viewModel.onEvent(TrainingEvent.NextExercise)
+
                             }
                         isModalOpen.value = true
                         println("Exercise Sets: ${exerciseSets.value}")
@@ -127,7 +118,8 @@ fun StartTrainingScreen(
         ModalTimer(
             totalTime = currentExercise.relax.toInteger().toLong(),
             viewModel = viewModel,
-            onDismiss = { isModalOpen.value = false }
+            onDismiss = { isModalOpen.value = false },
+            navController = navController
         )
     }
     if (isEditModal.value) {
@@ -166,7 +158,8 @@ fun StartTrainingScreen(
 fun ModalTimer(
     totalTime: Long,
     viewModel: StartTrainingViewModel,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    navController: NavHostController
 ) {
 
     val context = LocalContext.current
@@ -203,6 +196,8 @@ fun ModalTimer(
                 modifier = Modifier
                     .size(200.dp)
                     .align(Alignment.Center),
+                viewModel = viewModel,
+                navController = navController
             )
         }
     }

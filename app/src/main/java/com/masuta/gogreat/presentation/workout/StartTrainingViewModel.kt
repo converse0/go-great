@@ -6,6 +6,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import com.masuta.gogreat.R
 import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.domain.repository.TrainRepository
@@ -33,7 +34,7 @@ class StartTrainingViewModel @Inject constructor(
     private var _indexExercise = mutableStateOf(0)
     var indexExercise: State<Int> = _indexExercise
 
-    private var _exerciseSets = mutableStateOf(0)
+    private var _exerciseSets = mutableStateOf(1)
     var exerciseSets: State<Int> = _exerciseSets
 
     private var _currentExercise = mutableStateOf(default)
@@ -41,9 +42,18 @@ class StartTrainingViewModel @Inject constructor(
 
     var interval: String? = null
 
-    fun onEvent(event: TrainingEvent, navigateMain: () -> Unit) :Boolean {
+    fun endTraining(navController: NavController, context: Context) {
+        viewModelScope.launch{
+            playFinalSound(context)
+            delay(3000)
+            navController.navigate("main")
+        }
+    }
+
+
+
+    fun onEvent(event: TrainingEvent) :Boolean {
         if (_indexExercise.value==_listExercises.value.size) {
-            _indexExercise.value++
           //  navigateMain()
             println("=====================FINISHED=====================")
             return false
@@ -53,17 +63,18 @@ class StartTrainingViewModel @Inject constructor(
                 _exerciseSets.value--
             }
             is TrainingEvent.NextExercise -> {
-//                    println("old index: ${_indexExercise.value}")
+                    println("old index: ${_indexExercise.value}")
 //                    println("size: ${_listExercises.value.size}")
 //                    println(_listExercises.value[_indexExercise.value])
 //                    println(_listExercises.value[_indexExercise.value].numberOfSets)
                     _indexExercise.value++
-                if (_indexExercise.value>=_listExercises.value.size) {
+
+                if (_indexExercise.value==_listExercises.value.size) {
                     println("=====================FINISHED=====================")
                     return false
                 }
                     println("new index: ${_indexExercise.value}")
-
+                    println("list exercises: ${_listExercises.value.size}")
                     _currentExercise.value = _listExercises.value[_indexExercise.value]
                     _exerciseSets.value = _listExercises.value[_indexExercise.value].numberOfSets
 

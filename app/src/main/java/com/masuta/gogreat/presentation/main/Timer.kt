@@ -1,7 +1,5 @@
 package com.masuta.gogreat.presentation.main
 
-import android.content.Context
-import android.media.MediaPlayer
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -10,35 +8,26 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.Stop
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.PaintingStyle.Companion.Stroke
-import androidx.compose.ui.graphics.PointMode
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.masuta.gogreat.R
-import com.masuta.gogreat.presentation.ui.theme.SportTheme
+import androidx.navigation.NavHostController
+import com.masuta.gogreat.presentation.workout.StartTrainingViewModel
 import kotlinx.coroutines.delay
-import java.lang.Math.*
-import kotlin.math.cos
-import kotlin.math.sin
 
 
 @Composable
@@ -52,8 +41,10 @@ fun Timer(
     activeBarColor: Color = Color(0xFF37B900),
     initialValue: Float = 1f,
     strokeWidth: Dp = 5.dp,
+    viewModel: StartTrainingViewModel,
+    navController: NavHostController,
 ) {
-//    val context = LocalContext.current
+    val context = LocalContext.current
 
     var size by remember {
         mutableStateOf(IntSize.Zero)
@@ -80,11 +71,14 @@ fun Timer(
             value = currentTime / totalTime.toFloat()
         }
         if (currentTime/1000L == 0L) {
-            delay(1000L)
+            delay(500L)
             onTimerEnd()
             value = 1f
             currentTime = totalTime
             isTimerRunning = false
+            if (viewModel.indexExercise.value >= viewModel.listExercises.value.size) {
+                viewModel.endTraining(navController,context)
+            }
         }
     }
 
