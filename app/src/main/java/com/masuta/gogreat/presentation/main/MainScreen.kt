@@ -192,6 +192,7 @@ fun WorkoutItem(
             Text(
                 text =text,
                 style = MaterialTheme.typography.h5,
+                color = Color.White,
                 fontWeight = FontWeight.W700
             )
             Spacer(Modifier.height(10.dp))
@@ -199,6 +200,7 @@ fun WorkoutItem(
             Text(
                 text = "27 March 2017 $internal",
                 style = MaterialTheme.typography.body1,
+                color = Color.White,
                 fontWeight = FontWeight.W300
             )
         }
