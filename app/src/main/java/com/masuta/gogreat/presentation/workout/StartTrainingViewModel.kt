@@ -10,6 +10,7 @@ import com.masuta.gogreat.R
 import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.domain.repository.TrainRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -40,7 +41,7 @@ class StartTrainingViewModel @Inject constructor(
 
     var interval: String? = null
 
-    fun onEvent(event: TrainingEvent, navigateMain: () -> Unit) :Boolean {
+    suspend fun onEvent(event: TrainingEvent, navigateMain: () -> Unit) :Boolean {
         if (_indexExercise.value==_listExercises.value.size) {
             _indexExercise.value++
           //  navigateMain()
@@ -59,8 +60,8 @@ class StartTrainingViewModel @Inject constructor(
                     println(_listExercises.value[_indexExercise.value].numberOfSets)
                     _indexExercise.value++
                 if (_indexExercise.value>=_listExercises.value.size) {
-
                     println("=====================FINISHED=====================")
+                    delay(5000L)
                     return false
                 }
                     println("new index: ${_indexExercise.value}")
@@ -109,12 +110,17 @@ class StartTrainingViewModel @Inject constructor(
                     exercises = listExercises
                 )
             }
-
-            repository.saveLocal(training!!)
+            training?.let {
+                repository.saveLocal(it)
+            }
         }
     }
 
     fun playSound(context: Context) {
         val mp =  MediaPlayer.create(context, R.raw.zvuk41).start()
+    }
+
+    fun playFinalSound(context: Context) {
+        val mp = MediaPlayer.create(context, R.raw.fanfar).start()
     }
 }

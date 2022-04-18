@@ -25,6 +25,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
@@ -35,6 +36,8 @@ import com.masuta.gogreat.R
 import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.presentation.main.Timer
 import com.masuta.gogreat.presentation.new_training.toInteger
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun StartTrainingScreen(
@@ -97,11 +100,13 @@ fun StartTrainingScreen(
                     currentExercise,
                     exerciseSets = exerciseSets.value,
                     onOpenModal = {
-                        viewModel.onEvent(TrainingEvent.NextSet, navigateMain)
-                        if (exerciseSets.value == 0) {
-                           val resp = viewModel.onEvent(TrainingEvent.NextExercise, navigateMain)
-                            if (!resp) {
-                                navigateMain()
+                        viewModel.viewModelScope.launch {
+                            viewModel.onEvent(TrainingEvent.NextSet, navigateMain)
+                            if (exerciseSets.value == 0) {
+                                val resp = viewModel.onEvent(TrainingEvent.NextExercise, navigateMain)
+                                if (!resp) {
+                                    navigateMain()
+                                }
                             }
                         }
                         println("Exercise Sets: ${exerciseSets.value}")
