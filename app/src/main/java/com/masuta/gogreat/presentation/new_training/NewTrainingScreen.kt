@@ -317,7 +317,7 @@ fun IconButtonAddExercise(
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
-            .background(color = Color.LightGray, shape = CircleShape)
+            .background(color = Color.Yellow, shape = CircleShape)
             .clip(CircleShape)
             .size(20.dp)
     ) {
