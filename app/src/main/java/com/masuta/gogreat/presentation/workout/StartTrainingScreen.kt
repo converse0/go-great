@@ -253,7 +253,7 @@ fun TrainingInfo(
             fontWeight = FontWeight.Bold
         )
         Text(
-            text = exerciseSets.toString(),
+            text = "${exerciseSets} / ${exercise.numberOfSets}",
             modifier = Modifier.padding(start = 8.dp)
         )
     }

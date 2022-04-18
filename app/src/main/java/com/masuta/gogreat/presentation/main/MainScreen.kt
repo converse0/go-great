@@ -107,14 +107,15 @@ fun CurrentWorkoutSection(
     currentWorkout: MutableState<Training>,
     countCurrentWorkout: MutableState<Int>
 ) {
-    Text(
-        text = "Current workout",
-        style = MaterialTheme.typography.h5,
-        fontWeight = FontWeight.W300,
-        modifier = Modifier
-            .padding(vertical = 20.dp)
-    )
+
     if (countCurrentWorkout.value == 0) {
+        Text(
+            text = "Current workout",
+            style = MaterialTheme.typography.h5,
+            fontWeight = FontWeight.W300,
+            modifier = Modifier
+                .padding(vertical = 20.dp)
+        )
         viewModel.getCurrentTraining(currentWorkout, countCurrentWorkout)
     }
     WorkoutItem(workout = currentWorkout.value,

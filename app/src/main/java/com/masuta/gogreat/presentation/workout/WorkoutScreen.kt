@@ -128,7 +128,7 @@ fun PersonImage() {
         Image(
             painter = painterResource(R.drawable.human),
             contentDescription = null,
-            modifier = Modifier.height(300.dp)
+            modifier = Modifier.height(300.dp).fillMaxWidth()
         )
     }
 }
