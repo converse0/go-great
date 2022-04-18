@@ -50,52 +50,59 @@ fun WorkoutScreen(
     
     viewModel.getExercises(uid!!, listExercises, name)
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .background(color = Color.White)
             .padding(20.dp)
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(bottom = 60.dp)
         ) {
-            IconButton(onClick = {
-                navController.navigate("main")
-            }) {
-                Icon(imageVector = Icons.Default.KeyboardArrowLeft, contentDescription = "Back")
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                IconButton(onClick = {
+                    navController.navigate("main")
+                }) {
+                    Icon(imageVector = Icons.Default.KeyboardArrowLeft, contentDescription = "Back")
+                }
+                Text(
+                    text = name.value,
+                    style = MaterialTheme.typography.h4,
+                    modifier = Modifier.padding(start = 8.dp)
+                )
             }
-            Text(
-                text = name.value,
-                style = MaterialTheme.typography.h4,
-                modifier = Modifier.padding(start = 8.dp)
-            )
-        }
-        LazyColumn(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            item {
-                Spacer(modifier = Modifier.height(12.dp))
-                PersonImage()
-                Spacer(modifier = Modifier.height(12.dp))
-                WorkoutListExercises(listExercises.value, navController, uid)
-                Spacer(Modifier.height(30.dp))
-                TextButton(
-                    onClick = {
-                        viewModel.startTraining(uid)
-                        navController.navigate("start-training/$uid")
-                    },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                ) {
-                    Text(
-                        text = "Start training",
-                        color = Color.White,
-                        modifier = Modifier.padding(vertical = 8.dp)
-                    )
+            LazyColumn(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                item {
+                    Spacer(modifier = Modifier.height(12.dp))
+                    PersonImage()
+                    Spacer(modifier = Modifier.height(12.dp))
+                    WorkoutListExercises(listExercises.value, navController, uid)
+                    Spacer(Modifier.height(30.dp))
                 }
             }
+        }
+        TextButton(
+            onClick = {
+                viewModel.startTraining(uid)
+                navController.navigate("start-training/$uid")
+            },
+            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red),
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter)
+        ) {
+            Text(
+                text = "Start training",
+                color = Color.White,
+                modifier = Modifier.padding(vertical = 8.dp)
+            )
         }
     }
 }
@@ -119,10 +126,9 @@ fun PersonImage() {
         .fillMaxWidth()
         .padding(12.dp)) {
         Image(
-            painter = painterResource(R.drawable.person),
+            painter = painterResource(R.drawable.human),
             contentDescription = null,
-            modifier = Modifier
-                .fillMaxSize(0.5f)
+            modifier = Modifier.height(300.dp)
         )
     }
 }
