@@ -2,6 +2,7 @@ package com.masuta.gogreat.presentation.new_training
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -94,7 +95,8 @@ fun NewTrainingScreen(
                     enabled= listExercises.value.isNotEmpty(),
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray),
                     modifier = Modifier
-                        .fillMaxWidth().padding(vertical = 16.dp, horizontal = 16.dp)
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp, horizontal = 16.dp)
                 ) {
                     Text(
                         text = "Save",
@@ -290,7 +292,8 @@ fun PersonSection(
             contentDescription = null,
             modifier = Modifier
                 .layoutId("person")
-                .height(300.dp).fillMaxWidth()
+                .height(300.dp)
+                .fillMaxWidth()
         )
         ExerciseType.values().forEach { type ->
             val layoutId = when(type) {
@@ -317,14 +320,19 @@ fun IconButtonAddExercise(
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
-            .background(color = Color.Yellow, shape = CircleShape)
+            .background(color = Color.Transparent, shape = CircleShape)
             .clip(CircleShape)
             .size(20.dp)
+            .border(width = 2.dp, color = Color.White, shape = CircleShape)
     ) {
         IconButton(
             onClick = onClick
         ) {
-            Icon(imageVector = Icons.Default.Add, contentDescription = null, tint = Color.Black)
+            Icon(
+                imageVector = Icons.Default.Add,
+                contentDescription = null,
+                tint = Color.White,
+            )
         }
     }
 }
@@ -333,7 +341,8 @@ fun IconButtonAddExercise(
 @Composable
 fun NewTrainingScreenPreview() {
     SportTheme() {
-        PersonSection(onNewExercise = { ExerciseType.LEGS })
+//        IconButtonAddExercise(onClick = {})
+        PersonSection(onNewExercise = {})
     }
 
 }

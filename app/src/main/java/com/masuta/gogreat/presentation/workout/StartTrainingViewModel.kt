@@ -55,7 +55,7 @@ class StartTrainingViewModel @Inject constructor(
             onOpenModal()
             delay(1000L)
             onEvent(TrainingEvent.NextSet)
-            if (exerciseSets.value == 0) {
+            if (_exerciseSets.value == 0) {
                 onEvent(TrainingEvent.NextExercise)
             }
         }
@@ -93,7 +93,6 @@ class StartTrainingViewModel @Inject constructor(
                 _exerciseSets.value = event.sets
             }
         }
-//        return true
     }
 
     fun getTraining(uid: String) {

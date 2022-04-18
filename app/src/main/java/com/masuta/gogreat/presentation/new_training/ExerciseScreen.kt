@@ -27,6 +27,8 @@ import androidx.navigation.NavHostController
 import com.masuta.gogreat.R
 import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.presentation.components.DropdownDemo
+import com.masuta.gogreat.presentation.components.SliderWithLabel
+import com.masuta.gogreat.presentation.components.SliderWithText
 import com.skydoves.landscapist.glide.GlideImage
 import io.ktor.util.reflect.*
 
@@ -202,12 +204,12 @@ fun NewExerciseParameters(
     onSubmit: () -> Unit
 ) {
     val count = remember { mutableStateOf(exercise.count) }
-    val duration = remember { mutableStateOf(exercise.duration.toInteger()) }
+//    val duration = remember { mutableStateOf(exercise.duration.toInteger()) }
     val numberOfSets = remember { mutableStateOf(exercise.numberOfSets) }
     val numberOfRepetitions = remember { mutableStateOf(exercise.numberOfRepetitions) }
     val relaxTime = remember { mutableStateOf(exercise.relax.toInteger()) }
 
-    println(exercise)
+    println("Count: ${count.value}")
 
     LazyColumn(
         modifier = Modifier.fillMaxWidth()
@@ -217,37 +219,46 @@ fun NewExerciseParameters(
                 text = "Count",
                 style = MaterialTheme.typography.body1,
             )
-            DropdownDemo(items = listOf(10, 30, 50), selected = count)
+//            DropdownDemo(items = listOf(10, 30, 50), selected = count)
+            val counts = listOf(10, 20, 30, 40)
+            SliderWithLabel(value = 0f, selectedItem = count, valueRange = 0f..counts.size.minus(1).toFloat(), finiteEnd = true, items = counts)
             Text(
                 text = "Number of sets",
                 style = MaterialTheme.typography.body1,
                 modifier = Modifier.padding(10.dp)
             )
-            DropdownDemo(items = listOf(3, 4, 5), selected = numberOfSets)
+//            DropdownDemo(items = listOf(3, 4, 5), selected = numberOfSets)
+            val sets = listOf(3, 4, 5)
+            SliderWithLabel(value = 0f, selectedItem = numberOfSets, valueRange = 0f..sets.size.minus(1).toFloat(), finiteEnd = true, items = sets)
             Text(
                 text = "Number of repetitions",
                 style = MaterialTheme.typography.body1,
                 modifier = Modifier.padding(10.dp)
             )
-            DropdownDemo(items = listOf(15, 30, 50), selected = numberOfRepetitions)
+//            DropdownDemo(items = listOf(15, 30, 50), selected = numberOfRepetitions)
+            val repetitions = listOf(15, 30, 50)
+            SliderWithLabel(value = 0f, selectedItem = numberOfRepetitions, valueRange = 0f..repetitions.size.minus(1).toFloat(), finiteEnd = true, items = repetitions)
             Text(
-                text = "Choose recovery time, sec",
+                text = "Choose relax time, sec",
                 style = MaterialTheme.typography.body1,
                 modifier = Modifier.padding(10.dp)
             )
-            DropdownDemo(items = listOf(20, 30, 50), selected = relaxTime)
-            Text(
-                text = "Duration, sec",
-                style = MaterialTheme.typography.body1,
-                modifier = Modifier.padding(10.dp)
-            )
-            DropdownDemo(items = listOf(20, 30, 50), selected = duration)
+//            DropdownDemo(items = listOf(20, 30, 50), selected = relaxTime)
+            val relax = listOf(20, 30, 50)
+            SliderWithLabel(value = 0f, selectedItem = relaxTime, valueRange = 0f..relax.size.minus(1).toFloat(), finiteEnd = true, items = relax)
+//            Text(
+//                text = "Relax time, sec",
+//                style = MaterialTheme.typography.body1,
+//                modifier = Modifier.padding(10.dp)
+//            )
+//
+//            DropdownDemo(items = listOf(20, 30, 50), selected = duration)
             TextButton(
                 onClick = {
                     onSubmit()
                     val ex = exercise.copy(
-                        count = count.value,
-                        duration = "${duration.value}s",
+                        count = count.value.toInt(),
+//                        duration = "${duration.value}s",
                         numberOfRepetitions = numberOfRepetitions.value,
                         relax = "${relaxTime.value}s",
                         numberOfSets = numberOfSets.value
