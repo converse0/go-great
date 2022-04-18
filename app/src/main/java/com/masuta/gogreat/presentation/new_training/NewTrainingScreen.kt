@@ -286,11 +286,11 @@ fun PersonSection(
         .fillMaxWidth()
         .padding(12.dp)) {
         Image(
-            painter = painterResource(R.drawable.person),
+            painter = painterResource(R.drawable.human),
             contentDescription = null,
             modifier = Modifier
                 .layoutId("person")
-                .fillMaxSize(0.5f)
+                .height(300.dp).fillMaxWidth()
         )
         ExerciseType.values().forEach { type ->
             val layoutId = when(type) {
@@ -333,10 +333,7 @@ fun IconButtonAddExercise(
 @Composable
 fun NewTrainingScreenPreview() {
     SportTheme() {
-        NewTrainingScreen(
-            navController = NavHostController(LocalContext.current),
-            viewModel = hiltViewModel()
-        )
+        PersonSection(onNewExercise = { ExerciseType.LEGS })
     }
 
 }
