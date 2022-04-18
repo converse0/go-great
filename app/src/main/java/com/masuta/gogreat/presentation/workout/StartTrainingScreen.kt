@@ -97,12 +97,12 @@ fun StartTrainingScreen(
                     currentExercise,
                     exerciseSets = exerciseSets.value,
                     onOpenModal = {
-                            viewModel.onEvent(TrainingEvent.NextSet)
-                            if (exerciseSets.value == 0) {
-                                val resp = viewModel.onEvent(TrainingEvent.NextExercise)
-
-                            }
-                        isModalOpen.value = true
+//                            isModalOpen.value = true
+//                            viewModel.onEvent(TrainingEvent.NextSet)
+//                            if (exerciseSets.value == 0) {
+//                                val resp = viewModel.onEvent(TrainingEvent.NextExercise)
+//                            }
+                        viewModel.nextSetOrTraining(onOpenModal = { isModalOpen.value = true })
                         println("Exercise Sets: ${exerciseSets.value}")
                         println("Exercise: ${indexExercise.value}")
 

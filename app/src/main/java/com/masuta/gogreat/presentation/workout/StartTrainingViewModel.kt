@@ -50,13 +50,22 @@ class StartTrainingViewModel @Inject constructor(
         }
     }
 
+    fun nextSetOrTraining(onOpenModal: () -> Unit) {
+        viewModelScope.launch {
+            onOpenModal()
+            delay(1000L)
+            onEvent(TrainingEvent.NextSet)
+            if (exerciseSets.value == 0) {
+                onEvent(TrainingEvent.NextExercise)
+            }
+        }
+    }
 
-
-    fun onEvent(event: TrainingEvent) :Boolean {
+    fun onEvent(event: TrainingEvent) {
         if (_indexExercise.value==_listExercises.value.size) {
           //  navigateMain()
             println("=====================FINISHED=====================")
-            return false
+//            return false
         }
         when(event) {
             is TrainingEvent.NextSet -> {
@@ -71,7 +80,7 @@ class StartTrainingViewModel @Inject constructor(
 
                 if (_indexExercise.value==_listExercises.value.size) {
                     println("=====================FINISHED=====================")
-                    return false
+//                    return false
                 }
                     println("new index: ${_indexExercise.value}")
                     println("list exercises: ${_listExercises.value.size}")
@@ -84,7 +93,7 @@ class StartTrainingViewModel @Inject constructor(
                 _exerciseSets.value = event.sets
             }
         }
-        return true
+//        return true
     }
 
     fun getTraining(uid: String) {
