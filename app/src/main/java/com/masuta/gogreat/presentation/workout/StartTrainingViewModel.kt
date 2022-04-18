@@ -45,7 +45,7 @@ class StartTrainingViewModel @Inject constructor(
     fun endTraining(navController: NavController, context: Context) {
         viewModelScope.launch{
             playFinalSound(context)
-            delay(3000)
+            delay(500)
             navController.navigate("main")
         }
     }
@@ -65,7 +65,7 @@ class StartTrainingViewModel @Inject constructor(
         if (_indexExercise.value==_listExercises.value.size) {
           //  navigateMain()
             println("=====================FINISHED=====================")
-//            return false
+           return
         }
         when(event) {
             is TrainingEvent.NextSet -> {
@@ -80,7 +80,7 @@ class StartTrainingViewModel @Inject constructor(
 
                 if (_indexExercise.value==_listExercises.value.size) {
                     println("=====================FINISHED=====================")
-//                    return false
+                    return
                 }
                     println("new index: ${_indexExercise.value}")
                     println("list exercises: ${_listExercises.value.size}")
