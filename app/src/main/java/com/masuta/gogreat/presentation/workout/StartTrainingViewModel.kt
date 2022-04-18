@@ -41,7 +41,7 @@ class StartTrainingViewModel @Inject constructor(
 
     var interval: String? = null
 
-    suspend fun onEvent(event: TrainingEvent, navigateMain: () -> Unit) :Boolean {
+    fun onEvent(event: TrainingEvent, navigateMain: () -> Unit) :Boolean {
         if (_indexExercise.value==_listExercises.value.size) {
             _indexExercise.value++
           //  navigateMain()
@@ -53,15 +53,13 @@ class StartTrainingViewModel @Inject constructor(
                 _exerciseSets.value--
             }
             is TrainingEvent.NextExercise -> {
-
-                    println("old index: ${_indexExercise.value}")
-                    println("size: ${_listExercises.value.size}")
-                    println(_listExercises.value[_indexExercise.value])
-                    println(_listExercises.value[_indexExercise.value].numberOfSets)
+//                    println("old index: ${_indexExercise.value}")
+//                    println("size: ${_listExercises.value.size}")
+//                    println(_listExercises.value[_indexExercise.value])
+//                    println(_listExercises.value[_indexExercise.value].numberOfSets)
                     _indexExercise.value++
                 if (_indexExercise.value>=_listExercises.value.size) {
                     println("=====================FINISHED=====================")
-                    delay(5000L)
                     return false
                 }
                     println("new index: ${_indexExercise.value}")
@@ -121,6 +119,8 @@ class StartTrainingViewModel @Inject constructor(
     }
 
     fun playFinalSound(context: Context) {
-        val mp = MediaPlayer.create(context, R.raw.fanfar).start()
+        val mp = MediaPlayer.create(context, R.raw.fanfar)
+        mp.start()
+
     }
 }

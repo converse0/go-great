@@ -47,6 +47,7 @@ fun StartTrainingScreen(
 ) {
     val isEditModal = remember { mutableStateOf(false) }
     val isModalOpen = remember { mutableStateOf(false) }
+    val isFinalModal = remember { mutableStateOf(false) }
 
     if (viewModel.listExercises.value.isEmpty()) {
         viewModel.getTraining(uid!!)
@@ -59,9 +60,9 @@ fun StartTrainingScreen(
 //    val interval = remember { mutableStateOf("30") }
     val navigateMain = {        navController.navigate("main")
     }
-    if (indexExercise.value == listExercises.value.size) {
-        return
-    }
+//    if (indexExercise.value == listExercises.value.size) {
+//        return
+//    }
 
     val weight = remember { mutableStateOf("") }
     println("duration start new tr:" + currentExercise.duration)
@@ -69,6 +70,8 @@ fun StartTrainingScreen(
     val numberOfSets = remember { mutableStateOf(currentExercise.numberOfSets.toString()) }
     val numberOfRepetitions =
         remember { mutableStateOf(currentExercise.numberOfRepetitions.toString()) }
+
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -100,18 +103,18 @@ fun StartTrainingScreen(
                     currentExercise,
                     exerciseSets = exerciseSets.value,
                     onOpenModal = {
-                        viewModel.viewModelScope.launch {
                             viewModel.onEvent(TrainingEvent.NextSet, navigateMain)
                             if (exerciseSets.value == 0) {
                                 val resp = viewModel.onEvent(TrainingEvent.NextExercise, navigateMain)
                                 if (!resp) {
+                                    viewModel.playFinalSound(context)
                                     navigateMain()
                                 }
                             }
-                        }
+                        isModalOpen.value = true
                         println("Exercise Sets: ${exerciseSets.value}")
                         println("Exercise: ${indexExercise.value}")
-                        isModalOpen.value = true
+
                     },
                     onOpenEdit = {
                         isEditModal.value = true
@@ -150,6 +153,10 @@ fun StartTrainingScreen(
             },
             onDismiss = { isEditModal.value = false }
         )
+    }
+
+    if (isFinalModal.value) {
+        FinalModal()
     }
 }
 
