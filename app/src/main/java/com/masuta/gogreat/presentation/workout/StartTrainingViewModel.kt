@@ -103,10 +103,12 @@ class StartTrainingViewModel @Inject constructor(
             _currentExercise.value = listExercises.get(_indexExercise.value)
             _exerciseSets.value = _currentExercise.value.numberOfSets
             println("New currentExercise: ${_currentExercise.value}")
+
+            repository
         }
     }
 
     fun playSound(context: Context) {
-        val mp =  MediaPlayer.create(context, R.raw.beep).start()
+        val mp =  MediaPlayer.create(context, R.raw.zvuk41).start()
     }
 }
