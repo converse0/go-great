@@ -71,7 +71,7 @@ fun getSex(context: Context): Int {
 }
 
 @Composable
-fun setSex(context: Context, viewModel: ProfileViewModel, gender: MutableState<Int>){
+fun SetSex(context: Context, viewModel: ProfileViewModel, gender: MutableState<Int>){
 
     viewModel.getParameters(gender = gender)
     when (gender.value) {
@@ -86,7 +86,7 @@ fun setSex(context: Context, viewModel: ProfileViewModel, gender: MutableState<I
 }
 
 @Composable
-fun choseStartScreen(context: Context, viewModel: ProfileViewModel,
+fun ChoseStartScreen(context: Context, viewModel: ProfileViewModel,
                      startRouteName: MutableState<String>) {
        val token = getToken(context)
     userToken=token
@@ -101,7 +101,7 @@ fun choseStartScreen(context: Context, viewModel: ProfileViewModel,
     val gender = remember {
         mutableStateOf(777)
     }
-    setSex(context, viewModel = viewModel, gender)
+    SetSex(context, viewModel = viewModel, gender)
     when (gender.value) {
         -6 -> startRouteName.value= "sign-in"
         6 -> startRouteName.value= "about"
@@ -118,8 +118,8 @@ fun choseStartScreen(context: Context, viewModel: ProfileViewModel,
 fun Navigation(items: List<BottomNavigationItem>) {
     val navController = rememberNavController()
     var selected by remember { mutableStateOf("main") }
-    var startRouteName = remember { mutableStateOf("main") }
-    choseStartScreen(LocalContext.current, viewModel = hiltViewModel(), startRouteName = startRouteName)
+    val startRouteName = remember { mutableStateOf("main") }
+    ChoseStartScreen(LocalContext.current, viewModel = hiltViewModel(), startRouteName = startRouteName)
     NavHost(
         navController = navController,
         startDestination = startRouteName.value,
