@@ -29,6 +29,7 @@ import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.presentation.components.DropdownDemo
 import com.masuta.gogreat.presentation.components.SliderWithLabel
 import com.masuta.gogreat.presentation.components.SliderWithText
+import com.masuta.gogreat.presentation.profile.firstCharToUpperCase
 import com.masuta.gogreat.presentation.ui.theme.Red
 import com.skydoves.landscapist.glide.GlideImage
 import io.ktor.util.reflect.*
@@ -77,8 +78,12 @@ fun ExerciseScreen(
             )
         }
         Spacer(modifier = Modifier.height(12.dp))
+        val listName =
+            if (exercisesList.value.isNotEmpty()) exercisesList.value.first().type.firstCharToUpperCase() + " exercises"
+                        else "Empty List exercises"
         Text(
-            text = "Biceps exercise",
+//            text = "Biceps exercise",
+            text = listName,
             style = MaterialTheme.typography.h4,
             fontWeight = FontWeight.W300
         )
@@ -137,7 +142,7 @@ fun ExerciseItem(
             .padding(8.dp)
             .clip(RoundedCornerShape(16.dp))
             .background(color = if (selected) Color.Gray else Color.Transparent)
-            .height(100.dp)
+            .height(70.dp)
             .clickable { onClick() }
     ) {
         GlideImage(
@@ -145,7 +150,7 @@ fun ExerciseItem(
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .width(150.dp)
-                .height(100.dp)
+                .height(70.dp)
         )
 //        Image(
 //            painter = painterResource(id = R.drawable.sport_health),

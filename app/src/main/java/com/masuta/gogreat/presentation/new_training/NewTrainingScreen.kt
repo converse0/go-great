@@ -36,6 +36,8 @@ import com.masuta.gogreat.domain.model.ExerciseType
 import com.masuta.gogreat.domain.model.Training
 import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.domain.model.gender
+import com.masuta.gogreat.presentation.components.FemalePersonSection
+import com.masuta.gogreat.presentation.components.MalePersonSection
 import com.masuta.gogreat.presentation.ui.theme.Green
 import com.masuta.gogreat.presentation.ui.theme.Red
 import com.masuta.gogreat.presentation.ui.theme.SportTheme
@@ -80,10 +82,16 @@ fun NewTrainingScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             LazyColumn(
-                modifier = Modifier.fillMaxWidth().padding(bottom = 100.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 100.dp)
             ) {
                 item {
-                    PersonSection(onNewExercise = { navController.navigate("list-exercise/${it.value}") })
+//                    PersonSection(onNewExercise = { navController.navigate("list-exercise/${it.value}") })
+                    gender?.let { n ->
+                        if (n == 0) MalePersonSection(onNewExercise = { navController.navigate("list-exercise/${it.value}") }) else
+                            FemalePersonSection(onNewExercise = { navController.navigate("list-exercise/${it.value}") })
+                    }
                     Text(
                         text = "Please, press + to choose a group of muscles and add exercise",
                         style = MaterialTheme.typography.body1,
@@ -249,113 +257,103 @@ fun ExercisesItem(
     }
 }
 
-@Composable
-fun PersonSection(
-    onNewExercise: (ExerciseType) -> Unit
-) {
-    val constraints = ConstraintSet {
-        val topGuidLine = createGuidelineFromTop(0.2f)
-        val bottomGuidLine = createGuidelineFromBottom(0.4f)
-        val person = createRefFor("person")
-        val shoulder = createRefFor("shoulder")
-        val breast = createRefFor("breast")
-        val forearm = createRefFor("forearm")
-        val legUp = createRefFor("legUp")
-        val legDown = createRefFor("legDown")
+//@Composable
+//fun PersonSection(
+//    onNewExercise: (ExerciseType) -> Unit
+//) {
+//    val constraints = ConstraintSet {
+//        val topGuidLine = createGuidelineFromTop(0.2f)
+//        val bottomGuidLine = createGuidelineFromBottom(0.4f)
+//        val person = createRefFor("person")
+//        val shoulder = createRefFor("shoulder")
+//        val breast = createRefFor("breast")
+//        val forearm = createRefFor("forearm")
+//        val legUp = createRefFor("legUp")
+//        val legDown = createRefFor("legDown")
+//
+//        constrain(person) {
+//            top.linkTo(parent.top)
+//            start.linkTo(parent.start)
+//            end.linkTo(parent.end)
+//        }
+//        constrain(shoulder) {
+//            start.linkTo(person.start, 80.dp)
+//            top.linkTo(topGuidLine)
+//        }
+//        constrain(breast) {
+//            start.linkTo(person.start)
+//            end.linkTo(person.end)
+//            top.linkTo(shoulder.bottom, 10.dp)
+//        }
+//        constrain(forearm) {
+//            start.linkTo(person.start, 80.dp)
+//            top.linkTo(breast.bottom, 10.dp)
+//        }
+//        constrain(legUp) {
+//            top.linkTo(bottomGuidLine, 10.dp)
+//            start.linkTo(person.start, 10.dp)
+//        }
+//        constrain(legDown) {
+//            top.linkTo(legUp.bottom, 40.dp)
+//            start.linkTo(person.start, 80.dp)
+//        }
+//    }
+//
+//    ConstraintLayout(constraintSet = constraints, modifier = Modifier
+//        .fillMaxWidth()
+//        .padding(12.dp)) {
+//        Image(
+//            painter = painterResource(
+//                gender?.let {
+//                    if (it == 0) R.drawable.human else R.drawable.human_femail
+//                } ?: R.drawable.human
+//            ),
+//            contentDescription = null,
+//            modifier = Modifier
+//                .layoutId("person")
+//                .height(300.dp)
+//                .width(300.dp)
+//        )
+//        ExerciseType.values().forEach { type ->
+//            val layoutId = when(type) {
+//                ExerciseType.ARMS -> "shoulder"
+//                ExerciseType.LEGS -> "legDown"
+//                ExerciseType.OTHER -> "forearm"
+//            }
+//            IconButtonAddExercise(modifier = Modifier.layoutId(layoutId), onClick = { onNewExercise(type) })
+//        }
+//
+////        IconButtonAddExercise(modifier = Modifier.layoutId("shoulder"), onClick = onNewExercise)
+////        IconButtonAddExercise(modifier = Modifier.layoutId("breast"), onClick = onNewExercise)
+////        IconButtonAddExercise(modifier = Modifier.layoutId("forearm"), onClick = onNewExercise)
+////        IconButtonAddExercise(modifier = Modifier.layoutId("legUp"), onClick = onNewExercise)
+////        IconButtonAddExercise(modifier = Modifier.layoutId("legDown"), onClick = onNewExercise)
+//    }
+//}
 
-        constrain(person) {
-            top.linkTo(parent.top)
-            start.linkTo(parent.start)
-            end.linkTo(parent.end)
-        }
-        constrain(shoulder) {
-            start.linkTo(person.start, 80.dp)
-            top.linkTo(topGuidLine)
-        }
-        constrain(breast) {
-            start.linkTo(person.start)
-            end.linkTo(person.end)
-            top.linkTo(shoulder.bottom, 10.dp)
-        }
-        constrain(forearm) {
-            start.linkTo(person.start, 80.dp)
-            top.linkTo(breast.bottom, 10.dp)
-        }
-        constrain(legUp) {
-            top.linkTo(bottomGuidLine, 10.dp)
-            start.linkTo(person.start, 10.dp)
-        }
-        constrain(legDown) {
-            top.linkTo(legUp.bottom, 40.dp)
-            start.linkTo(person.start, 80.dp)
-        }
-    }
-
-    ConstraintLayout(constraintSet = constraints, modifier = Modifier
-        .fillMaxWidth()
-        .padding(12.dp)) {
-        Image(
-            painter = painterResource(
-                gender?.let {
-                    if (it == 0) R.drawable.human else R.drawable.human_femail
-                } ?: R.drawable.human
-            ),
-            contentDescription = null,
-            modifier = Modifier
-                .layoutId("person")
-                .height(300.dp)
-                .fillMaxWidth()
-        )
-        ExerciseType.values().forEach { type ->
-            val layoutId = when(type) {
-                ExerciseType.ARMS -> "shoulder"
-                ExerciseType.LEGS -> "legDown"
-                ExerciseType.OTHER -> "forearm"
-            }
-            IconButtonAddExercise(modifier = Modifier.layoutId(layoutId), onClick = { onNewExercise(type) })
-        }
-
-//        IconButtonAddExercise(modifier = Modifier.layoutId("shoulder"), onClick = onNewExercise)
-//        IconButtonAddExercise(modifier = Modifier.layoutId("breast"), onClick = onNewExercise)
-//        IconButtonAddExercise(modifier = Modifier.layoutId("forearm"), onClick = onNewExercise)
-//        IconButtonAddExercise(modifier = Modifier.layoutId("legUp"), onClick = onNewExercise)
-//        IconButtonAddExercise(modifier = Modifier.layoutId("legDown"), onClick = onNewExercise)
-    }
-}
-
-@Composable
-fun IconButtonAddExercise(
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit
-) {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = modifier
-            .background(color = Color.Transparent, shape = CircleShape)
-            .clip(CircleShape)
-            .size(20.dp)
-            .border(width = 2.dp, color = Color.White, shape = CircleShape)
-    ) {
-        IconButton(
-            onClick = onClick
-        ) {
-            Icon(
-                imageVector = Icons.Default.Add,
-                contentDescription = null,
-                tint = Color.White,
-            )
-        }
-    }
-}
-
-@Preview
-@Composable
-fun NewTrainingScreenPreview() {
-    SportTheme() {
-//        IconButtonAddExercise(onClick = {})
-        PersonSection(onNewExercise = {})
-    }
-
-}
+//@Composable
+//fun IconButtonAddExercise(
+//    modifier: Modifier = Modifier,
+//    onClick: () -> Unit
+//) {
+//    Box(
+//        contentAlignment = Alignment.Center,
+//        modifier = modifier
+//            .background(color = Color.Yellow, shape = CircleShape)
+//            .clip(CircleShape)
+//            .size(20.dp)
+////            .border(width = 2.dp, color = Color.White, shape = CircleShape)
+//    ) {
+//        IconButton(
+//            onClick = onClick
+//        ) {
+//            Icon(
+//                imageVector = Icons.Default.Add,
+//                contentDescription = null,
+//                tint = Color.Black,
+//            )
+//        }
+//    }
+//}
 
 

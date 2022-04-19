@@ -29,7 +29,13 @@ data class TrainingExercise(
 enum class ExerciseType(val value: Int) {
     ARMS(0),
     LEGS(1),
-    OTHER(2),
+    PRESS(2),
+    BACK(3),
+    CHEST(4),
+//    SHOULDER(5),
+//    TRICEPS(6),
+//    BICEPS(7),
+    OTHER(8)
 }
 
 @kotlinx.serialization.Serializable
