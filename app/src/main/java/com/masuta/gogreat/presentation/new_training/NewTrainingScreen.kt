@@ -76,38 +76,44 @@ fun NewTrainingScreen(
             )
         }
         Spacer(modifier = Modifier.height(12.dp))
-        LazyColumn(
+        Box(
             modifier = Modifier.fillMaxWidth()
         ) {
-            item {
-                PersonSection(onNewExercise = { navController.navigate("list-exercise/${it.value}") })
-                Text(
-                    text = "Please, press + to choose a group of muscles and add exercise",
-                    style = MaterialTheme.typography.body1,
-                    modifier = Modifier.padding(start = 16.dp, end = 16.dp)
-                )
-                Spacer(Modifier.height(20.dp))
-                ExercisesList(listExercises)
-                Spacer(modifier = Modifier.height(10.dp))
-                TextButton(
-                    onClick = {
-                        openModal.value = true
-                    },
-                    enabled= listExercises.value.isNotEmpty(),
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 16.dp, horizontal = 16.dp)
-                ) {
+            LazyColumn(
+                modifier = Modifier.fillMaxWidth().padding(bottom = 100.dp)
+            ) {
+                item {
+                    PersonSection(onNewExercise = { navController.navigate("list-exercise/${it.value}") })
                     Text(
-                        text = "Save",
-                        color = Color.White,
-                        modifier = Modifier.padding(vertical = 16.dp, horizontal = 16.dp)
+                        text = "Please, press + to choose a group of muscles and add exercise",
+                        style = MaterialTheme.typography.body1,
+                        modifier = Modifier.padding(start = 16.dp, end = 16.dp)
                     )
+                    Spacer(Modifier.height(20.dp))
+                    ExercisesList(listExercises)
+                    Spacer(modifier = Modifier.height(10.dp))
                 }
-                Spacer(modifier = Modifier.height(10.dp))
             }
+            TextButton(
+                onClick = {
+                    openModal.value = true
+                },
+                enabled= listExercises.value.isNotEmpty(),
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 16.dp, horizontal = 16.dp)
+                    .align(Alignment.BottomCenter)
+            ) {
+                Text(
+                    text = "Save",
+                    color = Color.White,
+                    modifier = Modifier.padding(vertical = 16.dp, horizontal = 16.dp)
+                )
+            }
+            Spacer(modifier = Modifier.height(10.dp))
         }
+
     }
     if (openModal.value) {
         Modal(
