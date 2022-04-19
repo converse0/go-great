@@ -17,18 +17,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.ConstraintSet
 import androidx.navigation.NavHostController
 import com.masuta.gogreat.R
-import com.masuta.gogreat.domain.model.ExerciseType
 import com.masuta.gogreat.domain.model.TrainingExercise
-import com.masuta.gogreat.domain.model.male
-import com.masuta.gogreat.presentation.new_training.IconButtonAddExercise
+import com.masuta.gogreat.domain.model.gender
 import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
@@ -128,7 +123,7 @@ fun PersonImage() {
         .padding(12.dp)) {
         Image(
             painter = painterResource(
-                male?.let {
+                gender?.let {
                     if (it == 0) R.drawable.human else R.drawable.human_femail
                 } ?: R.drawable.human
             ),

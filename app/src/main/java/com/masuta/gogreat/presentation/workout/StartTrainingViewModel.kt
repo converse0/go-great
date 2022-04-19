@@ -53,7 +53,7 @@ class StartTrainingViewModel @Inject constructor(
     fun nextSetOrTraining(onOpenModal: () -> Unit) {
         viewModelScope.launch {
             onOpenModal()
-            delay(1000L)
+            delay(500L)
             onEvent(TrainingEvent.NextSet)
             if (_exerciseSets.value == 0) {
                 onEvent(TrainingEvent.NextExercise)

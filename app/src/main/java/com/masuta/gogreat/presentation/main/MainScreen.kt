@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.masuta.gogreat.domain.model.Training
+import com.masuta.gogreat.domain.model.gender
 import com.masuta.gogreat.presentation.BottomNavigationItem
 import com.masuta.gogreat.presentation.components.BottomMenuBar
 import com.masuta.gogreat.presentation.ui.theme.Purple200
@@ -31,6 +32,8 @@ fun MainScreen(
     menuItems: List<BottomNavigationItem>,
     viewModel: MainViewModel
 ) {
+
+    println("Shared gender: $gender")
 
     viewModel.clearLocalExercises()
     val listTrainings = remember { mutableStateOf(emptyList<Training>()) }
@@ -102,6 +105,9 @@ fun CurrentWorkoutSection(
 ) {
 
     if (countCurrentWorkout.value == 0) {
+        viewModel.getCurrentTraining(currentWorkout, countCurrentWorkout)
+    }
+    if (currentWorkout.value.name.isNotEmpty()) {
         Text(
             text = "Current workout",
             style = MaterialTheme.typography.h5,
@@ -109,11 +115,10 @@ fun CurrentWorkoutSection(
             modifier = Modifier
                 .padding(vertical = 20.dp)
         )
-        viewModel.getCurrentTraining(currentWorkout, countCurrentWorkout)
+        WorkoutItem(workout = currentWorkout.value,
+            onSelectItem = {
+                navController.navigate("start-training/${currentWorkout.value.uid}")})
     }
-    WorkoutItem(workout = currentWorkout.value,
-        onSelectItem = {
-            navController.navigate("start-training/${currentWorkout.value.uid}")})
 }
 
 @Composable

@@ -11,6 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.masuta.gogreat.R
+import com.masuta.gogreat.domain.model.gender
 import com.masuta.gogreat.domain.model.refreshUserToken
 import com.masuta.gogreat.domain.model.userToken
 import com.masuta.gogreat.presentation.auth.AboutScreen
@@ -91,6 +92,8 @@ fun choseStartScreen(context: Context, viewModel: ProfileViewModel,
     userToken=token
     val r = getTokenR(context)
     refreshUserToken = r
+    val g = getSex(context)
+    gender = g
 
     if (token.isEmpty()) {
         startRouteName.value= "launch-screen"
@@ -103,7 +106,7 @@ fun choseStartScreen(context: Context, viewModel: ProfileViewModel,
         -6 -> startRouteName.value= "sign-in"
         6 -> startRouteName.value= "about"
         else -> {
-
+            println("Gender $gender")
             startRouteName.value= "main"
         }
     }
