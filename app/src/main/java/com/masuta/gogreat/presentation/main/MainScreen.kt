@@ -1,5 +1,6 @@
 package com.masuta.gogreat.presentation.main
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -9,14 +10,19 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.masuta.gogreat.R
 import com.masuta.gogreat.domain.model.Training
 import com.masuta.gogreat.domain.model.gender
 import com.masuta.gogreat.presentation.BottomNavigationItem
@@ -37,12 +43,13 @@ fun MainScreen(
     println("Shared gender: $gender")
 
     viewModel.clearLocalExercises()
-    val listTrainings = remember { mutableStateOf(emptyList<Training>()) }
+    val listTrainings = remember { mutableStateOf(emptyList<Training>())}
     val currentWorkout = remember{ mutableStateOf(Training(
         name = "",
         exercises = mutableListOf(),
         interval = ""
     )) }
+    val listPastTrainings = remember { mutableStateOf(emptyList<Training>())}
     val countCurrentWorkout = remember { mutableStateOf(0) }
     val countTotalWorkout = remember { mutableStateOf(0) }
     Scaffold(
@@ -55,7 +62,7 @@ fun MainScreen(
                 .fillMaxSize()
                 .background(color = Color.White)
                 .padding(20.dp)
-                .padding(bottom = 40.dp)
+                .padding(bottom = 60.dp)
         ) {
             Text(
                 text = "Workouts",
@@ -63,9 +70,24 @@ fun MainScreen(
                 fontWeight = FontWeight.W400
             )
             LazyColumn(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().padding(top = 15.dp)
             ) {
                 item {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.main_pic),
+                            contentDescription = "Main Picture",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .size(150.dp)
+                                .clip(RoundedCornerShape(16.dp))
+                        )
+                    }
                     Text(
                         text = "Create your workout today according to your personal preferences",
                         style = MaterialTheme.typography.body1,
@@ -76,6 +98,7 @@ fun MainScreen(
                             navController.navigate("new-training")
                         },
                         colors = ButtonDefaults.buttonColors(backgroundColor = Red),
+                        shape = RoundedCornerShape(16.dp),
                         modifier = Modifier
                             .fillMaxWidth()
                     ) {
@@ -91,11 +114,33 @@ fun MainScreen(
                         currentWorkout = currentWorkout, countCurrentWorkout)
                     WorkoutsSection(viewModel = viewModel, navController = navController,
                         listTrainings = listTrainings, countTotalWorkout)
+                    PastWorkoutsSection(viewModel = viewModel, navController = navController,
+                        listPastTrainings = listPastTrainings)
                 }
             }
         }
     }
 }
+
+@Composable
+fun PastWorkoutsSection(
+    viewModel: MainViewModel,
+    navController: NavHostController,
+    listPastTrainings: MutableState<List<Training>>,
+) {
+
+    if (listPastTrainings.value.isNotEmpty()) {
+        Text(
+            text = "Past workouts",
+            style = MaterialTheme.typography.h5,
+            fontWeight = FontWeight.W300,
+            modifier = Modifier
+                .padding(vertical = 20.dp)
+        )
+        WorkoutsList(workouts = listPastTrainings.value, navController = navController)
+    }
+}
+
 
 @Composable
 fun CurrentWorkoutSection(
@@ -169,7 +214,7 @@ fun WorkoutItem(
         backgroundColor = Color.Gray,
         modifier = Modifier
             .fillMaxWidth()
-            .height(200.dp)
+            .height(170.dp)
             .padding(horizontal = 20.dp)
             .clickable { workout.uid?.let { onSelectItem(it) } }
     ) {
@@ -195,9 +240,9 @@ fun WorkoutItem(
                 fontWeight = FontWeight.W700
             )
             Spacer(Modifier.height(10.dp))
-            val internal = if(workout.interval.isEmpty()) "30s" else workout.interval
+//            val internal = if(workout.interval.isEmpty()) "30s" else workout.interval
             Text(
-                text = "27 March 2017 $internal",
+                text = "27 March 2017",
                 style = MaterialTheme.typography.body1,
                 color = Color.White,
                 fontWeight = FontWeight.W300
