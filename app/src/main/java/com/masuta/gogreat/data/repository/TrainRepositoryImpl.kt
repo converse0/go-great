@@ -9,11 +9,10 @@ import io.ktor.http.*
 import javax.inject.Inject
 
 class TrainRepositoryImpl @Inject constructor(
-    private val client: Client
+    client: Client
 ): TrainRepository {
     private var httpClient: HttpClient? = null
     private val url = "https://boilerplate-go-trening.herokuapp.com"
-    private val token = userToken
     private var localTraining:Map<String,Training> = mutableMapOf()
     private var localTrainingEx:Map<Int,TrainingExercise> = mutableMapOf()
 
