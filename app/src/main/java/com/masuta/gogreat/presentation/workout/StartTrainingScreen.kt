@@ -180,9 +180,9 @@ fun ModalTimer(
             .background(color = Color.Black)
             .clickable { }
         )
-        IconButton(onClick = onDismiss, modifier = Modifier.align(Alignment.TopEnd)) {
-            Icon(Icons.Default.Close, contentDescription = "Close", tint = Color.White)
-        }
+//        IconButton(onClick = onDismiss, modifier = Modifier.align(Alignment.TopEnd)) {
+//            Icon(Icons.Default.Close, contentDescription = "Close", tint = Color.White)
+//        }
         Card(
             modifier = Modifier
                 .padding(16.dp)
