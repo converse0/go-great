@@ -137,6 +137,11 @@ class StartTrainingViewModel @Inject constructor(
         val mp =  MediaPlayer.create(context, R.raw.zvuk41).start()
     }
 
+    fun finishTraining(uid: String) {
+        viewModelScope.launch {
+            repository.finishTraining(uid)
+        }
+    }
     fun playFinalSound(context: Context) {
         val mp = MediaPlayer.create(context, R.raw.fanfar)
         mp.start()

@@ -129,6 +129,8 @@ fun PastWorkoutsSection(
     listPastTrainings: MutableState<List<Training>>,
 ) {
 
+    viewModel.getPastTrainings(listPastTrainings)
+
     if (listPastTrainings.value.isNotEmpty()) {
         Text(
             text = "Past workouts",
