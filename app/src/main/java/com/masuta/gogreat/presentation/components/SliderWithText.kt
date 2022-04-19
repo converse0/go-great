@@ -138,7 +138,7 @@ fun SliderWithLabelUserActivity(
     selectedItem: MutableState<UserActivity>,
     valueRange: ClosedFloatingPointRange<Float>,
     finiteEnd: Boolean,
-    enabled: Boolean,
+    enabled: Boolean = true,
     labelMinWidth: Dp = 24.dp,
     items: List<UserActivity>
 ) {

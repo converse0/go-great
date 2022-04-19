@@ -83,126 +83,132 @@ fun AboutForm(
 
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    LazyColumn(
+    Box(
         modifier = Modifier.fillMaxWidth()
     ) {
-        item {
-            Text(
-                text = "Hello, Maria! To help us create the best workout diary for you, please tell us a few words about you and your preferences"
-            )
-            Spacer(Modifier.height(10.dp))
-            Text(
-                text = "Gender",
-                style = MaterialTheme.typography.body1
-            )
-            Spacer(Modifier.height(10.dp))
-            GenderChoisen(
-                selected = gender.value,
-                onGenderSelect = { gender.value = it }
-            )
-            Spacer(Modifier.height(10.dp))
-            InputTextField(
-                text = "Age",
-                value = age.value,
-                keyboardController = keyboardController,
-                keyboardType = KeyboardType.Number,
-                onChangeValue = { age.value = it},
-            )
-            Spacer(Modifier.height(10.dp))
-            InputTextField(
-                text = "Weight",
-                value = weight.value,
-                keyboardController = keyboardController,
-                keyboardType = KeyboardType.Number,
-                onChangeValue = { weight.value = it},
-            )
-            Spacer(Modifier.height(10.dp))
-            InputTextField(
-                text = "Height",
-                value = height.value,
-                keyboardController = keyboardController,
-                keyboardType = KeyboardType.Number,
-                onChangeValue = { height.value = it},
-            )
-            Spacer(Modifier.height(20.dp))
-            Text(
-                text = "Physical activity",
-                style = MaterialTheme.typography.body1
-            )
-            Spacer(Modifier.height(20.dp))
+        LazyColumn(
+            modifier = Modifier.fillMaxWidth().padding(bottom = 100.dp)
+        ) {
+            item {
+                Text(
+                    text = "Hello, Maria! To help us create the best workout diary for you, please tell us a few words about you and your preferences"
+                )
+                Spacer(Modifier.height(10.dp))
+                Text(
+                    text = "Gender",
+                    style = MaterialTheme.typography.body1
+                )
+                Spacer(Modifier.height(10.dp))
+                GenderChoisen(
+                    selected = gender.value,
+                    onGenderSelect = { gender.value = it }
+                )
+                Spacer(Modifier.height(10.dp))
+                InputTextField(
+                    text = "Age",
+                    value = age.value,
+                    keyboardController = keyboardController,
+                    keyboardType = KeyboardType.Number,
+                    onChangeValue = { age.value = it},
+                )
+                Spacer(Modifier.height(10.dp))
+                InputTextField(
+                    text = "Weight",
+                    value = weight.value,
+                    keyboardController = keyboardController,
+                    keyboardType = KeyboardType.Number,
+                    onChangeValue = { weight.value = it},
+                )
+                Spacer(Modifier.height(10.dp))
+                InputTextField(
+                    text = "Height",
+                    value = height.value,
+                    keyboardController = keyboardController,
+                    keyboardType = KeyboardType.Number,
+                    onChangeValue = { height.value = it},
+                )
+                Spacer(Modifier.height(20.dp))
+                Text(
+                    text = "Physical activity",
+                    style = MaterialTheme.typography.body1
+                )
+                Spacer(Modifier.height(20.dp))
 //            PhysicalActivitySection(
 //                selected = physicalActivity,
 //                onPhysicalActivitySelect = { physicalActivity = it }
 //            )
-            val listActivity = UserActivity.values().toList()
-            SliderWithLabelUserActivity(
-                value = 0f,
-                selectedItem = physicalActivity,
-                valueRange = 0f..listActivity.size.minus(1).toFloat(),
-                finiteEnd = true,
-                enabled = false,
-                items = listActivity
-            )
-            Spacer(Modifier.height(20.dp))
-            Text(
-                text = "Diet",
-                style = MaterialTheme.typography.body1
-            )
-            Spacer(Modifier.height(20.dp))
+                val listActivity = UserActivity.values().toList()
+                SliderWithLabelUserActivity(
+                    value = 0f,
+                    selectedItem = physicalActivity,
+                    valueRange = 0f..listActivity.size.minus(1).toFloat(),
+                    finiteEnd = true,
+                    items = listActivity
+                )
+                Spacer(Modifier.height(20.dp))
+                Text(
+                    text = "Diet",
+                    style = MaterialTheme.typography.body1
+                )
+                Spacer(Modifier.height(20.dp))
 //            DietSection(
 //                selected = diet,
 //                onDietSelect = { diet = it}
 //            )
-            val listDiet = UserDiet.values().toList()
-            SliderWithLabelUserDiet(
-                value = 0f,
-                selectedItem = diet,
-                valueRange = 0f..listDiet.size.minus(1).toFloat(),
-                finiteEnd = true,
-                enabled = false,
-                items = listDiet
-            )
-            Spacer(Modifier.height(20.dp))
-            InputTextField(
-                text = "How often do you prefer to eat?",
-                value = timesEat.value,
-                keyboardController = keyboardController,
-                keyboardType = KeyboardType.Number,
-                onChangeValue = { timesEat.value = it},
-            )
-            Spacer(Modifier.height(10.dp))
-            InputTextField(
-                text = "Desired weight",
-                value = desiredWeight.value,
-                keyboardController = keyboardController,
-                keyboardType = KeyboardType.Number,
-                onChangeValue = { desiredWeight.value = it},
-            )
-            TextButton(
-                onClick = {
-                    viewModel.setParameters(
-                        age = if(age.value.isNotEmpty()) age.value.toIntOrNull() else 0,
-                        weight = if (weight.value.isNotEmpty()) weight.value.toInt() else 0,
-                        height = if (height.value.isNotEmpty()) height.value.toInt() else 0,
-                        desiredWeight = if (desiredWeight.value.isNotEmpty()) desiredWeight.value.toInt() else 0 ,
-                        timesEat = if(timesEat.value.isNotEmpty()) timesEat.value.toInt() else 0,
-                        diet = diet.value.value,
-                        activity = physicalActivity.value.value,
-                        gender = gender.value
-                    )
-                    navController.navigate("main")
-                },
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 60.dp)
-            ) {
-                Text(
-                    text = "Save",
-                    color = Color.White,
-                    modifier = Modifier.padding(vertical = 16.dp)
+                val listDiet = UserDiet.values().toList()
+                SliderWithLabelUserDiet(
+                    value = 0f,
+                    selectedItem = diet,
+                    valueRange = 0f..listDiet.size.minus(1).toFloat(),
+                    finiteEnd = true,
+                    items = listDiet
+                )
+                Spacer(Modifier.height(20.dp))
+                InputTextField(
+                    text = "How often do you prefer to eat?",
+                    value = timesEat.value,
+                    keyboardController = keyboardController,
+                    keyboardType = KeyboardType.Number,
+                    onChangeValue = { timesEat.value = it},
+                )
+                Spacer(Modifier.height(10.dp))
+                InputTextField(
+                    text = "Desired weight",
+                    value = desiredWeight.value,
+                    keyboardController = keyboardController,
+                    keyboardType = KeyboardType.Number,
+                    onChangeValue = { desiredWeight.value = it},
                 )
             }
+        }
+        TextButton(
+            onClick = {
+                viewModel.setParameters(
+                    age = if(age.value.isNotEmpty()) age.value.toIntOrNull() else 0,
+                    weight = if (weight.value.isNotEmpty()) weight.value.toInt() else 0,
+                    height = if (height.value.isNotEmpty()) height.value.toInt() else 0,
+                    desiredWeight = if (desiredWeight.value.isNotEmpty()) desiredWeight.value.toInt() else 0 ,
+                    timesEat = if(timesEat.value.isNotEmpty()) timesEat.value.toInt() else 0,
+                    diet = diet.value.value,
+                    activity = physicalActivity.value.value,
+                    gender = gender.value
+                )
+                navController.navigate("main")
+            },
+            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray),
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter)
+                .padding(
+                    top = 40.dp,
+                    bottom = 20.dp
+                )
+        ) {
+            Text(
+                text = "Save",
+                color = Color.White,
+                modifier = Modifier.padding(vertical = 16.dp)
+            )
         }
     }
 }
