@@ -80,4 +80,27 @@ class ProfileViewModel @Inject constructor(
             }
         }
 }
+
+    fun getParameters(gender: MutableState<Int>) {
+        viewModelScope.launch {
+            val (resp, message) = getUserParams()
+
+           val respInt = when {
+               resp!=null -> null
+               message!!.isNotEmpty() &&
+                        message.contains("Authentication failed") -> -6
+               message.isNotEmpty() &&
+                       !message.contains("Authentication failed") -> 6
+               else -> null
+           }
+            if (respInt==null) {
+                if (resp != null) {
+                    gender.value=resp.gender
+                }
+            } else {
+                gender.value = respInt
+            }
+        }
+
+    }
 }

@@ -21,10 +21,10 @@ import com.masuta.gogreat.presentation.diet.DietScreen
 import com.masuta.gogreat.presentation.health.HealthScreen
 import com.masuta.gogreat.presentation.launch_training.LaunchTrainingScreen
 import com.masuta.gogreat.presentation.main.MainScreen
-import com.masuta.gogreat.presentation.main.TrainingList
 import com.masuta.gogreat.presentation.new_training.ExerciseScreen
 import com.masuta.gogreat.presentation.new_training.NewTrainingScreen
 import com.masuta.gogreat.presentation.profile.ProfileScreen
+import com.masuta.gogreat.presentation.profile.ProfileViewModel
 import com.masuta.gogreat.presentation.ui.theme.SportTheme
 import com.masuta.gogreat.presentation.workout.StartTrainingScreen
 import com.masuta.gogreat.presentation.workout.WorkoutScreen
@@ -64,31 +64,62 @@ fun getTokenR(context: Context): String {
     return sharedPref.getString("refreshToken", "")!!
 }
 
-//fun getMale(context: Context): String {
-//    val sharedPref = context.getSharedPreferences("user", Context.MODE_PRIVATE)
-//    return sharedPref.getString("male", "")!!
-//}
+fun getSex(context: Context): Int {
+    val sharedPref = context.getSharedPreferences("user", Context.MODE_PRIVATE)
+    return sharedPref.getInt("sex", 0)
+}
 
-fun choseStartScreen(context: Context): String {
+@Composable
+fun setSex(context: Context, viewModel: ProfileViewModel, gender: MutableState<Int>){
+
+    viewModel.getParameters(gender = gender)
+    when (gender.value) {
+        0,1 -> {
+            val sharedPref = context.getSharedPreferences("user", Context.MODE_PRIVATE)
+            val editor = sharedPref.edit()
+            editor.putInt("sex", gender.value)
+            editor.apply()
+        }
+    }
+
+}
+
+@Composable
+fun choseStartScreen(context: Context, viewModel: ProfileViewModel,
+                     startRouteName: MutableState<String>) {
        val token = getToken(context)
     userToken=token
     val r = getTokenR(context)
     refreshUserToken = r
 
     if (token.isEmpty()) {
-        return "launch-screen"
+        startRouteName.value= "launch-screen"
     }
-    return "main"
+    val gender = remember {
+        mutableStateOf(777)
+    }
+    setSex(context, viewModel = viewModel, gender)
+    when (gender.value) {
+        -6 -> startRouteName.value= "sign-in"
+        6 -> startRouteName.value= "about"
+        else -> {
+
+            startRouteName.value= "main"
+        }
+    }
+
+
 }
 
 @Composable
 fun Navigation(items: List<BottomNavigationItem>) {
     val navController = rememberNavController()
     var selected by remember { mutableStateOf("main") }
-
+    var startRouteName = remember { mutableStateOf("main") }
+    choseStartScreen(LocalContext.current, viewModel = hiltViewModel(), startRouteName = startRouteName)
     NavHost(
         navController = navController,
-        startDestination = choseStartScreen(LocalContext.current)
+        startDestination = startRouteName.value,
     ) {
         composable(route = "main") {
             MainScreen(navController = navController,viewModel = hiltViewModel(),  menuItems = items, selected = selected, onSelect = { selected = it })
@@ -101,8 +132,6 @@ fun Navigation(items: List<BottomNavigationItem>) {
             LaunchTrainingScreen()
         }
         composable(route = "profile") {
-//            TrainingList(viewModel = hiltViewModel())
-
             ProfileScreen(viewModel = hiltViewModel(), navController = navController, menuItems = items, selected = selected, onSelect = { selected = it })
         }
         composable(route = "sign-in") {
