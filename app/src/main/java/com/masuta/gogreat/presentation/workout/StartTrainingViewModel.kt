@@ -145,6 +145,7 @@ class StartTrainingViewModel @Inject constructor(
     fun playFinalSound(context: Context) {
         val mp = MediaPlayer.create(context, R.raw.fanfar)
         mp.start()
+
       //  mp.
 
     }

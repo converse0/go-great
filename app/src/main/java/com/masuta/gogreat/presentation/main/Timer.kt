@@ -78,6 +78,7 @@ fun Timer(
             isTimerRunning = false
             if (viewModel.indexExercise.value >= viewModel.listExercises.value.size) {
                 viewModel.endTraining(navController,context)
+                viewModel.finishTraining("sdjewjkdfjewd")
             }
         }
     }
