@@ -9,4 +9,6 @@ interface ProfileRepository {
 
     suspend fun getParameters(): Pair<ParametersUserGet?, String?>
 
+    suspend fun updateParameters(params: ParametersUserSet): String
+
 }

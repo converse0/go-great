@@ -65,4 +65,21 @@ class ProfileRepositoryImpl @Inject constructor(
         }
         return Pair(response.data, null)
     }
+
+    override suspend fun updateParameters(params: ParametersUserSet): String {
+        println("userToken: $userToken")
+        println("refreshToken: $refreshUserToken")
+        println("params: $params")
+        val response = client.makeClient()
+            .put<String>("https://boilerplate-go-trening.herokuapp.com/user/parameters") {
+                contentType(ContentType.Application.Json)
+                headers {
+                    append("Authorization", "Bearer $userToken")
+                }
+                body = params
+            }
+        println(response)
+        return response
+    }
+
 }
