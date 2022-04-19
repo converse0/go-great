@@ -3,6 +3,7 @@ package com.masuta.gogreat.presentation.auth
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
@@ -64,52 +65,45 @@ fun SignUpForm(viewModel: SignUpViewModel, navController: NavHostController) {
     val keyboardController = LocalSoftwareKeyboardController.current
 
     var username by remember { mutableStateOf("") }
-    InputTextField(
-        text = "UserName",
-        value = username,
-        keyboardController = keyboardController,
-        onChangeValue = { username = it},
-    )
-//    Text(
-//        text = "Username",
-//        style = MaterialTheme.typography.body1,
-//        fontWeight = FontWeight.Bold
-//    )
-//    OutlinedTextField(
-//        value = username,
-//        onValueChange = { username = it},
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .onFocusChanged {
-//                if (it.isFocused) {
-//                    username = ""
-//                }
-//            }
-//    )
-    Spacer(modifier = Modifier.height(16.dp))
     var email by remember { mutableStateOf("") }
-    InputTextField(
-        text = "Email",
-        value = email,
-        keyboardController = keyboardController,
-        onChangeValue = { email = it},
-    )
-    Spacer(modifier = Modifier.height(16.dp))
     var password by remember { mutableStateOf("") }
     var passwordConfirm by remember { mutableStateOf("") }
-    InputTextField(
-        text = "Password",
-        value = password,
-        keyboardController = keyboardController,
-        onChangeValue = { password = it},
-    )
-    Spacer(modifier = Modifier.height(16.dp))
-    InputTextField(
-        text = "Confirm password",
-        value = passwordConfirm,
-        keyboardController = keyboardController,
-        onChangeValue = { passwordConfirm = it},
-    )
+
+    Box(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        LazyColumn(
+            modifier = Modifier.fillMaxWidth().padding(bottom = 100.dp)
+        ) {
+            item {
+                InputTextField(
+                    text = "UserName",
+                    value = username,
+                    keyboardController = keyboardController,
+                    onChangeValue = { username = it},
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                InputTextField(
+                    text = "Email",
+                    value = email,
+                    keyboardController = keyboardController,
+                    onChangeValue = { email = it},
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                InputTextField(
+                    text = "Password",
+                    value = password,
+                    keyboardController = keyboardController,
+                    onChangeValue = { password = it},
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                InputTextField(
+                    text = "Confirm password",
+                    value = passwordConfirm,
+                    keyboardController = keyboardController,
+                    onChangeValue = { passwordConfirm = it},
+                )
+                Spacer(modifier = Modifier.height(16.dp))
 //    var checked by remember { mutableStateOf(false) }
 //    Row(
 //        verticalAlignment = Alignment.CenterVertically,
@@ -121,44 +115,51 @@ fun SignUpForm(viewModel: SignUpViewModel, navController: NavHostController) {
 //            text = "Remember me"
 //        )
 //    }
-    TextButton(
-        onClick = {
-            CoroutineScope(Dispatchers.Main).launch {
-                val resp = viewModel.signUp(username, email,password,passwordConfirm)
-                if (resp) {
-                    val res = viewModel.signIn(User(email = email, password = password))
-                    if (res["status"] as Boolean) {
-                        viewModel.setToken(context = context, token = res["loginResponse"] as LoginResponse?)
-                        navController.navigate("about")
-                    } else {
-                        res["message"]?.let {
-                            Toast.makeText(
-                                context,
-                                it as String,
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
-                } else {
-                    Toast.makeText(
-                        context,
-                        "Sign up failed, fill all fields, and enter the same password twice",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
             }
-        },
-        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 40.dp)
-    ) {
-        Text(
-            text = "Sign Up",
-            color = Color.White,
-            style = MaterialTheme.typography.body1,
-            modifier = Modifier.padding(vertical = 16.dp)
-        )
+        }
+        TextButton(
+            onClick = {
+                CoroutineScope(Dispatchers.Main).launch {
+                    val resp = viewModel.signUp(username, email,password,passwordConfirm)
+                    if (resp) {
+                        val res = viewModel.signIn(User(email = email, password = password))
+                        if (res["status"] as Boolean) {
+                            viewModel.setToken(context = context, token = res["loginResponse"] as LoginResponse?)
+                            navController.navigate("about")
+                        } else {
+                            res["message"]?.let {
+                                Toast.makeText(
+                                    context,
+                                    it as String,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+                    } else {
+                        Toast.makeText(
+                            context,
+                            "Sign up failed, fill all fields, and enter the same password twice",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            },
+            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    top = 40.dp,
+                    bottom = 10.dp
+                )
+                .align(Alignment.BottomCenter)
+        ) {
+            Text(
+                text = "Sign Up",
+                color = Color.White,
+                style = MaterialTheme.typography.body1,
+                modifier = Modifier.padding(vertical = 16.dp)
+            )
+        }
     }
 
     Text(
