@@ -100,6 +100,21 @@ class TrainRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getPassTrainings(): List<Training>? {
+        httpClient?.get<TrainingResponse>("$url/user/trenings?status=Finish") {
+            contentType(ContentType.Application.Json)
+            headers {
+                append("Authorization", "Bearer $userToken")
+            }
+        }?.let { tr ->
+
+            tr.data?.let { trains ->
+                return trains
+            }
+        }
+        return null
+    }
+
     override suspend fun getLocalTrainingByUid(uid: String): Training? {
         localTraining.get(uid).let {
             return it
@@ -141,6 +156,19 @@ class TrainRepositoryImpl @Inject constructor(
             println("startTraining: $it")
         }
     }
+
+    override suspend fun finishTraining(uid: String) {
+        httpClient?.put<String>("$url/user/trening/status") {
+            contentType(ContentType.Application.Json)
+            headers {
+                append("Authorization", "Bearer $userToken")
+            }
+            body =  mapOf("uid" to uid, "status" to "Finish")
+        }?.let {
+            println("finishTraining: $it")
+        }
+    }
+
 
     override suspend fun getCurrentTraining(): Training? {
         httpClient?.get<TrainingResponse>("$url/user/trenings?status=Start") {

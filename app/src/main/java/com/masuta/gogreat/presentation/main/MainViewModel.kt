@@ -98,6 +98,15 @@ class MainViewModel @Inject constructor(
          }
     }
 
+    fun getPastTrainings(list: MutableState<List<Training>>) {
+        viewModelScope.launch {
+            val localTrainings = repository.getPassTrainings()
+            if (localTrainings != null) {
+                list.value = localTrainings
+            }
+        }
+    }
+
     fun clearLocalExercises() {
         viewModelScope.launch {
             repository.clearLocalExerciseData()
