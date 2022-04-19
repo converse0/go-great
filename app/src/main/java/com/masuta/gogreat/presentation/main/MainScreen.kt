@@ -22,6 +22,7 @@ import com.masuta.gogreat.domain.model.gender
 import com.masuta.gogreat.presentation.BottomNavigationItem
 import com.masuta.gogreat.presentation.components.BottomMenuBar
 import com.masuta.gogreat.presentation.ui.theme.Purple200
+import com.masuta.gogreat.presentation.ui.theme.Red
 import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
@@ -74,7 +75,7 @@ fun MainScreen(
                         onClick = {
                             navController.navigate("new-training")
                         },
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray),
+                        colors = ButtonDefaults.buttonColors(backgroundColor = Red),
                         modifier = Modifier
                             .fillMaxWidth()
                     ) {

@@ -23,6 +23,7 @@ import androidx.navigation.NavHostController
 import com.masuta.gogreat.domain.model.LoginResponse
 import com.masuta.gogreat.domain.model.User
 import com.masuta.gogreat.presentation.components.InputTextField
+import com.masuta.gogreat.presentation.ui.theme.Red
 import com.masuta.gogreat.presentation.ui.theme.SportTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -144,7 +145,7 @@ fun SignUpForm(viewModel: SignUpViewModel, navController: NavHostController) {
                     }
                 }
             },
-            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray),
+            colors = ButtonDefaults.buttonColors(backgroundColor = Red),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(

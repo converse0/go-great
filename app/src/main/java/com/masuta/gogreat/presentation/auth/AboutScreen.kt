@@ -28,6 +28,7 @@ import com.masuta.gogreat.presentation.components.SliderWithLabelUserDiet
 import com.masuta.gogreat.presentation.profile.LineSelectPoint
 import com.masuta.gogreat.presentation.profile.firstCharToUpperCase
 import com.masuta.gogreat.presentation.profile.normalizeString
+import com.masuta.gogreat.presentation.ui.theme.Red
 import com.masuta.gogreat.presentation.ui.theme.SportTheme
 
 @Composable
@@ -195,7 +196,7 @@ fun AboutForm(
                 )
                 navController.navigate("main")
             },
-            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray),
+            colors = ButtonDefaults.buttonColors(backgroundColor = Red),
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)

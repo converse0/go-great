@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import com.masuta.gogreat.presentation.ui.theme.Red
 import com.masuta.gogreat.presentation.ui.theme.SportTheme
 
 @Composable
@@ -47,7 +48,7 @@ fun LaunchScreen(
             onClick = {
                  navController.navigate("sign-in")
             },
-            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray),
+            colors = ButtonDefaults.buttonColors(backgroundColor = Red),
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(text = "Login", color = Color.White, modifier = Modifier.padding(vertical = 16.dp))

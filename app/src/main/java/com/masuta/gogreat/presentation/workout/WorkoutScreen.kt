@@ -24,6 +24,7 @@ import androidx.navigation.NavHostController
 import com.masuta.gogreat.R
 import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.domain.model.gender
+import com.masuta.gogreat.presentation.ui.theme.Red
 import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
@@ -89,7 +90,7 @@ fun WorkoutScreen(
                 viewModel.startTraining(uid)
                 navController.navigate("start-training/$uid")
             },
-            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red),
+            colors = ButtonDefaults.buttonColors(backgroundColor = Red),
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)

@@ -29,6 +29,7 @@ import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.presentation.components.DropdownDemo
 import com.masuta.gogreat.presentation.components.SliderWithLabel
 import com.masuta.gogreat.presentation.components.SliderWithText
+import com.masuta.gogreat.presentation.ui.theme.Red
 import com.skydoves.landscapist.glide.GlideImage
 import io.ktor.util.reflect.*
 
@@ -267,7 +268,7 @@ fun NewExerciseParameters(
                     println(exercise)
                     println(ex)
                 },
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray),
+                colors = ButtonDefaults.buttonColors(backgroundColor = Red),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(40.dp)

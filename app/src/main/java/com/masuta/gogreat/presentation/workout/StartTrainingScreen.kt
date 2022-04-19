@@ -32,6 +32,7 @@ import com.google.android.exoplayer2.upstream.DefaultDataSource
 import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.presentation.main.Timer
 import com.masuta.gogreat.presentation.new_training.toInteger
+import com.masuta.gogreat.presentation.ui.theme.Green
 
 @Composable
 fun StartTrainingScreen(
@@ -328,7 +329,7 @@ fun ButtonSection(
             modifier = Modifier
                 .width(100.dp)
                 .height(50.dp),
-            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Green),
+            colors = ButtonDefaults.buttonColors(backgroundColor = Green),
             shape = RoundedCornerShape(16.dp)
         ) {
             Text(text = "I managed!", color = Color.White)

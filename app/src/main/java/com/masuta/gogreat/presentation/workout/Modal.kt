@@ -29,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.masuta.gogreat.R
 import com.masuta.gogreat.presentation.components.InputTextField
+import com.masuta.gogreat.presentation.ui.theme.Green
 import com.masuta.gogreat.presentation.ui.theme.SportTheme
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -105,7 +106,7 @@ fun StartTrainingModal(
             }
             TextButton(
                 onClick =  onSave,
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray),
+                colors = ButtonDefaults.buttonColors(backgroundColor = Green),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)

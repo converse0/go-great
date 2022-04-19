@@ -36,6 +36,8 @@ import com.masuta.gogreat.domain.model.ExerciseType
 import com.masuta.gogreat.domain.model.Training
 import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.domain.model.gender
+import com.masuta.gogreat.presentation.ui.theme.Green
+import com.masuta.gogreat.presentation.ui.theme.Red
 import com.masuta.gogreat.presentation.ui.theme.SportTheme
 import com.skydoves.landscapist.glide.GlideImage
 
@@ -97,7 +99,7 @@ fun NewTrainingScreen(
                     openModal.value = true
                 },
                 enabled= listExercises.value.isNotEmpty(),
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray),
+                colors = ButtonDefaults.buttonColors(backgroundColor = Red),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 16.dp, horizontal = 16.dp)
@@ -183,7 +185,7 @@ fun Modal(
                         onSave(name.value)
                     },
                     enabled = name.value.isNotEmpty(),
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Green),
                     modifier = Modifier
                         .fillMaxWidth()
                 ) {
