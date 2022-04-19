@@ -14,6 +14,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.masuta.gogreat.domain.model.UserActivity
+import com.masuta.gogreat.domain.model.UserDiet
 import com.masuta.gogreat.presentation.ui.theme.SportTheme
 import kotlin.math.roundToInt
 
@@ -129,10 +131,129 @@ private fun getSliderOffset(
 private fun calcFraction(a: Float, b: Float, pos: Float) =
     (if (b - a == 0f) 0f else (pos - a) / (b - a)).coerceIn(0f,1f)
 
+
+@Composable
+fun SliderWithLabelUserActivity(
+    value: Float,
+    selectedItem: MutableState<UserActivity>,
+    valueRange: ClosedFloatingPointRange<Float>,
+    finiteEnd: Boolean,
+    enabled: Boolean,
+    labelMinWidth: Dp = 24.dp,
+    items: List<UserActivity>
+) {
+    var sliderPosition by remember { mutableStateOf(value) }
+    selectedItem.value = items[sliderPosition.toInt()]
+
+    Column {
+        Slider(
+            value = sliderPosition,
+            onValueChange = {
+                sliderPosition = it
+            },
+            steps = items.size - 2,
+            valueRange = valueRange,
+            enabled = enabled,
+            modifier = Modifier.fillMaxWidth()
+        )
+        BoxWithConstraints(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            val offset = getSliderOffset(
+                value = sliderPosition,
+                valueRange = valueRange,
+                boxWidth = maxWidth,
+                labelWidth = labelMinWidth + 8.dp
+            )
+
+            val endValueText = if (!finiteEnd && sliderPosition >= valueRange.endInclusive)
+                "${sliderPosition.toInt()} +" else items[sliderPosition.toInt()]
+
+            if (sliderPosition >= valueRange.start) {
+                //+ "${UserActivity.valueOf(selectedItem.value.toString())}"
+                SliderLabel(
+                    label = endValueText.toString(),
+                    minWidth = labelMinWidth,
+                    modifier = Modifier
+                        .padding(start = if(sliderPosition.toInt() != items.size - 1) offset else offset - 16.dp)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun SliderWithLabelUserDiet(
+    value: Float,
+    enabled: Boolean = true,
+    selectedItem: MutableState<UserDiet>,
+    valueRange: ClosedFloatingPointRange<Float>,
+    finiteEnd: Boolean,
+    labelMinWidth: Dp = 24.dp,
+    items: List<UserDiet>
+) {
+
+    var sliderPosition by remember { mutableStateOf(value) }
+    selectedItem.value = items[sliderPosition.toInt()]
+
+    println("Float value: $value")
+
+    Column {
+        Slider(
+            value = sliderPosition,
+            onValueChange = {
+                sliderPosition = it
+            },
+            steps = items.size - 2,
+            valueRange = valueRange,
+            enabled = enabled,
+            modifier = Modifier.fillMaxWidth()
+        )
+        BoxWithConstraints(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            val offset = getSliderOffset(
+                value = sliderPosition,
+                valueRange = valueRange,
+                boxWidth = maxWidth,
+                labelWidth = labelMinWidth + 8.dp
+            )
+
+            val endValueText = if (!finiteEnd && sliderPosition >= valueRange.endInclusive)
+                "${sliderPosition.toInt()} +" else items[sliderPosition.toInt()]
+
+            if (sliderPosition >= valueRange.start) {
+                //+ "${UserActivity.valueOf(selectedItem.value.toString())}"
+                SliderLabel(
+                    label = endValueText.toString(),
+                    minWidth = labelMinWidth,
+                    modifier = Modifier
+                        .padding(start = if(sliderPosition.toInt() != items.size - 1) offset else offset - 30.dp)
+                )
+            }
+        }
+    }
+}
+
 @Preview
 @Composable
 fun SliderWithTextPreview() {
     SportTheme {
-        SliderWithText()
+        val items = UserDiet.values().toList()
+
+        val item = remember { mutableStateOf(items[0]) }
+
+        val selected = 2
+
+        SliderWithLabelUserDiet(
+            value = selected.toFloat(),
+            selectedItem = item,
+            finiteEnd = true,
+            enabled = false,
+            valueRange = 0f..items.size.minus(1).toFloat(),
+            items = items
+        )
     }
 }

@@ -32,6 +32,8 @@ import com.masuta.gogreat.domain.model.UserDiet
 import com.masuta.gogreat.presentation.BottomNavigationItem
 import com.masuta.gogreat.presentation.components.BottomMenuBar
 import com.masuta.gogreat.presentation.components.InputTextField
+import com.masuta.gogreat.presentation.components.SliderWithLabelUserActivity
+import com.masuta.gogreat.presentation.components.SliderWithLabelUserDiet
 import com.masuta.gogreat.presentation.ui.theme.SportTheme
 
 
@@ -185,27 +187,48 @@ fun ProfileInfo(
             onChangeValue = { height.value = it }
         )
         Spacer(Modifier.height(20.dp))
-        InputTextField(
-            text = "Physical Activity",
-            value = UserActivity.values()[activity.value]
-                .toString().lowercase()
-                .firstCharToUpperCase().normalizeString(),
+//        InputTextField(
+//            text = "Physical Activity",
+//            value = UserActivity.values()[activity.value]
+//                .toString().lowercase()
+//                .firstCharToUpperCase().normalizeString(),
+//            enabled = false,
+//            keyboardController = keyboardController,
+//            keyboardType = KeyboardType.Number,
+//            onChangeValue = { timesEat.value = it }
+//        )
+        val listActivity = UserActivity.values().toList()
+        val selectedActivity = remember { mutableStateOf(listActivity[activity.value]) }
+        SliderWithLabelUserActivity(
+            value = activity.value.toFloat(),
+            selectedItem = selectedActivity,
+            valueRange = 0f..listActivity.size.minus(1).toFloat(),
+            finiteEnd = true,
             enabled = false,
-            keyboardController = keyboardController,
-            keyboardType = KeyboardType.Number,
-            onChangeValue = { timesEat.value = it }
+            items = listActivity
         )
         Spacer(Modifier.height(20.dp))
-        InputTextField(
-            text = "Diet",
-            value = UserDiet.values()[diet.value]
-                .toString().lowercase()
-                .firstCharToUpperCase().normalizeString(),
+        val listDiet = UserDiet.values().toList()
+        val selectedDiet = remember { mutableStateOf(listDiet[diet.value]) }
+        SliderWithLabelUserDiet(
+            value = diet.value.toFloat(),
+            selectedItem = selectedDiet,
             enabled = false,
-            keyboardController = keyboardController,
-            keyboardType = KeyboardType.Number,
-            onChangeValue = { timesEat.value = it }
+            valueRange = 0f..listDiet.size.minus(1).toFloat(),
+            finiteEnd = true,
+            items = listDiet
         )
+
+//        InputTextField(
+//            text = "Diet",
+//            value = UserDiet.values()[diet.value]
+//                .toString().lowercase()
+//                .firstCharToUpperCase().normalizeString(),
+//            enabled = false,
+//            keyboardController = keyboardController,
+//            keyboardType = KeyboardType.Number,
+//            onChangeValue = { timesEat.value = it }
+//        )
         Spacer(Modifier.height(20.dp))
         InputTextField(
             text = "How often do you prefer to eat?",

@@ -64,6 +64,11 @@ fun getTokenR(context: Context): String {
     return sharedPref.getString("refreshToken", "")!!
 }
 
+//fun getMale(context: Context): String {
+//    val sharedPref = context.getSharedPreferences("user", Context.MODE_PRIVATE)
+//    return sharedPref.getString("male", "")!!
+//}
+
 fun choseStartScreen(context: Context): String {
        val token = getToken(context)
     userToken=token

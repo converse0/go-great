@@ -29,3 +29,4 @@ data class Response(
 
 var userToken: String? = null
 var refreshUserToken: String? = null
+var male: Int? = null

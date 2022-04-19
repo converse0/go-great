@@ -23,6 +23,8 @@ import androidx.navigation.NavHostController
 import com.masuta.gogreat.domain.model.UserActivity
 import com.masuta.gogreat.domain.model.UserDiet
 import com.masuta.gogreat.presentation.components.InputTextField
+import com.masuta.gogreat.presentation.components.SliderWithLabelUserActivity
+import com.masuta.gogreat.presentation.components.SliderWithLabelUserDiet
 import com.masuta.gogreat.presentation.profile.LineSelectPoint
 import com.masuta.gogreat.presentation.profile.firstCharToUpperCase
 import com.masuta.gogreat.presentation.profile.normalizeString
@@ -76,8 +78,8 @@ fun AboutForm(
     val timesEat = remember { mutableStateOf("") }
     val desiredWeight = remember { mutableStateOf("") }
     val gender = remember { mutableStateOf(0) }
-    var physicalActivity by remember { mutableStateOf(UserActivity.BASIC) }
-    var diet by remember { mutableStateOf(UserDiet.BALANCED) }
+    var physicalActivity = remember { mutableStateOf(UserActivity.BASIC) }
+    var diet = remember { mutableStateOf(UserDiet.BALANCED) }
 
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -128,9 +130,18 @@ fun AboutForm(
                 style = MaterialTheme.typography.body1
             )
             Spacer(Modifier.height(20.dp))
-            PhysicalActivitySection(
-                selected = physicalActivity,
-                onPhysicalActivitySelect = { physicalActivity = it }
+//            PhysicalActivitySection(
+//                selected = physicalActivity,
+//                onPhysicalActivitySelect = { physicalActivity = it }
+//            )
+            val listActivity = UserActivity.values().toList()
+            SliderWithLabelUserActivity(
+                value = 0f,
+                selectedItem = physicalActivity,
+                valueRange = 0f..listActivity.size.minus(1).toFloat(),
+                finiteEnd = true,
+                enabled = false,
+                items = listActivity
             )
             Spacer(Modifier.height(20.dp))
             Text(
@@ -138,9 +149,18 @@ fun AboutForm(
                 style = MaterialTheme.typography.body1
             )
             Spacer(Modifier.height(20.dp))
-            DietSection(
-                selected = diet,
-                onDietSelect = { diet = it}
+//            DietSection(
+//                selected = diet,
+//                onDietSelect = { diet = it}
+//            )
+            val listDiet = UserDiet.values().toList()
+            SliderWithLabelUserDiet(
+                value = 0f,
+                selectedItem = diet,
+                valueRange = 0f..listDiet.size.minus(1).toFloat(),
+                finiteEnd = true,
+                enabled = false,
+                items = listDiet
             )
             Spacer(Modifier.height(20.dp))
             InputTextField(
@@ -166,8 +186,8 @@ fun AboutForm(
                         height = if (height.value.isNotEmpty()) height.value.toInt() else 0,
                         desiredWeight = if (desiredWeight.value.isNotEmpty()) desiredWeight.value.toInt() else 0 ,
                         timesEat = if(timesEat.value.isNotEmpty()) timesEat.value.toInt() else 0,
-                        diet = diet.value,
-                      activity = physicalActivity.value,
+                        diet = diet.value.value,
+                        activity = physicalActivity.value.value,
                         gender = gender.value
                     )
                     navController.navigate("main")
@@ -205,6 +225,10 @@ fun PhysicalActivitySection(
     selected: UserActivity,
     onPhysicalActivitySelect: (UserActivity) -> Unit
 ) {
+    val list = UserActivity.values().toList()
+
+    println(list)
+
     Column() {
         DefaultRadioButton(text = UserActivity.BASIC.toString()
             .lowercase().firstCharToUpperCase()

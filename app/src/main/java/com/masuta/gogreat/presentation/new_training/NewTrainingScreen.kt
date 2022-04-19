@@ -37,6 +37,7 @@ import com.masuta.gogreat.R
 import com.masuta.gogreat.domain.model.ExerciseType
 import com.masuta.gogreat.domain.model.Training
 import com.masuta.gogreat.domain.model.TrainingExercise
+import com.masuta.gogreat.domain.model.male
 import com.masuta.gogreat.presentation.ui.theme.SportTheme
 import com.skydoves.landscapist.glide.GlideImage
 
@@ -288,7 +289,11 @@ fun PersonSection(
         .fillMaxWidth()
         .padding(12.dp)) {
         Image(
-            painter = painterResource(R.drawable.human),
+            painter = painterResource(
+                male?.let {
+                    if (it == 0) R.drawable.human else R.drawable.human_femail
+                } ?: R.drawable.human
+            ),
             contentDescription = null,
             modifier = Modifier
                 .layoutId("person")
