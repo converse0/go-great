@@ -32,7 +32,7 @@ import com.masuta.gogreat.presentation.components.InputTextField
 import com.masuta.gogreat.presentation.ui.theme.Green
 import com.masuta.gogreat.presentation.ui.theme.SportTheme
 
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun StartTrainingModal(
     weight: MutableState<String>,
@@ -106,11 +106,11 @@ fun StartTrainingModal(
             }
             TextButton(
                 onClick =  onSave,
-                colors = ButtonDefaults.buttonColors(backgroundColor = Green),
+                colors = ButtonDefaults.buttonColors(containerColor = Green),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)
-                    .align(Alignment.BottomCenter)
+//                    .align(Alignment.BottomCenter)
                 ,
             ) {
                 Text(
@@ -123,7 +123,7 @@ fun StartTrainingModal(
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FinalModal() {
     val context = LocalContext.current

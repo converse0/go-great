@@ -175,7 +175,7 @@ fun ProfileInfo(
             style = MaterialTheme.typography.bodySmall
         )
         Spacer(Modifier.height(10.dp))
-        GenderChosen(selected = gender.value)
+        GenderChosen(selected = gender.value, onGenderChoose = { gender.value = it })
         Spacer(Modifier.height(10.dp))
         InputTextField(
             text = "Age",
@@ -317,6 +317,7 @@ fun ProfileInfo(
 
 @Composable
 fun GenderChosen(
+    onGenderChoose: (Int) -> Unit,
     selected: Int,
 ) {
     Row(
@@ -324,8 +325,8 @@ fun GenderChosen(
         horizontalArrangement = Arrangement.SpaceAround,
         modifier = Modifier.fillMaxWidth()
     ) {
-        DefaultRadioButton(text = "Male", selected = selected == 0, onSelect = {})
-        DefaultRadioButton(text = "Female", selected = selected == 1, onSelect = {})
+        DefaultRadioButton(text = "Male", selected = selected == 0, onSelect = {onGenderChoose(0)})
+        DefaultRadioButton(text = "Female", selected = selected == 1, onSelect = { onGenderChoose(1) })
     }
 }
 

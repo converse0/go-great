@@ -198,8 +198,8 @@ fun ModalTimer(
                 onTimerEnd = onDismiss,
                 startTimer = true,
                 modifier = Modifier
-                    .size(200.dp)
-                    .align(Alignment.Center),
+                    .size(200.dp),
+//                    .align(Alignment.Center),
                 viewModel = viewModel,
                 navController = navController,
                 uid = uid

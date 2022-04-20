@@ -26,7 +26,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.masuta.gogreat.R
 import com.masuta.gogreat.domain.model.TrainingExercise
-import com.masuta.gogreat.presentation.components.DropdownDemo
 import com.masuta.gogreat.presentation.components.SliderWithLabel
 import com.masuta.gogreat.presentation.components.SliderWithText
 import com.masuta.gogreat.presentation.profile.firstCharToUpperCase
@@ -342,6 +341,7 @@ fun NumberRecoveryTime(
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DefaultRadioButton(
     text: String,
