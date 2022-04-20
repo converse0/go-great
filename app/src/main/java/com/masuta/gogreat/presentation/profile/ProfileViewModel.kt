@@ -9,6 +9,7 @@ import com.masuta.gogreat.domain.handlers.GetUserParams
 import com.masuta.gogreat.domain.model.ParametersUserSet
 import com.masuta.gogreat.domain.model.UserActivity
 import com.masuta.gogreat.domain.model.UserDiet
+import com.masuta.gogreat.domain.repository.ProfileRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -16,7 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val createUserParams: CreateUserParams,
-    private val getUserParams: GetUserParams
+    private val getUserParams: GetUserParams,
+    private val repository: ProfileRepository
 ) :ViewModel() {
 
 
@@ -105,6 +107,32 @@ class ProfileViewModel @Inject constructor(
                 gender.value = respInt
             }
         }
+    }
 
+    fun updateParams(
+        age: Int,
+        weight: Int,
+        height: Int,
+        desiredWeight: Int,
+        timesEat: Int,
+        activity: Int,
+        diet: Int,
+        gender: Int
+    ) {
+        viewModelScope.launch {
+            val params = ParametersUserSet (
+                age = age,
+                weight = weight,
+                height = height,
+                desiredWeight = desiredWeight,
+                eat = timesEat,
+                activity = activity,
+                diet = diet,
+                gender = gender
+            )
+            val resp = repository.updateParameters(params)
+            println("Response: $resp")
+
+        }
     }
 }

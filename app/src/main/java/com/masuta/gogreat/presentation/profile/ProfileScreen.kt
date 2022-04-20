@@ -34,6 +34,7 @@ import com.masuta.gogreat.presentation.components.BottomMenuBar
 import com.masuta.gogreat.presentation.components.InputTextField
 import com.masuta.gogreat.presentation.components.SliderWithLabelUserActivity
 import com.masuta.gogreat.presentation.components.SliderWithLabelUserDiet
+import com.masuta.gogreat.presentation.ui.theme.Red
 import com.masuta.gogreat.presentation.ui.theme.SportTheme
 
 
@@ -122,6 +123,7 @@ fun ProfileSection(
             )
             Spacer(modifier = Modifier.height(20.dp))
             ProfileInfo(
+                viewModel = viewModel,
                 timesEat = timesEat,
                 age = age,
                 weight = weight,
@@ -139,6 +141,7 @@ fun ProfileSection(
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ProfileInfo(
+    viewModel: ProfileViewModel,
     timesEat: MutableState<String>,
     age: MutableState<String>,
     weight: MutableState<String>,
@@ -166,7 +169,6 @@ fun ProfileInfo(
             value = age.value,
             keyboardController = keyboardController,
             keyboardType = KeyboardType.Number,
-            enabled = false,
             onChangeValue = { age.value = it }
         )
         Spacer(Modifier.height(10.dp))
@@ -175,14 +177,12 @@ fun ProfileInfo(
             value = weight.value,
             keyboardController = keyboardController,
             keyboardType = KeyboardType.Number,
-            enabled = false,
             onChangeValue = { weight.value = it }
         )
         Spacer(Modifier.height(10.dp))
         InputTextField(
             text = "Height",
             value = height.value,
-            enabled = false,
             keyboardController = keyboardController,
             keyboardType = KeyboardType.Number,
             onChangeValue = { height.value = it }
@@ -198,23 +198,33 @@ fun ProfileInfo(
 //            keyboardType = KeyboardType.Number,
 //            onChangeValue = { timesEat.value = it }
 //        )
+        Text(
+            text = "Physical Activity",
+            style = MaterialTheme.typography.body1,
+            fontWeight = FontWeight.Bold
+        )
         val listActivity = UserActivity.values().toList()
         val selectedActivity = remember { mutableStateOf(listActivity[activity.value]) }
+        activity.value = selectedActivity.value.value
         SliderWithLabelUserActivity(
             value = activity.value.toFloat(),
             selectedItem = selectedActivity,
             valueRange = 0f..listActivity.size.minus(1).toFloat(),
             finiteEnd = true,
-            enabled = false,
             items = listActivity
         )
         Spacer(Modifier.height(20.dp))
+        Text(
+            text = "Diet",
+            style = MaterialTheme.typography.body1,
+            fontWeight = FontWeight.Bold
+        )
         val listDiet = UserDiet.values().toList()
         val selectedDiet = remember { mutableStateOf(listDiet[diet.value]) }
+        diet.value = selectedDiet.value.value
         SliderWithLabelUserDiet(
             value = diet.value.toFloat(),
             selectedItem = selectedDiet,
-            enabled = false,
             valueRange = 0f..listDiet.size.minus(1).toFloat(),
             finiteEnd = true,
             items = listDiet
@@ -234,7 +244,6 @@ fun ProfileInfo(
         InputTextField(
             text = "How often do you prefer to eat?",
             value = timesEat.value,
-            enabled = false,
             keyboardController = keyboardController,
             keyboardType = KeyboardType.Number,
             onChangeValue = { timesEat.value = it }
@@ -243,11 +252,34 @@ fun ProfileInfo(
         InputTextField(
             text = "Desired weight",
             value = desiredWeight.value,
-            enabled = false,
             keyboardController = keyboardController,
             keyboardType = KeyboardType.Number,
             onChangeValue = { desiredWeight.value = it }
         )
+        TextButton(
+            onClick = {
+                viewModel.updateParams(
+                    gender = gender.value,
+                    age = age.value.toInt(),
+                    weight = weight.value.toInt(),
+                    height = height.value.toInt(),
+                    activity = activity.value,
+                    diet = diet.value,
+                    timesEat = timesEat.value.toInt(),
+                    desiredWeight = desiredWeight.value.toInt()
+                )
+            },
+            colors = ButtonDefaults.buttonColors(backgroundColor = Red),
+            shape = RoundedCornerShape(16.dp),
+            modifier = Modifier
+                .fillMaxWidth().padding(vertical = 20.dp)
+        ) {
+            Text(
+                text = "Save",
+                color = Color.White,
+                modifier = Modifier.padding(vertical = 16.dp)
+            )
+        }
     }
 }
 
