@@ -76,7 +76,8 @@ fun ProfileScreen(
             Text(
                 text = "Profile",
                 style = MaterialTheme.typography.headlineMedium,
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier.padding(16.dp),
+                color = Color.Black
             )
             Spacer(modifier = Modifier.height(12.dp))
             ProfileSection(viewModel, navController)
@@ -172,7 +173,8 @@ fun ProfileInfo(
     ) {
         Text(
             text = "Gender",
-            style = MaterialTheme.typography.bodySmall
+            style = MaterialTheme.typography.bodySmall,
+            color = Color.Black
         )
         Spacer(Modifier.height(10.dp))
         GenderChosen(selected = gender.value, onGenderChoose = { gender.value = it })
@@ -214,7 +216,8 @@ fun ProfileInfo(
         Text(
             text = "Physical Activity",
             style = MaterialTheme.typography.bodySmall,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            color = Color.Black
         )
         val listActivity = UserActivity.values().toList()
         val selectedActivity = remember { mutableStateOf(listActivity[activity.value]) }
@@ -230,7 +233,8 @@ fun ProfileInfo(
         Text(
             text = "Diet",
             style = MaterialTheme.typography.bodySmall,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            color = Color.Black
         )
         val listDiet = UserDiet.values().toList()
         val selectedDiet = remember { mutableStateOf(listDiet[diet.value]) }
@@ -309,7 +313,7 @@ fun ProfileInfo(
             Text(
                 text = "Save",
                 color = Color.White,
-                modifier = Modifier.padding(vertical = 16.dp)
+                modifier = Modifier.padding(vertical = 16.dp),
             )
         }
     }
@@ -347,7 +351,8 @@ fun DefaultRadioButton(
         Spacer(modifier = Modifier.width(4.dp))
         Text(
             text = text,
-            style = MaterialTheme.typography.bodySmall
+            style = MaterialTheme.typography.bodySmall,
+            color = Color.Black
         )
     }
 }

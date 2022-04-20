@@ -224,36 +224,40 @@ fun WorkoutItem(
             .padding(horizontal = 20.dp)
             .clickable { workout.uid?.let { onSelectItem(it) } }
     ) {
-        workout.image?.let {
-            println("image: $it")
-            GlideImage(imageModel = it,
-                modifier = Modifier.size(200.dp),
-                colorFilter = ColorFilter.lighting(multiply = Color.Gray,add= Color.Black)
-            )
+        Box{
+            workout.image?.let {
+                println("image: $it")
+                GlideImage(imageModel = it,
+                    modifier = Modifier.size(200.dp),
+                    colorFilter = ColorFilter.lighting(multiply = Color.Gray,add= Color.Black)
+                )
 
-        }
-        Column(
-            verticalArrangement = Arrangement.Bottom,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp)
-        ) {
-            val text = if(workout.name.isEmpty()) "No name" else workout.name
-            Text(
-                text =text,
-                style = MaterialTheme.typography.headlineSmall,
-                color = Color.White,
-                fontWeight = FontWeight.W700
-            )
-            Spacer(Modifier.height(10.dp))
+            }
+            Column(
+//                verticalArrangement = Arrangement.Bottom,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp)
+                    .align(Alignment.BottomStart)
+            ) {
+                val text = if(workout.name.isEmpty()) "No name" else workout.name
+                Text(
+                    text =text,
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = Color.White,
+                    fontWeight = FontWeight.W700
+                )
+                Spacer(Modifier.height(10.dp))
 //            val internal = if(workout.interval.isEmpty()) "30s" else workout.interval
-            Text(
-                text = "27 March 2017",
-                style = MaterialTheme.typography.bodySmall,
-                color = Color.White,
-                fontWeight = FontWeight.W300
-            )
+                Text(
+                    text = "27 March 2017",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Color.White,
+                    fontWeight = FontWeight.W300
+                )
+            }
         }
+
     }
 }
 
