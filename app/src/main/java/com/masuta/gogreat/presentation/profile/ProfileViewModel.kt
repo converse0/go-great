@@ -109,7 +109,7 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    fun updateParams(
+    suspend fun updateParams(
         age: Int,
         weight: Int,
         height: Int,
@@ -119,22 +119,20 @@ class ProfileViewModel @Inject constructor(
         diet: Int,
         gender: Int,
         uid: String
-    ) {
-        viewModelScope.launch {
-            val params = ParametersUserSet (
-                age = age,
-                weight = weight,
-                height = height,
-                desiredWeight = desiredWeight,
-                eat = timesEat,
-                activity = activity,
-                diet = diet,
-                gender = gender,
-                uid=uid
-            )
-            val resp = repository.updateParameters(params)
-            println("Response: $resp")
-
-        }
+    ): String {
+        val params = ParametersUserSet (
+            age = age,
+            weight = weight,
+            height = height,
+            desiredWeight = desiredWeight,
+            eat = timesEat,
+            activity = activity,
+            diet = diet,
+            gender = gender,
+            uid=uid
+        )
+        val resp = repository.updateParameters(params)
+        println("Response: $resp")
+        return resp
     }
 }

@@ -27,6 +27,12 @@ data class Response(
     val data: LoginResponse? = null
 )
 
+@Serializable
+data class UpdateParamsResponse(
+    val message: String,
+    val status: Boolean,
+)
+
 var userToken: String? = null
 var refreshUserToken: String? = null
 var gender: Int? = null

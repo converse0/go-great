@@ -1,10 +1,13 @@
 package com.masuta.gogreat.presentation.profile
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -17,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -36,6 +40,9 @@ import com.masuta.gogreat.presentation.components.SliderWithLabelUserActivity
 import com.masuta.gogreat.presentation.components.SliderWithLabelUserDiet
 import com.masuta.gogreat.presentation.ui.theme.Red
 import com.masuta.gogreat.presentation.ui.theme.SportTheme
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 fun String.firstCharToUpperCase(): String {
@@ -105,9 +112,10 @@ fun ProfileSection(
             gender,diet, activity, routeTo, navController, fail,uid)
     }
 
-
+    val lazyListState = rememberLazyListState()
 
     LazyColumn(
+        state = lazyListState,
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 8.dp)
@@ -124,6 +132,7 @@ fun ProfileSection(
             )
             Spacer(modifier = Modifier.height(20.dp))
             ProfileInfo(
+                lazyListState = lazyListState,
                 viewModel = viewModel,
                 timesEat = timesEat,
                 age = age,
@@ -143,6 +152,7 @@ fun ProfileSection(
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ProfileInfo(
+    lazyListState: LazyListState,
     viewModel: ProfileViewModel,
     timesEat: MutableState<String>,
     age: MutableState<String>,
@@ -154,7 +164,7 @@ fun ProfileInfo(
     diet: MutableState<Int>,
     uid: MutableState<String>
 ) {
-
+    val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
 
     Column(
@@ -261,22 +271,40 @@ fun ProfileInfo(
         )
         TextButton(
             onClick = {
-                viewModel.updateParams(
-                    gender = gender.value,
-                    age = age.value.toInt(),
-                    weight = weight.value.toInt(),
-                    height = height.value.toInt(),
-                    activity = activity.value,
-                    diet = diet.value,
-                    timesEat = timesEat.value.toInt(),
-                    desiredWeight = desiredWeight.value.toInt(),
-                    uid = uid.value
-                )
+                CoroutineScope(Dispatchers.Main).launch {
+                    val resp = viewModel.updateParams(
+                        gender = gender.value,
+                        age = age.value.toInt(),
+                        weight = weight.value.toInt(),
+                        height = height.value.toInt(),
+                        activity = activity.value,
+                        diet = diet.value,
+                        timesEat = timesEat.value.toInt(),
+                        desiredWeight = desiredWeight.value.toInt(),
+                        uid = uid.value
+                    )
+                    if (resp.isNotEmpty()) {
+                        Toast.makeText(
+                            context,
+                            resp,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        Toast.makeText(
+                            context,
+                            "Update user parameters Success",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    lazyListState.scrollToItem(0)
+                }
+
             },
             colors = ButtonDefaults.buttonColors(containerColor = Red),
             shape = RoundedCornerShape(16.dp),
             modifier = Modifier
-                .fillMaxWidth().padding(vertical = 20.dp)
+                .fillMaxWidth()
+                .padding(vertical = 20.dp)
         ) {
             Text(
                 text = "Save",
@@ -296,8 +324,8 @@ fun GenderChosen(
         horizontalArrangement = Arrangement.SpaceAround,
         modifier = Modifier.fillMaxWidth()
     ) {
-        DefaultRadioButton(text = "Male", selected = selected == 0)
-        DefaultRadioButton(text = "Female", selected = selected == 1)
+        DefaultRadioButton(text = "Male", selected = selected == 0, onSelect = {})
+        DefaultRadioButton(text = "Female", selected = selected == 1, onSelect = {})
     }
 }
 
@@ -306,13 +334,14 @@ fun GenderChosen(
 fun DefaultRadioButton(
     text: String,
     selected: Boolean,
+    onSelect: () -> Unit
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
         RadioButton(
             selected = selected,
-            onClick = null
+            onClick = onSelect
         )
         Spacer(modifier = Modifier.width(4.dp))
         Text(
