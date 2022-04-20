@@ -94,12 +94,13 @@ fun ProfileSection(
     val gender = remember { mutableStateOf(0) }
     val diet = remember { mutableStateOf(0) }
     val activity = remember { mutableStateOf(0) }
+    val uid = remember{ mutableStateOf("")}
     val fail = remember {
         mutableStateOf(false)
     }
     if (!fail.value) {
         viewModel.getParameters(username, timesEat, age, weight, height, desiredWeight,
-            gender,diet, activity, routeTo, navController, fail)
+            gender,diet, activity, routeTo, navController, fail,uid)
     }
 
 

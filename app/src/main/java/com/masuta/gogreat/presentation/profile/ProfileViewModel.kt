@@ -52,7 +52,8 @@ class ProfileViewModel @Inject constructor(
         activity: MutableState<Int>,
         routeTo: (navController: NavHostController, route: String) -> Unit,
         navController: NavHostController,
-        fail: MutableState<Boolean>
+        fail: MutableState<Boolean>,
+        uid: MutableState<String>
     ) {
         viewModelScope.launch {
             val (resp, message) = getUserParams()
@@ -68,6 +69,9 @@ class ProfileViewModel @Inject constructor(
                 gender.value = resp.gender
                 diet.value = UserDiet.valueOf(resp.diet.uppercase()).value
                 activity.value = UserActivity.valueOf(resp.activity.uppercase()).value
+                resp.uid?.let {
+                    uid.value = it
+                }
             } else if (message!=null
                 &&message.isNotEmpty()
                 && message.contains("Authentication failed")) {

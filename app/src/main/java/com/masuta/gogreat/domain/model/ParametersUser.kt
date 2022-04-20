@@ -9,7 +9,8 @@ data class ParametersUserSet(
     val eat: Int,
     val gender: Int,
     val height: Int,
-    val weight: Int
+    val weight: Int,
+    val uid: String?=null
 )
 
 @kotlinx.serialization.Serializable
@@ -22,5 +23,6 @@ data class ParametersUserGet(
     val eat: Int,
     val gender: Int,
     val height: Int,
-    val weight: Int
+    val weight: Int,
+    val uid: String? = null
 )
