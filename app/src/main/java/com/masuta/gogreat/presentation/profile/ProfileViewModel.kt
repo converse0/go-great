@@ -1,5 +1,6 @@
 package com.masuta.gogreat.presentation.profile
 
+import android.widget.Toast
 import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -75,15 +76,15 @@ class ProfileViewModel @Inject constructor(
                     uid.value = it
                 }
             } else if (message!=null
-                &&message.isNotEmpty()
-                && message.contains("Authentication failed")) {
-                println("null")
+                &&message.isNotEmpty()) {
                 fail.value = true
                 routeTo(navController, "sign-in")
-            } else {
-                fail.value = true
-                routeTo(navController, "about")
             }
+
+//            else {
+//                fail.value = true
+//                routeTo(navController, "about")
+//            }
         }
 }
 
@@ -93,10 +94,9 @@ class ProfileViewModel @Inject constructor(
 
            val respInt = when {
                resp!=null -> null
-               message!!.isNotEmpty() &&
-                        message.contains("Authentication failed") -> -6
-               message.isNotEmpty() &&
-                       !message.contains("Authentication failed") -> 6
+               message!!.isNotEmpty()-> -6
+            //   message.isNotEmpty() &&
+              //         !message.contains("Authentication failed") -> 6
                else -> null
            }
             if (respInt==null) {
