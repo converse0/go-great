@@ -1,10 +1,7 @@
 package com.masuta.gogreat.data.repository
 
 import com.masuta.gogreat.data.remote.Client
-import com.masuta.gogreat.domain.model.ParametersUserGet
-import com.masuta.gogreat.domain.model.ParametersUserSet
-import com.masuta.gogreat.domain.model.refreshUserToken
-import com.masuta.gogreat.domain.model.userToken
+import com.masuta.gogreat.domain.model.*
 import com.masuta.gogreat.domain.repository.ProfileRepository
 import io.ktor.client.request.*
 import io.ktor.http.*
@@ -71,7 +68,7 @@ class ProfileRepositoryImpl @Inject constructor(
         println("refreshToken: $refreshUserToken")
         println("params: $params")
         val response = client.makeClient()
-            .put<String>("https://boilerplate-go-trening.herokuapp.com/user/parameters") {
+            .put<UpdateParamsResponse>("https://boilerplate-go-trening.herokuapp.com/user/parameters") {
                 contentType(ContentType.Application.Json)
                 headers {
                     append("Authorization", "Bearer $userToken")
@@ -79,7 +76,8 @@ class ProfileRepositoryImpl @Inject constructor(
                 body = params
             }
         println(response)
-        return response
+
+        return response.message
     }
 
 }
