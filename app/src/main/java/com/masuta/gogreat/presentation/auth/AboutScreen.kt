@@ -3,7 +3,9 @@ package com.masuta.gogreat.presentation.auth
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
@@ -56,7 +58,7 @@ fun AboutScreen(
             }
             Text(
                 text = "About you",
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.displayMedium,
                 modifier = Modifier.padding(start = 8.dp)
             )
         }
@@ -88,100 +90,99 @@ fun AboutForm(
     Box(
         modifier = Modifier.fillMaxWidth()
     ) {
-        LazyColumn(
+        Column(
             modifier = Modifier.fillMaxWidth().padding(bottom = 100.dp)
+                .verticalScroll(rememberScrollState())
         ) {
-            item {
-                Text(
-                    text = "Hello, Maria! To help us create the best workout diary for you, please tell us a few words about you and your preferences"
-                )
-                Spacer(Modifier.height(10.dp))
-                Text(
-                    text = "Gender",
-                    style = MaterialTheme.typography.bodySmall
-                )
-                Spacer(Modifier.height(10.dp))
-                GenderChoisen(
-                    selected = gender.value,
-                    onGenderSelect = { gender.value = it }
-                )
-                Spacer(Modifier.height(10.dp))
-                InputTextField(
-                    text = "Age",
-                    value = age.value,
-                    keyboardController = keyboardController,
-                    keyboardType = KeyboardType.Number,
-                    onChangeValue = { age.value = it},
-                )
-                Spacer(Modifier.height(10.dp))
-                InputTextField(
-                    text = "Weight",
-                    value = weight.value,
-                    keyboardController = keyboardController,
-                    keyboardType = KeyboardType.Number,
-                    onChangeValue = { weight.value = it},
-                )
-                Spacer(Modifier.height(10.dp))
-                InputTextField(
-                    text = "Height",
-                    value = height.value,
-                    keyboardController = keyboardController,
-                    keyboardType = KeyboardType.Number,
-                    onChangeValue = { height.value = it},
-                )
-                Spacer(Modifier.height(20.dp))
-                Text(
-                    text = "Physical activity",
-                    style = MaterialTheme.typography.bodySmall
-                )
-                Spacer(Modifier.height(20.dp))
+            Text(
+                text = "Hello, Maria! To help us create the best workout diary for you, please tell us a few words about you and your preferences"
+            )
+            Spacer(Modifier.height(10.dp))
+            Text(
+                text = "Gender",
+                style = MaterialTheme.typography.bodySmall
+            )
+            Spacer(Modifier.height(10.dp))
+            GenderChoisen(
+                selected = gender.value,
+                onGenderSelect = { gender.value = it }
+            )
+            Spacer(Modifier.height(10.dp))
+            InputTextField(
+                text = "Age",
+                value = age.value,
+                keyboardController = keyboardController,
+                keyboardType = KeyboardType.Number,
+                onChangeValue = { age.value = it},
+            )
+            Spacer(Modifier.height(10.dp))
+            InputTextField(
+                text = "Weight",
+                value = weight.value,
+                keyboardController = keyboardController,
+                keyboardType = KeyboardType.Number,
+                onChangeValue = { weight.value = it},
+            )
+            Spacer(Modifier.height(10.dp))
+            InputTextField(
+                text = "Height",
+                value = height.value,
+                keyboardController = keyboardController,
+                keyboardType = KeyboardType.Number,
+                onChangeValue = { height.value = it},
+            )
+            Spacer(Modifier.height(20.dp))
+            Text(
+                text = "Physical activity",
+                style = MaterialTheme.typography.bodySmall
+            )
+            Spacer(Modifier.height(20.dp))
 //            PhysicalActivitySection(
 //                selected = physicalActivity,
 //                onPhysicalActivitySelect = { physicalActivity = it }
 //            )
-                val listActivity = UserActivity.values().toList()
-                SliderWithLabelUserActivity(
-                    value = 0f,
-                    selectedItem = physicalActivity,
-                    valueRange = 0f..listActivity.size.minus(1).toFloat(),
-                    finiteEnd = true,
-                    items = listActivity
-                )
-                Spacer(Modifier.height(20.dp))
-                Text(
-                    text = "Diet",
-                    style = MaterialTheme.typography.bodySmall
-                )
-                Spacer(Modifier.height(20.dp))
+            val listActivity = UserActivity.values().toList()
+            SliderWithLabelUserActivity(
+                value = 0f,
+                selectedItem = physicalActivity,
+                valueRange = 0f..listActivity.size.minus(1).toFloat(),
+                finiteEnd = true,
+                items = listActivity
+            )
+            Spacer(Modifier.height(20.dp))
+            Text(
+                text = "Diet",
+                style = MaterialTheme.typography.bodySmall
+            )
+            Spacer(Modifier.height(20.dp))
 //            DietSection(
 //                selected = diet,
 //                onDietSelect = { diet = it}
 //            )
-                val listDiet = UserDiet.values().toList()
-                SliderWithLabelUserDiet(
-                    value = 0f,
-                    selectedItem = diet,
-                    valueRange = 0f..listDiet.size.minus(1).toFloat(),
-                    finiteEnd = true,
-                    items = listDiet
-                )
-                Spacer(Modifier.height(20.dp))
-                InputTextField(
-                    text = "How often do you prefer to eat?",
-                    value = timesEat.value,
-                    keyboardController = keyboardController,
-                    keyboardType = KeyboardType.Number,
-                    onChangeValue = { timesEat.value = it},
-                )
-                Spacer(Modifier.height(10.dp))
-                InputTextField(
-                    text = "Desired weight",
-                    value = desiredWeight.value,
-                    keyboardController = keyboardController,
-                    keyboardType = KeyboardType.Number,
-                    onChangeValue = { desiredWeight.value = it},
-                )
-            }
+            val listDiet = UserDiet.values().toList()
+            SliderWithLabelUserDiet(
+                value = 0f,
+                selectedItem = diet,
+                valueRange = 0f..listDiet.size.minus(1).toFloat(),
+                finiteEnd = true,
+                items = listDiet
+            )
+            Spacer(Modifier.height(20.dp))
+            InputTextField(
+                text = "How often do you prefer to eat?",
+                value = timesEat.value,
+                keyboardController = keyboardController,
+                keyboardType = KeyboardType.Number,
+                onChangeValue = { timesEat.value = it},
+            )
+            Spacer(Modifier.height(10.dp))
+            InputTextField(
+                text = "Desired weight",
+                value = desiredWeight.value,
+                keyboardController = keyboardController,
+                keyboardType = KeyboardType.Number,
+                onChangeValue = { desiredWeight.value = it},
+            )
         }
         TextButton(
             onClick = {
@@ -297,7 +298,7 @@ fun DefaultRadioButton(
         Spacer(modifier = Modifier.width(4.dp))
         Text(
             text = text,
-            style = MaterialTheme.typography.displayMedium
+            style = MaterialTheme.typography.bodyMedium
         )
     }
 }
