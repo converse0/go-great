@@ -122,7 +122,7 @@ fun StartTrainingScreen(
     }
     if (isEditModal.value) {
         val weight = remember { mutableStateOf("") }
-        val time = remember { mutableStateOf(currentExercise.relax.toInteger().toString()) }
+        val time = remember { mutableStateOf(currentExercise.relax.toInteger()) }
         val numberOfSets = remember { mutableStateOf(currentExercise.numberOfSets.toString()) }
         val numberOfRepetitions =
             remember { mutableStateOf(currentExercise.numberOfRepetitions.toString()) }
@@ -135,7 +135,7 @@ fun StartTrainingScreen(
                 val listEditExercise = listExercises.value.mapIndexed { index, exercise ->
                     if (index == indexExercise.value) {
                         exercise.copy(
-                            relax = time.value + "s",
+                            relax = time.value.toString() + "s",
                             numberOfSets = numberOfSets.value.toInt(),
                             numberOfRepetitions = numberOfRepetitions.value.toInt()
                         )
@@ -186,24 +186,30 @@ fun ModalTimer(
 //            Icon(Icons.Default.Close, contentDescription = "Close", tint = Color.White)
 //        }
         Card(
+            containerColor = Color.White,
             modifier = Modifier
+                .fillMaxWidth()
                 .padding(16.dp)
                 .height(400.dp)
                 .width(300.dp)
                 .clip(RoundedCornerShape(16.dp))
         ) {
-            Timer(
-                totalTime = totalTime * 1000L,
-                onAlarmSound = sound,
-                onTimerEnd = onDismiss,
-                startTimer = true,
-                modifier = Modifier
-                    .size(200.dp),
-//                    .align(Alignment.Center),
-                viewModel = viewModel,
-                navController = navController,
-                uid = uid
-            )
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Timer(
+                    totalTime = totalTime * 1000L,
+                    onAlarmSound = sound,
+                    onTimerEnd = onDismiss,
+                    startTimer = true,
+                    modifier = Modifier
+                        .size(200.dp),
+                    viewModel = viewModel,
+                    navController = navController,
+                    uid = uid
+                )
+            }
         }
     }
 }

@@ -29,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.masuta.gogreat.R
 import com.masuta.gogreat.presentation.components.InputTextField
+import com.masuta.gogreat.presentation.components.SliderWithLabel
 import com.masuta.gogreat.presentation.ui.theme.Green
 import com.masuta.gogreat.presentation.ui.theme.SportTheme
 
@@ -36,7 +37,7 @@ import com.masuta.gogreat.presentation.ui.theme.SportTheme
 @Composable
 fun StartTrainingModal(
     weight: MutableState<String>,
-    time: MutableState<String>,
+    time: MutableState<Int>,
     numberOfSets: MutableState<String>,
     numberOfRepetitions: MutableState<String>,
     onSave: () -> Unit,
@@ -55,69 +56,86 @@ fun StartTrainingModal(
             .clickable { onDismiss() }
         )
         Card(
+            containerColor = Color.White,
             modifier = Modifier
                 .padding(16.dp)
                 .clip(RoundedCornerShape(16.dp))
         ) {
-            LazyColumn(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(
-                    start = 16.dp,
-                    top = 16.dp,
-                    end = 16.dp,
-                    bottom = 70.dp
-                )
-            ){
-                item {
-                    Spacer(Modifier.height(10.dp))
-                    InputTextField(
-                        text = "Weight",
-                        value = weight.value,
-                        keyboardController = keyboardController,
-                        onChangeValue = { weight.value = it },
-                        keyboardType = KeyboardType.Number
+            Box {
+                LazyColumn(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.padding(
+                        start = 16.dp,
+                        top = 16.dp,
+                        end = 16.dp,
+                        bottom = 80.dp
                     )
-                    Spacer(Modifier.height(10.dp))
-                    InputTextField(
-                        text = "Time",
-                        value = time.value,
-                        keyboardController = keyboardController,
-                        onChangeValue = { time.value = it },
-                        keyboardType = KeyboardType.Number
-                    )
-                    Spacer(Modifier.height(10.dp))
-                    InputTextField(
-                        text = "Number of sets",
-                        value = numberOfSets.value,
-                        keyboardController = keyboardController,
-                        onChangeValue = { numberOfSets.value = it },
-                        keyboardType = KeyboardType.Number
-                    )
-                    Spacer(Modifier.height(10.dp))
-                    InputTextField(
-                        text = "Number of repetitions",
-                        value = numberOfRepetitions.value,
-                        keyboardController = keyboardController,
-                        onChangeValue = { numberOfRepetitions.value = it },
-                        keyboardType = KeyboardType.Number
-                    )
-                    Spacer(Modifier.height(30.dp))
+                ){
+                    item {
+                        Spacer(Modifier.height(10.dp))
+                        InputTextField(
+                            text = "Weight",
+                            value = weight.value,
+                            keyboardController = keyboardController,
+                            onChangeValue = { weight.value = it },
+                            keyboardType = KeyboardType.Number
+                        )
+                        Spacer(Modifier.height(10.dp))
+                        Text(
+                            text = "Choose relax time, sec",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = Color.Black,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(10.dp)
+                        )
+                        val relax = listOf(15, 30, 50)
+                        SliderWithLabel(value = 0f, selectedItem = time, valueRange = 0f..relax.size.minus(1).toFloat(), finiteEnd = true, items = relax)
+
+//                    InputTextField(
+//                        text = "Time",
+//                        value = time.value,
+//                        keyboardController = keyboardController,
+//                        onChangeValue = { time.value = it },
+//                        keyboardType = KeyboardType.Number
+//                    )
+                        Spacer(Modifier.height(10.dp))
+                        InputTextField(
+                            text = "Number of sets",
+                            value = numberOfSets.value,
+                            keyboardController = keyboardController,
+                            onChangeValue = { numberOfSets.value = it },
+                            keyboardType = KeyboardType.Number
+                        )
+                        Spacer(Modifier.height(10.dp))
+                        InputTextField(
+                            text = "Number of repetitions",
+                            value = numberOfRepetitions.value,
+                            keyboardController = keyboardController,
+                            onChangeValue = { numberOfRepetitions.value = it },
+                            keyboardType = KeyboardType.Number
+                        )
+                    }
                 }
-            }
-            TextButton(
-                onClick =  onSave,
-                colors = ButtonDefaults.buttonColors(containerColor = Green),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-//                    .align(Alignment.BottomCenter)
-                ,
-            ) {
-                Text(
-                    text = "OK!",
-                    color = Color.White,
-                    modifier = Modifier.padding(vertical = 8.dp)
-                )
+                TextButton(
+                    onClick =  onSave,
+                    colors = ButtonDefaults.buttonColors(containerColor = Green),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            top = 30.dp,
+                            start = 16.dp,
+                            bottom = 16.dp,
+                            end = 16.dp,
+                        )
+                        .align(Alignment.BottomCenter)
+                    ,
+                ) {
+                    Text(
+                        text = "OK!",
+                        color = Color.White,
+                        modifier = Modifier.padding(vertical = 8.dp)
+                    )
+                }
             }
         }
     }

@@ -69,7 +69,8 @@ fun HealthScreen(
             Text(
                 text = "Coming soon!",
                 style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.W700
+                fontWeight = FontWeight.W700,
+                color = Color.Black
             )
         }
     }

@@ -233,7 +233,7 @@ fun ExercisesItem(
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .width(150.dp)
-                .height(100.dp)
+                .height(70.dp)
         )
 //        Image(
 //            painter = painterResource(id = R.drawable.muscle_dieta),
