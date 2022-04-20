@@ -10,7 +10,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
@@ -73,7 +73,7 @@ fun NewTrainingScreen(
             }
             Text(
                 text = "New training",
-                style = MaterialTheme.typography.h4,
+                style = MaterialTheme.typography.headlineSmall,
                 modifier = Modifier.padding(start = 8.dp)
             )
         }
@@ -94,7 +94,7 @@ fun NewTrainingScreen(
                     }
                     Text(
                         text = "Please, press + to choose a group of muscles and add exercise",
-                        style = MaterialTheme.typography.body1,
+                        style = MaterialTheme.typography.bodySmall,
                         modifier = Modifier.padding(start = 16.dp, end = 16.dp)
                     )
                     Spacer(Modifier.height(20.dp))
@@ -107,7 +107,7 @@ fun NewTrainingScreen(
                     openModal.value = true
                 },
                 enabled= listExercises.value.isNotEmpty(),
-                colors = ButtonDefaults.buttonColors(backgroundColor = Red),
+                colors = ButtonDefaults.buttonColors(containerColor = Red),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 16.dp, horizontal = 16.dp)
@@ -142,7 +142,7 @@ fun NewTrainingScreen(
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun Modal(
     onSave: (String) -> Unit,
@@ -172,7 +172,7 @@ fun Modal(
             ){
                 Text(
                     text = "Please, name this workout",
-                    style = MaterialTheme.typography.h4,
+                    style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(Modifier.height(10.dp))
@@ -193,7 +193,7 @@ fun Modal(
                         onSave(name.value)
                     },
                     enabled = name.value.isNotEmpty(),
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Green),
+                    colors = ButtonDefaults.buttonColors(containerColor = Green),
                     modifier = Modifier
                         .fillMaxWidth()
                 ) {
@@ -245,7 +245,7 @@ fun ExercisesItem(
 //        )
         Text(
             text = ex.name,
-            style = MaterialTheme.typography.h5,
+            style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Light,
             modifier = Modifier
                 .padding(horizontal = 15.dp)

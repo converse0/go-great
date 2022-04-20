@@ -8,7 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,6 +31,7 @@ import com.masuta.gogreat.presentation.ui.theme.Purple200
 import com.masuta.gogreat.presentation.ui.theme.Red
 import com.skydoves.landscapist.glide.GlideImage
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
     navController: NavHostController,
@@ -66,7 +67,7 @@ fun MainScreen(
         ) {
             Text(
                 text = "Workouts",
-                style = MaterialTheme.typography.h4,
+                style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.W400
             )
             LazyColumn(
@@ -90,14 +91,14 @@ fun MainScreen(
                     }
                     Text(
                         text = "Create your workout today according to your personal preferences",
-                        style = MaterialTheme.typography.body1,
+                        style = MaterialTheme.typography.bodySmall,
                         modifier = Modifier.padding(vertical = 10.dp)
                     )
                     TextButton(
                         onClick = {
                             navController.navigate("new-training")
                         },
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Red),
+                        colors = ButtonDefaults.buttonColors(containerColor = Red),
                         shape = RoundedCornerShape(16.dp),
                         modifier = Modifier
                             .fillMaxWidth()
@@ -134,7 +135,7 @@ fun PastWorkoutsSection(
     if (listPastTrainings.value.isNotEmpty()) {
         Text(
             text = "Past workouts",
-            style = MaterialTheme.typography.h5,
+            style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.W300,
             modifier = Modifier
                 .padding(vertical = 20.dp)
@@ -158,7 +159,7 @@ fun CurrentWorkoutSection(
     if (currentWorkout.value.name.isNotEmpty()) {
         Text(
             text = "Current workout",
-            style = MaterialTheme.typography.h5,
+            style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.W300,
             modifier = Modifier
                 .padding(vertical = 20.dp)
@@ -182,7 +183,7 @@ fun WorkoutsSection(
     if (listTrainings.value.isNotEmpty()) {
         Text(
             text = "My workouts",
-            style = MaterialTheme.typography.h5,
+            style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.W300,
             modifier = Modifier
                 .padding(vertical = 20.dp)
@@ -203,6 +204,7 @@ fun WorkoutsList(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WorkoutItem(
     workout: Training,
@@ -213,7 +215,7 @@ fun WorkoutItem(
     }
     Card(
         shape = RoundedCornerShape(16.dp),
-        backgroundColor = Color.Gray,
+        containerColor = Color.Gray,
         modifier = Modifier
             .fillMaxWidth()
             .height(170.dp)
@@ -237,7 +239,7 @@ fun WorkoutItem(
             val text = if(workout.name.isEmpty()) "No name" else workout.name
             Text(
                 text =text,
-                style = MaterialTheme.typography.h5,
+                style = MaterialTheme.typography.headlineSmall,
                 color = Color.White,
                 fontWeight = FontWeight.W700
             )
@@ -245,7 +247,7 @@ fun WorkoutItem(
 //            val internal = if(workout.interval.isEmpty()) "30s" else workout.interval
             Text(
                 text = "27 March 2017",
-                style = MaterialTheme.typography.body1,
+                style = MaterialTheme.typography.bodySmall,
                 color = Color.White,
                 fontWeight = FontWeight.W300
             )
@@ -376,7 +378,7 @@ fun CountDownTraining(sec: Int, viewModel: MainViewModel) {
                     col = Color(0xFF2ABD20)
                 }
             },
-            backgroundColor = col,
+            containerColor = col,
             modifier = Modifier.size(150.dp)
         ) {
             Text(text.value, fontSize = 20.sp)

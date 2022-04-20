@@ -4,7 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,6 +19,7 @@ import com.masuta.gogreat.R
 import com.masuta.gogreat.presentation.BottomNavigationItem
 import com.masuta.gogreat.presentation.components.BottomMenuBar
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DietScreen(
     navController: NavHostController,
@@ -40,7 +41,7 @@ fun DietScreen(
         ) {
             Text(
                 text = "My diet",
-                style = MaterialTheme.typography.h3,
+                style = MaterialTheme.typography.headlineMedium,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)
@@ -64,7 +65,7 @@ fun DietScreen(
             Spacer(modifier = Modifier.height(40.dp))
             Text(
                 text = "Coming soon!",
-                style = MaterialTheme.typography.h5,
+                style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.W700
             )
         }

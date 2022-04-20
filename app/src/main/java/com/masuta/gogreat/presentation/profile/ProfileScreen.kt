@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.runtime.*
@@ -46,6 +46,7 @@ fun String.normalizeString(): String {
     return this.replace("_", " ")
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
     viewModel: ProfileViewModel,
@@ -67,7 +68,7 @@ fun ProfileScreen(
         ) {
             Text(
                 text = "Profile",
-                style = MaterialTheme.typography.h3,
+                style = MaterialTheme.typography.headlineMedium,
                 modifier = Modifier.padding(16.dp)
             )
             Spacer(modifier = Modifier.height(12.dp))
@@ -116,7 +117,7 @@ fun ProfileSection(
             Spacer(modifier = Modifier.height(10.dp))
             Text(
                 text = username.value,
-                style = MaterialTheme.typography.h5,
+                style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
@@ -161,7 +162,7 @@ fun ProfileInfo(
     ) {
         Text(
             text = "Gender",
-            style = MaterialTheme.typography.body1
+            style = MaterialTheme.typography.bodySmall
         )
         Spacer(Modifier.height(10.dp))
         GenderChosen(selected = gender.value)
@@ -202,7 +203,7 @@ fun ProfileInfo(
 //        )
         Text(
             text = "Physical Activity",
-            style = MaterialTheme.typography.body1,
+            style = MaterialTheme.typography.bodySmall,
             fontWeight = FontWeight.Bold
         )
         val listActivity = UserActivity.values().toList()
@@ -218,7 +219,7 @@ fun ProfileInfo(
         Spacer(Modifier.height(20.dp))
         Text(
             text = "Diet",
-            style = MaterialTheme.typography.body1,
+            style = MaterialTheme.typography.bodySmall,
             fontWeight = FontWeight.Bold
         )
         val listDiet = UserDiet.values().toList()
@@ -272,7 +273,7 @@ fun ProfileInfo(
                     uid = uid.value
                 )
             },
-            colors = ButtonDefaults.buttonColors(backgroundColor = Red),
+            colors = ButtonDefaults.buttonColors(containerColor = Red),
             shape = RoundedCornerShape(16.dp),
             modifier = Modifier
                 .fillMaxWidth().padding(vertical = 20.dp)
@@ -300,6 +301,7 @@ fun GenderChosen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DefaultRadioButton(
     text: String,
@@ -315,11 +317,12 @@ fun DefaultRadioButton(
         Spacer(modifier = Modifier.width(4.dp))
         Text(
             text = text,
-            style = MaterialTheme.typography.body1
+            style = MaterialTheme.typography.bodySmall
         )
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LineSelectPoint() {
     Column(
@@ -365,7 +368,7 @@ fun LineSelectPoint() {
         }
         Spacer(Modifier.height(10.dp))
         Card(
-            backgroundColor = Color.Gray,
+            containerColor = Color.Gray,
             shape = RoundedCornerShape(14.dp),
         ) {
             Column(

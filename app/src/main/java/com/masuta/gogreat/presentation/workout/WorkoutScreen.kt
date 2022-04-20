@@ -6,7 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.runtime.Composable
@@ -69,7 +69,7 @@ fun WorkoutScreen(
                 }
                 Text(
                     text = name.value,
-                    style = MaterialTheme.typography.h4,
+                    style = MaterialTheme.typography.headlineSmall,
                     modifier = Modifier.padding(start = 8.dp)
                 )
             }
@@ -90,7 +90,7 @@ fun WorkoutScreen(
                 viewModel.startTraining(uid)
                 navController.navigate("start-training/$uid")
             },
-            colors = ButtonDefaults.buttonColors(backgroundColor = Red),
+            colors = ButtonDefaults.buttonColors(containerColor = Red),
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
@@ -164,7 +164,7 @@ fun WorkoutExercise(
 //        )
         Text(
             text = ex.name,
-            style = MaterialTheme.typography.h5,
+            style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Light,
             modifier = Modifier
                 .padding(horizontal = 15.dp)

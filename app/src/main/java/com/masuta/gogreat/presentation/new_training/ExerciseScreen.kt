@@ -6,7 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
@@ -73,7 +73,7 @@ fun ExerciseScreen(
             }
             Text(
                 text = "List of exercise",
-                style = MaterialTheme.typography.h4,
+                style = MaterialTheme.typography.headlineSmall,
                 modifier = Modifier.padding(start = 8.dp)
             )
         }
@@ -84,7 +84,7 @@ fun ExerciseScreen(
         Text(
 //            text = "Biceps exercise",
             text = listName,
-            style = MaterialTheme.typography.h4,
+            style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.W300
         )
         if (exercisesList.value.isNotEmpty()) {
@@ -162,7 +162,7 @@ fun ExerciseItem(
 //        )
         Text(
             text = exercise.name,
-            style = MaterialTheme.typography.h5,
+            style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Light,
             modifier = Modifier.padding(horizontal = 14.dp)
         )
@@ -189,7 +189,7 @@ fun NewExerciseScreen(
         ) {
             Text(
                 text = "New Exercise",
-                style = MaterialTheme.typography.h4,
+                style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.W400
             )
             IconButton(onClick = onClose) {
@@ -223,14 +223,14 @@ fun NewExerciseParameters(
         item {
             Text(
                 text = "Count",
-                style = MaterialTheme.typography.body1,
+                style = MaterialTheme.typography.bodySmall,
             )
 //            DropdownDemo(items = listOf(10, 30, 50), selected = count)
             val counts = listOf(10, 20, 30, 40)
             SliderWithLabel(value = 0f, selectedItem = count, valueRange = 0f..counts.size.minus(1).toFloat(), finiteEnd = true, items = counts)
             Text(
                 text = "Number of sets",
-                style = MaterialTheme.typography.body1,
+                style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.padding(10.dp)
             )
 //            DropdownDemo(items = listOf(3, 4, 5), selected = numberOfSets)
@@ -238,7 +238,7 @@ fun NewExerciseParameters(
             SliderWithLabel(value = 0f, selectedItem = numberOfSets, valueRange = 0f..sets.size.minus(1).toFloat(), finiteEnd = true, items = sets)
             Text(
                 text = "Number of repetitions",
-                style = MaterialTheme.typography.body1,
+                style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.padding(10.dp)
             )
 //            DropdownDemo(items = listOf(15, 30, 50), selected = numberOfRepetitions)
@@ -246,7 +246,7 @@ fun NewExerciseParameters(
             SliderWithLabel(value = 0f, selectedItem = numberOfRepetitions, valueRange = 0f..repetitions.size.minus(1).toFloat(), finiteEnd = true, items = repetitions)
             Text(
                 text = "Choose relax time, sec",
-                style = MaterialTheme.typography.body1,
+                style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.padding(10.dp)
             )
 //            DropdownDemo(items = listOf(20, 30, 50), selected = relaxTime)
@@ -254,7 +254,7 @@ fun NewExerciseParameters(
             SliderWithLabel(value = 0f, selectedItem = relaxTime, valueRange = 0f..relax.size.minus(1).toFloat(), finiteEnd = true, items = relax)
 //            Text(
 //                text = "Relax time, sec",
-//                style = MaterialTheme.typography.body1,
+//                style = MaterialTheme.typography.bodySmall,
 //                modifier = Modifier.padding(10.dp)
 //            )
 //
@@ -273,7 +273,7 @@ fun NewExerciseParameters(
                     println(exercise)
                     println(ex)
                 },
-                colors = ButtonDefaults.buttonColors(backgroundColor = Red),
+                colors = ButtonDefaults.buttonColors(containerColor = Red),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(40.dp)
@@ -358,7 +358,7 @@ fun DefaultRadioButton(
         Spacer(modifier = Modifier.width(4.dp))
         Text(
             text = text,
-            style = MaterialTheme.typography.body1
+            style = MaterialTheme.typography.bodySmall
         )
     }
 }

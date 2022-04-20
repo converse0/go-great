@@ -7,7 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Facebook
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
@@ -61,7 +61,7 @@ fun SignInScreen(
             }
             Text(
                 text = "Log in",
-                style = MaterialTheme.typography.h4,
+                style = MaterialTheme.typography.displayMedium,
                 modifier = Modifier.padding(start = 8.dp)
             )
         }
@@ -134,7 +134,7 @@ fun SignInForm(viewModel: SignInViewModel, navController: NavHostController) {
                 }
             }
         },
-        colors = ButtonDefaults.buttonColors(backgroundColor = Red),
+        colors = ButtonDefaults.buttonColors(contentColor = Color.White, containerColor = Red),
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 40.dp)
@@ -142,7 +142,7 @@ fun SignInForm(viewModel: SignInViewModel, navController: NavHostController) {
         Text(
             text = "Login",
             color = Color.White,
-            style = MaterialTheme.typography.body1,
+            style = MaterialTheme.typography.bodySmall,
             modifier = Modifier.padding(vertical = 16.dp)
         )
     }

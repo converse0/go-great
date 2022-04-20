@@ -4,9 +4,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -55,7 +56,7 @@ fun AboutScreen(
             }
             Text(
                 text = "About you",
-                style = MaterialTheme.typography.h4,
+                style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(start = 8.dp)
             )
         }
@@ -97,7 +98,7 @@ fun AboutForm(
                 Spacer(Modifier.height(10.dp))
                 Text(
                     text = "Gender",
-                    style = MaterialTheme.typography.body1
+                    style = MaterialTheme.typography.bodySmall
                 )
                 Spacer(Modifier.height(10.dp))
                 GenderChoisen(
@@ -131,7 +132,7 @@ fun AboutForm(
                 Spacer(Modifier.height(20.dp))
                 Text(
                     text = "Physical activity",
-                    style = MaterialTheme.typography.body1
+                    style = MaterialTheme.typography.bodySmall
                 )
                 Spacer(Modifier.height(20.dp))
 //            PhysicalActivitySection(
@@ -149,7 +150,7 @@ fun AboutForm(
                 Spacer(Modifier.height(20.dp))
                 Text(
                     text = "Diet",
-                    style = MaterialTheme.typography.body1
+                    style = MaterialTheme.typography.bodySmall
                 )
                 Spacer(Modifier.height(20.dp))
 //            DietSection(
@@ -196,7 +197,7 @@ fun AboutForm(
                 )
                 navController.navigate("main")
             },
-            colors = ButtonDefaults.buttonColors(backgroundColor = Red),
+            colors = ButtonDefaults.buttonColors(containerColor = Red),
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
@@ -279,6 +280,7 @@ fun GenderChoisen(
 
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DefaultRadioButton(
     text: String,
@@ -295,7 +297,7 @@ fun DefaultRadioButton(
         Spacer(modifier = Modifier.width(4.dp))
         Text(
             text = text,
-            style = MaterialTheme.typography.body1
+            style = MaterialTheme.typography.displayMedium
         )
     }
 }

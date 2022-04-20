@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
@@ -86,6 +86,7 @@ fun ListExercises(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ItemExercise(
     onClickVideo: () -> Unit
@@ -93,7 +94,7 @@ fun ItemExercise(
     Card(
         modifier = Modifier
             .padding(8.dp),
-        elevation = 4.dp,
+//        elevation = 4.dp,
         shape = RoundedCornerShape(16.dp)
     ) {
         Column(
@@ -118,7 +119,7 @@ fun ItemExercise(
             ) {
                 Text(
                     text = "Работа со штангой",
-                    style = MaterialTheme.typography.h5,
+                    style = MaterialTheme.typography.headlineSmall,
                     color = Color.Black
                 )
                 IconButton(onClick = { /*TODO*/ }) {
@@ -140,25 +141,25 @@ fun ItemExercise(
             }
             Text(
                 text = "Количество подходов: 20",
-                style = MaterialTheme.typography.body2,
+                style = MaterialTheme.typography.bodyMedium,
                 color = Color.LightGray,
                 modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
             )
             Text(
                 text = "Количество повторений в каждом подходе: 20",
-                style = MaterialTheme.typography.body2,
+                style = MaterialTheme.typography.bodyMedium,
                 color = Color.LightGray,
                 modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
             )
             Text(
                 text = "Вес в каждом повторении: 20 килограмм",
-                style = MaterialTheme.typography.body2,
+                style = MaterialTheme.typography.bodyMedium,
                 color = Color.LightGray,
                 modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
             )
             Text(
                 text = "Время отдыха между повторениями: 90 секунд",
-                style = MaterialTheme.typography.body2,
+                style = MaterialTheme.typography.bodyMedium,
                 color = Color.LightGray,
                 modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
             )

@@ -4,7 +4,7 @@ import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.runtime.*
@@ -50,7 +50,7 @@ fun SignUpScreen(viewModel: SignUpViewModel, navController: NavHostController) {
             }
             Text(
                 text = "Sign Up",
-                style = MaterialTheme.typography.h4,
+                style = MaterialTheme.typography.displayMedium,
                 modifier = Modifier.padding(start = 8.dp)
             )
         }
@@ -145,7 +145,7 @@ fun SignUpForm(viewModel: SignUpViewModel, navController: NavHostController) {
                     }
                 }
             },
-            colors = ButtonDefaults.buttonColors(backgroundColor = Red),
+            colors = ButtonDefaults.buttonColors(containerColor = Red, contentColor = Color.White),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
@@ -157,7 +157,7 @@ fun SignUpForm(viewModel: SignUpViewModel, navController: NavHostController) {
             Text(
                 text = "Sign Up",
                 color = Color.White,
-                style = MaterialTheme.typography.body1,
+                style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.padding(vertical = 16.dp)
             )
         }

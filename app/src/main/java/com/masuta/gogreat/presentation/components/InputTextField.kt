@@ -3,9 +3,9 @@ package com.masuta.gogreat.presentation.components
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -27,7 +27,7 @@ fun InputTextField(
 ) {
     Text(
         text = text,
-        style = MaterialTheme.typography.body1,
+        style = MaterialTheme.typography.bodySmall,
         fontWeight = FontWeight.Bold
     )
     OutlinedTextField(

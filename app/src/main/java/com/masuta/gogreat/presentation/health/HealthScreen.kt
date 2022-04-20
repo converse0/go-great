@@ -4,7 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.runtime.Composable
@@ -24,6 +24,7 @@ import com.masuta.gogreat.presentation.components.BottomMenuBar
 import com.masuta.gogreat.presentation.diet.DietScreen
 import com.masuta.gogreat.presentation.ui.theme.SportTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HealthScreen(
     navController: NavHostController,
@@ -45,7 +46,7 @@ fun HealthScreen(
         ) {
             Text(
                 text = "My Health",
-                style = MaterialTheme.typography.h3,
+                style = MaterialTheme.typography.headlineMedium,
                 modifier = Modifier.fillMaxWidth().padding(16.dp)
             )
             Spacer(modifier = Modifier.height(40.dp))
@@ -67,7 +68,7 @@ fun HealthScreen(
             Spacer(modifier = Modifier.height(40.dp))
             Text(
                 text = "Coming soon!",
-                style = MaterialTheme.typography.h5,
+                style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.W700
             )
         }

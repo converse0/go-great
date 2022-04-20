@@ -8,7 +8,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
@@ -79,7 +79,7 @@ fun StartTrainingScreen(
             }
             Text(
                 text = currentExercise.name,
-                style = MaterialTheme.typography.h4,
+                style = MaterialTheme.typography.headlineSmall,
                 modifier = Modifier.padding(start = 8.dp)
             )
         }
@@ -156,7 +156,7 @@ fun StartTrainingScreen(
 }
 
 
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun ModalTimer(
     totalTime: Long,
@@ -221,7 +221,7 @@ fun TrainingInfo(
 //    ) {
 //        Text(
 //            text = "Weight",
-//            style = MaterialTheme.typography.body1,
+//            style = MaterialTheme.typography.bodySmall,
 //            fontWeight = FontWeight.Bold
 //        )
 //        Text(
@@ -235,7 +235,7 @@ fun TrainingInfo(
     ) {
         Text(
             text = "Number of repetitions",
-            style = MaterialTheme.typography.body1,
+            style = MaterialTheme.typography.bodySmall,
             fontWeight = FontWeight.Bold
         )
         Text(
@@ -249,7 +249,7 @@ fun TrainingInfo(
     ) {
         Text(
             text = "Number of sets",
-            style = MaterialTheme.typography.body1,
+            style = MaterialTheme.typography.bodySmall,
             fontWeight = FontWeight.Bold
         )
         Text(
@@ -263,7 +263,7 @@ fun TrainingInfo(
     ) {
         Text(
             text = "Description",
-            style = MaterialTheme.typography.h5,
+            style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold
         )
     }
@@ -272,7 +272,7 @@ fun TrainingInfo(
     Spacer(Modifier.height(10.dp))
     Text(
         text = "Technique",
-        style = MaterialTheme.typography.h5,
+        style = MaterialTheme.typography.headlineSmall,
         fontWeight = FontWeight.Bold
     )
     Spacer(Modifier.height(10.dp))
@@ -280,7 +280,7 @@ fun TrainingInfo(
     Spacer(Modifier.height(10.dp))
     Text(
         text = "Common mistakes",
-        style = MaterialTheme.typography.h5,
+        style = MaterialTheme.typography.headlineSmall,
         fontWeight = FontWeight.Bold
     )
     MistakesSection(mistake = exercise.mistake)
@@ -293,7 +293,7 @@ fun MistakesSection(
 ) {
     Text(
         text = mistake,
-        style = MaterialTheme.typography.body1
+        style = MaterialTheme.typography.bodySmall
     )
 }
 
@@ -303,7 +303,7 @@ fun TechniqueSection(
 ) {
     Text(
         text = technique,
-        style = MaterialTheme.typography.body1
+        style = MaterialTheme.typography.bodySmall
     )
 }
 
@@ -313,7 +313,7 @@ fun DescriptionSection(
 ) {
     Text(
         text = description,
-        style = MaterialTheme.typography.body1
+        style = MaterialTheme.typography.bodySmall
     )
 }
 
@@ -332,7 +332,7 @@ fun ButtonSection(
             modifier = Modifier
                 .width(100.dp)
                 .height(50.dp),
-            colors = ButtonDefaults.buttonColors(backgroundColor = Green),
+            colors = ButtonDefaults.buttonColors(containerColor = Green),
             shape = RoundedCornerShape(16.dp)
         ) {
             Text(text = "I managed!", color = Color.White)
@@ -342,7 +342,7 @@ fun ButtonSection(
             modifier = Modifier
                 .width(100.dp)
                 .height(50.dp),
-            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
             border = BorderStroke(1.dp, color = Color.Gray),
             shape = RoundedCornerShape(16.dp)
         ) {

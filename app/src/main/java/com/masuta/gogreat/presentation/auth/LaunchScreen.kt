@@ -3,10 +3,10 @@ package com.masuta.gogreat.presentation.auth
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,20 +35,20 @@ fun LaunchScreen(
     ) {
         Text(
             text = "Hello!",
-            style = MaterialTheme.typography.h3,
+            style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.W400
         )
         Spacer(Modifier.height(20.dp))
         Text(
             text = "Login or sign up to create your work out plan.",
-            style = MaterialTheme.typography.body1
+            style = MaterialTheme.typography.bodySmall
         )
         Spacer(Modifier.height(20.dp))
         TextButton(
             onClick = {
                  navController.navigate("sign-in")
             },
-            colors = ButtonDefaults.buttonColors(backgroundColor = Red),
+            colors = ButtonDefaults.buttonColors(containerColor = Red, contentColor = Color.White),
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(text = "Login", color = Color.White, modifier = Modifier.padding(vertical = 16.dp))
@@ -58,13 +58,13 @@ fun LaunchScreen(
             onClick = {
                 navController.navigate("sign-up")
             },
-            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray),
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Gray, contentColor = Color.White),
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
                 text = "Sign up",
                 color = Color.White,
-                style = MaterialTheme.typography.body1,
+                style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.padding(vertical = 16.dp)
             )
         }
