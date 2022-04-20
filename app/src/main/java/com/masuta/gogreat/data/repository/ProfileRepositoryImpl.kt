@@ -58,7 +58,7 @@ class ProfileRepositoryImpl @Inject constructor(
                 append("Authorization", "Bearer ${userToken}")
             }
         }
-        println(response)
+        println("getParameters: $response")
 
         if (response.status == null) {
             return Pair(null, response.message)

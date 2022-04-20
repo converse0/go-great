@@ -131,7 +131,8 @@ fun ProfileSection(
                 desiredWeight = desiredWeight,
                 gender = gender,
                 diet = diet,
-                activity = activity
+                activity = activity,
+                uid = uid
             )
             Spacer(Modifier.height(60.dp))
         }
@@ -149,7 +150,8 @@ fun ProfileInfo(
     desiredWeight: MutableState<String>,
     gender: MutableState<Int>,
     activity: MutableState<Int>,
-    diet: MutableState<Int>
+    diet: MutableState<Int>,
+    uid: MutableState<String>
 ) {
 
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -266,7 +268,8 @@ fun ProfileInfo(
                     activity = activity.value,
                     diet = diet.value,
                     timesEat = timesEat.value.toInt(),
-                    desiredWeight = desiredWeight.value.toInt()
+                    desiredWeight = desiredWeight.value.toInt(),
+                    uid = uid.value
                 )
             },
             colors = ButtonDefaults.buttonColors(backgroundColor = Red),

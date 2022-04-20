@@ -117,7 +117,8 @@ class ProfileViewModel @Inject constructor(
         timesEat: Int,
         activity: Int,
         diet: Int,
-        gender: Int
+        gender: Int,
+        uid: String
     ) {
         viewModelScope.launch {
             val params = ParametersUserSet (
@@ -128,7 +129,8 @@ class ProfileViewModel @Inject constructor(
                 eat = timesEat,
                 activity = activity,
                 diet = diet,
-                gender = gender
+                gender = gender,
+                uid=uid
             )
             val resp = repository.updateParameters(params)
             println("Response: $resp")
