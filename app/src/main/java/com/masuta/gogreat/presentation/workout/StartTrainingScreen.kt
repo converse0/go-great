@@ -116,7 +116,8 @@ fun StartTrainingScreen(
             totalTime = currentExercise.relax.toInteger().toLong(),
             viewModel = viewModel,
             onDismiss = { isModalOpen.value = false },
-            navController = navController
+            navController = navController,
+            uid = uid!!
         )
     }
     if (isEditModal.value) {
@@ -161,7 +162,8 @@ fun ModalTimer(
     totalTime: Long,
     viewModel: StartTrainingViewModel,
     onDismiss: () -> Unit,
-    navController: NavHostController
+    navController: NavHostController,
+    uid: String
 ) {
 
     val context = LocalContext.current
@@ -199,7 +201,8 @@ fun ModalTimer(
                     .size(200.dp)
                     .align(Alignment.Center),
                 viewModel = viewModel,
-                navController = navController
+                navController = navController,
+                uid = uid
             )
         }
     }

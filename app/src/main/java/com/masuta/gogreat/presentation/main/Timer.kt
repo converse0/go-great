@@ -43,6 +43,7 @@ fun Timer(
     strokeWidth: Dp = 5.dp,
     viewModel: StartTrainingViewModel,
     navController: NavHostController,
+    uid: String
 ) {
     val context = LocalContext.current
 
@@ -78,7 +79,7 @@ fun Timer(
             isTimerRunning = false
             if (viewModel.indexExercise.value >= viewModel.listExercises.value.size) {
                 viewModel.endTraining(navController,context)
-                viewModel.finishTraining("sdjewjkdfjewd")
+                viewModel.finishTraining(uid)
             }
         }
     }

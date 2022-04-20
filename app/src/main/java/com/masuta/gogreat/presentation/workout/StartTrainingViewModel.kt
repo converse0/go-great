@@ -40,8 +40,6 @@ class StartTrainingViewModel @Inject constructor(
     private var _currentExercise = mutableStateOf(default)
     var currentExercise: State<TrainingExercise> = _currentExercise
 
-    var interval: String? = null
-
     fun endTraining(navController: NavController, context: Context) {
         viewModelScope.launch{
             playFinalSound(context)
