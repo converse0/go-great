@@ -11,6 +11,7 @@ import com.masuta.gogreat.domain.repository.TrainRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import javax.inject.Inject
+import kotlin.system.measureTimeMillis
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -50,35 +51,44 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             val localTrainings = repository.getAllLocalTrainings()
 
-            if (localTrainings != null
-                &&localTrainings.size!=list.value.size
-                &&list.value.isNotEmpty()) {
-                println("list.value: ${list.value.size}")
-                println("localTrainings: ${localTrainings.size}")
-
-                println("findAll..${list.value.size}..")
-
-                val resp = repository.findAll()
-                println("fa size..${resp.data?.size ?: 0}..")
-                repository.clearLocalTrainingData()
-
-                resp.data?.let { training ->
-                    list.value = training.map { it.validateExerciseData() }
-                    training.forEach { repository.saveLocal(it.validateExerciseData()) }
-                }
-            }
-            else if (localTrainings != null
-                &&list.value.isEmpty()) {
-                list.value = localTrainings
-                println("localTraining (mem 0): ${localTrainings.size}")
-            }
-            else if(list.value.isEmpty()){
+//            if (localTrainings != null
+//                &&localTrainings.size!=list.value.size
+//                &&list.value.isNotEmpty()) {
+//                println("list.value: ${list.value.size}")
+//                println("localTrainings: ${localTrainings.size}")
+//
+//                println("findAll..${list.value.size}..")
+//
+//                val resp = repository.findAll()
+//                println("fa size..${resp.data?.size ?: 0}..")
+//                repository.clearLocalTrainingData()
+//
+//                resp.data?.let { training ->
+//                 //   list.value = training.map { it.validateExerciseData() }
+//                    training.forEach { repository.saveLocal(it.validateExerciseData()) }
+//                }
+//
+//                val myTrains = repository.getMyTrainings()
+//                myTrains?.let { train ->
+//                    list.value = train.map { it.validateExerciseData() }
+//                }
+//            }
+//            else if (localTrainings != null
+//                &&list.value.isEmpty()) {
+//                list.value = localTrainings
+//                println("localTraining (mem 0): ${localTrainings.size}")
+//            }
+            if(list.value.isEmpty()){
                 println("findAll....")
                 val resp = repository.findAll()
                 resp.data?.let { training ->
-                    list.value = training.map { it.validateExerciseData() }
+//                    list.value = training.map { it.validateExerciseData() }
                     repository.clearLocalTrainingData()
                     training.forEach { repository.saveLocal(it.validateExerciseData()) }
+                }
+                val myTrains = repository.getMyTrainings()
+                myTrains?.let { train ->
+                    list.value = train.map { it.validateExerciseData() }
                 }
             }
         //    countTotalWorkout.value ++
@@ -100,10 +110,13 @@ class MainViewModel @Inject constructor(
 
     fun getPastTrainings(list: MutableState<List<Training>>) {
         viewModelScope.launch {
-            val localTrainings = repository.getPassTrainings()
-            if (localTrainings != null) {
-                list.value = localTrainings
+            val measureTime = measureTimeMillis {
+                val resp = repository.getPassTrainings()
+                resp?.let {
+                    list.value = it
+                }
             }
+            println("getPastTrainings: ${measureTime}")
         }
     }
 

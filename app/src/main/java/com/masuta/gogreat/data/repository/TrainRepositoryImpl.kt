@@ -99,8 +99,25 @@ class TrainRepositoryImpl @Inject constructor(
         }
     }
 
+
+
     override suspend fun getPassTrainings(): List<Training>? {
         httpClient?.get<TrainingResponse>("$url/user/trenings?status=Finish") {
+            contentType(ContentType.Application.Json)
+            headers {
+                append("Authorization", "Bearer $userToken")
+            }
+        }?.let { tr ->
+
+            tr.data?.let { trains ->
+                return trains
+            }
+        }
+        return null
+    }
+
+    override suspend fun getMyTrainings(): List<Training>? {
+        httpClient?.get<TrainingResponse>("$url/user/trenings?status=Start") {
             contentType(ContentType.Application.Json)
             headers {
                 append("Authorization", "Bearer $userToken")
