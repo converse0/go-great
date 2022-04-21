@@ -14,6 +14,7 @@ interface TrainRepository {
     suspend fun getLocalEx(id: Int):TrainingExercise?
     suspend fun getAllLocalTrainings(): List<Training>?
     suspend fun getPassTrainings(): List<Training>?
+    suspend fun getMyTrainings(): List<Training>?
 
     suspend fun getLocalTrainingByUid(uid: String): Training?
     suspend fun getAllLocalEx(): List<TrainingExercise>
