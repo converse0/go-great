@@ -1,6 +1,5 @@
 package com.masuta.gogreat.presentation.profile
 
-import android.widget.Toast
 import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -52,7 +51,7 @@ class ProfileViewModel @Inject constructor(
         desiredWeight: MutableState<String>,
         gender: MutableState<Int>,
         diet: MutableState<Int>,
-        activity: MutableState<Int>,
+        activity: MutableState<Float>,
         routeTo: (navController: NavHostController, route: String) -> Unit,
         navController: NavHostController,
         fail: MutableState<Boolean>,
@@ -71,7 +70,8 @@ class ProfileViewModel @Inject constructor(
                 desiredWeight.value = resp.desiredWeight.toString()
                 gender.value = resp.gender
                 diet.value = UserDiet.valueOf(resp.diet.uppercase()).value
-                activity.value = UserActivity.valueOf(resp.activity.uppercase()).value
+                activity.value = UserActivity.valueOf(resp.activity.uppercase()).value.toFloat()
+                println("Activity: ${UserActivity.valueOf(resp.activity.uppercase()).value}")
                 resp.uid?.let {
                     uid.value = it
                 }
@@ -115,7 +115,7 @@ class ProfileViewModel @Inject constructor(
         height: Int,
         desiredWeight: Int,
         timesEat: Int,
-        activity: Int,
+        activity: Float,
         diet: Int,
         gender: Int,
         uid: String
@@ -126,7 +126,7 @@ class ProfileViewModel @Inject constructor(
             height = height,
             desiredWeight = desiredWeight,
             eat = timesEat,
-            activity = activity,
+            activity = activity.toInt(),
             diet = diet,
             gender = gender,
             uid=uid

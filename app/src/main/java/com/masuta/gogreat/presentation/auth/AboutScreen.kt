@@ -3,18 +3,13 @@ package com.masuta.gogreat.presentation.auth
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
-import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -28,7 +23,6 @@ import com.masuta.gogreat.domain.model.UserDiet
 import com.masuta.gogreat.presentation.components.InputTextField
 import com.masuta.gogreat.presentation.components.SliderWithLabelUserActivity
 import com.masuta.gogreat.presentation.components.SliderWithLabelUserDiet
-import com.masuta.gogreat.presentation.profile.LineSelectPoint
 import com.masuta.gogreat.presentation.profile.firstCharToUpperCase
 import com.masuta.gogreat.presentation.profile.normalizeString
 import com.masuta.gogreat.presentation.ui.theme.Red
@@ -144,13 +138,13 @@ fun AboutForm(
 //                onPhysicalActivitySelect = { physicalActivity = it }
 //            )
                 val listActivity = UserActivity.values().toList()
-                SliderWithLabelUserActivity(
-                    value = 0f,
-                    selectedItem = physicalActivity,
-                    valueRange = 0f..listActivity.size.minus(1).toFloat(),
-                    finiteEnd = true,
-                    items = listActivity
-                )
+//                SliderWithLabelUserActivity(
+//                    value = 0f,
+//                    selectedItem = physicalActivity,
+//                    valueRange = 0f..listActivity.size.minus(1).toFloat(),
+//                    finiteEnd = true,
+//                    items = listActivity
+//                )
                 Spacer(Modifier.height(20.dp))
                 Text(
                     text = "Diet",

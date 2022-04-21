@@ -3,7 +3,6 @@ package com.masuta.gogreat.presentation.profile
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -11,8 +10,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Create
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -26,7 +23,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -39,7 +35,6 @@ import com.masuta.gogreat.presentation.components.InputTextField
 import com.masuta.gogreat.presentation.components.SliderWithLabelUserActivity
 import com.masuta.gogreat.presentation.components.SliderWithLabelUserDiet
 import com.masuta.gogreat.presentation.ui.theme.Red
-import com.masuta.gogreat.presentation.ui.theme.SportTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -103,7 +98,7 @@ fun ProfileSection(
 
     val gender = remember { mutableStateOf(0) }
     val diet = remember { mutableStateOf(0) }
-    val activity = remember { mutableStateOf(0) }
+    val activity = remember { mutableStateOf(0.toFloat()) }
     val uid = remember{ mutableStateOf("")}
     val fail = remember {
         mutableStateOf(false)
@@ -161,7 +156,7 @@ fun ProfileInfo(
     height: MutableState<String>,
     desiredWeight: MutableState<String>,
     gender: MutableState<Int>,
-    activity: MutableState<Int>,
+    activity: MutableState<Float>,
     diet: MutableState<Int>,
     uid: MutableState<String>
 ) {
@@ -220,10 +215,14 @@ fun ProfileInfo(
             color = Color.Black
         )
         val listActivity = UserActivity.values().toList()
-        val selectedActivity = remember { mutableStateOf(listActivity[activity.value]) }
-        activity.value = selectedActivity.value.value
+        val selectedActivity = remember { mutableStateOf(listActivity[activity.value.toInt()]) }
+        println("selectedActivity: ${selectedActivity.value.value}")
+//        if (selectedActivity.value.value==0&&activity.value.toInt()>0) {
+//            selectedActivity.value = listActivity[activity.value.toInt()]
+//        }
+//        activity.value = selectedActivity.value.value.toFloat()
         SliderWithLabelUserActivity(
-            value = activity.value.toFloat(),
+            value = activity,
             selectedItem = selectedActivity,
             valueRange = 0f..listActivity.size.minus(1).toFloat(),
             finiteEnd = true,

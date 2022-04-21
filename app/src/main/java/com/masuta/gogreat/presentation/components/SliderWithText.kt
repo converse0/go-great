@@ -17,7 +17,6 @@ import androidx.compose.ui.unit.dp
 import com.masuta.gogreat.domain.model.UserActivity
 import com.masuta.gogreat.domain.model.UserDiet
 import com.masuta.gogreat.presentation.ui.theme.SportTheme
-import kotlin.math.roundToInt
 
 @Composable
 fun SliderWithText(
@@ -134,7 +133,7 @@ private fun calcFraction(a: Float, b: Float, pos: Float) =
 
 @Composable
 fun SliderWithLabelUserActivity(
-    value: Float,
+    value: MutableState<Float>,
     selectedItem: MutableState<UserActivity>,
     valueRange: ClosedFloatingPointRange<Float>,
     finiteEnd: Boolean,
@@ -142,14 +141,16 @@ fun SliderWithLabelUserActivity(
     labelMinWidth: Dp = 24.dp,
     items: List<UserActivity>
 ) {
-    var sliderPosition by remember { mutableStateOf(value) }
+    println("SliderWithLabelUserActivity ${value.value}")
+    var sliderPosition by remember { mutableStateOf(value.value) }
     selectedItem.value = items[sliderPosition.toInt()]
 
     Column {
         Slider(
-            value = sliderPosition,
+            value = value.value,
             onValueChange = {
                 sliderPosition = it
+                value.value = it
             },
             steps = items.size - 2,
             valueRange = valueRange,
