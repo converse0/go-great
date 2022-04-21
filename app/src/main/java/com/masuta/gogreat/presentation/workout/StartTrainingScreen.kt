@@ -115,7 +115,13 @@ fun StartTrainingScreen(
         ModalTimer(
             totalTime = currentExercise.relax.toInteger().toLong(),
             viewModel = viewModel,
-            onDismiss = { isModalOpen.value = false },
+            onDismiss = {
+                isModalOpen.value = false
+                if (viewModel.indexExercise.value >= viewModel.listExercises.value.size) {
+                    viewModel.endTraining(navController,context)
+                    viewModel.finishTraining(uid!!)
+                }
+            },
             navController = navController,
             uid = uid!!
         )
@@ -182,9 +188,9 @@ fun ModalTimer(
             .background(color = Color.Black)
             .clickable { }
         )
-//        IconButton(onClick = onDismiss, modifier = Modifier.align(Alignment.TopEnd)) {
-//            Icon(Icons.Default.Close, contentDescription = "Close", tint = Color.White)
-//        }
+        IconButton(onClick = onDismiss, modifier = Modifier.align(Alignment.TopEnd)) {
+            Icon(Icons.Default.Close, contentDescription = "Close", tint = Color.White)
+        }
         Card(
             containerColor = Color.White,
             modifier = Modifier
