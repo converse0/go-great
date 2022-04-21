@@ -21,17 +21,17 @@ import androidx.constraintlayout.compose.ConstraintSet
 import com.masuta.gogreat.R
 import com.masuta.gogreat.domain.model.ExerciseType
 
-enum class ExerciseTypeLocal(val value: Int) {
-    ARMS(0),
-    LEGS(1),
-    PRESS(2),
-    BACK(3),
-    CHEST(4),
-//    SHOULDER(5),
-//    TRICEPS(6),
-//    BICEPS(7),
-    OTHER(8)
-}
+//enum class ExerciseTypeLocal(val value: Int) {
+//    ARMS(0),
+//    LEGS(1),
+//    PRESS(2),
+//    BACK(3),
+//    CHEST(4),
+////    SHOULDER(5),
+////    TRICEPS(6),
+////    BICEPS(7),
+//    OTHER(8)
+//}
 
 @Composable
 fun FemalePersonSection(
@@ -47,6 +47,9 @@ fun FemalePersonSection(
         val press = createRefFor("press")
         val chest = createRefFor("chest")
         val back = createRefFor("back")
+        val shoulder = createRefFor("shoulder")
+        val triceps = createRefFor("triceps")
+        val biceps = createRefFor("biceps")
         val other = createRefFor("other")
 
         constrain(person) {
@@ -73,6 +76,18 @@ fun FemalePersonSection(
         constrain(back) {
             end.linkTo(arms.start, 5.dp)
             top.linkTo(press.top)
+        }
+        constrain(biceps) {
+            start.linkTo(startGuidLine)
+            bottom.linkTo(bottomGuidLine)
+        }
+        constrain(triceps) {
+            start.linkTo(startGuidLine)
+            bottom.linkTo(bottomGuidLine)
+        }
+        constrain(shoulder) {
+            start.linkTo(startGuidLine)
+            bottom.linkTo(bottomGuidLine)
         }
         constrain(other) {
             start.linkTo(startGuidLine)
@@ -106,6 +121,9 @@ fun FemalePersonSection(
                     ExerciseType.PRESS -> "press"
                     ExerciseType.BACK -> "back"
                     ExerciseType.CHEST -> "chest"
+                    ExerciseType.SHOULDER -> "shoulder"
+                    ExerciseType.TRICEPS -> "triceps"
+                    ExerciseType.BICEPS -> "biceps"
                     ExerciseType.OTHER -> "other"
                 }
                 IconButtonAddExercise(modifier = Modifier.layoutId(layoutId), onClick = { onNewExercise(type) })
@@ -116,7 +134,7 @@ fun FemalePersonSection(
 
 @Composable
 fun MalePersonSection(
-    onNewExercise: (ExerciseTypeLocal) -> Unit
+    onNewExercise: (ExerciseType) -> Unit
 ) {
     val constraints = ConstraintSet {
         val topGuidLine = createGuidelineFromTop(0.2f)
@@ -128,6 +146,9 @@ fun MalePersonSection(
         val press = createRefFor("press")
         val chest = createRefFor("chest")
         val back = createRefFor("back")
+        val shoulder = createRefFor("shoulder")
+        val triceps = createRefFor("triceps")
+        val biceps = createRefFor("biceps")
         val other = createRefFor("other")
 
         constrain(person) {
@@ -155,6 +176,18 @@ fun MalePersonSection(
             start.linkTo(startGuidLine, 55.dp)
             top.linkTo(press.top)
         }
+        constrain(biceps) {
+            start.linkTo(startGuidLine)
+            bottom.linkTo(bottomGuidLine)
+        }
+        constrain(triceps) {
+            start.linkTo(startGuidLine)
+            bottom.linkTo(bottomGuidLine)
+        }
+        constrain(shoulder) {
+            start.linkTo(startGuidLine)
+            bottom.linkTo(bottomGuidLine)
+        }
         constrain(other) {
             start.linkTo(startGuidLine)
             bottom.linkTo(bottomGuidLine)
@@ -180,14 +213,17 @@ fun MalePersonSection(
                     .height(350.dp)
                     .width(350.dp)
             )
-            ExerciseTypeLocal.values().forEach { type ->
+            ExerciseType.values().forEach { type ->
                 val layoutId = when(type) {
-                    ExerciseTypeLocal.ARMS -> "arms"
-                    ExerciseTypeLocal.LEGS -> "legs"
-                    ExerciseTypeLocal.PRESS -> "press"
-                    ExerciseTypeLocal.BACK -> "back"
-                    ExerciseTypeLocal.CHEST -> "chest"
-                    ExerciseTypeLocal.OTHER -> "other"
+                    ExerciseType.ARMS -> "arms"
+                    ExerciseType.LEGS -> "legs"
+                    ExerciseType.PRESS -> "press"
+                    ExerciseType.BACK -> "back"
+                    ExerciseType.CHEST -> "chest"
+                    ExerciseType.SHOULDER -> "shoulder"
+                    ExerciseType.TRICEPS -> "triceps"
+                    ExerciseType.BICEPS -> "biceps"
+                    ExerciseType.OTHER -> "other"
                 }
                 IconButtonAddExercise(modifier = Modifier.layoutId(layoutId), onClick = { onNewExercise(type) })
             }
