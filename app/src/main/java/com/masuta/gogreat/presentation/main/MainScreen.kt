@@ -219,7 +219,7 @@ fun WorkoutItem(
         shape = RoundedCornerShape(16.dp),
         containerColor = Color.Gray,
         modifier = Modifier
-            .fillMaxWidth()
+            .width(300.dp)
             .height(170.dp)
             .padding(horizontal = 20.dp)
             .clickable { workout.uid?.let { onSelectItem(it) } }
