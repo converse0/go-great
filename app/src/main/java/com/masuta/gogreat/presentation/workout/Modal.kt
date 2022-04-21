@@ -89,7 +89,13 @@ fun StartTrainingModal(
                             modifier = Modifier.padding(10.dp)
                         )
                         val relax = listOf(15, 30, 50)
-                        SliderWithLabel(value = 0f, selectedItem = time, valueRange = 0f..relax.size.minus(1).toFloat(), finiteEnd = true, items = relax)
+                        SliderWithLabel(
+                            value = 0f,
+                            selectedItem = time,
+                            valueRange = 0f..relax.size.minus(1).toFloat(),
+                            finiteEnd = true,
+                            items = relax
+                        )
 
 //                    InputTextField(
 //                        text = "Time",

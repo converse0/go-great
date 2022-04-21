@@ -50,7 +50,7 @@ class ProfileViewModel @Inject constructor(
         height: MutableState<String>,
         desiredWeight: MutableState<String>,
         gender: MutableState<Int>,
-        diet: MutableState<Int>,
+        diet: MutableState<Float>,
         activity: MutableState<Float>,
         routeTo: (navController: NavHostController, route: String) -> Unit,
         navController: NavHostController,
@@ -69,7 +69,7 @@ class ProfileViewModel @Inject constructor(
                 height.value = resp.height.toString()
                 desiredWeight.value = resp.desiredWeight.toString()
                 gender.value = resp.gender
-                diet.value = UserDiet.valueOf(resp.diet.uppercase()).value
+                diet.value = UserDiet.valueOf(resp.diet.uppercase()).value.toFloat()
                 activity.value = UserActivity.valueOf(resp.activity.uppercase()).value.toFloat()
                 println("Activity: ${UserActivity.valueOf(resp.activity.uppercase()).value}")
                 resp.uid?.let {
@@ -116,7 +116,7 @@ class ProfileViewModel @Inject constructor(
         desiredWeight: Int,
         timesEat: Int,
         activity: Float,
-        diet: Int,
+        diet: Float,
         gender: Int,
         uid: String
     ): String {
@@ -127,7 +127,7 @@ class ProfileViewModel @Inject constructor(
             desiredWeight = desiredWeight,
             eat = timesEat,
             activity = activity.toInt(),
-            diet = diet,
+            diet = diet.toInt(),
             gender = gender,
             uid=uid
         )

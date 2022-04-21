@@ -33,7 +33,6 @@ import com.masuta.gogreat.presentation.BottomNavigationItem
 import com.masuta.gogreat.presentation.components.BottomMenuBar
 import com.masuta.gogreat.presentation.components.InputTextField
 import com.masuta.gogreat.presentation.components.SliderWithLabelUserActivity
-import com.masuta.gogreat.presentation.components.SliderWithLabelUserDiet
 import com.masuta.gogreat.presentation.ui.theme.Red
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -97,7 +96,7 @@ fun ProfileSection(
     val desiredWeight = remember{ mutableStateOf("") }
 
     val gender = remember { mutableStateOf(0) }
-    val diet = remember { mutableStateOf(0) }
+    val diet = remember { mutableStateOf(0.toFloat()) }
     val activity = remember { mutableStateOf(0.toFloat()) }
     val uid = remember{ mutableStateOf("")}
     val fail = remember {
@@ -157,7 +156,7 @@ fun ProfileInfo(
     desiredWeight: MutableState<String>,
     gender: MutableState<Int>,
     activity: MutableState<Float>,
-    diet: MutableState<Int>,
+    diet: MutableState<Float>,
     uid: MutableState<String>
 ) {
     val context = LocalContext.current
@@ -215,17 +214,15 @@ fun ProfileInfo(
             color = Color.Black
         )
         val listActivity = UserActivity.values().toList()
-        val selectedActivity = remember { mutableStateOf(listActivity[activity.value.toInt()]) }
-        println("selectedActivity: ${selectedActivity.value.value}")
+//        val selectedActivity = remember { mutableStateOf(listActivity[activity.value.toInt()]) }
+//        println("selectedActivity: ${selectedActivity.value.value}")
 //        if (selectedActivity.value.value==0&&activity.value.toInt()>0) {
 //            selectedActivity.value = listActivity[activity.value.toInt()]
 //        }
 //        activity.value = selectedActivity.value.value.toFloat()
         SliderWithLabelUserActivity(
-            value = activity,
-            selectedItem = selectedActivity,
+            selectedItem = activity,
             valueRange = 0f..listActivity.size.minus(1).toFloat(),
-            finiteEnd = true,
             items = listActivity
         )
         Spacer(Modifier.height(20.dp))
@@ -236,15 +233,20 @@ fun ProfileInfo(
             color = Color.Black
         )
         val listDiet = UserDiet.values().toList()
-        val selectedDiet = remember { mutableStateOf(listDiet[diet.value]) }
-        diet.value = selectedDiet.value.value
-        SliderWithLabelUserDiet(
-            value = diet.value.toFloat(),
-            selectedItem = selectedDiet,
+        SliderWithLabelUserActivity(
+            selectedItem = diet,
             valueRange = 0f..listDiet.size.minus(1).toFloat(),
-            finiteEnd = true,
             items = listDiet
         )
+//        val selectedDiet = remember { mutableStateOf(listDiet[diet.value]) }
+//        diet.value = selectedDiet.value.value
+//        SliderWithLabelUserDiet(
+//            value = diet.value.toFloat(),
+//            selectedItem = selectedDiet,
+//            valueRange = 0f..listDiet.size.minus(1).toFloat(),
+//            finiteEnd = true,
+//            items = listDiet
+//        )
 
 //        InputTextField(
 //            text = "Diet",

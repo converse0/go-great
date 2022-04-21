@@ -27,6 +27,7 @@ import androidx.navigation.NavHostController
 import com.masuta.gogreat.R
 import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.presentation.components.SliderWithLabel
+import com.masuta.gogreat.presentation.components.SliderWithLabelUserActivity
 import com.masuta.gogreat.presentation.components.SliderWithText
 import com.masuta.gogreat.presentation.profile.firstCharToUpperCase
 import com.masuta.gogreat.presentation.ui.theme.Red
@@ -201,6 +202,7 @@ fun NewExerciseScreen(
 }
 
 fun String.toInteger(): Int = this.filter { it.isDigit() }.toIntOrNull() ?: 30
+fun Int.findIndexToFloat(listItems: List<Int>): Float = listItems.indexOf(this).toFloat()
 
 @Composable
 fun NewExerciseParameters(
@@ -208,13 +210,17 @@ fun NewExerciseParameters(
     exercise: TrainingExercise,
     onSubmit: () -> Unit
 ) {
-    val count = remember { mutableStateOf(exercise.count) }
-//    val duration = remember { mutableStateOf(exercise.duration.toInteger()) }
-    val numberOfSets = remember { mutableStateOf(exercise.numberOfSets) }
-    val numberOfRepetitions = remember { mutableStateOf(exercise.numberOfRepetitions) }
-    val relaxTime = remember { mutableStateOf(exercise.relax.toInteger()) }
 
-    println("Count: ${count.value}")
+    val counts = listOf(10, 20, 30, 40)
+    val sets = listOf(3, 4, 5)
+    val repetitions = listOf(15, 30, 50)
+    val relax = listOf(2, 20, 30, 50)
+
+    val count = remember { mutableStateOf(exercise.count.findIndexToFloat(counts)) }
+//    val duration = remember { mutableStateOf(exercise.duration.toInteger()) }
+    val numberOfSets = remember { mutableStateOf(exercise.numberOfSets.findIndexToFloat(sets)) }
+    val numberOfRepetitions = remember { mutableStateOf(exercise.numberOfRepetitions.findIndexToFloat(repetitions)) }
+    val relaxTime = remember { mutableStateOf(exercise.relax.toInteger().findIndexToFloat(relax)) }
 
     LazyColumn(
         modifier = Modifier.fillMaxWidth()
@@ -225,32 +231,54 @@ fun NewExerciseParameters(
                 style = MaterialTheme.typography.bodySmall,
             )
 //            DropdownDemo(items = listOf(10, 30, 50), selected = count)
-            val counts = listOf(10, 20, 30, 40)
-            SliderWithLabel(value = 0f, selectedItem = count, valueRange = 0f..counts.size.minus(1).toFloat(), finiteEnd = true, items = counts)
+            SliderWithLabelUserActivity (
+                selectedItem = count,
+                valueRange = 0f..counts.size.minus(1).toFloat(),
+                items = counts
+            )
+//            SliderWithLabel(
+//                value = 0f,
+//                selectedItem = count,
+//                valueRange = 0f..counts.size.minus(1).toFloat(),
+//                finiteEnd = true,
+//                items = counts
+//            )
             Text(
                 text = "Number of sets",
                 style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.padding(10.dp)
             )
 //            DropdownDemo(items = listOf(3, 4, 5), selected = numberOfSets)
-            val sets = listOf(3, 4, 5)
-            SliderWithLabel(value = 0f, selectedItem = numberOfSets, valueRange = 0f..sets.size.minus(1).toFloat(), finiteEnd = true, items = sets)
+//            SliderWithLabel(value = 0f, selectedItem = numberOfSets, valueRange = 0f..sets.size.minus(1).toFloat(), finiteEnd = true, items = sets)
+            SliderWithLabelUserActivity (
+                selectedItem = numberOfSets,
+                valueRange = 0f..sets.size.minus(1).toFloat(),
+                items = sets
+            )
             Text(
                 text = "Number of repetitions",
                 style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.padding(10.dp)
             )
 //            DropdownDemo(items = listOf(15, 30, 50), selected = numberOfRepetitions)
-            val repetitions = listOf(15, 30, 50)
-            SliderWithLabel(value = 0f, selectedItem = numberOfRepetitions, valueRange = 0f..repetitions.size.minus(1).toFloat(), finiteEnd = true, items = repetitions)
+//            SliderWithLabel(value = 0f, selectedItem = numberOfRepetitions, valueRange = 0f..repetitions.size.minus(1).toFloat(), finiteEnd = true, items = repetitions)
+            SliderWithLabelUserActivity (
+                selectedItem = numberOfRepetitions,
+                valueRange = 0f..repetitions.size.minus(1).toFloat(),
+                items = repetitions
+            )
             Text(
                 text = "Choose relax time, sec",
                 style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.padding(10.dp)
             )
 //            DropdownDemo(items = listOf(20, 30, 50), selected = relaxTime)
-            val relax = listOf(20, 30, 50)
-            SliderWithLabel(value = 0f, selectedItem = relaxTime, valueRange = 0f..relax.size.minus(1).toFloat(), finiteEnd = true, items = relax)
+//            SliderWithLabel(value = 0f, selectedItem = relaxTime, valueRange = 0f..relax.size.minus(1).toFloat(), finiteEnd = true, items = relax)
+            SliderWithLabelUserActivity (
+                selectedItem = relaxTime,
+                valueRange = 0f..relax.size.minus(1).toFloat(),
+                items = relax
+            )
 //            Text(
 //                text = "Relax time, sec",
 //                style = MaterialTheme.typography.bodySmall,
@@ -262,11 +290,11 @@ fun NewExerciseParameters(
                 onClick = {
                     onSubmit()
                     val ex = exercise.copy(
-                        count = count.value.toInt(),
+                        count = counts.get(count.value.toInt()),
 //                        duration = "${duration.value}s",
-                        numberOfRepetitions = numberOfRepetitions.value,
-                        relax = "${relaxTime.value}s",
-                        numberOfSets = numberOfSets.value
+                        numberOfRepetitions = repetitions.get(numberOfRepetitions.value.toInt()),
+                        relax = "${relax.get(relaxTime.value.toInt())}s",
+                        numberOfSets = sets.get(numberOfSets.value.toInt())
                     )
                     viewModel.saveLocalExercise(ex)
                     println(exercise)
