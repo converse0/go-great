@@ -142,7 +142,10 @@ fun PastWorkoutsSection(
             modifier = Modifier
                 .padding(vertical = 20.dp)
         )
-        WorkoutsList(workouts = listPastTrainings.value, navController = navController)
+        WorkoutsList(
+            workouts = listPastTrainings.value,
+            navController = navController
+        )
     }
 }
 
@@ -166,9 +169,12 @@ fun CurrentWorkoutSection(
             modifier = Modifier
                 .padding(vertical = 20.dp)
         )
-        WorkoutItem(workout = currentWorkout.value,
+        WorkoutItem(
+            workout = currentWorkout.value,
+            modifier = Modifier.fillMaxWidth(),
             onSelectItem = {
-                navController.navigate("start-training/${currentWorkout.value.uid}")})
+                navController.navigate("start-training/${currentWorkout.value.uid}")}
+        )
     }
 }
 
@@ -201,7 +207,11 @@ fun WorkoutsList(
 ) {
     LazyRow() {
         items(workouts) { workout ->
-            WorkoutItem(workout = workout, onSelectItem = { navController.navigate("workout/${it}") })
+            WorkoutItem(
+                workout = workout,
+                modifier = Modifier.width(250.dp),
+                onSelectItem = { navController.navigate("workout/${it}") }
+            )
         }
     }
 }
@@ -210,6 +220,7 @@ fun WorkoutsList(
 @Composable
 fun WorkoutItem(
     workout: Training,
+    modifier: Modifier = Modifier,
     onSelectItem: (String) -> Unit
 ) {
     if (workout.name.isEmpty()) {
@@ -218,8 +229,8 @@ fun WorkoutItem(
     Card(
         shape = RoundedCornerShape(16.dp),
         containerColor = Color.Gray,
-        modifier = Modifier
-            .width(300.dp)
+        modifier = modifier
+//            .width(300.dp)
             .height(170.dp)
             .padding(horizontal = 20.dp)
             .clickable { workout.uid?.let { onSelectItem(it) } }
