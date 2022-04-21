@@ -226,9 +226,8 @@ fun WorkoutItem(
     ) {
         Box{
             workout.image?.let {
-                println("image: $it")
                 GlideImage(imageModel = it,
-                    modifier = Modifier.size(200.dp),
+                    modifier = Modifier.fillMaxWidth(),
                     colorFilter = ColorFilter.lighting(multiply = Color.Gray,add= Color.Black)
                 )
 

@@ -118,8 +118,10 @@ fun ChoseStartScreen(context: Context, viewModel: ProfileViewModel,
 fun Navigation(items: List<BottomNavigationItem>) {
     val navController = rememberNavController()
     var selected by remember { mutableStateOf("main") }
-    val startRouteName = remember { mutableStateOf("main") }
-    ChoseStartScreen(LocalContext.current, viewModel = hiltViewModel(), startRouteName = startRouteName)
+    val startRouteName = remember { mutableStateOf("") }
+    if (startRouteName.value.isEmpty()) {
+        ChoseStartScreen(LocalContext.current, viewModel = hiltViewModel(), startRouteName = startRouteName)
+    }
     NavHost(
         navController = navController,
         startDestination = startRouteName.value,
