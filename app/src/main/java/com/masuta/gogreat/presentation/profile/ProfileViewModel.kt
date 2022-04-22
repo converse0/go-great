@@ -92,8 +92,8 @@ class ProfileViewModel @Inject constructor(
             val (resp, message) = getUserParams()
 
            val respInt = when {
-               message!!.isNotEmpty()&& message.contains("token")-> -6
-               message.isNotEmpty() -> 6
+               message!=null&&message!!.isNotEmpty()&& message.contains("token")-> -6
+               message!=null&&message.isNotEmpty() -> 6
                else -> null
            }
             if (respInt==null) {
