@@ -25,6 +25,7 @@ data class ResponseProf(
 data class ResponseParams(
     val message: String?= null,
     val status: Boolean?= null,
+    val code: Int?= null,
     val data: ParametersUserGet? = null
 )
 
@@ -48,19 +49,22 @@ class ProfileRepositoryImpl @Inject constructor(
 
     override suspend fun getParameters(): Pair<ParametersUserGet?, String?> {
         println("userToken: $userToken")
-        val response = client.makeClient().get<ResponseParams>(
-            "https://boilerplate-go-trening.herokuapp.com/user/parameters") {
-            contentType(ContentType.Application.Json)
-            headers {
-                append("Authorization", "Bearer ${userToken}")
+        userToken?.let {
+            val response = client.makeClient().get<ResponseParams>(
+                "https://boilerplate-go-trening.herokuapp.com/user/parameters") {
+                contentType(ContentType.Application.Json)
+                headers {
+                    append("Authorization", "Bearer ${userToken}")
+                }
             }
-        }
-        println("getParameters: $response")
+            println("getParameters: $response")
 
-        if (response.status == null) {
-            return Pair(null, response.message)
-        }
-        return Pair(response.data, null)
+            if (response.status == null) {
+                return Pair(null, response.message)
+            }
+            return Pair(response.data, null)
+        } ?: return Pair(null, "No user token")
+
     }
 
     override suspend fun updateParameters(params: ParametersUserSet): String {
