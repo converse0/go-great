@@ -105,8 +105,8 @@ fun ChoseStartScreen(context: Context, viewModel: ProfileViewModel,
     }
     SetSex(context, viewModel = viewModel, gender)
     when (gender.value) {
-        -6 -> startRouteName.value= "sign-in"
-//        6 -> startRouteName.value= "about"
+        6 -> startRouteName.value= "sign-in"
+        -6 -> startRouteName.value= "about"
         else -> {
             println("Gender $gender")
             startRouteName.value= "main"

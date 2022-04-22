@@ -16,6 +16,7 @@ class NewTrainingViewModel @Inject constructor(
 ): ViewModel() {
 
     fun saveTrain(newTrain: Training) {
+        println(newTrain)
         viewModelScope.launch {
             repository.save(newTrain)
         }

@@ -5,7 +5,8 @@ data class Training(
     val interval: String,
     var name: String,
     var uid: String? = null,
-    var image: String? = null
+    var image: String? = null,
+    var date: String? = null
 ) {
     fun validateExerciseData(): Training {
         return this.copy(

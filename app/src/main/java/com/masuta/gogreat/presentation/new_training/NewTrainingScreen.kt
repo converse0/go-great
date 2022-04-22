@@ -1,12 +1,9 @@
 package com.masuta.gogreat.presentation.new_training
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -21,18 +18,11 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.ConstraintSet
 import androidx.navigation.NavHostController
-import com.masuta.gogreat.R
-import com.masuta.gogreat.domain.model.ExerciseType
 import com.masuta.gogreat.domain.model.Training
 import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.domain.model.gender
@@ -40,7 +30,6 @@ import com.masuta.gogreat.presentation.components.FemalePersonSection
 import com.masuta.gogreat.presentation.components.MalePersonSection
 import com.masuta.gogreat.presentation.ui.theme.Green
 import com.masuta.gogreat.presentation.ui.theme.Red
-import com.masuta.gogreat.presentation.ui.theme.SportTheme
 import com.skydoves.landscapist.glide.GlideImage
 
 private fun replaceString(str: String) = str.replace(" ", "_")
@@ -127,10 +116,12 @@ fun NewTrainingScreen(
         Modal(
             onSave = {
                 viewModel.saveTrain(
+                    //TODO: date implementation
                     newTrain = Training(
                         exercises = listExercises.value,
                         interval = "50s",
                         name = it,
+                        date = "2022-04-22T10:39:48.408Z"
 //                        image = "https://fitseven.ru/wp-content/uploads/2020/07/uprazhneniya-na-press-skruchivaniya.jpg"
                     )
                 )

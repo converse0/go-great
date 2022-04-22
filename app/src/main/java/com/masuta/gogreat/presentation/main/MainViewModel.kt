@@ -78,7 +78,7 @@ class MainViewModel @Inject constructor(
 //                list.value = localTrainings
 //                println("localTraining (mem 0): ${localTrainings.size}")
 //            }
-            if(list.value.isEmpty()){
+            if(1==1) {
                 println("findAll....")
                 val resp = repository.findAll()
                 resp.data?.let { training ->
@@ -87,8 +87,9 @@ class MainViewModel @Inject constructor(
                     training.forEach { repository.saveLocal(it.validateExerciseData()) }
                 }
                 val myTrains = repository.getMyTrainings()
-                myTrains?.let { train ->
-                    list.value = train.map { it.validateExerciseData() }
+                myTrains?.let { trains ->
+                    println("myTrains: ${trains.size}")
+                    list.value = trains.map { it.validateExerciseData() }
                 }
             }
         //    countTotalWorkout.value ++

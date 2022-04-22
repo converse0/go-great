@@ -10,7 +10,8 @@ data class ParametersUserSet(
     val gender: Int,
     val height: Int,
     val weight: Int,
-    val uid: String?=null
+    val uid: String?=null,
+    var image: ByteArray? = null
 )
 
 @kotlinx.serialization.Serializable

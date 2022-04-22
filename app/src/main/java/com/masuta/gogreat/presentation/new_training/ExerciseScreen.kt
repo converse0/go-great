@@ -214,7 +214,7 @@ fun NewExerciseParameters(
     val counts = listOf(10, 20, 30, 40)
     val sets = listOf(3, 4, 5)
     val repetitions = listOf(15, 30, 50)
-    val relax = listOf(2, 20, 30, 50)
+    val relax = listOf(5, 20, 30, 50)
 
     val count = remember { mutableStateOf(exercise.count.findIndexToFloat(counts)) }
 //    val duration = remember { mutableStateOf(exercise.duration.toInteger()) }

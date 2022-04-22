@@ -117,13 +117,13 @@ class TrainRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getMyTrainings(): List<Training>? {
-        httpClient?.get<TrainingResponse>("$url/user/trenings?status=Start") {
+        httpClient?.get<TrainingResponse>("$url/user/trenings?status=Create") {
             contentType(ContentType.Application.Json)
             headers {
                 append("Authorization", "Bearer $userToken")
             }
         }?.let { tr ->
-
+            println("getMyTrainings: $tr")
             tr.data?.let { trains ->
                 return trains
             }
