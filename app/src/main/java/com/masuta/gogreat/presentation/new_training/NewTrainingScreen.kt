@@ -27,6 +27,7 @@ import com.masuta.gogreat.domain.model.Training
 import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.domain.model.gender
 import com.masuta.gogreat.presentation.components.FemalePersonSection
+import com.masuta.gogreat.presentation.components.MainTextButton
 import com.masuta.gogreat.presentation.components.MalePersonSection
 import com.masuta.gogreat.presentation.ui.theme.Green
 import com.masuta.gogreat.presentation.ui.theme.Red
@@ -91,23 +92,35 @@ fun NewTrainingScreen(
                     Spacer(modifier = Modifier.height(10.dp))
                 }
             }
-            TextButton(
-                onClick = {
-                    openModal.value = true
-                },
-                enabled= listExercises.value.isNotEmpty(),
-                colors = ButtonDefaults.buttonColors(containerColor = Red),
+
+            MainTextButton(
+                text = "Save",
+                color = Red,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 16.dp, horizontal = 16.dp)
                     .align(Alignment.BottomCenter)
             ) {
-                Text(
-                    text = "Save",
-                    color = Color.White,
-                    modifier = Modifier.padding(vertical = 16.dp, horizontal = 16.dp)
-                )
+                openModal.value = true
             }
+
+//            TextButton(
+//                onClick = {
+//                    openModal.value = true
+//                },
+//                enabled= listExercises.value.isNotEmpty(),
+//                colors = ButtonDefaults.buttonColors(containerColor = Red),
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(vertical = 16.dp, horizontal = 16.dp)
+//                    .align(Alignment.BottomCenter)
+//            ) {
+//                Text(
+//                    text = "Save",
+//                    color = Color.White,
+//                    modifier = Modifier.padding(vertical = 16.dp, horizontal = 16.dp)
+//                )
+//            }
             Spacer(modifier = Modifier.height(10.dp))
         }
 
@@ -140,6 +153,8 @@ fun Modal(
     onDismiss: () -> Unit
 ) {
     val name = remember { mutableStateOf("") }
+    val date = remember { mutableStateOf("") }
+    val showCal = remember { mutableStateOf(false) }
     val keyboardController = LocalSoftwareKeyboardController.current
 
     Box(
@@ -153,6 +168,7 @@ fun Modal(
             .clickable { onDismiss() }
         )
         Card(
+            containerColor = Color.White,
             modifier = Modifier
                 .padding(16.dp)
                 .clip(RoundedCornerShape(16.dp))
@@ -178,7 +194,25 @@ fun Modal(
                         imeAction = ImeAction.Done,
                     )
                 )
+                Spacer(Modifier.height(10.dp))
+                Text(
+                    text = "Please, select date",
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(Modifier.height(10.dp))
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    OutlinedTextField(value = date.value, onValueChange = {}, enabled = false)
+                    IconButton(onClick = { showCal.value = !showCal.value }) {
+                        Icon(Icons.Default.CalendarToday, contentDescription = "Cal")
+                    }
+                }
                 Spacer(Modifier.height(30.dp))
+
                 TextButton(
                     onClick = {
                         onSave(name.value)
@@ -197,6 +231,7 @@ fun Modal(
             }
         }
     }
+    CalendarTraining(date, showCal)
 }
 
 @Composable
