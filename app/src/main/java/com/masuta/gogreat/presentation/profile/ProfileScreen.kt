@@ -56,6 +56,10 @@ fun ProfileScreen(
     onSelect: (String) -> Unit,
     menuItems: List<BottomNavigationItem>
 ) {
+
+    if(viewModel.errorMessage.isNotEmpty()) {
+        Toast.makeText(LocalContext.current,viewModel.errorMessage,Toast.LENGTH_SHORT ).show()
+    }
     Scaffold(
         bottomBar = {
             BottomMenuBar(navController = navController, selected = selected, onSelect = onSelect, menuItems = menuItems)

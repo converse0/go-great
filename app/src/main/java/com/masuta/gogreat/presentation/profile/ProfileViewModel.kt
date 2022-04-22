@@ -1,6 +1,9 @@
 package com.masuta.gogreat.presentation.profile
 
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
@@ -21,7 +24,7 @@ class ProfileViewModel @Inject constructor(
     private val repository: ProfileRepository
 ) :ViewModel() {
 
-
+    var errorMessage by mutableStateOf("")
 
     fun setParameters(
         age: Int?,
@@ -73,10 +76,9 @@ class ProfileViewModel @Inject constructor(
                 diet.value = UserDiet.valueOf(resp.data.diet.uppercase()).value.toFloat()
                 activity.value = UserActivity.valueOf(resp.data.activity.uppercase()).value.toFloat()
                 println("Activity: ${UserActivity.valueOf(resp.data.activity.uppercase()).value}")
-                resp.data.uid?.let {
-                    uid.value = it
-                }
+                resp.data.uid?.let { uid.value = it }
             } else if (resp.code!=null) {
+                resp.message?.let { errorMessage = it }
                 fail.value = true
                 routeTo(navController, "sign-in")
                 when(resp.code) {
@@ -94,6 +96,8 @@ class ProfileViewModel @Inject constructor(
             resp.data?.let {
                 gender.value = it.gender
             } ?: resp.code?.let {
+                resp.message?.let { errorMessage = it }
+
                 gender.value = when(it){
                     16 -> -6
                     2,5 -> 6

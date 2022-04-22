@@ -2,6 +2,7 @@ package com.masuta.gogreat.presentation
 
 import android.content.Context
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatDelegate
@@ -105,6 +106,9 @@ fun ChoseStartScreen(context: Context, viewModel: ProfileViewModel,
         mutableStateOf(777)
     }
     SetSex(context, viewModel = viewModel, gender)
+    if (viewModel.errorMessage.isNotEmpty()){
+        Toast.makeText(LocalContext.current,viewModel.errorMessage, Toast.LENGTH_LONG).show()
+    }
     when (gender.value) {
             -6 -> startRouteName.value= "sign-in"
         6 -> startRouteName.value= "about"
