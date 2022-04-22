@@ -47,7 +47,7 @@ class ProfileRepositoryImpl @Inject constructor(
         return response
     }
 
-    override suspend fun getParameters(): Pair<ParametersUserGet?, String?> {
+    override suspend fun getParameters(): ResponseParams {
         println("userToken: $userToken")
         userToken?.let {
             val response = client.makeClient().get<ResponseParams>(
@@ -58,12 +58,8 @@ class ProfileRepositoryImpl @Inject constructor(
                 }
             }
             println("getParameters: $response")
-
-            if (response.status == null) {
-                return Pair(null, response.message)
-            }
-            return Pair(response.data, null)
-        } ?: return Pair(null, "No user token")
+            return response
+        } ?: return ResponseParams()
 
     }
 

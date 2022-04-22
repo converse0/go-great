@@ -222,7 +222,7 @@ fun PhysicalActivitySection(
 
     println(list)
 
-    Column() {
+    Column {
         DefaultRadioButton(text = UserActivity.BASIC.toString()
             .lowercase().firstCharToUpperCase()
             .normalizeString(),
@@ -291,7 +291,7 @@ fun DefaultRadioButton(
 @Preview
 @Composable
 fun AboutScreenPreview() {
-    SportTheme() {
+    SportTheme {
         AboutScreen(viewModel = viewModel(), navController = NavHostController(LocalContext.current))
     }
 }

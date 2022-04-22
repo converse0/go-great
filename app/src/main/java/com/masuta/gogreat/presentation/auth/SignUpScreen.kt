@@ -171,7 +171,7 @@ fun SignUpForm(viewModel: SignUpViewModel, navController: NavHostController) {
 @Preview
 @Composable
 fun SignUpScreenPreview() {
-    SportTheme() {
+    SportTheme {
         SignUpScreen(viewModel = viewModel(), navController = NavHostController(LocalContext.current))
     }
 }
