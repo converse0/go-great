@@ -18,6 +18,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -43,6 +44,9 @@ fun NewTrainingScreen(
 
     val openModal = remember { mutableStateOf(false) }
     val listExercises = remember { mutableStateOf(listOf<TrainingExercise>()) }
+
+    val name = remember { mutableStateOf("") }
+    val date = remember { mutableStateOf("") }
 
     viewModel.getLocalExercises(listExercises)
 
@@ -127,14 +131,16 @@ fun NewTrainingScreen(
     }
     if (openModal.value) {
         Modal(
+            name = name,
+            date = date,
             onSave = {
                 viewModel.saveTrain(
                     //TODO: date implementation
                     newTrain = Training(
                         exercises = listExercises.value,
                         interval = "50s",
-                        name = it,
-                        date = "2022-04-22T10:39:48.408Z"
+                        name = name.value,
+                        date = date.value
 //                        image = "https://fitseven.ru/wp-content/uploads/2020/07/uprazhneniya-na-press-skruchivaniya.jpg"
                     )
                 )
@@ -149,12 +155,12 @@ fun NewTrainingScreen(
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun Modal(
-    onSave: (String) -> Unit,
+    name: MutableState<String>,
+    date: MutableState<String>,
+    onSave: () -> Unit,
     onDismiss: () -> Unit
 ) {
-    val name = remember { mutableStateOf("") }
-    val date = remember { mutableStateOf("") }
-    val showCal = remember { mutableStateOf(false) }
+    val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
 
     Box(
@@ -207,16 +213,17 @@ fun Modal(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     OutlinedTextField(value = date.value, onValueChange = {}, enabled = false)
-                    IconButton(onClick = { showCal.value = !showCal.value }) {
+                    IconButton(onClick = {
+//                        showCal.value = !showCal.value
+                        calendarTraining(date, context).show()
+                    }) {
                         Icon(Icons.Default.CalendarToday, contentDescription = "Cal")
                     }
                 }
                 Spacer(Modifier.height(30.dp))
 
                 TextButton(
-                    onClick = {
-                        onSave(name.value)
-                    },
+                    onClick = onSave,
                     enabled = name.value.isNotEmpty(),
                     colors = ButtonDefaults.buttonColors(containerColor = Green),
                     modifier = Modifier
@@ -231,7 +238,7 @@ fun Modal(
             }
         }
     }
-    CalendarTraining(date, showCal)
+//    CalendarTraining(date, showCal)
 }
 
 @Composable

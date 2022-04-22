@@ -1,6 +1,7 @@
 package com.masuta.gogreat.presentation.new_training
 
 import android.app.DatePickerDialog
+import android.content.Context
 import android.widget.DatePicker
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.ButtonDefaults
@@ -20,13 +21,11 @@ import androidx.compose.ui.unit.sp
 import java.util.*
 
 
-@Composable
-fun CalendarTraining(
+//@Composable
+fun calendarTraining(
     date: MutableState<String>,
-    showCal: MutableState<Boolean>
-){
-
-    val mContext = LocalContext.current
+    context: Context
+): DatePickerDialog {
 
     val mYear: Int
     val mMonth: Int
@@ -46,15 +45,18 @@ fun CalendarTraining(
 
     mCalendar.time = Date()
 
+//    mCalendar.get
+
     val mDatePickerDialog = DatePickerDialog(
-        mContext,
+        context,
         { _: DatePicker, mYear: Int, mMonth: Int, mDayOfMonth: Int ->
-            date.value = "$mYear-$mMonth-${mDayOfMonth}T$mHour:$mMinute:$mSecond.408Z"
+            println("Date Picker$")
+            val m = if (mMonth < 10) "0$mMonth" else mMonth
+            val d = if (mDayOfMonth < 10) "0$mDayOfMonth" else mDayOfMonth
+            date.value = "$mYear-$m-${d}T10:39:48.408Z"
 
         }, mYear, mMonth, mDay,
     )
 
-    if (showCal.value) {
-        mDatePickerDialog.show()
-    }
+    return mDatePickerDialog
 }
