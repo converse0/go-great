@@ -80,10 +80,9 @@ class ProfileViewModel @Inject constructor(
             } else if (resp.code!=null) {
                 resp.message?.let { errorMessage = it }
                 fail.value = true
-                routeTo(navController, "sign-in")
                 when(resp.code) {
                     16 -> routeTo(navController, "sign_in")
-                    2, 5 -> routeTo(navController, "about")
+                    2, 5, 13 -> routeTo(navController, "about")
                 }
             }
 
