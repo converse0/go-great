@@ -166,7 +166,7 @@ fun SignInForm(viewModel: SignInViewModel, navController: NavHostController) {
 @Preview
 @Composable
 fun SignInScreenPreview() {
-    SportTheme() {
+    SportTheme {
         SignInScreen(viewModel = viewModel(), navController = NavHostController(context = LocalContext.current))
     }
 }

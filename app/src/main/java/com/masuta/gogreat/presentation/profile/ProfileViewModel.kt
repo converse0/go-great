@@ -58,51 +58,50 @@ class ProfileViewModel @Inject constructor(
         uid: MutableState<String>
     ) {
         viewModelScope.launch {
-            val (resp, message) = getUserParams()
-            if (resp != null) {
-                println(resp.age)
-                println(resp.username)
-                username.value = resp.username
-                age.value = resp.age.toString()
-                timesEat.value = resp.eat.toString()
-                weight.value = resp.weight.toString()
-                height.value = resp.height.toString()
-                desiredWeight.value = resp.desiredWeight.toString()
-                gender.value = resp.gender
-                diet.value = UserDiet.valueOf(resp.diet.uppercase()).value.toFloat()
-                activity.value = UserActivity.valueOf(resp.activity.uppercase()).value.toFloat()
-                println("Activity: ${UserActivity.valueOf(resp.activity.uppercase()).value}")
-                resp.uid?.let {
+            val resp = getUserParams()
+            if (resp.data!= null) {
+
+                println(resp.data.age)
+                println(resp.data.username)
+                username.value = resp.data.username
+                age.value = resp.data.age.toString()
+                timesEat.value = resp.data.eat.toString()
+                weight.value = resp.data.weight.toString()
+                height.value = resp.data.height.toString()
+                desiredWeight.value = resp.data.desiredWeight.toString()
+                gender.value = resp.data.gender
+                diet.value = UserDiet.valueOf(resp.data.diet.uppercase()).value.toFloat()
+                activity.value = UserActivity.valueOf(resp.data.activity.uppercase()).value.toFloat()
+                println("Activity: ${UserActivity.valueOf(resp.data.activity.uppercase()).value}")
+                resp.data.uid?.let {
                     uid.value = it
                 }
-            } else if (message!=null
-                &&message.isNotEmpty()&&message.contains("token")) {
+            } else if (resp.code!=null) {
                 fail.value = true
                 routeTo(navController, "sign-in")
+                when(resp.code) {
+                    16 -> routeTo(navController, "sign_in")
+                    2, 5 -> routeTo(navController, "about")
+                }
             }
-            else {
-                fail.value = true
-                routeTo(navController, "about")
-            }
+
         }
 }
 
     fun getParameters(gender: MutableState<Int>) {
         viewModelScope.launch {
-            val (resp, message) = getUserParams()
-
-           val respInt = when {
-               message!=null&&message!!.isNotEmpty()&& message.contains("token")-> -6
-               message!=null&&message.isNotEmpty() -> 6
-               else -> null
-           }
-            if (respInt==null) {
-                if (resp != null) {
-                    gender.value=resp.gender
+            val resp = getUserParams()
+            resp.data?.let {
+                gender.value = it.gender
+            } ?: resp.code?.let {
+                gender.value = when(it){
+                    16 -> -6
+                    2,5 -> 6
+                    else -> 777
                 }
-            } else {
-                gender.value = respInt
             }
+
+
         }
     }
 

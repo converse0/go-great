@@ -203,7 +203,7 @@ fun WorkoutsList(
     workouts: List<Training>,
     navController: NavHostController
 ) {
-    LazyRow() {
+    LazyRow {
         items(workouts) { workout ->
             WorkoutItem(
                 workout = workout,
