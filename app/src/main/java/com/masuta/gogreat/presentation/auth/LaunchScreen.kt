@@ -1,5 +1,6 @@
 package com.masuta.gogreat.presentation.auth
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,61 +13,68 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import com.masuta.gogreat.R
+import com.masuta.gogreat.presentation.components.MainTextButton
 import com.masuta.gogreat.presentation.ui.theme.Red
 import com.masuta.gogreat.presentation.ui.theme.SportTheme
+import com.skydoves.landscapist.rememberDrawablePainter
 
 @Composable
 fun LaunchScreen(
     navController: NavHostController
 ) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color.White)
-            .padding(20.dp)
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier.fillMaxSize()
     ) {
-        Text(
-            text = "Hello!",
-            style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.W400
+        Image(
+            painter = painterResource(id = R.drawable.index),
+            contentDescription = "Launch Image",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
         )
-        Spacer(Modifier.height(20.dp))
-        Text(
-            text = "Login or sign up to create your work out plan.",
-            style = MaterialTheme.typography.bodySmall
-        )
-        Spacer(Modifier.height(20.dp))
-        TextButton(
-            onClick = {
-                 navController.navigate("sign-in")
-            },
-            colors = ButtonDefaults.buttonColors(containerColor = Red, contentColor = Color.White),
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(text = "Login", color = Color.White, modifier = Modifier.padding(vertical = 16.dp))
-        }
-        Spacer(Modifier.height(20.dp))
-        TextButton(
-            onClick = {
-                navController.navigate("sign-up")
-            },
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Gray, contentColor = Color.White),
-            modifier = Modifier.fillMaxWidth()
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .background(color = Color.Transparent)
+                .padding(20.dp)
         ) {
             Text(
+                text = "Hello!",
+                style = MaterialTheme.typography.displayMedium,
+                color = Color.White
+            )
+            Spacer(Modifier.height(20.dp))
+            Text(
+                text = "Login or sign up to create your work out plan.",
+                style = MaterialTheme.typography.headlineSmall,
+                textAlign = TextAlign.Center,
+                color = Color.White
+            )
+            Spacer(Modifier.height(20.dp))
+            MainTextButton(text = "Login", color = Red, modifier = Modifier.fillMaxWidth()) {
+                navController.navigate("sign-in")
+            }
+            Spacer(Modifier.height(20.dp))
+            MainTextButton(
                 text = "Sign up",
                 color = Color.White,
-                style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier.padding(vertical = 16.dp)
-            )
+                textColor = Color.Black,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                navController.navigate("sign-up")
+            }
         }
     }
 }

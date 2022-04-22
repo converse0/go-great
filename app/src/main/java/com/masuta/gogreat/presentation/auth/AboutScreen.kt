@@ -21,6 +21,7 @@ import androidx.navigation.NavHostController
 import com.masuta.gogreat.domain.model.UserActivity
 import com.masuta.gogreat.domain.model.UserDiet
 import com.masuta.gogreat.presentation.components.InputTextField
+import com.masuta.gogreat.presentation.components.MainTextButton
 import com.masuta.gogreat.presentation.components.SliderWithLabelUserActivity
 import com.masuta.gogreat.presentation.profile.firstCharToUpperCase
 import com.masuta.gogreat.presentation.profile.normalizeString
@@ -84,7 +85,9 @@ fun AboutForm(
         modifier = Modifier.fillMaxWidth()
     ) {
         LazyColumn(
-            modifier = Modifier.fillMaxWidth().padding(bottom = 100.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 100.dp)
         ) {
             item {
                 Text(
@@ -168,21 +171,9 @@ fun AboutForm(
                 )
             }
         }
-        TextButton(
-            onClick = {
-                viewModel.setParameters(
-                    age = if(age.value.isNotEmpty()) age.value.toIntOrNull() else 0,
-                    weight = if (weight.value.isNotEmpty()) weight.value.toInt() else 0,
-                    height = if (height.value.isNotEmpty()) height.value.toInt() else 0,
-                    desiredWeight = if (desiredWeight.value.isNotEmpty()) desiredWeight.value.toInt() else 0 ,
-                    timesEat = if(timesEat.value.isNotEmpty()) timesEat.value.toInt() else 0,
-                    diet = diet.value.toInt(),
-                    activity = physicalActivity.value.toInt(),
-                    gender = gender.value
-                )
-                navController.navigate("main")
-            },
-            colors = ButtonDefaults.buttonColors(containerColor = Red),
+        MainTextButton(
+            text = "Save",
+            color = Red,
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
@@ -191,11 +182,17 @@ fun AboutForm(
                     bottom = 20.dp
                 )
         ) {
-            Text(
-                text = "Save",
-                color = Color.White,
-                modifier = Modifier.padding(vertical = 16.dp)
+            viewModel.setParameters(
+                age = if(age.value.isNotEmpty()) age.value.toIntOrNull() else 0,
+                weight = if (weight.value.isNotEmpty()) weight.value.toInt() else 0,
+                height = if (height.value.isNotEmpty()) height.value.toInt() else 0,
+                desiredWeight = if (desiredWeight.value.isNotEmpty()) desiredWeight.value.toInt() else 0 ,
+                timesEat = if(timesEat.value.isNotEmpty()) timesEat.value.toInt() else 0,
+                diet = diet.value.toInt(),
+                activity = physicalActivity.value.toInt(),
+                gender = gender.value
             )
+            navController.navigate("main")
         }
     }
 }

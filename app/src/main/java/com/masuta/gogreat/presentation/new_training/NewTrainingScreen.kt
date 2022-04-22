@@ -224,7 +224,7 @@ fun Modal(
 
                 TextButton(
                     onClick = onSave,
-                    enabled = name.value.isNotEmpty(),
+                    enabled = name.value.isNotEmpty() && date.value.isNotEmpty(),
                     colors = ButtonDefaults.buttonColors(containerColor = Green),
                     modifier = Modifier
                         .fillMaxWidth()

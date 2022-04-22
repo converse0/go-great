@@ -31,6 +31,7 @@ import androidx.navigation.NavHostController
 import com.masuta.gogreat.domain.model.LoginResponse
 import com.masuta.gogreat.domain.model.User
 import com.masuta.gogreat.presentation.components.InputTextField
+import com.masuta.gogreat.presentation.components.MainTextButton
 import com.masuta.gogreat.presentation.ui.theme.Red
 import com.masuta.gogreat.presentation.ui.theme.SportTheme
 import kotlinx.coroutines.CoroutineScope
@@ -114,37 +115,25 @@ fun SignInForm(viewModel: SignInViewModel, navController: NavHostController) {
 //                }
 //        )
 //    }
-    TextButton(
-        onClick = {
-            val user = User(email=email, password=password)
-            CoroutineScope(Dispatchers.Main).launch {
-                val resp = viewModel.signIn(user)
-                if(resp["status"] as Boolean){
 
-                    viewModel.setToken(context = context, token = resp["loginResponse"] as LoginResponse?)
-                    navController.navigate("main")
-                } else {
-                    resp["message"]?.let {
-                        Toast.makeText(
-                            context,
-                            it as String,
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
+    MainTextButton(text = "Login", color = Red, modifier = Modifier.fillMaxWidth().padding(vertical = 40.dp)) {
+        val user = User(email=email, password=password)
+        CoroutineScope(Dispatchers.Main).launch {
+            val resp = viewModel.signIn(user)
+            if(resp["status"] as Boolean){
+
+                viewModel.setToken(context = context, token = resp["loginResponse"] as LoginResponse?)
+                navController.navigate("main")
+            } else {
+                resp["message"]?.let {
+                    Toast.makeText(
+                        context,
+                        it as String,
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
-        },
-        colors = ButtonDefaults.buttonColors(contentColor = Color.White, containerColor = Red),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 40.dp)
-    ) {
-        Text(
-            text = "Login",
-            color = Color.White,
-            style = MaterialTheme.typography.bodySmall,
-            modifier = Modifier.padding(vertical = 16.dp)
-        )
+        }
     }
     Row(
         verticalAlignment = Alignment.CenterVertically

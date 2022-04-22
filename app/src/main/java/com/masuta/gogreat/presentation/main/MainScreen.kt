@@ -27,6 +27,7 @@ import com.masuta.gogreat.domain.model.Training
 import com.masuta.gogreat.domain.model.gender
 import com.masuta.gogreat.presentation.BottomNavigationItem
 import com.masuta.gogreat.presentation.components.BottomMenuBar
+import com.masuta.gogreat.presentation.components.MainTextButton
 import com.masuta.gogreat.presentation.ui.theme.Purple200
 import com.masuta.gogreat.presentation.ui.theme.Red
 import com.skydoves.landscapist.glide.GlideImage
@@ -71,7 +72,9 @@ fun MainScreen(
                 fontWeight = FontWeight.W400
             )
             LazyColumn(
-                modifier = Modifier.fillMaxWidth().padding(top = 15.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 15.dp)
             ) {
                 item {
                     Box(
@@ -94,21 +97,28 @@ fun MainScreen(
                         style = MaterialTheme.typography.bodySmall,
                         modifier = Modifier.padding(vertical = 10.dp)
                     )
-                    TextButton(
-                        onClick = {
-                            navController.navigate("new-training")
-                        },
-                        colors = ButtonDefaults.buttonColors(containerColor = Red),
-                        shape = RoundedCornerShape(16.dp),
-                        modifier = Modifier
-                            .fillMaxWidth()
+                    MainTextButton(
+                        text = "Create new training",
+                        color = Red,
+                        modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text(
-                            text = "Create new training",
-                            color = Color.White,
-                            modifier = Modifier.padding(vertical = 16.dp)
-                        )
+                        navController.navigate("new-training")
                     }
+//                    TextButton(
+//                        onClick = {
+//                            navController.navigate("new-training")
+//                        },
+//                        colors = ButtonDefaults.buttonColors(containerColor = Red),
+//                        shape = RoundedCornerShape(16.dp),
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                    ) {
+//                        Text(
+//                            text = "Create new training",
+//                            color = Color.White,
+//                            modifier = Modifier.padding(vertical = 16.dp)
+//                        )
+//                    }
 
                     CurrentWorkoutSection(viewModel = viewModel,
                         navController = navController,
@@ -221,9 +231,13 @@ fun WorkoutItem(
     modifier: Modifier = Modifier,
     onSelectItem: (String) -> Unit
 ) {
+
+    val ymdDate = workout.date?.split("T")?.get(0) ?: ""
+
     if (workout.name.isEmpty()) {
         return
     }
+    println("Date: $ymdDate")
     Card(
         shape = RoundedCornerShape(16.dp),
         containerColor = Color.Gray,
@@ -258,7 +272,7 @@ fun WorkoutItem(
                 Spacer(Modifier.height(10.dp))
 //            val internal = if(workout.interval.isEmpty()) "30s" else workout.interval
                 Text(
-                    text = "27 March 2017",
+                    text = ymdDate.split("-").reversed().joinToString(" "),
                     style = MaterialTheme.typography.bodySmall,
                     color = Color.White,
                     fontWeight = FontWeight.W300

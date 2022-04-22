@@ -32,6 +32,7 @@ import com.masuta.gogreat.domain.model.UserDiet
 import com.masuta.gogreat.presentation.BottomNavigationItem
 import com.masuta.gogreat.presentation.components.BottomMenuBar
 import com.masuta.gogreat.presentation.components.InputTextField
+import com.masuta.gogreat.presentation.components.MainTextButton
 import com.masuta.gogreat.presentation.components.SliderWithLabelUserActivity
 import com.masuta.gogreat.presentation.ui.theme.Red
 import kotlinx.coroutines.CoroutineScope
@@ -278,49 +279,84 @@ fun ProfileInfo(
             keyboardType = KeyboardType.Number,
             onChangeValue = { desiredWeight.value = it }
         )
-        TextButton(
-            onClick = {
-                CoroutineScope(Dispatchers.Main).launch {
-                    val resp = viewModel.updateParams(
-                        gender = gender.value,
-                        age = age.value.toInt(),
-                        weight = weight.value.toInt(),
-                        height = height.value.toInt(),
-                        activity = activity.value,
-                        diet = diet.value,
-                        timesEat = timesEat.value.toInt(),
-                        desiredWeight = desiredWeight.value.toInt(),
-                        uid = uid.value
-                    )
-                    if (resp.isNotEmpty()) {
-                        Toast.makeText(
-                            context,
-                            resp,
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else {
-                        Toast.makeText(
-                            context,
-                            "Update user parameters Success",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                    lazyListState.scrollToItem(0)
-                }
 
-            },
-            colors = ButtonDefaults.buttonColors(containerColor = Red),
-            shape = RoundedCornerShape(16.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 20.dp)
+        MainTextButton(
+            text = "Save",
+            color = Red,
+            modifier = Modifier.fillMaxWidth().padding(vertical = 20.dp)
         ) {
-            Text(
-                text = "Save",
-                color = Color.White,
-                modifier = Modifier.padding(vertical = 16.dp),
-            )
+            CoroutineScope(Dispatchers.Main).launch {
+                val resp = viewModel.updateParams(
+                    gender = gender.value,
+                    age = age.value.toInt(),
+                    weight = weight.value.toInt(),
+                    height = height.value.toInt(),
+                    activity = activity.value,
+                    diet = diet.value,
+                    timesEat = timesEat.value.toInt(),
+                    desiredWeight = desiredWeight.value.toInt(),
+                    uid = uid.value
+                )
+                if (resp.isNotEmpty()) {
+                    Toast.makeText(
+                        context,
+                        resp,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    Toast.makeText(
+                        context,
+                        "Update user parameters Success",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                lazyListState.scrollToItem(0)
+            }
         }
+
+//        TextButton(
+//            onClick = {
+//                CoroutineScope(Dispatchers.Main).launch {
+//                    val resp = viewModel.updateParams(
+//                        gender = gender.value,
+//                        age = age.value.toInt(),
+//                        weight = weight.value.toInt(),
+//                        height = height.value.toInt(),
+//                        activity = activity.value,
+//                        diet = diet.value,
+//                        timesEat = timesEat.value.toInt(),
+//                        desiredWeight = desiredWeight.value.toInt(),
+//                        uid = uid.value
+//                    )
+//                    if (resp.isNotEmpty()) {
+//                        Toast.makeText(
+//                            context,
+//                            resp,
+//                            Toast.LENGTH_SHORT
+//                        ).show()
+//                    } else {
+//                        Toast.makeText(
+//                            context,
+//                            "Update user parameters Success",
+//                            Toast.LENGTH_SHORT
+//                        ).show()
+//                    }
+//                    lazyListState.scrollToItem(0)
+//                }
+//
+//            },
+//            colors = ButtonDefaults.buttonColors(containerColor = Red),
+//            shape = RoundedCornerShape(16.dp),
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(vertical = 20.dp)
+//        ) {
+//            Text(
+//                text = "Save",
+//                color = Color.White,
+//                modifier = Modifier.padding(vertical = 16.dp),
+//            )
+//        }
     }
 }
 

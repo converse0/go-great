@@ -23,6 +23,7 @@ import androidx.navigation.NavHostController
 import com.masuta.gogreat.domain.model.LoginResponse
 import com.masuta.gogreat.domain.model.User
 import com.masuta.gogreat.presentation.components.InputTextField
+import com.masuta.gogreat.presentation.components.MainTextButton
 import com.masuta.gogreat.presentation.ui.theme.Red
 import com.masuta.gogreat.presentation.ui.theme.SportTheme
 import kotlinx.coroutines.CoroutineScope
@@ -74,7 +75,9 @@ fun SignUpForm(viewModel: SignUpViewModel, navController: NavHostController) {
         modifier = Modifier.fillMaxWidth()
     ) {
         LazyColumn(
-            modifier = Modifier.fillMaxWidth().padding(bottom = 100.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 100.dp)
         ) {
             item {
                 InputTextField(
@@ -118,48 +121,40 @@ fun SignUpForm(viewModel: SignUpViewModel, navController: NavHostController) {
 //    }
             }
         }
-        TextButton(
-            onClick = {
-                CoroutineScope(Dispatchers.Main).launch {
-                    val resp = viewModel.signUp(username, email,password,passwordConfirm)
-                    if (resp) {
-                        val res = viewModel.signIn(User(email = email, password = password))
-                        if (res["status"] as Boolean) {
-                            viewModel.setToken(context = context, token = res["loginResponse"] as LoginResponse?)
-                            navController.navigate("about")
-                        } else {
-                            res["message"]?.let {
-                                Toast.makeText(
-                                    context,
-                                    it as String,
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        }
-                    } else {
-                        Toast.makeText(
-                            context,
-                            "Sign up failed, fill all fields, and enter the same password twice",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-            },
-            colors = ButtonDefaults.buttonColors(containerColor = Red, contentColor = Color.White),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
+
+        MainTextButton(
+            text = "Sign up",
+            color = Red,
+            modifier = Modifier.fillMaxWidth().padding(
                     top = 40.dp,
                     bottom = 10.dp
                 )
                 .align(Alignment.BottomCenter)
         ) {
-            Text(
-                text = "Sign Up",
-                color = Color.White,
-                style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier.padding(vertical = 16.dp)
-            )
+            CoroutineScope(Dispatchers.Main).launch {
+                val resp = viewModel.signUp(username, email,password,passwordConfirm)
+                if (resp) {
+                    val res = viewModel.signIn(User(email = email, password = password))
+                    if (res["status"] as Boolean) {
+                        viewModel.setToken(context = context, token = res["loginResponse"] as LoginResponse?)
+                        navController.navigate("about")
+                    } else {
+                        res["message"]?.let {
+                            Toast.makeText(
+                                context,
+                                it as String,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+                } else {
+                    Toast.makeText(
+                        context,
+                        "Sign up failed, fill all fields, and enter the same password twice",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
         }
     }
 
