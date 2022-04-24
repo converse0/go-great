@@ -3,6 +3,9 @@ package com.masuta.gogreat.presentation.main
 import android.content.Context
 import android.media.MediaPlayer
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.masuta.gogreat.R
@@ -21,6 +24,14 @@ class MainViewModel @Inject constructor(
     private var globSec = 0
     private var count = 0
     private var job: Job? = null
+
+    var reloadData by mutableStateOf(repository.workoutsDataReload)
+
+    fun setWorkoutsDateReload(bool: Boolean) {
+        reloadData = bool
+        repository.workoutsDataReload = bool
+        println("${repository.workoutsDataReload}")
+    }
 
     fun init(sec:Int) {
         globSec = sec
@@ -48,8 +59,9 @@ class MainViewModel @Inject constructor(
     }
 
     fun getExercises(list: MutableState<List<Training>>, countTotalWorkout: MutableState<Int>) {
-        viewModelScope.launch {
-            val localTrainings = repository.getAllLocalTrainings()
+        if (list.value.isEmpty()) {
+            viewModelScope.launch {
+                val localTrainings = repository.getAllLocalTrainings()
 
 //            if (localTrainings != null
 //                &&localTrainings.size!=list.value.size
@@ -78,21 +90,22 @@ class MainViewModel @Inject constructor(
 //                list.value = localTrainings
 //                println("localTraining (mem 0): ${localTrainings.size}")
 //            }
-            if(1==1) {
-                println("findAll....")
-                val resp = repository.findAll()
-                resp.data?.let { training ->
+                if(1==1) {
+                    println("findAll....")
+                    val resp = repository.findAll()
+                    resp.data?.let { training ->
 //                    list.value = training.map { it.validateExerciseData() }
-                    repository.clearLocalTrainingData()
-                    training.forEach { repository.saveLocal(it.validateExerciseData()) }
+                        repository.clearLocalTrainingData()
+                        training.forEach { repository.saveLocal(it.validateExerciseData()) }
+                    }
+                    val myTrains = repository.getMyTrainings()
+                    myTrains?.let { trains ->
+                        println("myTrains: ${trains.size}")
+                        list.value = trains.map { it.validateExerciseData() }
+                    }
                 }
-                val myTrains = repository.getMyTrainings()
-                myTrains?.let { trains ->
-                    println("myTrains: ${trains.size}")
-                    list.value = trains.map { it.validateExerciseData() }
-                }
+                //    countTotalWorkout.value ++
             }
-        //    countTotalWorkout.value ++
         }
     }
      fun getCurrentTraining(
@@ -110,14 +123,16 @@ class MainViewModel @Inject constructor(
     }
 
     fun getPastTrainings(list: MutableState<List<Training>>) {
-        viewModelScope.launch {
-            val measureTime = measureTimeMillis {
-                val resp = repository.getPassTrainings()
-                resp?.let {
-                    list.value = it
+        if (list.value.isEmpty()) {
+            viewModelScope.launch {
+                val measureTime = measureTimeMillis {
+                    val resp = repository.getPassTrainings()
+                    resp?.let {
+                        list.value = it
+                    }
                 }
+                println("getPastTrainings: ${measureTime}")
             }
-            println("getPastTrainings: ${measureTime}")
         }
     }
 

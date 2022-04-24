@@ -45,13 +45,31 @@ fun MainScreen(
     println("Shared gender: $gender")
 
     viewModel.clearLocalExercises()
-    val listTrainings = remember { mutableStateOf(emptyList<Training>())}
+    val listTrainings = remember { mutableStateOf(emptyList<Training>()) }
     val currentWorkout = remember{ mutableStateOf(Training(
         name = "",
         exercises = mutableListOf(),
         interval = ""
     )) }
     val listPastTrainings = remember { mutableStateOf(emptyList<Training>())}
+
+    if (viewModel.reloadData) {
+        println("Old reload Data: ${viewModel.reloadData}")
+        listTrainings.value = emptyList()
+        listPastTrainings.value = emptyList()
+        currentWorkout.value = Training(
+            name = "",
+            exercises = mutableListOf(),
+            interval = ""
+        )
+        viewModel.setWorkoutsDateReload(false)
+        println("New reload Data: ${viewModel.reloadData}")
+    }
+
+    println("List Trainings: ${listTrainings.value}")
+    println("Current Workout: ${currentWorkout.value}")
+
+
     val countCurrentWorkout = remember { mutableStateOf(0) }
     val countTotalWorkout = remember { mutableStateOf(0) }
     Scaffold(

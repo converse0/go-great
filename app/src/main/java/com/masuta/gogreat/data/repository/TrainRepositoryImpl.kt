@@ -16,6 +16,8 @@ class TrainRepositoryImpl @Inject constructor(
     private var localTraining:Map<String,Training> = mutableMapOf()
     private var localTrainingEx:Map<Int,TrainingExercise> = mutableMapOf()
 
+    override var workoutsDataReload: Boolean = true
+
     init {
        httpClient = client.makeClient()
     }

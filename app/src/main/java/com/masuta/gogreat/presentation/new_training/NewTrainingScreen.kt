@@ -1,5 +1,8 @@
 package com.masuta.gogreat.presentation.new_training
 
+import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -33,6 +36,11 @@ import com.masuta.gogreat.presentation.components.MalePersonSection
 import com.masuta.gogreat.presentation.ui.theme.Green
 import com.masuta.gogreat.presentation.ui.theme.Red
 import com.skydoves.landscapist.glide.GlideImage
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 private fun replaceString(str: String) = str.replace(" ", "_")
 
@@ -100,6 +108,7 @@ fun NewTrainingScreen(
             MainTextButton(
                 text = "Save",
                 color = Red,
+                enabled = listExercises.value.isNotEmpty(),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 16.dp, horizontal = 16.dp)
@@ -238,7 +247,6 @@ fun Modal(
             }
         }
     }
-//    CalendarTraining(date, showCal)
 }
 
 @Composable

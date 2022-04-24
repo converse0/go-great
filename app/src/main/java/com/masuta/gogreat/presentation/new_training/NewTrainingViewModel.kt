@@ -19,6 +19,7 @@ class NewTrainingViewModel @Inject constructor(
         println(newTrain)
         viewModelScope.launch {
             repository.save(newTrain)
+            repository.workoutsDataReload = true
         }
     }
 

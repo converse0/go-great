@@ -115,6 +115,7 @@ class StartTrainingViewModel @Inject constructor(
     fun setExerciseParams(uid: String, listExercises: List<TrainingExercise>) {
         viewModelScope.launch {
             repository.setExerciseParams(uid, listExercises)
+            repository.workoutsDataReload = true
             println("Old currentExercise: ${_currentExercise.value}")
             _currentExercise.value = listExercises.get(_indexExercise.value)
             _exerciseSets.value = _currentExercise.value.numberOfSets
