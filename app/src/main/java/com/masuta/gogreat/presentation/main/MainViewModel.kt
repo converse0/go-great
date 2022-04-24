@@ -58,7 +58,10 @@ class MainViewModel @Inject constructor(
         job?.cancel()
     }
 
-    fun getExercises(list: MutableState<List<Training>>, countTotalWorkout: MutableState<Int>) {
+    fun getExercises(
+        list: MutableState<List<Training>>,
+//        countTotalWorkout: MutableState<Int>
+    ) {
         if (list.value.isEmpty()) {
             viewModelScope.launch {
                 val localTrainings = repository.getAllLocalTrainings()
@@ -110,7 +113,7 @@ class MainViewModel @Inject constructor(
     }
      fun getCurrentTraining(
          training: MutableState<Training>,
-         countCurrentWorkout: MutableState<Int>
+//         countCurrentWorkout: MutableState<Int>
      ) {
          if(training.value.name.isEmpty()) {
         viewModelScope.launch {

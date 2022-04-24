@@ -63,6 +63,11 @@ fun MainScreen(
             interval = ""
         )
         viewModel.setWorkoutsDateReload(false)
+
+        viewModel.getCurrentTraining(currentWorkout)
+        viewModel.getExercises(listTrainings)
+        viewModel.getPastTrainings(listPastTrainings)
+
         println("New reload Data: ${viewModel.reloadData}")
     }
 
@@ -158,7 +163,7 @@ fun PastWorkoutsSection(
     listPastTrainings: MutableState<List<Training>>,
 ) {
 
-        viewModel.getPastTrainings(listPastTrainings)
+//        viewModel.getPastTrainings(listPastTrainings)
 
     if (listPastTrainings.value.isNotEmpty()) {
         Text(
@@ -184,9 +189,9 @@ fun CurrentWorkoutSection(
     countCurrentWorkout: MutableState<Int>
 ) {
 
-    if (countCurrentWorkout.value == 0) {
-        viewModel.getCurrentTraining(currentWorkout, countCurrentWorkout)
-    }
+//    if (countCurrentWorkout.value == 0) {
+//        viewModel.getCurrentTraining(currentWorkout, countCurrentWorkout)
+//    }
     if (currentWorkout.value.name.isNotEmpty()) {
         Text(
             text = "Current workout",
@@ -211,7 +216,7 @@ fun WorkoutsSection(
     listTrainings: MutableState<List<Training>>,
     countTotalWorkout: MutableState<Int>
 ) {
-        viewModel.getExercises(listTrainings, countTotalWorkout)
+//        viewModel.getExercises(listTrainings, countTotalWorkout)
 
 
     if (listTrainings.value.isNotEmpty()) {
