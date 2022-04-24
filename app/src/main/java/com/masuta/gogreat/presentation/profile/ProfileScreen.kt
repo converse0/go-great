@@ -1,8 +1,17 @@
 package com.masuta.gogreat.presentation.profile
 
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -16,6 +25,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -23,6 +33,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -34,6 +45,7 @@ import com.masuta.gogreat.presentation.components.BottomMenuBar
 import com.masuta.gogreat.presentation.components.InputTextField
 import com.masuta.gogreat.presentation.components.MainTextButton
 import com.masuta.gogreat.presentation.components.SliderWithLabelUserActivity
+import com.masuta.gogreat.presentation.ui.theme.Green
 import com.masuta.gogreat.presentation.ui.theme.Red
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -114,6 +126,16 @@ fun ProfileSection(
 
     val lazyListState = rememberLazyListState()
 
+    // Image
+
+    var imageUri by remember { mutableStateOf<Uri?>(null) }
+    val context = LocalContext.current
+    val bitmap = remember { mutableStateOf<Bitmap?>(null) }
+
+    val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
+        imageUri = uri
+    }
+
     LazyColumn(
         state = lazyListState,
         modifier = Modifier
@@ -121,7 +143,7 @@ fun ProfileSection(
             .padding(horizontal = 8.dp)
     ) {
         items(1) {
-            ProfileAvatar(gender = gender.value)
+            ProfileAvatar(gender = gender.value, imageUri = imageUri, bitmap = bitmap, context = context)
             Spacer(modifier = Modifier.height(10.dp))
             Text(
                 text = username.value,
@@ -129,6 +151,15 @@ fun ProfileSection(
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            Text(
+                text = "Edit photo",
+                style = MaterialTheme.typography.bodyLarge,
+                textDecoration = TextDecoration.Underline,
+                color = Green,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth().clickable { launcher.launch("image/*") }
             )
             Spacer(modifier = Modifier.height(20.dp))
             ProfileInfo(
@@ -283,7 +314,9 @@ fun ProfileInfo(
         MainTextButton(
             text = "Save",
             color = Red,
-            modifier = Modifier.fillMaxWidth().padding(vertical = 20.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 20.dp)
         ) {
             CoroutineScope(Dispatchers.Main).launch {
                 val resp = viewModel.updateParams(
@@ -461,7 +494,10 @@ fun LineSelectPoint() {
 
 @Composable
 fun ProfileAvatar(
-    gender: Int
+    gender: Int,
+    imageUri: Uri?,
+    bitmap: MutableState<Bitmap?>,
+    context: Context
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -476,26 +512,48 @@ fun ProfileAvatar(
                     .clip(shape = CircleShape)
                     .background(color = Color.Gray)
             ) {
-                if (gender == 0) {
-                    Image(
-                        painter = painterResource(id = R.drawable.avatar_male),
-                        contentDescription = "Male Avatar",
-                        contentScale = ContentScale.Inside,
-                        modifier = Modifier
-                            .size(150.dp)
-                            .clip(shape = CircleShape)
-                            .padding(10.dp)
-                    )
-                } else {
-                    Image(
-                        painter = painterResource(id = R.drawable.avatar_female),
-                        contentDescription = "Female Avatar",
-                        contentScale = ContentScale.Inside,
-                        modifier = Modifier
-                            .size(150.dp)
-                            .clip(shape = CircleShape)
-                            .padding(10.dp)
-                    )
+                imageUri?.let {
+                    if (Build.VERSION.SDK_INT < 28) {
+                        bitmap.value = MediaStore.Images
+                            .Media.getBitmap(context.contentResolver, it)
+                    } else {
+                        val source = ImageDecoder.createSource(context.contentResolver, it)
+                        bitmap.value = ImageDecoder.decodeBitmap(source)
+                    }
+
+                    bitmap.value?.let { btm ->
+                        Image(
+                            bitmap = btm.asImageBitmap(),
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .size(150.dp)
+                                .clip(shape = CircleShape)
+                        )
+                    }
+                }
+                if (bitmap.value == null) {
+                    if (gender == 0) {
+                        Image(
+                            painter = painterResource(id = R.drawable.avatar_male),
+                            contentDescription = "Male Avatar",
+                            contentScale = ContentScale.Inside,
+                            modifier = Modifier
+                                .size(150.dp)
+                                .clip(shape = CircleShape)
+                                .padding(10.dp)
+                        )
+                    } else {
+                        Image(
+                            painter = painterResource(id = R.drawable.avatar_female),
+                            contentDescription = "Female Avatar",
+                            contentScale = ContentScale.Inside,
+                            modifier = Modifier
+                                .size(150.dp)
+                                .clip(shape = CircleShape)
+                                .padding(10.dp)
+                        )
+                    }
                 }
             }
         }

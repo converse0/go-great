@@ -24,6 +24,7 @@ import androidx.navigation.NavHostController
 import com.masuta.gogreat.R
 import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.domain.model.gender
+import com.masuta.gogreat.presentation.components.MainTextButton
 import com.masuta.gogreat.presentation.ui.theme.Red
 import com.skydoves.landscapist.glide.GlideImage
 
@@ -85,22 +86,32 @@ fun WorkoutScreen(
                 }
             }
         }
-        TextButton(
-            onClick = {
-                viewModel.startTraining(uid)
-                navController.navigate("start-training/$uid")
-            },
-            colors = ButtonDefaults.buttonColors(containerColor = Red),
+        MainTextButton(
+            text = "Start Training",
+            color = Red,
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
         ) {
-            Text(
-                text = "Start training",
-                color = Color.White,
-                modifier = Modifier.padding(vertical = 8.dp)
-            )
+            viewModel.startTraining(uid)
+            navController.navigate("start-training/$uid")
         }
+//        TextButton(
+//            onClick = {
+//                viewModel.startTraining(uid)
+//                navController.navigate("start-training/$uid")
+//            },
+//            colors = ButtonDefaults.buttonColors(containerColor = Red),
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .align(Alignment.BottomCenter)
+//        ) {
+//            Text(
+//                text = "Start training",
+//                color = Color.White,
+//                modifier = Modifier.padding(vertical = 8.dp)
+//            )
+//        }
     }
 }
 
@@ -120,8 +131,8 @@ fun PersonImage() {
     Box(
         contentAlignment = Alignment.TopCenter,
         modifier = Modifier
-        .fillMaxWidth()
-        .padding(12.dp)) {
+            .fillMaxWidth()
+            .padding(12.dp)) {
         Image(
             painter = painterResource(
                 gender?.let {
@@ -129,7 +140,9 @@ fun PersonImage() {
                 } ?: R.drawable.human
             ),
             contentDescription = null,
-            modifier = Modifier.height(300.dp).fillMaxWidth()
+            modifier = Modifier
+                .height(300.dp)
+                .fillMaxWidth()
         )
     }
 }

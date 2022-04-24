@@ -17,6 +17,7 @@ fun MainTextButton(
     modifier: Modifier = Modifier,
     text: String,
     color: Color,
+    enabled: Boolean = true,
     textColor: Color = Color.White,
     onClick: () -> Unit
 ) {
@@ -24,6 +25,7 @@ fun MainTextButton(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(containerColor = color),
         shape = RoundedCornerShape(16.dp),
+        enabled = enabled,
         modifier = modifier
     ) {
         Text(
