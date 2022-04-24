@@ -72,7 +72,7 @@ fun WorkoutScreen(
                 }
                 Text(
                     text = name.value,
-                    style = MaterialTheme.typography.headlineSmall,
+                    style = MaterialTheme.typography.displayMedium,
                     modifier = Modifier.padding(start = 8.dp)
                 )
             }

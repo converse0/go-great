@@ -83,12 +83,12 @@ fun ProfileScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .background(color = Color.White)
+                .padding(20.dp)
         ) {
             Text(
                 text = "Profile",
-                style = MaterialTheme.typography.headlineMedium,
-                modifier = Modifier.padding(16.dp),
-                color = Color.Black
+                style = MaterialTheme.typography.displayMedium,
+                modifier = Modifier.padding(start = 8.dp)
             )
             Spacer(modifier = Modifier.height(12.dp))
             ProfileSection(viewModel, navController)
@@ -140,7 +140,7 @@ fun ProfileSection(
         state = lazyListState,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 8.dp)
+//            .padding(horizontal = 8.dp)
     ) {
         items(1) {
             ProfileAvatar(gender = gender.value, imageUri = imageUri, bitmap = bitmap, context = context)

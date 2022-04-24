@@ -62,6 +62,7 @@ fun NewTrainingScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(color = Color.White)
+            .padding(20.dp)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -75,7 +76,7 @@ fun NewTrainingScreen(
             }
             Text(
                 text = "New training",
-                style = MaterialTheme.typography.headlineSmall,
+                style = MaterialTheme.typography.displayMedium,
                 modifier = Modifier.padding(start = 8.dp)
             )
         }
@@ -111,7 +112,7 @@ fun NewTrainingScreen(
                 enabled = listExercises.value.isNotEmpty(),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 16.dp, horizontal = 16.dp)
+                    .padding(vertical = 16.dp)
                     .align(Alignment.BottomCenter)
             ) {
                 openModal.value = true

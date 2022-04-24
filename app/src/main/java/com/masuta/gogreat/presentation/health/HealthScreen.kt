@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -38,7 +39,6 @@ fun HealthScreen(
         }
     ) {
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxSize()
                 .background(color = Color.White)
@@ -46,8 +46,8 @@ fun HealthScreen(
         ) {
             Text(
                 text = "My Health",
-                style = MaterialTheme.typography.headlineMedium,
-                modifier = Modifier.fillMaxWidth().padding(16.dp)
+                style = MaterialTheme.typography.displayMedium,
+                modifier = Modifier.padding(start = 8.dp)
             )
             Spacer(modifier = Modifier.height(40.dp))
             Box(
@@ -69,8 +69,10 @@ fun HealthScreen(
             Text(
                 text = "Coming soon!",
                 style = MaterialTheme.typography.headlineSmall,
+                textAlign = TextAlign.Center,
                 fontWeight = FontWeight.W700,
-                color = Color.Black
+                color = Color.Black,
+                modifier = Modifier.fillMaxWidth()
             )
         }
     }

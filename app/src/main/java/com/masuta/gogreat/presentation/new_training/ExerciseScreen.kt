@@ -61,7 +61,7 @@ fun ExerciseScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(20.dp)
             .background(Color.White)
     ) {
         Row(
@@ -73,7 +73,7 @@ fun ExerciseScreen(
             }
             Text(
                 text = "List of exercise",
-                style = MaterialTheme.typography.headlineSmall,
+                style = MaterialTheme.typography.displayMedium,
                 modifier = Modifier.padding(start = 8.dp)
             )
         }
@@ -87,6 +87,7 @@ fun ExerciseScreen(
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.W300
         )
+        Spacer(modifier = Modifier.height(20.dp))
         if (exercisesList.value.isNotEmpty()) {
             ExerciseList(
                 exercisesList = exercisesList,

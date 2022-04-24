@@ -93,8 +93,8 @@ fun MainScreen(
         ) {
             Text(
                 text = "Workouts",
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.W400
+                style = MaterialTheme.typography.displayMedium,
+                modifier = Modifier.padding(start = 8.dp)
             )
             LazyColumn(
                 modifier = Modifier

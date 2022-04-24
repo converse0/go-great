@@ -74,12 +74,12 @@ fun StartTrainingScreen(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
-            IconButton(onClick = { navController.navigate("workout/${uid}") }) {
+            IconButton(onClick = { navController.navigate("main") }) {
                 Icon(imageVector = Icons.Default.KeyboardArrowLeft, contentDescription = "Back")
             }
             Text(
                 text = currentExercise.name,
-                style = MaterialTheme.typography.headlineSmall,
+                style = MaterialTheme.typography.displayMedium,
                 modifier = Modifier.padding(start = 8.dp)
             )
         }
