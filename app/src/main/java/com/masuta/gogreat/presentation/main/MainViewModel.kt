@@ -122,7 +122,7 @@ class MainViewModel @Inject constructor(
             }
          } else {
              viewModelScope.launch {
-                 repository.getCurrentTraining()?.let {
+                 repository.getLocalCurrentWorkout()?.let {
                     training.value = it
                  }
              }
