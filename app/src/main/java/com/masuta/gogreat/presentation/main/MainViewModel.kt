@@ -25,44 +25,33 @@ class MainViewModel @Inject constructor(
     private var count = 0
     private var job: Job? = null
 
-    var reloadData by mutableStateOf(repository.workoutsDataReload)
-
-    fun setWorkoutsDataReload(bool: Boolean) {
-        reloadData = bool
-        repository.workoutsDataReload = bool
-        println("${repository.workoutsDataReload}")
-    }
-
-    fun init(sec:Int) {
-        globSec = sec
-    }
-
-    fun playSound(context: Context) {
-      val mp =  MediaPlayer.create(context, R.raw.beep).start()
-    }
-
-    fun start( text: MutableState<String>, context: Context) {
-        job = CoroutineScope(Dispatchers.Main).launch {
-            val seq = 0..globSec - count
-            for (i in seq.reversed()) {
-                currSec = i
-                count++
-                if(i % 10 == 0) playSound(context)
-                text.value = i.toString()
-                delay(1000)
-            }
-
+    var workoutsReloadData = false
+        get() = repository.workoutsDataReload
+        set(value) {
+            field = value
+            repository.workoutsDataReload = value
         }
-    }
-    fun stop() {
-        job?.cancel()
-    }
 
-    fun getExercises(
+    var currentWorkoutReloadData = false
+        get() = repository.currentWorkoutDataReload
+        set(value) {
+            field = value
+            repository.currentWorkoutDataReload = value
+        }
+
+    var pastWorkoutsReloadData = false
+        get() = repository.pastWorkoutsDataReload
+        set(value) {
+            field = value
+            repository.pastWorkoutsDataReload = value
+        }
+
+    fun getWorkouts(
         list: MutableState<List<Training>>,
 //        countTotalWorkout: MutableState<Int>
     ) {
-        if (list.value.isEmpty()) {
+        if (workoutsReloadData) {
+            workoutsReloadData = false
             viewModelScope.launch {
                 val localTrainings = repository.getAllLocalTrainings()
 
@@ -115,18 +104,21 @@ class MainViewModel @Inject constructor(
          training: MutableState<Training>,
 //         countCurrentWorkout: MutableState<Int>
      ) {
-         if(training.value.name.isEmpty()) {
-        viewModelScope.launch {
-            repository.getCurrentTraining()?.let {
-                training.value = it.validateExerciseData()
+         if(currentWorkoutReloadData) {
+             currentWorkoutReloadData = false
+            viewModelScope.launch {
+                repository.getCurrentTraining()?.let {
+                    training.value = it.validateExerciseData()
+                }
+            //   countCurrentWorkout.value++
             }
-         //   countCurrentWorkout.value++
-        }
          }
     }
 
     fun getPastTrainings(list: MutableState<List<Training>>) {
-        if (list.value.isEmpty()) {
+        if (pastWorkoutsReloadData) {
+            pastWorkoutsReloadData = false
+            println("past Workouts Data Reload: ${repository.pastWorkoutsDataReload}")
             viewModelScope.launch {
                 val measureTime = measureTimeMillis {
                     val resp = repository.getPassTrainings()
@@ -143,5 +135,30 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             repository.clearLocalExerciseData()
         }
+    }
+
+    fun init(sec:Int) {
+        globSec = sec
+    }
+
+    fun playSound(context: Context) {
+        val mp =  MediaPlayer.create(context, R.raw.beep).start()
+    }
+
+    fun start( text: MutableState<String>, context: Context) {
+        job = CoroutineScope(Dispatchers.Main).launch {
+            val seq = 0..globSec - count
+            for (i in seq.reversed()) {
+                currSec = i
+                count++
+                if(i % 10 == 0) playSound(context)
+                text.value = i.toString()
+                delay(1000)
+            }
+
+        }
+    }
+    fun stop() {
+        job?.cancel()
     }
 }

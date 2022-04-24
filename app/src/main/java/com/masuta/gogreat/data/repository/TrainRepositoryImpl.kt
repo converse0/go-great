@@ -9,7 +9,7 @@ import io.ktor.http.*
 import javax.inject.Inject
 
 class TrainRepositoryImpl @Inject constructor(
-    client: Client
+    client: Client,
 ): TrainRepository {
     private var httpClient: HttpClient? = null
     private val url = "https://boilerplate-go-trening.herokuapp.com"
@@ -17,6 +17,8 @@ class TrainRepositoryImpl @Inject constructor(
     private var localTrainingEx:Map<Int,TrainingExercise> = mutableMapOf()
 
     override var workoutsDataReload: Boolean = true
+    override var pastWorkoutsDataReload: Boolean = true
+    override var currentWorkoutDataReload: Boolean = true
 
     init {
        httpClient = client.makeClient()

@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,43 +43,26 @@ fun MainScreen(
 ) {
 
     viewModel.clearLocalExercises()
+
     val listTrainings = remember { mutableStateOf(emptyList<Training>()) }
-    val currentWorkout = remember{ mutableStateOf(Training(
+    val currentWorkout = remember { mutableStateOf(Training(
         name = "",
         exercises = mutableListOf(),
         interval = ""
     )) }
     val listPastTrainings = remember { mutableStateOf(emptyList<Training>()) }
 
-    println("Old List Trainings: ${listTrainings.value}")
-    println("Old List Past Trainings: ${listPastTrainings.value}")
-    println("Old Current Workout: ${currentWorkout.value}")
+    viewModel.getCurrentTraining(currentWorkout)
+    viewModel.getWorkouts(listTrainings)
+    viewModel.getPastTrainings(listPastTrainings)
 
-    if (viewModel.reloadData) {
-        listTrainings.value = emptyList()
-        listPastTrainings.value = emptyList()
-        currentWorkout.value = Training(
-            name = "",
-            exercises = mutableListOf(),
-            interval = ""
-        )
-        viewModel.setWorkoutsDataReload(false)
-        viewModel.getCurrentTraining(currentWorkout)
-        viewModel.getExercises(listTrainings)
-        viewModel.getPastTrainings(listPastTrainings)
-        println("Data reload in IF: ${viewModel.reloadData}")
-
-    }
-
-    println("Data reload out of IF: ${viewModel.reloadData}")
-
-    println("New List Trainings: ${listTrainings.value}")
-    println("New List Past Trainings: ${listPastTrainings.value}")
-    println("New Current Workout: ${currentWorkout.value}")
-
+    println("My workouts: ${listTrainings.value}")
+    println("Current workouts: ${currentWorkout.value}")
+    println("Past workouts: ${listPastTrainings.value}")
 
     val countCurrentWorkout = remember { mutableStateOf(0) }
     val countTotalWorkout = remember { mutableStateOf(0) }
+
     Scaffold(
         bottomBar = {
             BottomMenuBar(navController = navController, selected = selected, onSelect = onSelect, menuItems = menuItems)
