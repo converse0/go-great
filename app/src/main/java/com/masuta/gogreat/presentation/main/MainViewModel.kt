@@ -27,7 +27,7 @@ class MainViewModel @Inject constructor(
 
     var reloadData by mutableStateOf(repository.workoutsDataReload)
 
-    fun setWorkoutsDateReload(bool: Boolean) {
+    fun setWorkoutsDataReload(bool: Boolean) {
         reloadData = bool
         repository.workoutsDataReload = bool
         println("${repository.workoutsDataReload}")

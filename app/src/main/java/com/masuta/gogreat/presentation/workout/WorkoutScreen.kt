@@ -24,7 +24,9 @@ import androidx.navigation.NavHostController
 import com.masuta.gogreat.R
 import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.domain.model.gender
+import com.masuta.gogreat.presentation.components.FemalePersonSectionWithPoint
 import com.masuta.gogreat.presentation.components.MainTextButton
+import com.masuta.gogreat.presentation.components.MalePersonSectionWithPoint
 import com.masuta.gogreat.presentation.ui.theme.Red
 import com.skydoves.landscapist.glide.GlideImage
 
@@ -79,7 +81,11 @@ fun WorkoutScreen(
             ) {
                 item {
                     Spacer(modifier = Modifier.height(12.dp))
-                    PersonImage()
+//                    PersonImage()
+                    gender?.let { n ->
+                        if (n == 0) FemalePersonSectionWithPoint(listPoints = listExercises.value) else
+                            MalePersonSectionWithPoint(listPoints = listExercises.value)
+                    }
                     Spacer(modifier = Modifier.height(12.dp))
                     WorkoutListExercises(listExercises.value, navController, uid)
                     Spacer(Modifier.height(30.dp))

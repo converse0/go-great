@@ -24,7 +24,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.masuta.gogreat.R
 import com.masuta.gogreat.domain.model.Training
-import com.masuta.gogreat.domain.model.gender
 import com.masuta.gogreat.presentation.BottomNavigationItem
 import com.masuta.gogreat.presentation.components.BottomMenuBar
 import com.masuta.gogreat.presentation.components.MainTextButton
@@ -42,8 +41,6 @@ fun MainScreen(
     viewModel: MainViewModel
 ) {
 
-    println("Shared gender: $gender")
-
     viewModel.clearLocalExercises()
     val listTrainings = remember { mutableStateOf(emptyList<Training>()) }
     val currentWorkout = remember{ mutableStateOf(Training(
@@ -51,10 +48,13 @@ fun MainScreen(
         exercises = mutableListOf(),
         interval = ""
     )) }
-    val listPastTrainings = remember { mutableStateOf(emptyList<Training>())}
+    val listPastTrainings = remember { mutableStateOf(emptyList<Training>()) }
+
+    println("Old List Trainings: ${listTrainings.value}")
+    println("Old List Past Trainings: ${listPastTrainings.value}")
+    println("Old Current Workout: ${currentWorkout.value}")
 
     if (viewModel.reloadData) {
-        println("Old reload Data: ${viewModel.reloadData}")
         listTrainings.value = emptyList()
         listPastTrainings.value = emptyList()
         currentWorkout.value = Training(
@@ -62,17 +62,19 @@ fun MainScreen(
             exercises = mutableListOf(),
             interval = ""
         )
-        viewModel.setWorkoutsDateReload(false)
-
+        viewModel.setWorkoutsDataReload(false)
         viewModel.getCurrentTraining(currentWorkout)
         viewModel.getExercises(listTrainings)
         viewModel.getPastTrainings(listPastTrainings)
+        println("Data reload in IF: ${viewModel.reloadData}")
 
-        println("New reload Data: ${viewModel.reloadData}")
     }
 
-    println("List Trainings: ${listTrainings.value}")
-    println("Current Workout: ${currentWorkout.value}")
+    println("Data reload out of IF: ${viewModel.reloadData}")
+
+    println("New List Trainings: ${listTrainings.value}")
+    println("New List Past Trainings: ${listPastTrainings.value}")
+    println("New Current Workout: ${currentWorkout.value}")
 
 
     val countCurrentWorkout = remember { mutableStateOf(0) }
