@@ -1,5 +1,6 @@
 package com.masuta.gogreat.data.repository
 
+import androidx.compose.runtime.mutableStateOf
 import com.masuta.gogreat.data.remote.Client
 import com.masuta.gogreat.domain.model.*
 import com.masuta.gogreat.domain.repository.TrainRepository
@@ -16,6 +17,10 @@ class TrainRepositoryImpl @Inject constructor(
     private var localTraining:Map<String,Training> = mutableMapOf()
     private var localTrainingEx:Map<Int,TrainingExercise> = mutableMapOf()
 
+    private var localWorkouts: List<Training> = mutableListOf()
+    private var localCurrentWorkout = mutableStateOf<Training?>(null)
+    private var localPastWorkouts: List<Training> = mutableListOf()
+
     override var workoutsDataReload: Boolean = true
     override var pastWorkoutsDataReload: Boolean = true
     override var currentWorkoutDataReload: Boolean = true
@@ -23,6 +28,9 @@ class TrainRepositoryImpl @Inject constructor(
     init {
        httpClient = client.makeClient()
     }
+
+
+
     override suspend fun findAll(): TrainingResponse {
         httpClient?.get<TrainingResponse>("$url/user/trenings") {
             contentType(ContentType.Application.Json)
@@ -133,6 +141,30 @@ class TrainRepositoryImpl @Inject constructor(
             }
         }
         return null
+    }
+
+    override suspend fun getLocalWorkouts(): List<Training> {
+        return localWorkouts
+    }
+
+    override suspend fun setLocalWorkouts(workouts: List<Training>) {
+        localWorkouts = workouts
+    }
+
+    override suspend fun getLocalCurrentWorkout(): Training? {
+        return localCurrentWorkout.value
+    }
+
+    override suspend fun setLocalCurrentWorkout(workout: Training) {
+        localCurrentWorkout.value = workout
+    }
+
+    override suspend fun getLocalPastWorkouts(): List<Training> {
+        return localPastWorkouts
+    }
+
+    override suspend fun setLocalPastWorkouts(workouts: List<Training>) {
+        localPastWorkouts = workouts
     }
 
     override suspend fun getLocalTrainingByUid(uid: String): Training? {

@@ -46,6 +46,8 @@ class WorkoutViewModel @Inject constructor(
         viewModelScope.launch {
             repository.startTraining(uid)
             repository.workoutsDataReload = true
+            repository.pastWorkoutsDataReload = true
+            repository.currentWorkoutDataReload = true
         }
     }
 }

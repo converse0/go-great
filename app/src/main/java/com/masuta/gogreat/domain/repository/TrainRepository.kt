@@ -20,6 +20,15 @@ interface TrainRepository {
     suspend fun getPassTrainings(): List<Training>?
     suspend fun getMyTrainings(): List<Training>?
 
+    suspend fun getLocalWorkouts(): List<Training>
+    suspend fun setLocalWorkouts(workouts: List<Training>)
+
+    suspend fun getLocalCurrentWorkout(): Training?
+    suspend fun setLocalCurrentWorkout(workout: Training)
+
+    suspend fun getLocalPastWorkouts(): List<Training>
+    suspend fun setLocalPastWorkouts(workouts: List<Training>)
+
     suspend fun getLocalTrainingByUid(uid: String): Training?
     suspend fun getAllLocalEx(): List<TrainingExercise>
     suspend fun clearLocalExerciseData()

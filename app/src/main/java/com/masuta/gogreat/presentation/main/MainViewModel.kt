@@ -92,10 +92,16 @@ class MainViewModel @Inject constructor(
                         workoutsReloadData = false
 
                         println("myTrains: ${trains.size}")
-                        list.value = trains.map { it.validateExerciseData() }
+                        val localList = trains.map { it.validateExerciseData() }
+                        list.value = localList
+                        repository.setLocalWorkouts(localList)
                     }
 
                 //    countTotalWorkout.value ++
+            }
+        } else {
+            viewModelScope.launch {
+                list.value = repository.getLocalWorkouts()
             }
         }
     }
@@ -108,10 +114,18 @@ class MainViewModel @Inject constructor(
                 repository.getCurrentTraining()?.let {
                     currentWorkoutReloadData = false
 
-                    training.value = it.validateExerciseData()
+                    val workout = it.validateExerciseData()
+                    training.value = workout
+                    repository.setLocalCurrentWorkout(workout)
                 }
             //   countCurrentWorkout.value++
             }
+         } else {
+             viewModelScope.launch {
+                 repository.getCurrentTraining()?.let {
+                    training.value = it
+                 }
+             }
          }
     }
 
@@ -125,9 +139,14 @@ class MainViewModel @Inject constructor(
                         pastWorkoutsReloadData = false
 
                         list.value = it
+                        repository.setLocalPastWorkouts(it)
                     }
                 }
                 println("getPastTrainings: ${measureTime}")
+            }
+        } else {
+            viewModelScope.launch {
+                list.value = repository.getLocalPastWorkouts()
             }
         }
     }
