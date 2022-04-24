@@ -83,8 +83,9 @@ fun WorkoutScreen(
                     Spacer(modifier = Modifier.height(12.dp))
 //                    PersonImage()
                     gender?.let { n ->
-                        if (n == 0) FemalePersonSectionWithPoint(listPoints = listExercises.value) else
-                            MalePersonSectionWithPoint(listPoints = listExercises.value)
+                        if (n == 0) MalePersonSectionWithPoint(listPoints = listExercises.value)
+                        else FemalePersonSectionWithPoint(listPoints = listExercises.value)
+
                     }
                     Spacer(modifier = Modifier.height(12.dp))
                     WorkoutListExercises(listExercises.value, navController, uid)
