@@ -51,9 +51,8 @@ class MainViewModel @Inject constructor(
 //        countTotalWorkout: MutableState<Int>
     ) {
         if (workoutsReloadData) {
-            workoutsReloadData = false
             viewModelScope.launch {
-                val localTrainings = repository.getAllLocalTrainings()
+//                val localTrainings = repository.getAllLocalTrainings()
 
 //            if (localTrainings != null
 //                &&localTrainings.size!=list.value.size
@@ -82,8 +81,6 @@ class MainViewModel @Inject constructor(
 //                list.value = localTrainings
 //                println("localTraining (mem 0): ${localTrainings.size}")
 //            }
-                if(1==1) {
-                    println("findAll....")
                     val resp = repository.findAll()
                     resp.data?.let { training ->
 //                    list.value = training.map { it.validateExerciseData() }
@@ -92,10 +89,12 @@ class MainViewModel @Inject constructor(
                     }
                     val myTrains = repository.getMyTrainings()
                     myTrains?.let { trains ->
+                        workoutsReloadData = false
+
                         println("myTrains: ${trains.size}")
                         list.value = trains.map { it.validateExerciseData() }
                     }
-                }
+
                 //    countTotalWorkout.value ++
             }
         }
@@ -105,9 +104,10 @@ class MainViewModel @Inject constructor(
 //         countCurrentWorkout: MutableState<Int>
      ) {
          if(currentWorkoutReloadData) {
-             currentWorkoutReloadData = false
             viewModelScope.launch {
                 repository.getCurrentTraining()?.let {
+                    currentWorkoutReloadData = false
+
                     training.value = it.validateExerciseData()
                 }
             //   countCurrentWorkout.value++
@@ -117,12 +117,13 @@ class MainViewModel @Inject constructor(
 
     fun getPastTrainings(list: MutableState<List<Training>>) {
         if (pastWorkoutsReloadData) {
-            pastWorkoutsReloadData = false
             println("past Workouts Data Reload: ${repository.pastWorkoutsDataReload}")
             viewModelScope.launch {
                 val measureTime = measureTimeMillis {
                     val resp = repository.getPassTrainings()
                     resp?.let {
+                        pastWorkoutsReloadData = false
+
                         list.value = it
                     }
                 }
