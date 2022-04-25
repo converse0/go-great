@@ -4,6 +4,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
@@ -135,7 +136,7 @@ class ProfileViewModel @Inject constructor(
         return resp
     }
 
-    fun uploadImage(im:String) {
+    fun uploadImage(im: ImageBitmap) {
         viewModelScope.launch {
             val resp = repository.uploadImage(im)
             println("Response: $resp")

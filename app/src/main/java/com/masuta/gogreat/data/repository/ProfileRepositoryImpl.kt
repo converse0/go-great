@@ -1,14 +1,21 @@
 package com.masuta.gogreat.data.repository
 
+import android.graphics.Bitmap
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asAndroidBitmap
 import com.masuta.gogreat.data.remote.Client
 import com.masuta.gogreat.domain.model.*
 import com.masuta.gogreat.domain.repository.ProfileRepository
+import io.ktor.client.features.*
 import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
 import io.ktor.client.response.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
+import io.ktor.util.*
+import io.ktor.utils.io.core.*
 import kotlinx.serialization.Serializable
+import java.io.ByteArrayOutputStream
 import java.io.File
 import javax.inject.Inject
 
@@ -84,31 +91,42 @@ class ProfileRepositoryImpl @Inject constructor(
         return response.message
     }
 
-    override suspend fun uploadImage(image: String): String {
+    private fun imageBitmapToByteArray(bitmap: Bitmap): ByteArray {
+        val stream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+        return stream.toByteArray()
+    }
 
-        val response:io.ktor.client.statement.HttpResponse = client.makeClient().submitFormWithBinaryData(
-            url = "https://boilerplate-go-trening.herokuapp.com/v1/files",
-            formData = formData {
-                append("description", "Ktor logo")
-                append("image", File("ktor_logo.png").readBytes(), Headers.build {
-                    append(HttpHeaders.ContentType, "image/png")
-                    append(HttpHeaders.ContentDisposition, "filename=ktor_logo.png")
-                })
-            }
-        )
-        return response.readText()
-//        println("userToken: $userToken")
-//        println("refreshToken: $refreshUserToken")
-//        println("image: $image")
-//        val response = client.makeClient()
-//            .post<String>("https://boilerplate-go-trening.herokuapp.com/v1/files") {
+    @OptIn(InternalAPI::class)
+    override suspend fun uploadImage(image: ImageBitmap): String {
+
+
+        println("userToken: $userToken")
+        println("refreshToken: $refreshUserToken")
+        println("image: $image")
+
+        val response = client.makeClient()
+            .post<String>("https://boilerplate-go-trening.herokuapp.com/v1/files") {
 //                contentType(ContentType.Application.Json)
-//                headers {
-//                    append("Authorization", "Bearer $userToken")
-//                }
-//                body = image
-//            }
-//        return response
+                headers {
+                    append("Content-Type", ContentType.Application.Json)
+                    append("Authorization", "Bearer $userToken")
+                }
+                body = MultiPartFormDataContent(
+                    formData {
+                        this.append(FormPart("bitmapName", "image.jpg"))
+                        this.appendInput(
+                            key = "image",
+                            headers = Headers.build {
+                                append(
+                                    HttpHeaders.ContentDisposition,
+                                    "filename=image.jpg"
+                                )
+                            },
+                        ) { buildPacket { writeFully(imageBitmapToByteArray(image.asAndroidBitmap())) } }                    }
+                )
+            }
+        return response
     }
 
 }

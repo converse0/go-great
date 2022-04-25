@@ -2,7 +2,6 @@ package com.masuta.gogreat.presentation.profile
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
@@ -117,6 +116,7 @@ fun ProfileSection(
     val diet = remember { mutableStateOf(0.toFloat()) }
     val activity = remember { mutableStateOf(0.toFloat()) }
     val uid = remember{ mutableStateOf("")}
+
     val fail = remember {
         mutableStateOf(false)
     }
@@ -135,7 +135,7 @@ fun ProfileSection(
 
     val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
         imageUri = uri
-        viewModel.uploadImage(imageUri.toString())
+
 //        val image = context.contentResolver.openInputStream(uri!!)
 
     }
@@ -147,7 +147,7 @@ fun ProfileSection(
 //            .padding(horizontal = 8.dp)
     ) {
         items(1) {
-            ProfileAvatar(gender = gender.value, imageUri = imageUri, bitmap = bitmap, context = context)
+            ProfileAvatar(gender = gender.value, imageUri = imageUri, bitmap = bitmap, context = context, viewModel)
             Spacer(modifier = Modifier.height(10.dp))
             Text(
                 text = username.value,
@@ -163,7 +163,9 @@ fun ProfileSection(
                 textDecoration = TextDecoration.Underline,
                 color = Green,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth().clickable { launcher.launch("image/*") }
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { launcher.launch("image/*") }
             )
             Spacer(modifier = Modifier.height(20.dp))
             ProfileInfo(
@@ -501,7 +503,8 @@ fun ProfileAvatar(
     gender: Int,
     imageUri: Uri?,
     bitmap: MutableState<Bitmap?>,
-    context: Context
+    context: Context,
+    viewModel: ProfileViewModel
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -526,6 +529,7 @@ fun ProfileAvatar(
                     }
 
                     bitmap.value?.let { btm ->
+                        viewModel.uploadImage(btm.asImageBitmap())
                         Image(
                             bitmap = btm.asImageBitmap(),
                             contentDescription = null,
