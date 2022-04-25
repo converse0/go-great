@@ -109,21 +109,21 @@ class ProfileRepositoryImpl @Inject constructor(
             .post<String>("https://boilerplate-go-trening.herokuapp.com/v1/files") {
 //                contentType(ContentType.Application.Json)
                 headers {
-                    append("Content-Type", ContentType.Application.Json)
+//                    append("Content-Type", ContentType.Application.Json)
                     append("Authorization", "Bearer $userToken")
                 }
                 body = MultiPartFormDataContent(
                     formData {
                         this.append(FormPart("bitmapName", "image.jpg"))
                         this.appendInput(
-                            key = "image",
+                            key = "attachment",
                             headers = Headers.build {
                                 append(
                                     HttpHeaders.ContentDisposition,
                                     "filename=image.jpg"
                                 )
                             },
-                        ) { buildPacket { writeFully(imageBitmapToByteArray(image.asAndroidBitmap())) } }                    }
+                        ) { buildPacket { writeFully(imageBitmapToByteArray(image.asAndroidBitmap())) } }}
                 )
             }
         return response

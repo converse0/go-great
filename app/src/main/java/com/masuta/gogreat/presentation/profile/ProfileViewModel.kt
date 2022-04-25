@@ -24,7 +24,6 @@ class ProfileViewModel @Inject constructor(
     private val getUserParams: GetUserParams,
     private val repository: ProfileRepository
 ) :ViewModel() {
-
     var errorMessage by mutableStateOf("")
 
     fun setParameters(

@@ -125,9 +125,12 @@ fun ProfileSection(
             gender,diet, activity, routeTo, navController, fail,uid)
     }
 
+
+
     val lazyListState = rememberLazyListState()
 
     // Image
+    val isUploadImage = remember { mutableStateOf(false) }
 
     var imageUri by remember { mutableStateOf<Uri?>(null) }
     val context = LocalContext.current
@@ -147,7 +150,7 @@ fun ProfileSection(
 //            .padding(horizontal = 8.dp)
     ) {
         items(1) {
-            ProfileAvatar(gender = gender.value, imageUri = imageUri, bitmap = bitmap, context = context, viewModel)
+            ProfileAvatar(gender = gender.value, imageUri = imageUri, bitmap = bitmap, context = context, viewModel, isUploadImage)
             Spacer(modifier = Modifier.height(10.dp))
             Text(
                 text = username.value,
@@ -165,7 +168,10 @@ fun ProfileSection(
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { launcher.launch("image/*") }
+                    .clickable {
+                        launcher.launch("image/*")
+                        isUploadImage.value = true
+                    }
             )
             Spacer(modifier = Modifier.height(20.dp))
             ProfileInfo(
@@ -504,7 +510,8 @@ fun ProfileAvatar(
     imageUri: Uri?,
     bitmap: MutableState<Bitmap?>,
     context: Context,
-    viewModel: ProfileViewModel
+    viewModel: ProfileViewModel,
+    isUploadImage: MutableState<Boolean>
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -529,7 +536,10 @@ fun ProfileAvatar(
                     }
 
                     bitmap.value?.let { btm ->
-                        viewModel.uploadImage(btm.asImageBitmap())
+                        if (isUploadImage.value) {
+                            viewModel.uploadImage(btm.asImageBitmap())
+                            isUploadImage.value = false
+                        }
                         Image(
                             bitmap = btm.asImageBitmap(),
                             contentDescription = null,
