@@ -134,4 +134,11 @@ class ProfileViewModel @Inject constructor(
         println("Response: $resp")
         return resp
     }
+
+    fun uploadImage(im:String) {
+        viewModelScope.launch {
+            val resp = repository.uploadImage(im)
+            println("Response: $resp")
+        }
+    }
 }

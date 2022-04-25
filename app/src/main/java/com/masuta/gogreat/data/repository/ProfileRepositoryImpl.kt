@@ -4,8 +4,12 @@ import com.masuta.gogreat.data.remote.Client
 import com.masuta.gogreat.domain.model.*
 import com.masuta.gogreat.domain.repository.ProfileRepository
 import io.ktor.client.request.*
+import io.ktor.client.request.forms.*
+import io.ktor.client.response.*
+import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.serialization.Serializable
+import java.io.File
 import javax.inject.Inject
 
 @Serializable
@@ -79,4 +83,32 @@ class ProfileRepositoryImpl @Inject constructor(
 
         return response.message
     }
+
+    override suspend fun uploadImage(image: String): String {
+
+        val response:io.ktor.client.statement.HttpResponse = client.makeClient().submitFormWithBinaryData(
+            url = "https://boilerplate-go-trening.herokuapp.com/v1/files",
+            formData = formData {
+                append("description", "Ktor logo")
+                append("image", File("ktor_logo.png").readBytes(), Headers.build {
+                    append(HttpHeaders.ContentType, "image/png")
+                    append(HttpHeaders.ContentDisposition, "filename=ktor_logo.png")
+                })
+            }
+        )
+        return response.readText()
+//        println("userToken: $userToken")
+//        println("refreshToken: $refreshUserToken")
+//        println("image: $image")
+//        val response = client.makeClient()
+//            .post<String>("https://boilerplate-go-trening.herokuapp.com/v1/files") {
+//                contentType(ContentType.Application.Json)
+//                headers {
+//                    append("Authorization", "Bearer $userToken")
+//                }
+//                body = image
+//            }
+//        return response
+    }
+
 }

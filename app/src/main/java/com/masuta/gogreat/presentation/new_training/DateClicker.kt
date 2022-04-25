@@ -14,17 +14,6 @@ import kotlinx.datetime.toLocalDateTime
 import java.text.SimpleDateFormat
 import java.util.*
 
-/** convert Timestamp to Date*/
-fun Long.toDate(): Date {
-    return Date(this)
-}
-
-
-/** convert Date to String with format yyyy-MM-dd'T'HH:mm:ss.SSS */
-fun formatDate(date: Date): String {
-    val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.getDefault())
-    return format.format(date)
-}
 
 fun calendarTraining(
     date: MutableState<String>,
@@ -60,7 +49,6 @@ fun calendarTraining(
                 s,
                 0
             ).toInstant(timeZone = timeZone).toString()
-            //instantNow.toString()
         },
         mYear, mMonth, mDay,
     )

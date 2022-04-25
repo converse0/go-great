@@ -12,4 +12,5 @@ interface ProfileRepository {
 
     suspend fun updateParameters(params: ParametersUserSet): String
 
+    suspend fun uploadImage(image: String): String
 }
