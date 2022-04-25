@@ -7,11 +7,11 @@ import android.os.Build
 import android.widget.DatePicker
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.MutableState
-import java.text.DateFormat
+import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.toInstant
+import kotlinx.datetime.toLocalDateTime
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.Month
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 /** convert Timestamp to Date*/
@@ -48,13 +48,23 @@ fun calendarTraining(
         context,
         { _: DatePicker, year: Int, month: Int, mDayOfMonth: Int ->
             println("Date Picker$")
-            val m = if (month < 10) "0$month" else month.toString()
-            val d = if (mDayOfMonth < 10) "0$mDayOfMonth" else mDayOfMonth
-            println("$year-$m-$d")
-            val dateTime = LocalDateTime.now()
-            val dateTime2 = LocalDateTime.of(year, Month.of(month+1), mDayOfMonth, dateTime.hour, dateTime.minute)
-            date.value = dateTime2.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
-        }, mYear, mMonth, mDay,
+            val timeZone = kotlinx.datetime.TimeZone.currentSystemDefault()
+            val now = Clock.System.now()
+            val h = now.toLocalDateTime(timeZone).hour
+            val min = now.toLocalDateTime(timeZone).minute
+            val s = now.toLocalDateTime(timeZone).second
+            date.value = LocalDateTime(
+                year,
+                month + 1,
+                mDayOfMonth,
+                h,
+                min,
+                s,
+                0
+            ).toInstant(timeZone = timeZone).toString()
+            //instantNow.toString()
+        },
+        mYear, mMonth, mDay,
     )
 
     return mDatePickerDialog
