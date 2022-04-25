@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.masuta.gogreat.R
+import com.masuta.gogreat.domain.model.ParametersUser
 import com.masuta.gogreat.domain.model.UserActivity
 import com.masuta.gogreat.domain.model.UserDiet
 import com.masuta.gogreat.presentation.BottomNavigationItem
@@ -47,6 +48,7 @@ import com.masuta.gogreat.presentation.components.MainTextButton
 import com.masuta.gogreat.presentation.components.SliderWithLabelUserActivity
 import com.masuta.gogreat.presentation.ui.theme.Green
 import com.masuta.gogreat.presentation.ui.theme.Red
+import com.skydoves.landscapist.glide.GlideImage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -105,32 +107,25 @@ fun ProfileSection(
     viewModel: ProfileViewModel,
     navController: NavHostController
 ) {
-    val username = remember { mutableStateOf("") }
-    val timesEat = remember{ mutableStateOf("") }
-    val age = remember{ mutableStateOf("") }
-    val weight = remember{ mutableStateOf("") }
-    val height = remember{ mutableStateOf("") }
-    val desiredWeight = remember{ mutableStateOf("") }
 
-    val gender = remember { mutableStateOf(0) }
-    val diet = remember { mutableStateOf(0.toFloat()) }
-    val activity = remember { mutableStateOf(0.toFloat()) }
-    val uid = remember{ mutableStateOf("")}
+    val userParams = remember { mutableStateOf(ParametersUser()) }
 
     val fail = remember {
         mutableStateOf(false)
     }
+
     if (!fail.value) {
-        viewModel.getParameters(username, timesEat, age, weight, height, desiredWeight,
-            gender,diet, activity, routeTo, navController, fail,uid)
+        viewModel.getParameters(
+            userParams = userParams,
+            routeTo = routeTo,
+            navController = navController,
+            fail = fail
+        )
     }
-
-
 
     val lazyListState = rememberLazyListState()
 
     // Image
-    val isUploadImage = remember { mutableStateOf(false) }
 
     var imageUri by remember { mutableStateOf<Uri?>(null) }
     val context = LocalContext.current
@@ -138,9 +133,7 @@ fun ProfileSection(
 
     val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
         imageUri = uri
-
 //        val image = context.contentResolver.openInputStream(uri!!)
-
     }
 
     LazyColumn(
@@ -150,10 +143,17 @@ fun ProfileSection(
 //            .padding(horizontal = 8.dp)
     ) {
         items(1) {
-            ProfileAvatar(gender = gender.value, imageUri = imageUri, bitmap = bitmap, context = context, viewModel, isUploadImage)
+            ProfileAvatar(
+                gender = userParams.value.gender,
+                imageUri = imageUri,
+                bitmap = bitmap,
+                context = context,
+                viewModel = viewModel,
+                profileImg = userParams.value.image
+            )
             Spacer(modifier = Modifier.height(10.dp))
             Text(
-                text = username.value,
+                text = userParams.value.username,
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
@@ -170,23 +170,16 @@ fun ProfileSection(
                     .fillMaxWidth()
                     .clickable {
                         launcher.launch("image/*")
-                        isUploadImage.value = true
                     }
             )
             Spacer(modifier = Modifier.height(20.dp))
-            ProfileInfo(
-                lazyListState = lazyListState,
-                viewModel = viewModel,
-                timesEat = timesEat,
-                age = age,
-                weight = weight,
-                height = height,
-                desiredWeight = desiredWeight,
-                gender = gender,
-                diet = diet,
-                activity = activity,
-                uid = uid
-            )
+            if (userParams.value.uid != null) {
+                ProfileInfo(
+                    lazyListState = lazyListState,
+                    viewModel = viewModel,
+                    userParams = userParams,
+                )
+            }
             Spacer(Modifier.height(60.dp))
         }
     }
@@ -197,18 +190,22 @@ fun ProfileSection(
 fun ProfileInfo(
     lazyListState: LazyListState,
     viewModel: ProfileViewModel,
-    timesEat: MutableState<String>,
-    age: MutableState<String>,
-    weight: MutableState<String>,
-    height: MutableState<String>,
-    desiredWeight: MutableState<String>,
-    gender: MutableState<Int>,
-    activity: MutableState<Float>,
-    diet: MutableState<Float>,
-    uid: MutableState<String>
+    userParams: MutableState<ParametersUser>,
 ) {
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
+
+    val state = userParams.value
+
+    val timesEat = remember{ mutableStateOf(state.eat.toString()) }
+    val age = remember{ mutableStateOf(state.age.toString()) }
+    val weight = remember{ mutableStateOf(state.weight.toString()) }
+    val height = remember{ mutableStateOf(state.height.toString()) }
+    val desiredWeight = remember{ mutableStateOf(state.desiredWeight.toString()) }
+
+    val gender = remember { mutableStateOf(state.gender) }
+    val diet = remember { mutableStateOf(state.diet.toFloat()) }
+    val activity = remember { mutableStateOf(state.activity.toFloat()) }
 
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -245,16 +242,6 @@ fun ProfileInfo(
             onChangeValue = { height.value = it }
         )
         Spacer(Modifier.height(20.dp))
-//        InputTextField(
-//            text = "Physical Activity",
-//            value = UserActivity.values()[activity.value]
-//                .toString().lowercase()
-//                .firstCharToUpperCase().normalizeString(),
-//            enabled = false,
-//            keyboardController = keyboardController,
-//            keyboardType = KeyboardType.Number,
-//            onChangeValue = { timesEat.value = it }
-//        )
         Text(
             text = "Physical Activity",
             style = MaterialTheme.typography.bodySmall,
@@ -262,12 +249,6 @@ fun ProfileInfo(
             color = Color.Black
         )
         val listActivity = UserActivity.values().toList()
-//        val selectedActivity = remember { mutableStateOf(listActivity[activity.value.toInt()]) }
-//        println("selectedActivity: ${selectedActivity.value.value}")
-//        if (selectedActivity.value.value==0&&activity.value.toInt()>0) {
-//            selectedActivity.value = listActivity[activity.value.toInt()]
-//        }
-//        activity.value = selectedActivity.value.value.toFloat()
         SliderWithLabelUserActivity(
             selectedItem = activity,
             valueRange = 0f..listActivity.size.minus(1).toFloat(),
@@ -286,26 +267,6 @@ fun ProfileInfo(
             valueRange = 0f..listDiet.size.minus(1).toFloat(),
             items = listDiet
         )
-//        val selectedDiet = remember { mutableStateOf(listDiet[diet.value]) }
-//        diet.value = selectedDiet.value.value
-//        SliderWithLabelUserDiet(
-//            value = diet.value.toFloat(),
-//            selectedItem = selectedDiet,
-//            valueRange = 0f..listDiet.size.minus(1).toFloat(),
-//            finiteEnd = true,
-//            items = listDiet
-//        )
-
-//        InputTextField(
-//            text = "Diet",
-//            value = UserDiet.values()[diet.value]
-//                .toString().lowercase()
-//                .firstCharToUpperCase().normalizeString(),
-//            enabled = false,
-//            keyboardController = keyboardController,
-//            keyboardType = KeyboardType.Number,
-//            onChangeValue = { timesEat.value = it }
-//        )
         Spacer(Modifier.height(20.dp))
         InputTextField(
             text = "How often do you prefer to eat?",
@@ -332,15 +293,16 @@ fun ProfileInfo(
         ) {
             CoroutineScope(Dispatchers.Main).launch {
                 val resp = viewModel.updateParams(
-                    gender = gender.value,
-                    age = age.value.toInt(),
-                    weight = weight.value.toInt(),
-                    height = height.value.toInt(),
-                    activity = activity.value,
-                    diet = diet.value,
-                    timesEat = timesEat.value.toInt(),
-                    desiredWeight = desiredWeight.value.toInt(),
-                    uid = uid.value
+                    userParams = state.copy(
+                        age = age.value.toInt(),
+                        eat = timesEat.value.toInt(),
+                        height = height.value.toInt(),
+                        weight = weight.value.toInt(),
+                        activity = activity.value.toInt(),
+                        diet = diet.value.toInt(),
+                        desiredWeight = desiredWeight.value.toInt(),
+                        gender = gender.value,
+                    )
                 )
                 if (resp.isNotEmpty()) {
                     Toast.makeText(
@@ -511,7 +473,7 @@ fun ProfileAvatar(
     bitmap: MutableState<Bitmap?>,
     context: Context,
     viewModel: ProfileViewModel,
-    isUploadImage: MutableState<Boolean>
+    profileImg: String?
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -526,57 +488,66 @@ fun ProfileAvatar(
                     .clip(shape = CircleShape)
                     .background(color = Color.Gray)
             ) {
-                imageUri?.let {
-                    if (Build.VERSION.SDK_INT < 28) {
-                        bitmap.value = MediaStore.Images
-                            .Media.getBitmap(context.contentResolver, it)
-                    } else {
-                        val source = ImageDecoder.createSource(context.contentResolver, it)
-                        bitmap.value = ImageDecoder.decodeBitmap(source)
-                    }
-
-                    bitmap.value?.let { btm ->
-                        if (isUploadImage.value) {
-                            viewModel.uploadImage(btm.asImageBitmap())
-                            isUploadImage.value = false
+                println("Image------------")
+                if (viewModel.isUploadImage) {
+                    imageUri?.let {
+                        if (Build.VERSION.SDK_INT < 28) {
+                            bitmap.value = MediaStore.Images
+                                .Media.getBitmap(context.contentResolver, it)
+                        } else {
+                            val source = ImageDecoder.createSource(context.contentResolver, it)
+                            bitmap.value = ImageDecoder.decodeBitmap(source)
                         }
-                        Image(
-                            bitmap = btm.asImageBitmap(),
-                            contentDescription = null,
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .size(150.dp)
-                                .clip(shape = CircleShape)
-                        )
+
+                        bitmap.value?.let { btm ->
+                            viewModel.uploadImage(btm.asImageBitmap())
+                            Image(
+                                bitmap = btm.asImageBitmap(),
+                                contentDescription = null,
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier
+                                    .size(150.dp)
+                                    .clip(shape = CircleShape)
+                            )
+                        }
                     }
                 }
-                if (bitmap.value == null) {
-                    if (gender == 0) {
-                        Image(
-                            painter = painterResource(id = R.drawable.avatar_male),
-                            contentDescription = "Male Avatar",
-                            contentScale = ContentScale.Inside,
-                            modifier = Modifier
-                                .size(150.dp)
-                                .clip(shape = CircleShape)
-                                .padding(10.dp)
-                        )
-                    } else {
-                        Image(
-                            painter = painterResource(id = R.drawable.avatar_female),
-                            contentDescription = "Female Avatar",
-                            contentScale = ContentScale.Inside,
-                            modifier = Modifier
-                                .size(150.dp)
-                                .clip(shape = CircleShape)
-                                .padding(10.dp)
-                        )
-                    }
+            }
+            if (profileImg == null || profileImg.isEmpty() && bitmap.value == null) {
+                if (gender == 0) {
+                    Image(
+                        painter = painterResource(id = R.drawable.avatar_male),
+                        contentDescription = "Male Avatar",
+                        contentScale = ContentScale.Inside,
+                        modifier = Modifier
+                            .size(150.dp)
+                            .clip(shape = CircleShape)
+                            .padding(10.dp)
+                    )
+                } else {
+                    Image(
+                        painter = painterResource(id = R.drawable.avatar_female),
+                        contentDescription = "Female Avatar",
+                        contentScale = ContentScale.Inside,
+                        modifier = Modifier
+                            .size(150.dp)
+                            .clip(shape = CircleShape)
+                            .padding(10.dp)
+                    )
                 }
+            } else {
+                GlideImage(
+                    imageModel = profileImg,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .size(150.dp)
+                        .clip(shape = CircleShape)
+                )
             }
         }
     }
 }
+
 
 
 

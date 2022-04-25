@@ -25,5 +25,20 @@ data class ParametersUserGet(
     val gender: Int,
     val height: Int,
     val weight: Int,
-    val uid: String? = null
+    val uid: String? = null,
+    var image: String? = null
+)
+
+data class ParametersUser(
+    var username: String = "",
+    var activity: Int = 0,
+    var age: Int = 0,
+    var desiredWeight: Int = 0,
+    var diet: Int = 0,
+    var eat: Int = 0,
+    var gender: Int = 0,
+    val height: Int = 0,
+    val weight: Int = 0,
+    val uid: String? = null,
+    var image: String? = null
 )

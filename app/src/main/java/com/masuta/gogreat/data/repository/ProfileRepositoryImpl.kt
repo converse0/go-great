@@ -1,6 +1,7 @@
 package com.masuta.gogreat.data.repository
 
 import android.graphics.Bitmap
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asAndroidBitmap
 import com.masuta.gogreat.data.remote.Client
@@ -41,8 +42,13 @@ data class ResponseParams(
 )
 
 class ProfileRepositoryImpl @Inject constructor(
-    private val client: Client
+    private val client: Client,
 ): ProfileRepository {
+
+    private var profileParams = mutableStateOf<ParametersUser?>(null)
+
+    override var isLoadData: Boolean = true
+
     override suspend fun createParameters(params: ParametersUserSet): String {
         println("accessToken: $userToken")
         println("refreshToken: $refreshUserToken")
@@ -127,6 +133,14 @@ class ProfileRepositoryImpl @Inject constructor(
                 )
             }
         return response
+    }
+
+    override suspend fun getLocalProfileParams(): ParametersUser? {
+        return profileParams.value
+    }
+
+    override suspend fun setLocalProfileParams(params: ParametersUser) {
+        profileParams.value = params
     }
 
 }
