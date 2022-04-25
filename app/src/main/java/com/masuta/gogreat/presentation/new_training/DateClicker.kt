@@ -26,8 +26,6 @@ fun formatDate(date: Date): String {
     return format.format(date)
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
-@SuppressLint("SimpleDateFormat")
 fun calendarTraining(
     date: MutableState<String>,
     context: Context
