@@ -1,5 +1,6 @@
 package com.masuta.gogreat.presentation.main
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -31,6 +32,8 @@ import com.masuta.gogreat.presentation.components.MainTextButton
 import com.masuta.gogreat.presentation.ui.theme.Purple200
 import com.masuta.gogreat.presentation.ui.theme.Red
 import com.skydoves.landscapist.glide.GlideImage
+import java.text.SimpleDateFormat
+import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -233,6 +236,7 @@ fun WorkoutsList(
     }
 }
 
+@SuppressLint("SimpleDateFormat")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WorkoutItem(
@@ -240,13 +244,21 @@ fun WorkoutItem(
     modifier: Modifier = Modifier,
     onSelectItem: (String) -> Unit
 ) {
-
-    val ymdDate = workout.date?.split("T")?.get(0) ?: ""
+    val dateText = workout.date?.let {
+        val date = it.split("T").get(0)
+        val formatParse = SimpleDateFormat("yyyy-MM-dd")
+        val format = SimpleDateFormat("dd MMMM yyyy", Locale.ENGLISH)
+        val dateParse = formatParse.parse(date)
+        println("Date parse: ${dateParse}")
+        format.format(dateParse!!)
+    } ?: "27 March 2019"
+//    val ymdDate = workout.date?.split("T")?.get(0) ?: ""
+//    val dateText = SimpleDateFormat("dd MMMM yyyy").parse(ymdDate)
 
     if (workout.name.isEmpty()) {
         return
     }
-    println("Date: $ymdDate")
+//    println("Date: $ymdDate")
     Card(
         shape = RoundedCornerShape(16.dp),
         containerColor = Color.Gray,
@@ -281,7 +293,7 @@ fun WorkoutItem(
                 Spacer(Modifier.height(10.dp))
 //            val internal = if(workout.interval.isEmpty()) "30s" else workout.interval
                 Text(
-                    text = ymdDate.split("-").reversed().joinToString(" "),
+                    text = dateText,
                     style = MaterialTheme.typography.bodySmall,
                     color = Color.White,
                     fontWeight = FontWeight.W300
