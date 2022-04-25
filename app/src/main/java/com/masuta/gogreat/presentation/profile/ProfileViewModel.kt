@@ -146,10 +146,10 @@ class ProfileViewModel @Inject constructor(
     }
 
     fun uploadImage(im: ImageBitmap) {
+        isUploadImage = false
         viewModelScope.launch {
             val resp = repository.uploadImage(im)
             println("Response: $resp")
-            isUploadImage = false
 //            isDataLoad = true
         }
     }

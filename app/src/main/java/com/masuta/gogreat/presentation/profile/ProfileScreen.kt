@@ -512,6 +512,16 @@ fun ProfileAvatar(
                         }
                     }
                 }
+                if (bitmap.value != null) {
+                    Image(
+                        bitmap = bitmap.value!!.asImageBitmap(),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .size(150.dp)
+                            .clip(shape = CircleShape)
+                    )
+                }
             }
             if (profileImg == null || profileImg.isEmpty() && bitmap.value == null) {
                 if (gender == 0) {
