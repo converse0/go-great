@@ -28,8 +28,6 @@ fun SliderWithText(
     val items = listOf(1, 2 , 3, 4)
     val selectedItem = remember { mutableStateOf(items[0]) }
 
-    println(selectedItem.value)
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -141,7 +139,6 @@ fun SliderWithLabelUserActivity(
     labelMinWidth: Dp = 24.dp,
     items: List<Any?>
 ) {
-    println("SliderWithLabelUserActivity ${selectedItem.value}")
     Column {
         Slider(
             value = selectedItem.value,

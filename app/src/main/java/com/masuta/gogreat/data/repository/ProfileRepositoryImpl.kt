@@ -50,9 +50,6 @@ class ProfileRepositoryImpl @Inject constructor(
     override var isLoadData: Boolean = true
 
     override suspend fun createParameters(params: ParametersUserSet): String {
-        println("accessToken: $userToken")
-        println("refreshToken: $refreshUserToken")
-        println("params: $params")
         val response = client.makeClient()
             .post<String>("https://boilerplate-go-trening.herokuapp.com/user/parameters") {
                 contentType(ContentType.Application.Json)
@@ -65,7 +62,6 @@ class ProfileRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getParameters(): ResponseParams {
-        println("userToken: $userToken")
         userToken?.let {
             val response = client.makeClient().get<ResponseParams>(
                 "https://boilerplate-go-trening.herokuapp.com/user/parameters") {
@@ -81,9 +77,6 @@ class ProfileRepositoryImpl @Inject constructor(
     }
 
     override suspend fun updateParameters(params: ParametersUserSet): String {
-        println("userToken: $userToken")
-        println("refreshToken: $refreshUserToken")
-        println("params: $params")
         val response = client.makeClient()
             .put<UpdateParamsResponse>("https://boilerplate-go-trening.herokuapp.com/user/parameters") {
                 contentType(ContentType.Application.Json)

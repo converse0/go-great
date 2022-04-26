@@ -88,7 +88,7 @@ fun StartTrainingModal(
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(10.dp)
                         )
-                        val relax = listOf(15, 30, 50)
+                        val relax = listOf(5, 15, 30, 50)
                         SliderWithLabel(
                             value = 0f,
                             selectedItem = time,

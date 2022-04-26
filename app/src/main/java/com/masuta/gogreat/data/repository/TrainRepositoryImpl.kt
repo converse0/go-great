@@ -43,7 +43,6 @@ class TrainRepositoryImpl @Inject constructor(
     override suspend fun findById(id: Long): ExerciseResponse {
         ExerciseType.values()[id.toInt()].let {
             val type = it.toString().lowercase()
-            println(type)
             val resp = httpClient?.get<ExerciseResponse>(
                 "$url/user/exercises/default?type=${type}") {
                 contentType(ContentType.Application.Json)
@@ -51,14 +50,12 @@ class TrainRepositoryImpl @Inject constructor(
                     append("Authorization", "Bearer $userToken")
                 }
             }!!
-            println(   "findById: $resp" )
             return resp
         }
     }
 
 
     override suspend fun save(newTrain: Training) {
-        println("saveReq: $newTrain")
       val resp = httpClient?.post<String>("$url/user/trening") {
           contentType(ContentType.Application.Json)
             headers {
@@ -67,14 +64,11 @@ class TrainRepositoryImpl @Inject constructor(
             body = newTrain
         }
         saveLocal(newTrain)
-        println("saveRes: $resp")
 
     }
 
     override suspend fun saveLocal(newTrain: Training): String {
         val id = newTrain.uid ?: ""
-        println("saveLocal: $id")
-        println("Old LocalTrainings $localTraining")
         localTraining.get(id)?.apply {
             this.image = newTrain.image
             this.uid = id
@@ -84,14 +78,12 @@ class TrainRepositoryImpl @Inject constructor(
         } ?: run {
             localTraining = localTraining.plus(id to newTrain)
         }
-        println("Old LocalTrainings $localTraining")
         return id
     }
 
     override suspend fun saveLocalEx(ex: TrainingExercise): Int {
         val id = localTrainingEx.size.plus(1)
         localTrainingEx = localTrainingEx.plus(id to ex)
-        println(localTrainingEx)
         return id
     }
 
@@ -133,7 +125,6 @@ class TrainRepositoryImpl @Inject constructor(
                 append("Authorization", "Bearer $userToken")
             }
         }?.let { tr ->
-            println("getMyTrainings: $tr")
             tr.data?.let { trains ->
                 return trains
             }
@@ -189,7 +180,6 @@ class TrainRepositoryImpl @Inject constructor(
                 append("Authorization", "Bearer $userToken")
             }
         }.let {
-            println("getTrainingDetail: $it")
             return it!!.data!!
         }
 
@@ -230,7 +220,6 @@ class TrainRepositoryImpl @Inject constructor(
 
             tr.data?.let { train ->
                 train.getOrNull(0)?.let {
-                    println("getCurrentTraining: $it")
                     return it
                 }
             }
@@ -240,7 +229,6 @@ class TrainRepositoryImpl @Inject constructor(
 
 
     override suspend fun setExerciseParams(uid: String, listExercises: List<TrainingExercise>) {
-        println("setExerciseParamsReq: $listExercises")
         val data = TrainingExerciseUpdate(uid=uid, exercises = listExercises)
         httpClient?.put<String>("$url/user/trening/exercises") {
             contentType(ContentType.Application.Json)

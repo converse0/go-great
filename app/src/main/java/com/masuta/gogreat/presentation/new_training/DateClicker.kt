@@ -1,17 +1,13 @@
 package com.masuta.gogreat.presentation.new_training
 
-import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Context
-import android.os.Build
 import android.widget.DatePicker
-import androidx.annotation.RequiresApi
 import androidx.compose.runtime.MutableState
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
-import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -34,7 +30,6 @@ fun calendarTraining(
     val mDatePickerDialog = DatePickerDialog(
         context,
         { _: DatePicker, year: Int, month: Int, mDayOfMonth: Int ->
-            println("Date Picker$")
             val timeZone = kotlinx.datetime.TimeZone.currentSystemDefault()
             val now = Clock.System.now()
             val h = now.toLocalDateTime(timeZone).hour

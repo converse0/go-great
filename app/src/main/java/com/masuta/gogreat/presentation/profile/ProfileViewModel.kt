@@ -141,7 +141,6 @@ class ProfileViewModel @Inject constructor(
         repository.setLocalProfileParams(userParams)
         val resp = repository.updateParameters(params)
         isDataLoad = true
-        println("Response: $resp")
         return resp
     }
 

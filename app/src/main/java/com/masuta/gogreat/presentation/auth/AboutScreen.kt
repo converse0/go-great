@@ -198,54 +198,6 @@ fun AboutForm(
 }
 
 @Composable
-fun DietSection(
-    selected: UserDiet,
-    onDietSelect: (UserDiet) -> Unit
-) {
-    Column {
-        DefaultRadioButton(text = UserDiet.BALANCED.toString().lowercase(), selected = selected == UserDiet.BALANCED, onSelect = { onDietSelect(UserDiet.BALANCED) })
-        DefaultRadioButton(text = UserDiet.LOW_FAT.toString().lowercase(), selected = selected == UserDiet.LOW_FAT, onSelect = { onDietSelect(UserDiet.LOW_FAT) })
-        DefaultRadioButton(text = UserDiet.LOW_CARBS.toString().lowercase(), selected = selected == UserDiet.LOW_CARBS, onSelect = { onDietSelect(UserDiet.LOW_CARBS) })
-        DefaultRadioButton(text = UserDiet.LOW_PROTEIN.toString().lowercase(), selected = selected == UserDiet.LOW_PROTEIN, onSelect = { onDietSelect(UserDiet.LOW_PROTEIN) })
-    }
-}
-
-@Composable
-fun PhysicalActivitySection(
-    selected: UserActivity,
-    onPhysicalActivitySelect: (UserActivity) -> Unit
-) {
-    val list = UserActivity.values().toList()
-
-    println(list)
-
-    Column {
-        DefaultRadioButton(text = UserActivity.BASIC.toString()
-            .lowercase().firstCharToUpperCase()
-            .normalizeString(),
-            selected = selected == UserActivity.BASIC,
-            onSelect = { onPhysicalActivitySelect(UserActivity.BASIC) })
-        DefaultRadioButton(text = UserActivity.LOW.toString()
-            .lowercase().firstCharToUpperCase()
-            .normalizeString(),
-            selected = selected == UserActivity.LOW,
-            onSelect = { onPhysicalActivitySelect(UserActivity.LOW) })
-        DefaultRadioButton(text = UserActivity.LIGHT.toString().lowercase()
-            .firstCharToUpperCase().normalizeString(),
-            selected = selected == UserActivity.LIGHT,
-            onSelect = { onPhysicalActivitySelect(UserActivity.LIGHT) })
-        DefaultRadioButton(text = UserActivity.MEDIUM.toString().lowercase()
-            .firstCharToUpperCase().normalizeString(),
-            selected = selected == UserActivity.MEDIUM,
-            onSelect = { onPhysicalActivitySelect(UserActivity.MEDIUM) })
-        DefaultRadioButton(text = UserActivity.HIGH.toString().lowercase()
-            .firstCharToUpperCase().normalizeString(),
-            selected = selected == UserActivity.HIGH,
-            onSelect = { onPhysicalActivitySelect(UserActivity.HIGH) })
-    }
-}
-
-@Composable
 fun GenderChoisen(
     selected: Int,
     onGenderSelect: (Int) -> Unit

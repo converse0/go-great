@@ -18,7 +18,6 @@ class WorkoutViewModel @Inject constructor(
         viewModelScope.launch {
 //            val resp = repository.getTrainingDetail(uid)
             val resp = repository.getLocalTrainingByUid(uid)
-            println(resp)
 
             resp?.let {
                 listExercises.value = it.exercises

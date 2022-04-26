@@ -62,7 +62,6 @@ class StartTrainingViewModel @Inject constructor(
     fun onEvent(event: TrainingEvent) {
         if (_indexExercise.value==_listExercises.value.size) {
           //  navigateMain()
-            println("=====================FINISHED=====================")
            return
         }
         when(event) {
@@ -70,22 +69,13 @@ class StartTrainingViewModel @Inject constructor(
                 _exerciseSets.value--
             }
             is TrainingEvent.NextExercise -> {
-                    println("old index: ${_indexExercise.value}")
-//                    println("size: ${_listExercises.value.size}")
-//                    println(_listExercises.value[_indexExercise.value])
-//                    println(_listExercises.value[_indexExercise.value].numberOfSets)
                     _indexExercise.value++
 
                 if (_indexExercise.value==_listExercises.value.size) {
-                    println("=====================FINISHED=====================")
                     return
                 }
-                    println("new index: ${_indexExercise.value}")
-                    println("list exercises: ${_listExercises.value.size}")
                     _currentExercise.value = _listExercises.value[_indexExercise.value]
                     _exerciseSets.value = _listExercises.value[_indexExercise.value].numberOfSets
-
-                println("index: ${_indexExercise.value}")
             }
             is TrainingEvent.SetExerciseSets -> {
                 _exerciseSets.value = event.sets
@@ -97,14 +87,12 @@ class StartTrainingViewModel @Inject constructor(
         viewModelScope.launch {
 //            val resp = repository.getTrainingDetail(uid)
             val resp = repository.getLocalTrainingByUid(uid)
-            println("Exercise: $resp")
 
             resp?.let { it ->
                 _listExercises.value = it.exercises
 //                interval.value = it.interval.toInteger()
                 _currentExercise.value = it.exercises[indexExercise.value]
                 _exerciseSets.value = _currentExercise.value.numberOfSets
-                println("${_exerciseSets.value} ,${_indexExercise.value}")
             }
 //
 //            listExercises.value = resp.exercises
@@ -118,10 +106,9 @@ class StartTrainingViewModel @Inject constructor(
             repository.workoutsDataReload = true
             repository.pastWorkoutsDataReload = true
             repository.currentWorkoutDataReload = true
-            println("Old currentExercise: ${_currentExercise.value}")
+
             _currentExercise.value = listExercises.get(_indexExercise.value)
             _exerciseSets.value = _currentExercise.value.numberOfSets
-            println("New currentExercise: ${_currentExercise.value}")
 
             val training = repository.getLocalTrainingByUid(uid).let {
                 it?.copy(

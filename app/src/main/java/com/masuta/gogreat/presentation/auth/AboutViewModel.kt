@@ -34,7 +34,6 @@ class AboutViewModel @Inject constructor(
 //            val pUseCase = ProfileUseCase()
             viewModelScope.launch {
                 val resp = createUserParams(parametersUser)
-                println(resp)
             }
         }
     }

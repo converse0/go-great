@@ -1,6 +1,5 @@
 package com.masuta.gogreat.presentation.new_training
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -34,22 +33,12 @@ import com.masuta.gogreat.presentation.ui.theme.Red
 import com.skydoves.landscapist.glide.GlideImage
 import io.ktor.util.reflect.*
 
-// local data
-//         TrainingExercise(1, "2s", 3,
-//            12, name = "Squat", relax = "20s", type = "other",uid= ""),
-//        TrainingExercise(1, "2s", 3,
-//            12, name = "Deadlift", relax = "20s", type = "other",uid= ""),
-//        TrainingExercise(1, "2s", 3, 12,
-//            name = "Bench press",relax = "20s", type = "other",uid= "")
-
 @Composable
 fun ExerciseScreen(
     navController: NavHostController,
     viewModel: ExerciseViewModel,
     typeId: String?
 ) {
-    println(typeId)
-    
     val selectedItems = remember { mutableStateOf(listOf(-1)) }
     val newExercise = remember{ mutableStateOf(false) }
     val exercisesList = remember { mutableStateOf(emptyList<TrainingExercise>())  }
@@ -82,7 +71,6 @@ fun ExerciseScreen(
             if (exercisesList.value.isNotEmpty()) exercisesList.value.first().type.firstCharToUpperCase() + " exercises"
                         else "Empty List exercises"
         Text(
-//            text = "Biceps exercise",
             text = listName,
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.W300
@@ -153,14 +141,6 @@ fun ExerciseItem(
                 .width(150.dp)
                 .height(70.dp)
         )
-//        Image(
-//            painter = painterResource(id = R.drawable.sport_health),
-//            contentDescription = null,
-//            contentScale = ContentScale.Crop,
-//            modifier = Modifier
-//                .width(200.dp)
-//                .height(100.dp)
-//        )
         Text(
             text = exercise.name,
             style = MaterialTheme.typography.headlineSmall,
@@ -298,8 +278,6 @@ fun NewExerciseParameters(
                         numberOfSets = sets.get(numberOfSets.value.toInt())
                     )
                     viewModel.saveLocalExercise(ex)
-                    println(exercise)
-                    println(ex)
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Red),
                 modifier = Modifier

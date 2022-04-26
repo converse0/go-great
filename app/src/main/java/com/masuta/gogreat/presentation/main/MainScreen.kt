@@ -59,10 +59,6 @@ fun MainScreen(
     viewModel.getWorkouts(listTrainings)
     viewModel.getPastTrainings(listPastTrainings)
 
-    println("My workouts: ${listTrainings.value}")
-    println("Current workouts: ${currentWorkout.value}")
-    println("Past workouts: ${listPastTrainings.value}")
-
     val countCurrentWorkout = remember { mutableStateOf(0) }
     val countTotalWorkout = remember { mutableStateOf(0) }
 
@@ -249,21 +245,17 @@ fun WorkoutItem(
         val formatParse = SimpleDateFormat("yyyy-MM-dd")
         val format = SimpleDateFormat("dd MMMM yyyy", Locale.ENGLISH)
         val dateParse = formatParse.parse(date)
-        println("Date parse: ${dateParse}")
         format.format(dateParse!!)
     } ?: "27 March 2019"
-//    val ymdDate = workout.date?.split("T")?.get(0) ?: ""
-//    val dateText = SimpleDateFormat("dd MMMM yyyy").parse(ymdDate)
 
     if (workout.name.isEmpty()) {
         return
     }
-//    println("Date: $ymdDate")
+
     Card(
         shape = RoundedCornerShape(16.dp),
         containerColor = Color.Gray,
         modifier = modifier
-//            .width(300.dp)
             .height(170.dp)
             .padding(horizontal = 20.dp)
             .clickable { workout.uid?.let { onSelectItem(it) } }
@@ -277,7 +269,6 @@ fun WorkoutItem(
 
             }
             Column(
-//                verticalArrangement = Arrangement.Bottom,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(20.dp)

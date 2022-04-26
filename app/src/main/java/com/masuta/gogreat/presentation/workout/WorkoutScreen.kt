@@ -36,15 +36,7 @@ fun WorkoutScreen(
     viewModel: WorkoutViewModel,
     uid: String?
 ) {
-    println("Training uid: $uid")
-//    val listExercises = listOf(
-//        TrainingExercise(1, "2s", 3,
-//            12, name = "Squat", relax = "20s", type = "other",uid= ""),
-//        TrainingExercise(1, "2s", 3,
-//            12, name = "Deadlift", relax = "20s", type = "other",uid= ""),
-//        TrainingExercise(1, "2s", 3, 12,
-//            name = "Bench press",relax = "20s", type = "other",uid= "")
-//    )
+
     val listExercises = remember { mutableStateOf(emptyList<TrainingExercise>()) }
     val name = remember { mutableStateOf("") }
     
@@ -103,22 +95,6 @@ fun WorkoutScreen(
             viewModel.startTraining(uid)
             navController.navigate("start-training/$uid")
         }
-//        TextButton(
-//            onClick = {
-//                viewModel.startTraining(uid)
-//                navController.navigate("start-training/$uid")
-//            },
-//            colors = ButtonDefaults.buttonColors(containerColor = Red),
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .align(Alignment.BottomCenter)
-//        ) {
-//            Text(
-//                text = "Start training",
-//                color = Color.White,
-//                modifier = Modifier.padding(vertical = 8.dp)
-//            )
-//        }
     }
 }
 

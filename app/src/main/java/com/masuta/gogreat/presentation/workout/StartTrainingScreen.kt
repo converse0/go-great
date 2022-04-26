@@ -59,8 +59,6 @@ fun StartTrainingScreen(
 //        return
 //    }
 
-    println("duration start new tr:" + currentExercise.duration)
-
 
     val context = LocalContext.current
 
@@ -100,9 +98,6 @@ fun StartTrainingScreen(
 //                                val resp = viewModel.onEvent(TrainingEvent.NextExercise)
 //                            }
                         viewModel.nextSetOrTraining(onOpenModal = { isModalOpen.value = true })
-                        println("Exercise Sets: ${exerciseSets.value}")
-                        println("Exercise: ${indexExercise.value}")
-
                     },
                     onOpenEdit = {
                         isEditModal.value = true

@@ -17,7 +17,6 @@ class ExerciseViewModel @Inject constructor(
     fun getExercises(id: Long, exercisesList: MutableState<List<TrainingExercise>>) {
         viewModelScope.launch {
             val resp = repository.findById(id)
-//            println(resp)
 
             if(resp.data != null) {
                 exercisesList.value = resp.data

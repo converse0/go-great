@@ -488,7 +488,6 @@ fun ProfileAvatar(
                     .clip(shape = CircleShape)
                     .background(color = Color.Gray)
             ) {
-                println("Image------------")
                 if (viewModel.isUploadImage) {
                     imageUri?.let {
                         if (Build.VERSION.SDK_INT < 28) {
