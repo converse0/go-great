@@ -131,6 +131,8 @@ fun ProfileSection(
     val context = LocalContext.current
     val bitmap = remember { mutableStateOf<Bitmap?>(null) }
 
+    println("RE-RENDERING")
+
     val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
         imageUri = uri
 //        val image = context.contentResolver.openInputStream(uri!!)
@@ -169,6 +171,7 @@ fun ProfileSection(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
+                        viewModel.isUploadImage = true
                         launcher.launch("image/*")
                     }
             )
@@ -475,6 +478,9 @@ fun ProfileAvatar(
     viewModel: ProfileViewModel,
     profileImg: String?
 ) {
+
+    println("Profile AVATAR RE-RENDERING")
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxWidth()
@@ -503,15 +509,14 @@ fun ProfileAvatar(
                                 val resp = viewModel.uploadImage(btm.asImageBitmap())
                             Toast.makeText(context, resp, Toast.LENGTH_LONG ).show()
                             }
-
-                            Image(
-                                bitmap = btm.asImageBitmap(),
-                                contentDescription = null,
-                                contentScale = ContentScale.Crop,
-                                modifier = Modifier
-                                    .size(150.dp)
-                                    .clip(shape = CircleShape)
-                            )
+//                            Image(
+//                                bitmap = btm.asImageBitmap(),
+//                                contentDescription = null,
+//                                contentScale = ContentScale.Crop,
+//                                modifier = Modifier
+//                                    .size(150.dp)
+//                                    .clip(shape = CircleShape)
+//                            )
                         }
                     }
                 }
