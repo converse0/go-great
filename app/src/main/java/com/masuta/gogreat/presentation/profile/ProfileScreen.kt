@@ -213,9 +213,6 @@ fun ProfileAvatar(
                                 .Media.getBitmap(context.contentResolver, it)
                         } else {
                             val source = ImageDecoder.createSource(context.contentResolver, it)
-                            it.queryParameterNames.forEach {
-                                println("QUERY PARAMETER: $it")
-                            }
                             bitmap.value = ImageDecoder.decodeBitmap(source)
                         }
                         bitmap.value?.let { btm ->
@@ -224,8 +221,8 @@ fun ProfileAvatar(
                                 withContext(Dispatchers.Main) {
 //                                    response = resp
 //                                    println("RESPONSE: $response")
-                                    resp?.let {
-                                        Toast.makeText(context, it, Toast.LENGTH_LONG ).show()
+                                    resp?.let { r ->
+                                        Toast.makeText(context, r, Toast.LENGTH_LONG ).show()
                                     }
                                 }
                             }
@@ -258,17 +255,15 @@ fun ProfileInfo(
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    val state = userParams
+    val timesEat = remember{ mutableStateOf(userParams.eat.toString()) }
+    val age = remember{ mutableStateOf(userParams.age.toString()) }
+    val weight = remember{ mutableStateOf(userParams.weight.toString()) }
+    val height = remember{ mutableStateOf(userParams.height.toString()) }
+    val desiredWeight = remember{ mutableStateOf(userParams.desiredWeight.toString()) }
 
-    val timesEat = remember{ mutableStateOf(state.eat.toString()) }
-    val age = remember{ mutableStateOf(state.age.toString()) }
-    val weight = remember{ mutableStateOf(state.weight.toString()) }
-    val height = remember{ mutableStateOf(state.height.toString()) }
-    val desiredWeight = remember{ mutableStateOf(state.desiredWeight.toString()) }
-
-    val gender = remember { mutableStateOf(state.gender) }
-    val diet = remember { mutableStateOf(state.diet.toFloat()) }
-    val activity = remember { mutableStateOf(state.activity.toFloat()) }
+    val gender = remember { mutableStateOf(userParams.gender) }
+    val diet = remember { mutableStateOf(userParams.diet.toFloat()) }
+    val activity = remember { mutableStateOf(userParams.activity.toFloat()) }
 
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -356,7 +351,7 @@ fun ProfileInfo(
         ) {
             CoroutineScope(Dispatchers.Main).launch {
                 val resp = viewModel.updateParams(
-                    userParams = state.copy(
+                    userParams = userParams.copy(
                         age = age.value.toInt(),
                         eat = timesEat.value.toInt(),
                         height = height.value.toInt(),
