@@ -96,7 +96,6 @@ class ProfileRepositoryImpl @Inject constructor(
         return stream.toByteArray()
     }
 
-    @OptIn(InternalAPI::class)
     override suspend fun uploadImage(image: ImageBitmap): String {
 
 
