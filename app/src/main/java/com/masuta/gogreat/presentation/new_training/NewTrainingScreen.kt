@@ -36,9 +36,12 @@ import com.masuta.gogreat.presentation.components.MalePersonSection
 import com.masuta.gogreat.presentation.ui.theme.Green
 import com.masuta.gogreat.presentation.ui.theme.Red
 import com.skydoves.landscapist.glide.GlideImage
+import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import java.text.SimpleDateFormat
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
@@ -53,8 +56,10 @@ fun NewTrainingScreen(
     val openModal = remember { mutableStateOf(false) }
     val listExercises = remember { mutableStateOf(listOf<TrainingExercise>()) }
 
+    val timeNow = Clock.System.now().toString()
+
     val name = remember { mutableStateOf("") }
-    val date = remember { mutableStateOf("") }
+    val date = remember { mutableStateOf(timeNow) }
 
     viewModel.getLocalExercises(listExercises)
 
@@ -173,6 +178,8 @@ fun Modal(
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
 
+    val textDate = LocalDate.parse(date.value).format(DateTimeFormatter.BASIC_ISO_DATE)
+
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier.fillMaxSize()
@@ -222,7 +229,7 @@ fun Modal(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    OutlinedTextField(value = date.value, onValueChange = {}, enabled = false)
+                    OutlinedTextField(value = textDate, onValueChange = {}, enabled = false)
                     IconButton(onClick = {
 //                        showCal.value = !showCal.value
                         calendarTraining(date, context).show()
