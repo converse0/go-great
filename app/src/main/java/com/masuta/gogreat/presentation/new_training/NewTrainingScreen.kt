@@ -167,6 +167,7 @@ fun NewTrainingScreen(
     }
 }
 
+@SuppressLint("SimpleDateFormat")
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun Modal(
@@ -178,7 +179,11 @@ fun Modal(
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    val textDate = LocalDate.parse(date.value).format(DateTimeFormatter.BASIC_ISO_DATE)
+        val dateLocal = date.value.split("T").get(0)
+        val formatParse = SimpleDateFormat("yyyy-MM-dd")
+        val format = SimpleDateFormat("dd MMMM yyyy", Locale.ENGLISH)
+        val dateParse = formatParse.parse(dateLocal)
+        val textDate = format.format(dateParse!!)
 
     Box(
         contentAlignment = Alignment.Center,
