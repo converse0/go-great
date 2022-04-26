@@ -21,6 +21,9 @@ class TrainRepositoryImpl @Inject constructor(
     private var localCurrentWorkout = mutableStateOf<Training?>(null)
     private var localPastWorkouts: List<Training> = mutableListOf()
 
+    private var localCurrentExercise = mutableStateOf<Int?>(null)
+    private var localCurrentExerciseSets = mutableStateOf<Int?>(null)
+
     override var workoutsDataReload: Boolean = true
     override var pastWorkoutsDataReload: Boolean = true
     override var currentWorkoutDataReload: Boolean = true
@@ -154,6 +157,22 @@ class TrainRepositoryImpl @Inject constructor(
 
     override suspend fun setLocalPastWorkouts(workouts: List<Training>) {
         localPastWorkouts = workouts
+    }
+
+    override suspend fun getLocalCurrentExercise(): Int? {
+        return localCurrentExercise.value
+    }
+
+    override suspend fun setLocalCurrentExercise(indexExercise: Int?) {
+        localCurrentExercise.value = indexExercise
+    }
+
+    override suspend fun getLocalCurrentExerciseSets(): Int? {
+        return localCurrentExerciseSets.value
+    }
+
+    override suspend fun setLocalCurrentExerciseSets(exerciseSets: Int?) {
+        localCurrentExerciseSets.value = exerciseSets
     }
 
     override suspend fun getLocalTrainingByUid(uid: String): Training? {
