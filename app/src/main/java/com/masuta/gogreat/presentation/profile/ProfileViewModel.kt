@@ -28,7 +28,7 @@ class ProfileViewModel @Inject constructor(
 
     var isUploadImage by mutableStateOf(true)
 
-    var userParams by mutableStateOf(ParametersUser())
+    var userParams = mutableStateOf(ParametersUser())
 
     var isDataLoad: Boolean = true
         get() = repository.isLoadData
@@ -59,7 +59,7 @@ class ProfileViewModel @Inject constructor(
                         uid = resp.data.uid,
                         image = resp.data.image
                     )
-                    userParams = params
+                    userParams.value = params
                     repository.setLocalProfileParams(params)
                     isDataLoad = false
                 } else if (resp.code!=null) {
@@ -74,7 +74,7 @@ class ProfileViewModel @Inject constructor(
         } else {
             viewModelScope.launch {
                 repository.getLocalProfileParams()?.let {
-                    userParams = it
+                    userParams.value = it
                 }
             }
         }
@@ -153,11 +153,11 @@ class ProfileViewModel @Inject constructor(
         println("Response: $resp")
         resp.data?.let {
             println("uploadImage: $it")
-            userParams = userParams.copy(
+            userParams.value = userParams.value.copy(
                 image = it
             )
             println("OLD IMAGE LOCAL: ${repository.getLocalProfileParams()?.image}")
-            repository.setLocalProfileParams(userParams)
+            repository.setLocalProfileParams(userParams.value)
             println("NEW IMAGE LOCAL: ${repository.getLocalProfileParams()?.image}")
             return null
         } ?: resp.message?.let {

@@ -135,7 +135,6 @@ fun ProfileSection(
 //        val image = context.contentResolver.openInputStream(uri!!)
     }
 
-
         LazyColumn(
             state = lazyListState,
             modifier = Modifier
@@ -148,11 +147,11 @@ fun ProfileSection(
                     bitmap = bitmap,
                     context = context,
                     viewModel = viewModel,
-                    profileImg = userParams.image ?: ""
+                    profileImg = userParams.value.image ?: ""
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 Text(
-                    text = userParams.username,
+                    text = userParams.value.username,
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center,
@@ -173,11 +172,11 @@ fun ProfileSection(
                         }
                 )
                 Spacer(modifier = Modifier.height(20.dp))
-                if (userParams.uid != null) {
+                if (userParams.value.uid != null) {
                     ProfileInfo(
                         lazyListState = lazyListState,
                         viewModel = viewModel,
-                        userParams = userParams,
+                        userParams = userParams.value,
                     )
                 }
                 Spacer(Modifier.height(60.dp))
