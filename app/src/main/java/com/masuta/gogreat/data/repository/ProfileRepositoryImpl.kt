@@ -132,6 +132,7 @@ class ProfileRepositoryImpl @Inject constructor(
                         ) { buildPacket { writeFully(imageBitmapToByteArray(image.asAndroidBitmap())) } }}
                 )
             }
+        println("Response IMAGE: $response")
     return  response
     }
 

@@ -28,6 +28,8 @@ class ProfileViewModel @Inject constructor(
 
     var isUploadImage by mutableStateOf(true)
 
+    var userParams by mutableStateOf(ParametersUser())
+
     var isDataLoad: Boolean = true
         get() = repository.isLoadData
         set(value) {
@@ -37,7 +39,6 @@ class ProfileViewModel @Inject constructor(
 
     fun getParameters(
         fail: MutableState<Boolean>,
-        userParams: MutableState<ParametersUser>,
         navController: NavHostController,
         routeTo: (navController: NavHostController, route: String) -> Unit,
     ) {
@@ -58,7 +59,7 @@ class ProfileViewModel @Inject constructor(
                         uid = resp.data.uid,
                         image = resp.data.image
                     )
-                    userParams.value = params
+                    userParams = params
                     repository.setLocalProfileParams(params)
                     isDataLoad = false
                 } else if (resp.code!=null) {
@@ -73,7 +74,7 @@ class ProfileViewModel @Inject constructor(
         } else {
             viewModelScope.launch {
                 repository.getLocalProfileParams()?.let {
-                    userParams.value = it
+                    userParams = it
                 }
             }
         }
@@ -145,20 +146,23 @@ class ProfileViewModel @Inject constructor(
     }
 
     suspend fun uploadImage(im: ImageBitmap): String? {
+        println("IMAGE BITMAP: $im")
         isUploadImage = false
+        isDataLoad = true
         val resp = repository.uploadImage(im)
         println("Response: $resp")
         resp.data?.let {
             println("uploadImage: $it")
+            userParams = userParams.copy(
+                image = it
+            )
+            println("OLD IMAGE LOCAL: ${repository.getLocalProfileParams()?.image}")
+            repository.setLocalProfileParams(userParams)
+            println("NEW IMAGE LOCAL: ${repository.getLocalProfileParams()?.image}")
             return null
         } ?: resp.message?.let {
             println("uploadImage error: $it")
             return it
         } ?: return "Error"
-
-//        viewModelScope.launch {
-//
-////            isDataLoad = true
-//        }
     }
 }

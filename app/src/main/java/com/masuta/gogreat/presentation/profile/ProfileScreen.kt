@@ -108,7 +108,7 @@ fun ProfileSection(
     navController: NavHostController
 ) {
 
-    val userParams = remember { mutableStateOf(ParametersUser()) }
+    val userParams = viewModel.userParams
 
     val fail = remember {
         mutableStateOf(false)
@@ -116,7 +116,6 @@ fun ProfileSection(
 
     if (!fail.value) {
         viewModel.getParameters(
-            userParams = userParams,
             routeTo = routeTo,
             navController = navController,
             fail = fail
@@ -131,74 +130,132 @@ fun ProfileSection(
     val context = LocalContext.current
     val bitmap = remember { mutableStateOf<Bitmap?>(null) }
 
-    println("RE-RENDERING")
-
     val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
         imageUri = uri
 //        val image = context.contentResolver.openInputStream(uri!!)
     }
 
-    LazyColumn(
-        state = lazyListState,
-        modifier = Modifier
-            .fillMaxWidth()
+
+        LazyColumn(
+            state = lazyListState,
+            modifier = Modifier
+                .fillMaxWidth()
 //            .padding(horizontal = 8.dp)
-    ) {
-        items(1) {
-            ProfileAvatar(
-                gender = userParams.value.gender,
-                imageUri = imageUri,
-                bitmap = bitmap,
-                context = context,
-                viewModel = viewModel,
-                profileImg = userParams.value.image
-            )
-            Spacer(modifier = Modifier.height(10.dp))
-            Text(
-                text = userParams.value.username,
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(modifier = Modifier.height(10.dp))
-            Text(
-                text = "Edit photo",
-                style = MaterialTheme.typography.bodyLarge,
-                textDecoration = TextDecoration.Underline,
-                color = Green,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable {
-                        viewModel.isUploadImage = true
-                        launcher.launch("image/*")
-                    }
-            )
-            Spacer(modifier = Modifier.height(20.dp))
-            if (userParams.value.uid != null) {
-                ProfileInfo(
-                    lazyListState = lazyListState,
+        ) {
+            items(1) {
+                ProfileAvatar(
+                    imageUri = imageUri,
+                    bitmap = bitmap,
+                    context = context,
                     viewModel = viewModel,
-                    userParams = userParams,
+                    profileImg = userParams.image ?: ""
                 )
-            }
-            Spacer(Modifier.height(60.dp))
+                Spacer(modifier = Modifier.height(10.dp))
+                Text(
+                    text = userParams.username,
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+                Text(
+                    text = "Edit photo",
+                    style = MaterialTheme.typography.bodyLarge,
+                    textDecoration = TextDecoration.Underline,
+                    color = Green,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            viewModel.isUploadImage = true
+                            launcher.launch("image/*")
+                        }
+                )
+                Spacer(modifier = Modifier.height(20.dp))
+                if (userParams.uid != null) {
+                    ProfileInfo(
+                        lazyListState = lazyListState,
+                        viewModel = viewModel,
+                        userParams = userParams,
+                    )
+                }
+                Spacer(Modifier.height(60.dp))
         }
     }
 }
+
+@Composable
+fun ProfileAvatar(
+    imageUri: Uri?,
+    bitmap: MutableState<Bitmap?>,
+    context: Context,
+    viewModel: ProfileViewModel,
+    profileImg: String
+) {
+
+    println("Profile AVATAR RE-RENDERING")
+    println("LINK PROFILE IMG: $profileImg")
+
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Box(
+            contentAlignment = Alignment.TopCenter,
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(150.dp)
+                    .clip(shape = CircleShape)
+                    .background(color = Color.Gray)
+            ) {
+                if (viewModel.isUploadImage) {
+                    imageUri?.let {
+                        if (Build.VERSION.SDK_INT < 28) {
+                            bitmap.value = MediaStore.Images
+                                .Media.getBitmap(context.contentResolver, it)
+                        } else {
+                            val source = ImageDecoder.createSource(context.contentResolver, it)
+                            bitmap.value = ImageDecoder.decodeBitmap(source)
+                        }
+
+                        bitmap.value?.let { btm ->
+                            CoroutineScope(Dispatchers.Main).launch {
+                                val resp = viewModel.uploadImage(btm.asImageBitmap())
+                                resp?.let {
+                                    Toast.makeText(context, it, Toast.LENGTH_LONG ).show()
+                                }
+                            }
+                        }
+                    }
+                }
+                if (profileImg.isNotEmpty()) {
+                    GlideImage(
+                        imageModel = profileImg,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .size(150.dp)
+                            .clip(shape = CircleShape)
+                    )
+                }
+            }
+        }
+    }
+}
+
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ProfileInfo(
     lazyListState: LazyListState,
     viewModel: ProfileViewModel,
-    userParams: MutableState<ParametersUser>,
+    userParams: ParametersUser,
 ) {
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    val state = userParams.value
+    val state = userParams
 
     val timesEat = remember{ mutableStateOf(state.eat.toString()) }
     val age = remember{ mutableStateOf(state.age.toString()) }
@@ -467,97 +524,6 @@ fun LineSelectPoint() {
         }
     }
 }
-
-
-@Composable
-fun ProfileAvatar(
-    gender: Int,
-    imageUri: Uri?,
-    bitmap: MutableState<Bitmap?>,
-    context: Context,
-    viewModel: ProfileViewModel,
-    profileImg: String?
-) {
-
-    println("Profile AVATAR RE-RENDERING")
-
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Box(
-            contentAlignment = Alignment.TopCenter,
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(150.dp)
-                    .clip(shape = CircleShape)
-                    .background(color = Color.Gray)
-            ) {
-                if (viewModel.isUploadImage) {
-                    imageUri?.let {
-                        if (Build.VERSION.SDK_INT < 28) {
-                            bitmap.value = MediaStore.Images
-                                .Media.getBitmap(context.contentResolver, it)
-                        } else {
-                            val source = ImageDecoder.createSource(context.contentResolver, it)
-                            bitmap.value = ImageDecoder.decodeBitmap(source)
-                        }
-
-                        bitmap.value?.let { btm ->
-                            CoroutineScope(Dispatchers.Main).launch {
-                                val resp = viewModel.uploadImage(btm.asImageBitmap())
-                                resp?.let {
-                                    Toast.makeText(context, it, Toast.LENGTH_LONG ).show()
-                                }
-                            }
-//                            Image(
-//                                bitmap = btm.asImageBitmap(),
-//                                contentDescription = null,
-//                                contentScale = ContentScale.Crop,
-//                                modifier = Modifier
-//                                    .size(150.dp)
-//                                    .clip(shape = CircleShape)
-//                            )
-                        }
-                    }
-                }
-            }
-            if (profileImg == null || profileImg.isEmpty()) {
-                if (gender == 0) {
-                    Image(
-                        painter = painterResource(id = R.drawable.avatar_male),
-                        contentDescription = "Male Avatar",
-                        contentScale = ContentScale.Inside,
-                        modifier = Modifier
-                            .size(150.dp)
-                            .clip(shape = CircleShape)
-                            .padding(10.dp)
-                    )
-                } else {
-                    Image(
-                        painter = painterResource(id = R.drawable.avatar_female),
-                        contentDescription = "Female Avatar",
-                        contentScale = ContentScale.Inside,
-                        modifier = Modifier
-                            .size(150.dp)
-                            .clip(shape = CircleShape)
-                            .padding(10.dp)
-                    )
-                }
-            } else {
-                GlideImage(
-                    imageModel = profileImg,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .size(150.dp)
-                        .clip(shape = CircleShape)
-                )
-            }
-        }
-    }
-}
-
 
 
 
