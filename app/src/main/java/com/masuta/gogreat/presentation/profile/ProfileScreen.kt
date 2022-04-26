@@ -507,7 +507,9 @@ fun ProfileAvatar(
                         bitmap.value?.let { btm ->
                             CoroutineScope(Dispatchers.Main).launch {
                                 val resp = viewModel.uploadImage(btm.asImageBitmap())
-                            Toast.makeText(context, resp, Toast.LENGTH_LONG ).show()
+                                resp?.let {
+                                    Toast.makeText(context, it, Toast.LENGTH_LONG ).show()
+                                }
                             }
 //                            Image(
 //                                bitmap = btm.asImageBitmap(),

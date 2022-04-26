@@ -41,6 +41,14 @@ data class ResponseParams(
     val data: ParametersUserGet? = null
 )
 
+@Serializable
+data class ResponseParamsIm(
+    val message: String?= null,
+    val status: Boolean?= null,
+    val code: Int?= null,
+    val data: String? = null
+)
+
 class ProfileRepositoryImpl @Inject constructor(
     private val client: Client,
 ): ProfileRepository {
@@ -96,7 +104,7 @@ class ProfileRepositoryImpl @Inject constructor(
         return stream.toByteArray()
     }
 
-    override suspend fun uploadImage(image: ImageBitmap): String {
+    override suspend fun uploadImage(image: ImageBitmap): ResponseParamsIm {
 
 
         println("userToken: $userToken")
@@ -104,7 +112,7 @@ class ProfileRepositoryImpl @Inject constructor(
         println("image: $image")
 
         val response = client.makeClient()
-            .post<String>("https://boilerplate-go-trening.herokuapp.com/v1/files") {
+            .post<ResponseParamsIm>("https://boilerplate-go-trening.herokuapp.com/v1/files") {
 //                contentType(ContentType.Application.Json)
                 headers {
 //                    append("Content-Type", ContentType.Application.Json)
@@ -124,7 +132,7 @@ class ProfileRepositoryImpl @Inject constructor(
                         ) { buildPacket { writeFully(imageBitmapToByteArray(image.asAndroidBitmap())) } }}
                 )
             }
-        return response
+    return  response
     }
 
     override suspend fun getLocalProfileParams(): ParametersUser? {

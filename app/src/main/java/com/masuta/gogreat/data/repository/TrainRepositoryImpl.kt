@@ -8,10 +8,12 @@ import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import javax.inject.Inject
+const val url = "https://api.gogreat.com/v1/train"
 
 class TrainRepositoryImpl @Inject constructor(
     client: Client,
 ): TrainRepository {
+
     private var httpClient: HttpClient? = null
     private val url = "https://boilerplate-go-trening.herokuapp.com"
     private var localTraining:Map<String,Training> = mutableMapOf()
