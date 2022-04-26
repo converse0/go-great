@@ -9,7 +9,6 @@ import android.provider.MediaStore
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -29,7 +28,6 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -37,7 +35,6 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.masuta.gogreat.R
 import com.masuta.gogreat.domain.model.ParametersUser
 import com.masuta.gogreat.domain.model.UserActivity
 import com.masuta.gogreat.domain.model.UserDiet
@@ -49,9 +46,7 @@ import com.masuta.gogreat.presentation.components.SliderWithLabelUserActivity
 import com.masuta.gogreat.presentation.ui.theme.Green
 import com.masuta.gogreat.presentation.ui.theme.Red
 import com.skydoves.landscapist.glide.GlideImage
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 
 fun String.firstCharToUpperCase(): String {
@@ -131,6 +126,7 @@ fun ProfileSection(
     val bitmap = remember { mutableStateOf<Bitmap?>(null) }
 
     val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
+        viewModel.isUploadImage = true
         imageUri = uri
 //        val image = context.contentResolver.openInputStream(uri!!)
     }
@@ -147,7 +143,7 @@ fun ProfileSection(
                     bitmap = bitmap,
                     context = context,
                     viewModel = viewModel,
-                    profileImg = userParams.value.image ?: ""
+                    profileImg = userParams
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 Text(
@@ -167,7 +163,6 @@ fun ProfileSection(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            viewModel.isUploadImage = true
                             launcher.launch("image/*")
                         }
                 )
@@ -190,7 +185,7 @@ fun ProfileAvatar(
     bitmap: MutableState<Bitmap?>,
     context: Context,
     viewModel: ProfileViewModel,
-    profileImg: String
+    profileImg: MutableState<ParametersUser>
 ) {
 
     println("Profile AVATAR RE-RENDERING")
@@ -210,28 +205,37 @@ fun ProfileAvatar(
                     .background(color = Color.Gray)
             ) {
                 if (viewModel.isUploadImage) {
+                    viewModel.isUploadImage = false
+
                     imageUri?.let {
                         if (Build.VERSION.SDK_INT < 28) {
                             bitmap.value = MediaStore.Images
                                 .Media.getBitmap(context.contentResolver, it)
                         } else {
                             val source = ImageDecoder.createSource(context.contentResolver, it)
+                            it.queryParameterNames.forEach {
+                                println("QUERY PARAMETER: $it")
+                            }
                             bitmap.value = ImageDecoder.decodeBitmap(source)
                         }
-
                         bitmap.value?.let { btm ->
-                            CoroutineScope(Dispatchers.Main).launch {
+                            CoroutineScope(Dispatchers.IO).launch {
                                 val resp = viewModel.uploadImage(btm.asImageBitmap())
-                                resp?.let {
-                                    Toast.makeText(context, it, Toast.LENGTH_LONG ).show()
+                                withContext(Dispatchers.Main) {
+//                                    response = resp
+//                                    println("RESPONSE: $response")
+                                    resp?.let {
+                                        Toast.makeText(context, it, Toast.LENGTH_LONG ).show()
+                                    }
                                 }
                             }
                         }
                     }
                 }
-                if (profileImg.isNotEmpty()) {
+                if (profileImg.value.image!= null) {
+                    println("PROFILE IMG: ${profileImg.value.image}")
                     GlideImage(
-                        imageModel = profileImg,
+                        imageModel = profileImg.value.image,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .size(150.dp)

@@ -18,6 +18,7 @@ import io.ktor.utils.io.core.*
 import kotlinx.serialization.Serializable
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.util.*
 import javax.inject.Inject
 
 @Serializable
@@ -98,6 +99,17 @@ class ProfileRepositoryImpl @Inject constructor(
         return response.message
     }
 
+    private fun getStringRandom(): String {
+        val chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        val random = Random()
+        val sb = StringBuilder(7)
+        for (i in 0 until 7) {
+            val randomChar = chars[random.nextInt(chars.length)]
+            sb.append(randomChar)
+        }
+        return sb.toString()
+    }
+
     private fun imageBitmapToByteArray(bitmap: Bitmap): ByteArray {
         val stream = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
@@ -106,11 +118,20 @@ class ProfileRepositoryImpl @Inject constructor(
 
     override suspend fun uploadImage(image: ImageBitmap): ResponseParamsIm {
 
+    val convertedImage = imageBitmapToByteArray(image.asAndroidBitmap())
 
         println("userToken: $userToken")
         println("refreshToken: $refreshUserToken")
-        println("image: $image")
-
+        println("image: ${convertedImage.size / 1024}")
+        val imageName = getStringRandom()
+        val size = convertedImage.size / 1024
+        if (size > 3 * 1024) {
+            return ResponseParamsIm(
+                message = "Image size is too big",
+                status = false,
+                code = 400
+            )
+        }
         val response = client.makeClient()
             .post<ResponseParamsIm>("https://boilerplate-go-trening.herokuapp.com/v1/files") {
 //                contentType(ContentType.Application.Json)
@@ -120,16 +141,16 @@ class ProfileRepositoryImpl @Inject constructor(
                 }
                 body = MultiPartFormDataContent(
                     formData {
-                        this.append(FormPart("bitmapName", "image.jpg"))
+                        this.append(FormPart("bitmapName", imageName))
                         this.appendInput(
                             key = "attachment",
                             headers = Headers.build {
                                 append(
                                     HttpHeaders.ContentDisposition,
-                                    "filename=image.jpg"
+                                    "filename=$imageName"
                                 )
                             },
-                        ) { buildPacket { writeFully(imageBitmapToByteArray(image.asAndroidBitmap())) } }}
+                        ) { buildPacket { writeFully(convertedImage) } }}
                 )
             }
         println("Response IMAGE: $response")
