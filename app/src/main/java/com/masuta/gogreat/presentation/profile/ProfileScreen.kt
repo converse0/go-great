@@ -500,6 +500,7 @@ fun ProfileAvatar(
 
                         bitmap.value?.let { btm ->
                             viewModel.uploadImage(btm.asImageBitmap())
+//                            Toast.makeText(context, resp, Toast.LENGTH_SHORT ).show()
                             Image(
                                 bitmap = btm.asImageBitmap(),
                                 contentDescription = null,
@@ -511,18 +512,8 @@ fun ProfileAvatar(
                         }
                     }
                 }
-                if (bitmap.value != null) {
-                    Image(
-                        bitmap = bitmap.value!!.asImageBitmap(),
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .size(150.dp)
-                            .clip(shape = CircleShape)
-                    )
-                }
             }
-            if (profileImg == null || profileImg.isEmpty() && bitmap.value == null) {
+            if (profileImg == null || profileImg.isEmpty()) {
                 if (gender == 0) {
                     Image(
                         painter = painterResource(id = R.drawable.avatar_male),
