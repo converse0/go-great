@@ -14,7 +14,7 @@ class AuthRepositoryImpl @Inject constructor(
 ) : AuthRepository {
 
     override suspend fun login(user: User): Map<String, Any?> {
-        val response: Response = client.makeClient()
+        val response: Response = client.makeClient(500)
             .post("https://boilerplate-go.herokuapp.com/login") {
                 contentType(ContentType.Application.Json)
                 body = user
@@ -37,7 +37,7 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override suspend fun signup(user: User): Boolean {
-        val response: HttpResponse = client.makeClient().post("https://boilerplate-go.herokuapp.com/signup") {
+        val response: HttpResponse = client.makeClient(500).post("https://boilerplate-go.herokuapp.com/signup") {
             contentType(ContentType.Application.Json)
             body = user
         }

@@ -1,6 +1,8 @@
 package com.masuta.gogreat.data.repository
 
+import android.content.Context
 import androidx.compose.runtime.mutableStateOf
+import com.masuta.gogreat.R
 import com.masuta.gogreat.data.remote.Client
 import com.masuta.gogreat.domain.model.*
 import com.masuta.gogreat.domain.repository.TrainRepository
@@ -8,14 +10,13 @@ import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import javax.inject.Inject
-const val url = "https://api.gogreat.com/v1/train"
 
 class TrainRepositoryImpl @Inject constructor(
     client: Client,
+    context: Context,
 ): TrainRepository {
-
     private var httpClient: HttpClient? = null
-    private val url = "https://boilerplate-go-trening.herokuapp.com"
+    private var trainUrl = "https://api.gogreat.com/v1/train"
     private var localTraining:Map<String,Training> = mutableMapOf()
     private var localTrainingEx:Map<Int,TrainingExercise> = mutableMapOf()
 
@@ -31,11 +32,19 @@ class TrainRepositoryImpl @Inject constructor(
     override var currentWorkoutDataReload: Boolean = true
 
     init {
-       httpClient = client.makeClient()
+
+        context.resources.getInteger(R.integer.request_timeout).let {
+            httpClient = client.makeClient(it.toLong())
+        }
+        context.getString(R.string.train_url).let {
+            if (it.isNotEmpty()) {
+                trainUrl = it
+            }
+        }
     }
 
     override suspend fun findAll(): TrainingResponse {
-        httpClient?.get<TrainingResponse>("$url/user/trenings") {
+        httpClient?.get<TrainingResponse>("$trainUrl/user/trenings") {
             contentType(ContentType.Application.Json)
             headers {
                 append("Authorization", "Bearer $userToken")
@@ -49,7 +58,7 @@ class TrainRepositoryImpl @Inject constructor(
         ExerciseType.values()[id.toInt()].let {
             val type = it.toString().lowercase()
             val resp = httpClient?.get<ExerciseResponse>(
-                "$url/user/exercises/default?type=${type}") {
+                "$trainUrl/user/exercises/default?type=${type}") {
                 contentType(ContentType.Application.Json)
                 headers {
                     append("Authorization", "Bearer $userToken")
@@ -61,7 +70,7 @@ class TrainRepositoryImpl @Inject constructor(
 
 
     override suspend fun save(newTrain: Training) {
-      val resp = httpClient?.post<String>("$url/user/trening") {
+      val resp = httpClient?.post<String>("$trainUrl/user/trening") {
           contentType(ContentType.Application.Json)
             headers {
                 append("Authorization", "Bearer $userToken")
@@ -109,7 +118,7 @@ class TrainRepositoryImpl @Inject constructor(
 
 
     override suspend fun getPassTrainings(): List<Training>? {
-        httpClient?.get<TrainingResponse>("$url/user/trenings?status=Finish") {
+        httpClient?.get<TrainingResponse>("$trainUrl/user/trenings?status=Finish") {
             contentType(ContentType.Application.Json)
             headers {
                 append("Authorization", "Bearer $userToken")
@@ -124,7 +133,7 @@ class TrainRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getMyTrainings(): List<Training>? {
-        httpClient?.get<TrainingResponse>("$url/user/trenings?status=Create") {
+        httpClient?.get<TrainingResponse>("$trainUrl/user/trenings?status=Create") {
             contentType(ContentType.Application.Json)
             headers {
                 append("Authorization", "Bearer $userToken")
@@ -195,7 +204,8 @@ class TrainRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getTrainingDetail(uid: String): Training {
-        httpClient?.get<TrainingDetailsResponse>("$url/user/trening?uid=$uid") {
+
+        httpClient?.get<TrainingDetailsResponse>("$trainUrl/user/trening?uid=$uid") {
             contentType(ContentType.Application.Json)
             headers {
                 append("Authorization", "Bearer $userToken")
@@ -207,7 +217,7 @@ class TrainRepositoryImpl @Inject constructor(
     }
 
     override suspend fun startTraining(uid: String) {
-        httpClient?.put<String>("$url/user/trening/status") {
+        httpClient?.put<String>("$trainUrl/user/trening/status") {
             contentType(ContentType.Application.Json)
             headers {
                 append("Authorization", "Bearer $userToken")
@@ -219,7 +229,7 @@ class TrainRepositoryImpl @Inject constructor(
     }
 
     override suspend fun finishTraining(uid: String) {
-        httpClient?.put<String>("$url/user/trening/status") {
+        httpClient?.put<String>("$trainUrl/user/trening/status") {
             contentType(ContentType.Application.Json)
             headers {
                 append("Authorization", "Bearer $userToken")
@@ -232,7 +242,7 @@ class TrainRepositoryImpl @Inject constructor(
 
 
     override suspend fun getCurrentTraining(): Training? {
-        httpClient?.get<TrainingResponse>("$url/user/trenings?status=Start") {
+        httpClient?.get<TrainingResponse>("$trainUrl/user/trenings?status=Start") {
             contentType(ContentType.Application.Json)
             headers {
                 append("Authorization", "Bearer $userToken")
@@ -251,7 +261,7 @@ class TrainRepositoryImpl @Inject constructor(
 
     override suspend fun setExerciseParams(uid: String, listExercises: List<TrainingExercise>) {
         val data = TrainingExerciseUpdate(uid=uid, exercises = listExercises)
-        httpClient?.put<String>("$url/user/trening/exercises") {
+        httpClient?.put<String>("$trainUrl/user/trening/exercises") {
             contentType(ContentType.Application.Json)
             headers {
                 append("Authorization", "Bearer $userToken")
