@@ -83,7 +83,7 @@ class ProfileRepositoryImpl @Inject constructor(
             }?.let {
                 return it
             }
-        } catch(e: HttpRequestTimeoutException) {
+        } catch(e: Exception) {
             e.localizedMessage?.let {
                 Toast.makeText(context, it, Toast.LENGTH_LONG).show()
             }
@@ -105,7 +105,7 @@ class ProfileRepositoryImpl @Inject constructor(
                     return it
                 }
             } ?: return ResponseParams()
-        } catch (e: HttpRequestTimeoutException) {
+        } catch (e: Exception) {
             e.localizedMessage?.let {
                 Toast.makeText(context, it, Toast.LENGTH_LONG).show()
             }
@@ -125,7 +125,7 @@ class ProfileRepositoryImpl @Inject constructor(
             }?.let {
                 return it.message
             }
-        } catch(e: HttpRequestTimeoutException) {
+        } catch(e: Exception) {
             e.localizedMessage?.let {
                 Toast.makeText(context, it, Toast.LENGTH_LONG).show()
             }
@@ -188,7 +188,7 @@ class ProfileRepositoryImpl @Inject constructor(
                 println("Response IMAGE: $it")
                 return it
             }
-        } catch(e: HttpRequestTimeoutException) {
+        } catch(e: Exception) {
             e.localizedMessage?.let {
                 Toast.makeText(context, it, Toast.LENGTH_LONG).show()
             }

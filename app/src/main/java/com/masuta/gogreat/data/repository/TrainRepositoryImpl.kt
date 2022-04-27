@@ -1,6 +1,7 @@
 package com.masuta.gogreat.data.repository
 
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
 import com.bumptech.glide.load.HttpException
 import com.masuta.gogreat.R
@@ -44,41 +45,62 @@ class TrainRepositoryImpl @Inject constructor(
     }
 
     override suspend fun findAll(): TrainingResponse {
-        httpClient?.get<TrainingResponse>("$trainUrl/user/trenings") {
-            contentType(ContentType.Application.Json)
-            headers {
-                append("Authorization", "Bearer $userToken")
-            }
-        }.let {
-            return it!!
-        }
-    }
-
-    override suspend fun findById(id: Long): ExerciseResponse {
-        ExerciseType.values()[id.toInt()].let {
-            val type = it.toString().lowercase()
-            val resp = httpClient?.get<ExerciseResponse>(
-                "$trainUrl/user/exercises/default?type=${type}") {
+        try {
+            httpClient?.get<TrainingResponse>("$trainUrl/user/trenings") {
                 contentType(ContentType.Application.Json)
                 headers {
                     append("Authorization", "Bearer $userToken")
                 }
-            }!!
-            return resp
+            }.let {
+                return it!!
+            }
+        } catch (e: Exception) {
+            e.localizedMessage?.let {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            }
+            e.printStackTrace()
         }
+        return TrainingResponse()
     }
 
+    override suspend fun findById(id: Long): ExerciseResponse {
+        try {
+            ExerciseType.values()[id.toInt()].let {
+                val type = it.toString().lowercase()
+                val resp = httpClient?.get<ExerciseResponse>(
+                    "$trainUrl/user/exercises/default?type=${type}") {
+                    contentType(ContentType.Application.Json)
+                    headers {
+                        append("Authorization", "Bearer $userToken")
+                    }
+                }!!
+                return resp
+            }
+        } catch (e: Exception) {
+            e.localizedMessage?.let {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            }
+            e.printStackTrace()
+        }
+        return ExerciseResponse()
+    }
 
     override suspend fun save(newTrain: Training) {
-      val resp = httpClient?.post<String>("$trainUrl/user/trening") {
-          contentType(ContentType.Application.Json)
-            headers {
-                append("Authorization", "Bearer $userToken")
+        try {
+            httpClient?.post<String>("$trainUrl/user/trening") {
+                contentType(ContentType.Application.Json)
+                headers {
+                    append("Authorization", "Bearer $userToken")
+                }
+                body = newTrain
             }
-            body = newTrain
+            saveLocal(newTrain)
+        } catch (e: Exception) {
+            e.localizedMessage?.let {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            }
+            e.printStackTrace()
         }
-        saveLocal(newTrain)
-
     }
 
     override suspend fun saveLocal(newTrain: Training): String {
@@ -115,56 +137,43 @@ class TrainRepositoryImpl @Inject constructor(
         }
     }
 
-
-
     override suspend fun getPassTrainings(): List<Training>? {
         try {
-        httpClient?.get<TrainingResponse>("$trainUrl/user/trenings?status=Finish") {
-            contentType(ContentType.Application.Json)
-            headers {
-                append("Authorization", "Bearer $userToken")
+            httpClient?.get<TrainingResponse>("$trainUrl/user/trenings?status=Finish") {
+                contentType(ContentType.Application.Json)
+                headers {
+                    append("Authorization", "Bearer $userToken")
+                }
+            }?.let { tr ->
+                tr.data?.let { trains ->
+                    return trains
+                }
             }
-        }?.let { tr ->
-
-            tr.data?.let { trains ->
-                return trains
+        } catch (e: Exception) {
+            e.localizedMessage?.let {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
             }
-        }
-        } catch (e: HttpRequestTimeoutException) {
-            e.printStackTrace()
-        } catch (e: HttpException) {
-            e.printStackTrace()
-        }
-        catch (e: ConnectTimeoutException) {
-            e.printStackTrace()
-        }
-        catch (e: SocketTimeoutException) {
             e.printStackTrace()
         }
         return null
     }
 
     override suspend fun getMyTrainings(): List<Training>? {
-        try{
-        httpClient?.get<TrainingResponse>("$trainUrl/user/trenings?status=Create") {
-            contentType(ContentType.Application.Json)
-            headers {
-                append("Authorization", "Bearer $userToken")
+        try {
+            httpClient?.get<TrainingResponse>("$trainUrl/user/trenings?status=Create") {
+                contentType(ContentType.Application.Json)
+                headers {
+                    append("Authorization", "Bearer $userToken")
+                }
+            }?.let { tr ->
+                tr.data?.let { trains ->
+                    return trains
+                }
             }
-        }?.let { tr ->
-            tr.data?.let { trains ->
-                return trains
+        } catch (e: Exception) {
+            e.localizedMessage?.let {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
             }
-        }
-        } catch (e: HttpRequestTimeoutException) {
-            e.printStackTrace()
-        } catch (e: HttpException) {
-            e.printStackTrace()
-        }
-        catch (e: ConnectTimeoutException) {
-            e.printStackTrace()
-        }
-        catch (e: SocketTimeoutException) {
             e.printStackTrace()
         }
         return null
@@ -245,54 +254,59 @@ class TrainRepositoryImpl @Inject constructor(
         localTraining = mutableMapOf()
     }
 
-    override suspend fun getTrainingDetail(uid: String): Training {
-
-        httpClient?.get<TrainingDetailsResponse>("$trainUrl/user/trening?uid=$uid") {
-            contentType(ContentType.Application.Json)
-            headers {
-                append("Authorization", "Bearer $userToken")
+    override suspend fun getTrainingDetail(uid: String): Training? {
+        try {
+            httpClient?.get<TrainingDetailsResponse>("$trainUrl/user/trening?uid=$uid") {
+                contentType(ContentType.Application.Json)
+                headers {
+                    append("Authorization", "Bearer $userToken")
+                }
+            }.let {
+                return it!!.data!!
             }
-        }.let {
-            return it!!.data!!
+        } catch (e: Exception) {
+            e.localizedMessage?.let {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            }
+            e.printStackTrace()
         }
-
+        return null
     }
 
     override suspend fun startTraining(uid: String) {
-        httpClient?.put<String>("$trainUrl/user/trening/status") {
-            contentType(ContentType.Application.Json)
-            headers {
-                append("Authorization", "Bearer $userToken")
+        try {
+            httpClient?.put<String>("$trainUrl/user/trening/status") {
+                contentType(ContentType.Application.Json)
+                headers {
+                    append("Authorization", "Bearer $userToken")
+                }
+                body = mapOf("uid" to uid, "status" to "Start")
+            }?.let {
+                println("startTraining: $it")
             }
-            body =  mapOf("uid" to uid, "status" to "Start")
-        }?.let {
-            println("startTraining: $it")
+        } catch (e: Exception) {
+            e.localizedMessage?.let {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            }
+            e.printStackTrace()
         }
     }
 
     override suspend fun finishTraining(uid: String) {
         try {
-
-
-        httpClient?.put<String>("$trainUrl/user/trening/status") {
-            contentType(ContentType.Application.Json)
-            headers {
-                append("Authorization", "Bearer $userToken")
+            httpClient?.put<String>("$trainUrl/user/trening/status") {
+                contentType(ContentType.Application.Json)
+                headers {
+                    append("Authorization", "Bearer $userToken")
+                }
+                body =  mapOf("uid" to uid, "status" to "Finish")
+            }?.let {
+                println("finishTraining: $it")
             }
-            body =  mapOf("uid" to uid, "status" to "Finish")
-        }?.let {
-            println("finishTraining: $it")
-        }
-
-        } catch (e: HttpRequestTimeoutException) {
-            e.printStackTrace()
-        } catch (e: HttpException) {
-            e.printStackTrace()
-        }
-        catch (e: ConnectTimeoutException) {
-            e.printStackTrace()
-        }
-        catch (e: SocketTimeoutException) {
+        } catch (e: Exception) {
+            e.localizedMessage?.let {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            }
             e.printStackTrace()
         }
     }
@@ -300,33 +314,27 @@ class TrainRepositoryImpl @Inject constructor(
 
     override suspend fun getCurrentTraining(): Training? {
         try {
-        httpClient?.get<TrainingResponse>("$trainUrl/user/trenings?status=Start") {
-            contentType(ContentType.Application.Json)
-            headers {
-                append("Authorization", "Bearer $userToken")
-            }
-        }?.let { tr ->
+            httpClient?.get<TrainingResponse>("$trainUrl/user/trenings?status=Start") {
+                contentType(ContentType.Application.Json)
+                headers {
+                    append("Authorization", "Bearer $userToken")
+                }
+            }?.let { tr ->
 
-            tr.data?.let { train ->
-                train.getOrNull(0)?.let {
-                    return it
+                tr.data?.let { train ->
+                    train.getOrNull(0)?.let {
+                        return it
+                    }
                 }
             }
-        }
-        } catch (e: HttpRequestTimeoutException) {
-            e.printStackTrace()
-        } catch (e: HttpException) {
-            e.printStackTrace()
-        }
-        catch (e: ConnectTimeoutException) {
-            e.printStackTrace()
-        }
-        catch (e: SocketTimeoutException) {
+        } catch (e: Exception) {
+            e.localizedMessage?.let {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            }
             e.printStackTrace()
         }
         return null
     }
-
 
     override suspend fun setExerciseParams(uid: String, listExercises: List<TrainingExercise>) {
         val data = TrainingExerciseUpdate(uid=uid, exercises = listExercises)
@@ -340,19 +348,12 @@ class TrainRepositoryImpl @Inject constructor(
             }?.let {
                 println("setExerciseParams: $it")
             }
-        } catch (e: HttpRequestTimeoutException) {
-            e.printStackTrace()
-        } catch (e: HttpException) {
-            e.printStackTrace()
-        }
-        catch (e: ConnectTimeoutException) {
+        } catch (e: Exception) {
+            e.localizedMessage?.let {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            }
             e.printStackTrace()
         }
-        catch (e: SocketTimeoutException) {
-            e.printStackTrace()
-        }
-
-
     }
 
     override fun delete(newTrain: Training) {

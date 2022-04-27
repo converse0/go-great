@@ -54,7 +54,7 @@ class AuthRepositoryImpl @Inject constructor(
                     "loginResponse" to null
                 )
             }
-        } catch(e: HttpRequestTimeoutException) {
+        } catch(e: Exception) {
             e.localizedMessage?.let {
                 Toast.makeText(context, it, Toast.LENGTH_LONG).show()
             }
@@ -80,7 +80,7 @@ class AuthRepositoryImpl @Inject constructor(
                 }
             }
             return false
-        } catch(e: HttpRequestTimeoutException) {
+        } catch(e: Exception) {
             e.localizedMessage?.let {
                 Toast.makeText(context, it, Toast.LENGTH_LONG).show()
             }
