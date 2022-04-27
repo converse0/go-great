@@ -187,7 +187,7 @@ class ProfileRepositoryImpl @Inject constructor(
                 )
             }?.let {
                 println("Response IMAGE: $it")
-                it
+                return it
             }
         } catch(e: Exception) {
             e.localizedMessage?.let {
