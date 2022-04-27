@@ -56,7 +56,7 @@ class ProfileRepositoryImpl @Inject constructor(
 ): ProfileRepository {
     private var trainUrl = "https://api.gogreat.com/v1/profile"
     private var httpClient: HttpClient? = null
-
+    private val maxImageLimit = 3 * 1024
     init {
         context.resources.getInteger(R.integer.request_timeout).let {
             httpClient = client.makeClient(it.toLong())
@@ -156,11 +156,10 @@ class ProfileRepositoryImpl @Inject constructor(
     val convertedImage = imageBitmapToByteArray(image.asAndroidBitmap())
 
         println("userToken: $userToken")
-        println("refreshToken: $refreshUserToken")
         println("image: ${convertedImage.size / 1024}")
         val imageName = "image.jpg"
-        val size = convertedImage.size / 1024
-        if (size > 3 * 1024) {
+        val imageSizeInKB = convertedImage.size / 1024
+        if (imageSizeInKB > maxImageLimit) {
             return ResponseParamsIm(
                 message = "Image size is too big",
                 status = false,
@@ -187,7 +186,7 @@ class ProfileRepositoryImpl @Inject constructor(
                 )
             }?.let {
                 println("Response IMAGE: $it")
-                it
+                return it
             }
         } catch(e: HttpRequestTimeoutException) {
             e.localizedMessage?.let {
