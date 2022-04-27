@@ -55,8 +55,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideAuthRepository(client: Client): AuthRepository {
-        return AuthRepositoryImpl(client)
+    fun provideAuthRepository(client: Client, @ApplicationContext context: Context): AuthRepository {
+        return AuthRepositoryImpl(client, context)
     }
 
     @Provides

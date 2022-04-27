@@ -1,49 +1,90 @@
 package com.masuta.gogreat.data.repository
 
+import android.content.Context
+import android.widget.Toast
+import com.masuta.gogreat.R
 import com.masuta.gogreat.data.remote.Client
 import com.masuta.gogreat.domain.model.Response
 import com.masuta.gogreat.domain.model.User
 import com.masuta.gogreat.domain.repository.AuthRepository
+import io.ktor.client.*
+import io.ktor.client.features.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
-    private val client: Client
+    private val client: Client,
+    private val context: Context
 ) : AuthRepository {
+    private var httpClient: HttpClient? = null
+    private var authUrl = "https://api.gogreat.com/v1/train"
+
+    init {
+        context.resources.getInteger(R.integer.request_timeout).let {
+            httpClient = client.makeClient(it.toLong())
+        }
+        context.getString(R.string.auth_url).let {
+            if (it.isNotEmpty()) {
+                authUrl = it
+            }
+        }
+    }
 
     override suspend fun login(user: User): Map<String, Any?> {
-        val response: Response = client.makeClient(500)
-            .post("https://boilerplate-go.herokuapp.com/login") {
+        try {
+            val response = httpClient?.post<Response>("$authUrl/login") {
                 contentType(ContentType.Application.Json)
                 body = user
             }
+            response?.let { res ->
+                res.data?.let {
+                    println(it.accessToken)
 
-        response.data?.let {
-            println(it.accessToken)
-
-            return mapOf<String,Any?>(
-                "status" to response.status,
-                "message" to response.message,
-                "loginResponse" to it
-            )
+                    return mapOf<String,Any?>(
+                        "status" to res.status,
+                        "message" to res.message,
+                        "loginResponse" to it
+                    )
+                }
+                return mapOf<String,Any?>(
+                    "status" to res.status,
+                    "message" to res.message,
+                    "loginResponse" to null
+                )
+            }
+        } catch(e: HttpRequestTimeoutException) {
+            e.localizedMessage?.let {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            }
+            e.printStackTrace()
         }
         return mapOf<String,Any?>(
-            "status" to response.status,
-            "message" to response.message,
+            "status" to null,
+            "message" to null,
             "loginResponse" to null
         )
     }
 
     override suspend fun signup(user: User): Boolean {
-        val response: HttpResponse = client.makeClient(500).post("https://boilerplate-go.herokuapp.com/signup") {
-            contentType(ContentType.Application.Json)
-            body = user
-        }
-        println(response.status.description)
-        if (response.status.value==201) {
-            return true
+        try {
+            val response = httpClient?.post<HttpResponse>("$authUrl/signup") {
+                contentType(ContentType.Application.Json)
+                body = user
+            }
+            response?.let { res ->
+                println(res.status.description)
+                if (res.status.value==201) {
+                    return true
+                }
+            }
+            return false
+        } catch(e: HttpRequestTimeoutException) {
+            e.localizedMessage?.let {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            }
+            e.printStackTrace()
         }
         return false
     }
