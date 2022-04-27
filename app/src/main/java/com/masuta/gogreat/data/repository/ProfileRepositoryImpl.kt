@@ -14,14 +14,10 @@ import io.ktor.client.*
 import io.ktor.client.features.*
 import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
-import io.ktor.client.response.*
-import io.ktor.client.statement.*
 import io.ktor.http.*
-import io.ktor.util.*
 import io.ktor.utils.io.core.*
 import kotlinx.serialization.Serializable
 import java.io.ByteArrayOutputStream
-import java.io.File
 import java.util.*
 import javax.inject.Inject
 
@@ -58,7 +54,7 @@ class ProfileRepositoryImpl @Inject constructor(
     private val client: Client,
     private val context: Context
 ): ProfileRepository {
-    private var profileUrl = "https://api.gogreat.com/v1/profile"
+    private var trainUrl = "https://api.gogreat.com/v1/profile"
     private var httpClient: HttpClient? = null
 
     init {
@@ -67,7 +63,7 @@ class ProfileRepositoryImpl @Inject constructor(
         }
         context.getString(R.string.train_url).let {
             if (it.isNotEmpty()) {
-                profileUrl = it
+                trainUrl = it
             }
         }
     }
@@ -78,7 +74,7 @@ class ProfileRepositoryImpl @Inject constructor(
 
     override suspend fun createParameters(params: ParametersUserSet): String? {
         try {
-            httpClient?.post<String>("$profileUrl/user/parameters") {
+            httpClient?.post<String>("$trainUrl/user/parameters") {
                 contentType(ContentType.Application.Json)
                 headers {
                     append("Authorization", "Bearer $userToken")
@@ -99,7 +95,7 @@ class ProfileRepositoryImpl @Inject constructor(
     override suspend fun getParameters(): ResponseParams {
         try {
             userToken?.let {
-                httpClient?.get<ResponseParams>("$profileUrl/user/parameters") {
+                httpClient?.get<ResponseParams>("$trainUrl/user/parameters") {
                     contentType(ContentType.Application.Json)
                     headers {
                         append("Authorization", "Bearer ${userToken}")
@@ -120,7 +116,7 @@ class ProfileRepositoryImpl @Inject constructor(
 
     override suspend fun updateParameters(params: ParametersUserSet): String? {
         try {
-            httpClient?.put<UpdateParamsResponse>("$profileUrl/user/parameters") {
+            httpClient?.put<UpdateParamsResponse>("$trainUrl/user/parameters") {
                 contentType(ContentType.Application.Json)
                 headers {
                     append("Authorization", "Bearer $userToken")
@@ -172,7 +168,7 @@ class ProfileRepositoryImpl @Inject constructor(
             )
         }
         try {
-           httpClient?.post<ResponseParamsIm>("$profileUrl/v1/files") {
+           httpClient?.post<ResponseParamsIm>("$trainUrl/v1/files") {
                 headers {
                     append("Authorization", "Bearer $userToken")
                 }
