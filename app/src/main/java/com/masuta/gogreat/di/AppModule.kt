@@ -61,8 +61,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideProfileRepository(client: Client): ProfileRepository {
-        return ProfileRepositoryImpl(client)
+    fun provideProfileRepository(client: Client, @ApplicationContext context: Context): ProfileRepository {
+        return ProfileRepositoryImpl(client, context)
     }
 
     @Provides

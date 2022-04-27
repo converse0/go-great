@@ -1,6 +1,8 @@
 package com.masuta.gogreat.data.repository
 
+import android.content.Context
 import android.graphics.Bitmap
+import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asAndroidBitmap
@@ -52,6 +54,7 @@ data class ResponseParamsIm(
 
 class ProfileRepositoryImpl @Inject constructor(
     private val client: Client,
+    private val context: Context
 ): ProfileRepository {
 
     private var profileParams = mutableStateOf<ParametersUser?>(null)
@@ -71,18 +74,17 @@ class ProfileRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getParameters(): ResponseParams {
-        userToken?.let {
-            val response = client.makeClient(500).get<ResponseParams>(
-                "https://boilerplate-go-trening.herokuapp.com/user/parameters") {
-                contentType(ContentType.Application.Json)
-                headers {
-                    append("Authorization", "Bearer ${userToken}")
+            userToken?.let {
+                val response = client.makeClient(500).get<ResponseParams>(
+                    "https://boilerplate-go-trening.herokuapp.com/user/parameters") {
+                    contentType(ContentType.Application.Json)
+                    headers {
+                        append("Authorization", "Bearer ${userToken}")
+                    }
                 }
-            }
-            println("getParameters: $response")
-            return response
-        } ?: return ResponseParams()
-
+                println("getParameters: $response")
+                return response
+            } ?: return ResponseParams()
     }
 
     override suspend fun updateParameters(params: ParametersUserSet): String {

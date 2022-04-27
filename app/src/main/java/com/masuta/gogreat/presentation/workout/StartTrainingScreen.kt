@@ -44,8 +44,10 @@ fun StartTrainingScreen(
     val isModalOpen = remember { mutableStateOf(false) }
     val isFinalModal = remember { mutableStateOf(false) }
 
+    val context = LocalContext.current
+
     if (viewModel.listExercises.value.isEmpty()) {
-        viewModel.getTraining(uid!!)
+        viewModel.getTraining(uid!!, context)
     }
 
     val listExercises = viewModel.listExercises
@@ -58,9 +60,6 @@ fun StartTrainingScreen(
 //    if (indexExercise.value == listExercises.value.size) {
 //        return
 //    }
-
-
-    val context = LocalContext.current
 
     Column(
         modifier = Modifier

@@ -1,7 +1,6 @@
 package com.masuta.gogreat.data.repository
 
 import android.content.Context
-import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
 import com.bumptech.glide.load.HttpException
 import com.masuta.gogreat.R
@@ -16,7 +15,7 @@ import io.ktor.network.sockets.*
 import javax.inject.Inject
 
 class TrainRepositoryImpl @Inject constructor(
-    client: Client,
+    private var client: Client,
     private var context: Context,
 ): TrainRepository {
     private var httpClient: HttpClient? = null
@@ -28,8 +27,8 @@ class TrainRepositoryImpl @Inject constructor(
     private var localCurrentWorkout = mutableStateOf<Training?>(null)
     private var localPastWorkouts: List<Training> = mutableListOf()
 
-    private var localCurrentExercise = mutableStateOf<Int?>(null)
-    private var localCurrentExerciseSets = mutableStateOf<Int?>(null)
+//    private var localCurrentExercise = mutableStateOf<Int?>(null)
+//    private var localCurrentExerciseSets = mutableStateOf<Int?>(null)
 
     override var workoutsDataReload: Boolean = true
     override var pastWorkoutsDataReload: Boolean = true
@@ -136,26 +135,14 @@ class TrainRepositoryImpl @Inject constructor(
         }
         } catch (e: HttpRequestTimeoutException) {
             e.printStackTrace()
-            e.localizedMessage?.let {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-            }
         } catch (e: HttpException) {
             e.printStackTrace()
-            e.localizedMessage?.let {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-            }
         }
         catch (e: ConnectTimeoutException) {
             e.printStackTrace()
-            e.localizedMessage?.let {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-            }
         }
         catch (e: SocketTimeoutException) {
             e.printStackTrace()
-            e.localizedMessage?.let {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-            }
         }
         return null
     }
@@ -173,26 +160,14 @@ class TrainRepositoryImpl @Inject constructor(
             }
         }
         } catch (e: HttpRequestTimeoutException) {
-            e.localizedMessage?.let {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-            }
             e.printStackTrace()
         } catch (e: HttpException) {
-            e.localizedMessage?.let {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-            }
             e.printStackTrace()
         }
         catch (e: ConnectTimeoutException) {
-            e.localizedMessage?.let {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-            }
             e.printStackTrace()
         }
         catch (e: SocketTimeoutException) {
-            e.localizedMessage?.let {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-            }
             e.printStackTrace()
         }
         return null
@@ -223,19 +198,37 @@ class TrainRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getLocalCurrentExercise(): Int? {
-        return localCurrentExercise.value
+        val sharedPref = context.getSharedPreferences("user", Context.MODE_PRIVATE)
+        val value = sharedPref.getInt("currentExercise", -1)
+        println("LOCAL EXERCISE: ${value}")
+        return when (value) {
+            -1 -> null
+            else -> value
+        }
     }
 
     override suspend fun setLocalCurrentExercise(indexExercise: Int?) {
-        localCurrentExercise.value = indexExercise
+        val sharedPref = context.getSharedPreferences("user", Context.MODE_PRIVATE)
+        val editor = sharedPref.edit()
+        editor.putInt("currentExercise", indexExercise ?: -1)
+        editor.apply()
     }
 
     override suspend fun getLocalCurrentExerciseSets(): Int? {
-        return localCurrentExerciseSets.value
+        val sharedPref = context.getSharedPreferences("user", Context.MODE_PRIVATE)
+        val value = sharedPref.getInt("currentExerciseSets", -1)
+        println("LOCAL SETS: ${value}")
+        return when (value) {
+            -1 -> null
+            else -> value
+        }
     }
 
     override suspend fun setLocalCurrentExerciseSets(exerciseSets: Int?) {
-        localCurrentExerciseSets.value = exerciseSets
+        val sharedPref = context.getSharedPreferences("user", Context.MODE_PRIVATE)
+        val editor = sharedPref.edit()
+        editor.putInt("currentExerciseSets", exerciseSets ?: -1)
+        editor.apply()
     }
 
     override suspend fun getLocalTrainingByUid(uid: String): Training? {
@@ -268,7 +261,6 @@ class TrainRepositoryImpl @Inject constructor(
 
     }
 
-
     override suspend fun startTraining(uid: String) {
         httpClient?.put<String>("$trainUrl/user/trening/status") {
             contentType(ContentType.Application.Json)
@@ -296,26 +288,14 @@ class TrainRepositoryImpl @Inject constructor(
         }
 
         } catch (e: HttpRequestTimeoutException) {
-            e.localizedMessage?.let {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-            }
             e.printStackTrace()
         } catch (e: HttpException) {
-            e.localizedMessage?.let {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-            }
             e.printStackTrace()
         }
         catch (e: ConnectTimeoutException) {
-            e.localizedMessage?.let {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-            }
             e.printStackTrace()
         }
         catch (e: SocketTimeoutException) {
-            e.localizedMessage?.let {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-            }
             e.printStackTrace()
         }
     }
@@ -337,26 +317,14 @@ class TrainRepositoryImpl @Inject constructor(
             }
         }
         } catch (e: HttpRequestTimeoutException) {
-            e.localizedMessage?.let {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-            }
             e.printStackTrace()
         } catch (e: HttpException) {
-            e.localizedMessage?.let {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-            }
             e.printStackTrace()
         }
         catch (e: ConnectTimeoutException) {
-            e.localizedMessage?.let {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-            }
             e.printStackTrace()
         }
         catch (e: SocketTimeoutException) {
-            e.localizedMessage?.let {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-            }
             e.printStackTrace()
         }
         return null
@@ -376,26 +344,14 @@ class TrainRepositoryImpl @Inject constructor(
                 println("setExerciseParams: $it")
             }
         } catch (e: HttpRequestTimeoutException) {
-            e.localizedMessage?.let {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-            }
             e.printStackTrace()
         } catch (e: HttpException) {
-            e.localizedMessage?.let {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-            }
             e.printStackTrace()
         }
         catch (e: ConnectTimeoutException) {
-            e.localizedMessage?.let {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-            }
             e.printStackTrace()
         }
         catch (e: SocketTimeoutException) {
-            e.localizedMessage?.let {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-            }
             e.printStackTrace()
         }
 

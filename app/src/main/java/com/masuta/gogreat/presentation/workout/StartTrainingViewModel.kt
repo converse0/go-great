@@ -102,8 +102,9 @@ class StartTrainingViewModel @Inject constructor(
         }
     }
 
-    fun getTraining(uid: String) {
+    fun getTraining(uid: String, context: Context) {
         viewModelScope.launch {
+//            repository.init(context)
 //            val resp = repository.getTrainingDetail(uid)
             val resp = repository.getLocalTrainingByUid(uid)
             val exerciseCurrent = repository.getLocalCurrentExercise()
