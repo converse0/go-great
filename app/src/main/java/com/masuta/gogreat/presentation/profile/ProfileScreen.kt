@@ -1,8 +1,10 @@
 package com.masuta.gogreat.presentation.profile
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
@@ -35,6 +37,11 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestBuilder
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions.withCrossFade
+import com.bumptech.glide.request.RequestOptions
 import com.masuta.gogreat.domain.model.ParametersUser
 import com.masuta.gogreat.domain.model.UserActivity
 import com.masuta.gogreat.domain.model.UserDiet
@@ -46,6 +53,7 @@ import com.masuta.gogreat.presentation.components.SliderWithLabelUserActivity
 import com.masuta.gogreat.presentation.ui.theme.Green
 import com.masuta.gogreat.presentation.ui.theme.Red
 import com.skydoves.landscapist.glide.GlideImage
+import com.skydoves.landscapist.glide.LocalGlideRequestBuilder
 import kotlinx.coroutines.*
 
 
@@ -126,7 +134,7 @@ fun ProfileSection(
     val bitmap = remember { mutableStateOf<Bitmap?>(null) }
 
     val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
-        viewModel.isUploadImage = true
+        viewModel.isUploadImage.value = true
         imageUri = uri
 //        val image = context.contentResolver.openInputStream(uri!!)
     }
@@ -179,6 +187,7 @@ fun ProfileSection(
     }
 }
 
+@SuppressLint("CheckResult")
 @Composable
 fun ProfileAvatar(
     imageUri: Uri?,
@@ -187,10 +196,6 @@ fun ProfileAvatar(
     viewModel: ProfileViewModel,
     profileImg: MutableState<ParametersUser>
 ) {
-
-    println("Profile AVATAR RE-RENDERING")
-    println("LINK PROFILE IMG: ${profileImg.value.image}")
-
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxWidth()
@@ -204,8 +209,8 @@ fun ProfileAvatar(
                     .clip(shape = CircleShape)
                     .background(color = Color.Gray)
             ) {
-                if (viewModel.isUploadImage) {
-                    viewModel.isUploadImage = false
+                if (viewModel.isUploadImage.value) {
+                    viewModel.isUploadImage.value = false
 
                     imageUri?.let {
                         if (Build.VERSION.SDK_INT < 28) {
@@ -219,8 +224,6 @@ fun ProfileAvatar(
                             CoroutineScope(Dispatchers.IO).launch {
                                 val resp = viewModel.uploadImage(btm.asImageBitmap())
                                 withContext(Dispatchers.Main) {
-//                                    response = resp
-//                                    println("RESPONSE: $response")
                                     resp?.let { r ->
                                         Toast.makeText(context, r, Toast.LENGTH_LONG ).show()
                                     }
@@ -229,15 +232,17 @@ fun ProfileAvatar(
                         }
                     }
                 }
-                if (profileImg.value.image!= null) {
+                if (profileImg.value.image != null) {
                     println("PROFILE IMG: ${profileImg.value.image}")
-                    GlideImage(
-                        imageModel = profileImg.value.image,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .size(150.dp)
-                            .clip(shape = CircleShape)
-                    )
+                        GlideImage(
+                            imageModel = profileImg.value.image,
+                            contentScale = ContentScale.Crop,
+                            requestOptions = { RequestOptions().diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true) },
+                            modifier = Modifier
+                                .size(150.dp)
+                                .clip(shape = CircleShape)
+                        )
+
                 }
             }
         }

@@ -26,7 +26,7 @@ class ProfileViewModel @Inject constructor(
 
     var errorMessage by mutableStateOf("")
 
-    var isUploadImage by mutableStateOf(true)
+    var isUploadImage = mutableStateOf(true)
 
     var userParams = mutableStateOf(ParametersUser())
 
@@ -150,10 +150,10 @@ class ProfileViewModel @Inject constructor(
 
     suspend fun uploadImage(im: ImageBitmap): String? {
         println("IMAGE BITMAP: $im")
-        isUploadImage = false
         isDataLoad = true
         val resp = repository.uploadImage(im)
         println("Response: $resp")
+        isUploadImage.value = false
         resp.data?.let {
             println("uploadImage: $it")
             userParams.value = userParams.value.copy(
