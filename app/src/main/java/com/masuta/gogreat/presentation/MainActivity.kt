@@ -135,6 +135,8 @@ fun ChoseStartScreen(
                 .makeText(context.applicationContext,
                 "unknown error",
                     Toast.LENGTH_LONG).show()
+            startRouteName.value = "sign-in"
+
         }
         else -> {
             println("Gender $gender")
