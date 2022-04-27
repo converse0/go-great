@@ -363,19 +363,22 @@ fun ProfileInfo(
                     )
                 )
                 withContext(Dispatchers.Main) {
-                    if (resp.isNotEmpty()) {
-                        Toast.makeText(
-                            context,
-                            resp,
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else {
-                        Toast.makeText(
-                            context,
-                            "Update user parameters Success",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                    resp?.let {
+                        if (it.isNotEmpty()) {
+                            Toast.makeText(
+                                context,
+                                resp,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            Toast.makeText(
+                                context,
+                                "Update user parameters Success",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
+
                     lazyListState.scrollToItem(0)
                 }
             }

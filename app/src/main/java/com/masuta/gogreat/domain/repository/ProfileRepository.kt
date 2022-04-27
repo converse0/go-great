@@ -10,11 +10,11 @@ interface ProfileRepository {
 
     var isLoadData: Boolean
 
-    suspend fun createParameters(params: ParametersUserSet): String
+    suspend fun createParameters(params: ParametersUserSet): String?
 
     suspend fun getParameters(): ResponseParams
 
-    suspend fun updateParameters(params: ParametersUserSet): String
+    suspend fun updateParameters(params: ParametersUserSet): String?
 
     suspend fun uploadImage(image: ImageBitmap): ResponseParamsIm
 

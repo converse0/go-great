@@ -6,9 +6,11 @@ import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asAndroidBitmap
+import com.masuta.gogreat.R
 import com.masuta.gogreat.data.remote.Client
 import com.masuta.gogreat.domain.model.*
 import com.masuta.gogreat.domain.repository.ProfileRepository
+import io.ktor.client.*
 import io.ktor.client.features.*
 import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
@@ -56,49 +58,84 @@ class ProfileRepositoryImpl @Inject constructor(
     private val client: Client,
     private val context: Context
 ): ProfileRepository {
+    private var profileUrl = "https://api.gogreat.com/v1/profile"
+    private var httpClient: HttpClient? = null
+
+    init {
+        context.resources.getInteger(R.integer.request_timeout).let {
+            httpClient = client.makeClient(it.toLong())
+        }
+        context.getString(R.string.train_url).let {
+            if (it.isNotEmpty()) {
+                profileUrl = it
+            }
+        }
+    }
 
     private var profileParams = mutableStateOf<ParametersUser?>(null)
 
     override var isLoadData: Boolean = true
 
-    override suspend fun createParameters(params: ParametersUserSet): String {
-        val response = client.makeClient(500)
-            .post<String>("https://boilerplate-go-trening.herokuapp.com/user/parameters") {
+    override suspend fun createParameters(params: ParametersUserSet): String? {
+        try {
+            httpClient?.post<String>("$profileUrl/user/parameters") {
                 contentType(ContentType.Application.Json)
                 headers {
                     append("Authorization", "Bearer $userToken")
                 }
                 body = params
+            }?.let {
+                return it
             }
-        return response
+        } catch(e: HttpRequestTimeoutException) {
+            e.localizedMessage?.let {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            }
+            e.printStackTrace()
+        }
+        return null
     }
 
     override suspend fun getParameters(): ResponseParams {
+        try {
             userToken?.let {
-                val response = client.makeClient(500).get<ResponseParams>(
-                    "https://boilerplate-go-trening.herokuapp.com/user/parameters") {
+                httpClient?.get<ResponseParams>("$profileUrl/user/parameters") {
                     contentType(ContentType.Application.Json)
                     headers {
                         append("Authorization", "Bearer ${userToken}")
                     }
+                }?.let {
+                    println("getParameters: $it")
+                    return it
                 }
-                println("getParameters: $response")
-                return response
             } ?: return ResponseParams()
+        } catch (e: HttpRequestTimeoutException) {
+            e.localizedMessage?.let {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            }
+            e.printStackTrace()
+            return ResponseParams(code = 777)
+        }
     }
 
-    override suspend fun updateParameters(params: ParametersUserSet): String {
-        val response = client.makeClient(500)
-            .put<UpdateParamsResponse>("https://boilerplate-go-trening.herokuapp.com/user/parameters") {
+    override suspend fun updateParameters(params: ParametersUserSet): String? {
+        try {
+            httpClient?.put<UpdateParamsResponse>("$profileUrl/user/parameters") {
                 contentType(ContentType.Application.Json)
                 headers {
                     append("Authorization", "Bearer $userToken")
                 }
                 body = params
+            }?.let {
+                return it.message
             }
-        println(response)
-
-        return response.message
+        } catch(e: HttpRequestTimeoutException) {
+            e.localizedMessage?.let {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            }
+            e.printStackTrace()
+        }
+        return null
     }
 
     private fun getStringRandom(): String {
@@ -134,11 +171,9 @@ class ProfileRepositoryImpl @Inject constructor(
                 code = 400
             )
         }
-        val response = client.makeClient(500)
-            .post<ResponseParamsIm>("https://boilerplate-go-trening.herokuapp.com/v1/files") {
-//                contentType(ContentType.Application.Json)
+        try {
+           httpClient?.post<ResponseParamsIm>("$profileUrl/v1/files") {
                 headers {
-//                    append("Content-Type", ContentType.Application.Json)
                     append("Authorization", "Bearer $userToken")
                 }
                 body = MultiPartFormDataContent(
@@ -154,9 +189,18 @@ class ProfileRepositoryImpl @Inject constructor(
                             },
                         ) { buildPacket { writeFully(convertedImage) } }}
                 )
+            }?.let {
+                println("Response IMAGE: $it")
+                it
             }
-        println("Response IMAGE: $response")
-    return  response
+        } catch(e: HttpRequestTimeoutException) {
+            e.localizedMessage?.let {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            }
+            e.printStackTrace()
+            return ResponseParamsIm(code = 777)
+        }
+        return ResponseParamsIm()
     }
 
     override suspend fun getLocalProfileParams(): ParametersUser? {

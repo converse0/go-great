@@ -27,9 +27,6 @@ class TrainRepositoryImpl @Inject constructor(
     private var localCurrentWorkout = mutableStateOf<Training?>(null)
     private var localPastWorkouts: List<Training> = mutableListOf()
 
-//    private var localCurrentExercise = mutableStateOf<Int?>(null)
-//    private var localCurrentExerciseSets = mutableStateOf<Int?>(null)
-
     override var workoutsDataReload: Boolean = true
     override var pastWorkoutsDataReload: Boolean = true
     override var currentWorkoutDataReload: Boolean = true

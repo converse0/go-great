@@ -127,7 +127,7 @@ class ProfileViewModel @Inject constructor(
 
     suspend fun updateParams(
         userParams: ParametersUser,
-    ): String {
+    ): String? {
         val params = ParametersUserSet (
             age = userParams.age,
             weight = userParams.weight,
@@ -141,8 +141,11 @@ class ProfileViewModel @Inject constructor(
         )
         repository.setLocalProfileParams(userParams)
         val resp = repository.updateParameters(params)
-        isDataLoad = true
-        return resp
+        if (resp != null) {
+            isDataLoad = true
+            return resp
+        }
+        return null
     }
 
     suspend fun uploadImage(im: ImageBitmap): String? {
