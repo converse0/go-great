@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">GoGreat</string>
-    <integer name="request_timeout">3000</integer>
+    <integer name="request_timeout">5000</integer>
     <string name="train_url">https://boilerplate-go-trening.herokuapp.com</string>
     <string name="auth_url">https://boilerplate-go.herokuapp.com</string>
 </resources>

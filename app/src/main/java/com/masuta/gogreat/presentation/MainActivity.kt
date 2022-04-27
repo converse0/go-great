@@ -121,7 +121,7 @@ fun ChoseStartScreen(
         return
     }
     val gender = remember {
-        mutableStateOf(777)
+        mutableStateOf(888)
     }
     SetSex(context, viewModel = viewModel, gender)
     if (viewModel.errorMessage.isNotEmpty()) {
@@ -133,9 +133,9 @@ fun ChoseStartScreen(
         777 -> {
             Toast
                 .makeText(context.applicationContext,
-                "timeout exceeded",
+                "Request timeout exceeded",
                     Toast.LENGTH_LONG).show()
-            startRouteName.value = "sign-in"
+            startRouteName.value = "main"
 
         }
         else -> {
