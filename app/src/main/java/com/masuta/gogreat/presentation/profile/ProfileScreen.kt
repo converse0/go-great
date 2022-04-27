@@ -189,7 +189,7 @@ fun ProfileAvatar(
 ) {
 
     println("Profile AVATAR RE-RENDERING")
-    println("LINK PROFILE IMG: $profileImg")
+    println("LINK PROFILE IMG: ${profileImg.value.image}")
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -349,7 +349,7 @@ fun ProfileInfo(
                 .fillMaxWidth()
                 .padding(vertical = 20.dp)
         ) {
-            CoroutineScope(Dispatchers.Main).launch {
+            CoroutineScope(Dispatchers.IO).launch {
                 val resp = viewModel.updateParams(
                     userParams = userParams.copy(
                         age = age.value.toInt(),
@@ -362,66 +362,24 @@ fun ProfileInfo(
                         gender = gender.value,
                     )
                 )
-                if (resp.isNotEmpty()) {
-                    Toast.makeText(
-                        context,
-                        resp,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                } else {
-                    Toast.makeText(
-                        context,
-                        "Update user parameters Success",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                withContext(Dispatchers.Main) {
+                    if (resp.isNotEmpty()) {
+                        Toast.makeText(
+                            context,
+                            resp,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        Toast.makeText(
+                            context,
+                            "Update user parameters Success",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    lazyListState.scrollToItem(0)
                 }
-                lazyListState.scrollToItem(0)
             }
         }
-
-//        TextButton(
-//            onClick = {
-//                CoroutineScope(Dispatchers.Main).launch {
-//                    val resp = viewModel.updateParams(
-//                        gender = gender.value,
-//                        age = age.value.toInt(),
-//                        weight = weight.value.toInt(),
-//                        height = height.value.toInt(),
-//                        activity = activity.value,
-//                        diet = diet.value,
-//                        timesEat = timesEat.value.toInt(),
-//                        desiredWeight = desiredWeight.value.toInt(),
-//                        uid = uid.value
-//                    )
-//                    if (resp.isNotEmpty()) {
-//                        Toast.makeText(
-//                            context,
-//                            resp,
-//                            Toast.LENGTH_SHORT
-//                        ).show()
-//                    } else {
-//                        Toast.makeText(
-//                            context,
-//                            "Update user parameters Success",
-//                            Toast.LENGTH_SHORT
-//                        ).show()
-//                    }
-//                    lazyListState.scrollToItem(0)
-//                }
-//
-//            },
-//            colors = ButtonDefaults.buttonColors(containerColor = Red),
-//            shape = RoundedCornerShape(16.dp),
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(vertical = 20.dp)
-//        ) {
-//            Text(
-//                text = "Save",
-//                color = Color.White,
-//                modifier = Modifier.padding(vertical = 16.dp),
-//            )
-//        }
     }
 }
 

@@ -37,6 +37,7 @@ import com.masuta.gogreat.presentation.ui.theme.SportTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun SignInScreen(
@@ -118,19 +119,21 @@ fun SignInForm(viewModel: SignInViewModel, navController: NavHostController) {
 
     MainTextButton(text = "Login", color = Red, modifier = Modifier.fillMaxWidth().padding(vertical = 40.dp)) {
         val user = User(email=email, password=password)
-        CoroutineScope(Dispatchers.Main).launch {
+        CoroutineScope(Dispatchers.IO).launch {
             val resp = viewModel.signIn(user)
-            if(resp["status"] as Boolean){
 
-                viewModel.setToken(context = context, token = resp["loginResponse"] as LoginResponse?)
-                navController.navigate("main")
-            } else {
-                resp["message"]?.let {
-                    Toast.makeText(
-                        context,
-                        it as String,
-                        Toast.LENGTH_SHORT
-                    ).show()
+            withContext(Dispatchers.Main) {
+                if(resp["status"] as Boolean){
+                    viewModel.setToken(context = context, token = resp["loginResponse"] as LoginResponse?)
+                    navController.navigate("main")
+                } else {
+                    resp["message"]?.let {
+                        Toast.makeText(
+                            context,
+                            it as String,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             }
         }

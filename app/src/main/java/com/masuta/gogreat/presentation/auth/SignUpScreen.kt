@@ -29,6 +29,7 @@ import com.masuta.gogreat.presentation.ui.theme.SportTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun SignUpScreen(viewModel: SignUpViewModel, navController: NavHostController) {
@@ -131,33 +132,37 @@ fun SignUpForm(viewModel: SignUpViewModel, navController: NavHostController) {
                 )
                 .align(Alignment.BottomCenter)
         ) {
-            CoroutineScope(Dispatchers.Main).launch {
-                val resp = viewModel.signUp(username, email,password,passwordConfirm)
-                if (resp) {
+            CoroutineScope(Dispatchers.IO).launch {
+                val respSignUp = viewModel.signUp(username, email,password,passwordConfirm)
+
+                if (respSignUp) {
                     val res = viewModel.signIn(User(email = email, password = password))
-                    if (res["status"] as Boolean) {
-                        viewModel.setToken(context = context, token = res["loginResponse"] as LoginResponse?)
-                        navController.navigate("about")
-                    } else {
-                        res["message"]?.let {
-                            Toast.makeText(
-                                context,
-                                it as String,
-                                Toast.LENGTH_SHORT
-                            ).show()
+                    withContext(Dispatchers.Main) {
+                        if (res["status"] as Boolean) {
+                            viewModel.setToken(context = context, token = res["loginResponse"] as LoginResponse?)
+                            navController.navigate("about")
+                        } else {
+                            res["message"]?.let {
+                                Toast.makeText(
+                                    context,
+                                    it as String,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                         }
                     }
                 } else {
-                    Toast.makeText(
-                        context,
-                        "Sign up failed, fill all fields, and enter the same password twice",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(
+                            context,
+                            "Sign up failed, fill all fields, and enter the same password twice",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             }
         }
     }
-
     Text(
         text = "By signing up, you agree to our Privacy Policy"
     )
