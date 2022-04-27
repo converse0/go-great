@@ -2,13 +2,16 @@ package com.masuta.gogreat.data.repository
 
 import android.content.Context
 import androidx.compose.runtime.mutableStateOf
+import com.bumptech.glide.load.HttpException
 import com.masuta.gogreat.R
 import com.masuta.gogreat.data.remote.Client
 import com.masuta.gogreat.domain.model.*
 import com.masuta.gogreat.domain.repository.TrainRepository
 import io.ktor.client.*
+import io.ktor.client.features.*
 import io.ktor.client.request.*
 import io.ktor.http.*
+import io.ktor.network.sockets.*
 import javax.inject.Inject
 
 class TrainRepositoryImpl @Inject constructor(
@@ -118,6 +121,7 @@ class TrainRepositoryImpl @Inject constructor(
 
 
     override suspend fun getPassTrainings(): List<Training>? {
+        try {
         httpClient?.get<TrainingResponse>("$trainUrl/user/trenings?status=Finish") {
             contentType(ContentType.Application.Json)
             headers {
@@ -129,10 +133,22 @@ class TrainRepositoryImpl @Inject constructor(
                 return trains
             }
         }
+        } catch (e: HttpRequestTimeoutException) {
+            e.printStackTrace()
+        } catch (e: HttpException) {
+            e.printStackTrace()
+        }
+        catch (e: ConnectTimeoutException) {
+            e.printStackTrace()
+        }
+        catch (e: SocketTimeoutException) {
+            e.printStackTrace()
+        }
         return null
     }
 
     override suspend fun getMyTrainings(): List<Training>? {
+        try{
         httpClient?.get<TrainingResponse>("$trainUrl/user/trenings?status=Create") {
             contentType(ContentType.Application.Json)
             headers {
@@ -142,6 +158,17 @@ class TrainRepositoryImpl @Inject constructor(
             tr.data?.let { trains ->
                 return trains
             }
+        }
+        } catch (e: HttpRequestTimeoutException) {
+            e.printStackTrace()
+        } catch (e: HttpException) {
+            e.printStackTrace()
+        }
+        catch (e: ConnectTimeoutException) {
+            e.printStackTrace()
+        }
+        catch (e: SocketTimeoutException) {
+            e.printStackTrace()
         }
         return null
     }
@@ -229,6 +256,9 @@ class TrainRepositoryImpl @Inject constructor(
     }
 
     override suspend fun finishTraining(uid: String) {
+        try {
+
+
         httpClient?.put<String>("$trainUrl/user/trening/status") {
             contentType(ContentType.Application.Json)
             headers {
@@ -238,10 +268,23 @@ class TrainRepositoryImpl @Inject constructor(
         }?.let {
             println("finishTraining: $it")
         }
+
+        } catch (e: HttpRequestTimeoutException) {
+            e.printStackTrace()
+        } catch (e: HttpException) {
+            e.printStackTrace()
+        }
+        catch (e: ConnectTimeoutException) {
+            e.printStackTrace()
+        }
+        catch (e: SocketTimeoutException) {
+            e.printStackTrace()
+        }
     }
 
 
     override suspend fun getCurrentTraining(): Training? {
+        try {
         httpClient?.get<TrainingResponse>("$trainUrl/user/trenings?status=Start") {
             contentType(ContentType.Application.Json)
             headers {
@@ -255,21 +298,46 @@ class TrainRepositoryImpl @Inject constructor(
                 }
             }
         }
+        } catch (e: HttpRequestTimeoutException) {
+            e.printStackTrace()
+        } catch (e: HttpException) {
+            e.printStackTrace()
+        }
+        catch (e: ConnectTimeoutException) {
+            e.printStackTrace()
+        }
+        catch (e: SocketTimeoutException) {
+            e.printStackTrace()
+        }
         return null
     }
 
 
     override suspend fun setExerciseParams(uid: String, listExercises: List<TrainingExercise>) {
         val data = TrainingExerciseUpdate(uid=uid, exercises = listExercises)
-        httpClient?.put<String>("$trainUrl/user/trening/exercises") {
-            contentType(ContentType.Application.Json)
-            headers {
-                append("Authorization", "Bearer $userToken")
+        try {
+            httpClient?.put<String>("$trainUrl/user/trening/exercises") {
+                contentType(ContentType.Application.Json)
+                headers {
+                    append("Authorization", "Bearer $userToken")
+                }
+                body = data // mapOf("uid" to uid, "exercises" to listExercises)
+            }?.let {
+                println("setExerciseParams: $it")
             }
-            body = data // mapOf("uid" to uid, "exercises" to listExercises)
-        }?.let {
-            println("setExerciseParams: $it")
+        } catch (e: HttpRequestTimeoutException) {
+            e.printStackTrace()
+        } catch (e: HttpException) {
+            e.printStackTrace()
         }
+        catch (e: ConnectTimeoutException) {
+            e.printStackTrace()
+        }
+        catch (e: SocketTimeoutException) {
+            e.printStackTrace()
+        }
+
+
     }
 
     override fun delete(newTrain: Training) {
