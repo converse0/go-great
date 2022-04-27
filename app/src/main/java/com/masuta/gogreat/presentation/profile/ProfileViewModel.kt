@@ -166,6 +166,14 @@ class ProfileViewModel @Inject constructor(
         } ?: resp.message?.let {
             println("uploadImage error: $it")
             return it
-        } ?: return "Error"
+        } ?: resp.code?.let {
+            println("uploadImage error: $it")
+            return when(it) {
+                16 -> "Access Token is expired"
+                5,2 -> "profile is not found"
+                else -> "Request Time out exceeded"
+            }
+        }
+        return null
     }
 }
