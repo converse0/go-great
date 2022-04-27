@@ -12,6 +12,9 @@ import io.ktor.client.features.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
@@ -56,7 +59,9 @@ class AuthRepositoryImpl @Inject constructor(
             }
         } catch(e: Exception) {
             e.localizedMessage?.let {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                CoroutineScope(Dispatchers.Main).launch {
+                    Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                }
             }
             e.printStackTrace()
         }
@@ -82,7 +87,9 @@ class AuthRepositoryImpl @Inject constructor(
             return false
         } catch(e: Exception) {
             e.localizedMessage?.let {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                CoroutineScope(Dispatchers.Main).launch {
+                    Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                }
             }
             e.printStackTrace()
         }

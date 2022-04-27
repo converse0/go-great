@@ -13,6 +13,9 @@ import io.ktor.client.features.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.network.sockets.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class TrainRepositoryImpl @Inject constructor(
@@ -56,7 +59,9 @@ class TrainRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             e.localizedMessage?.let {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                CoroutineScope(Dispatchers.Main).launch {
+                    Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                }
             }
             e.printStackTrace()
         }
@@ -78,7 +83,9 @@ class TrainRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             e.localizedMessage?.let {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                CoroutineScope(Dispatchers.Main).launch {
+                    Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                }
             }
             e.printStackTrace()
         }
@@ -97,7 +104,9 @@ class TrainRepositoryImpl @Inject constructor(
             saveLocal(newTrain)
         } catch (e: Exception) {
             e.localizedMessage?.let {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                CoroutineScope(Dispatchers.Main).launch {
+                    Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                }
             }
             e.printStackTrace()
         }
@@ -151,7 +160,9 @@ class TrainRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             e.localizedMessage?.let {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                CoroutineScope(Dispatchers.Main).launch {
+                    Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                }
             }
             e.printStackTrace()
         }
@@ -172,7 +183,9 @@ class TrainRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             e.localizedMessage?.let {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                CoroutineScope(Dispatchers.Main).launch {
+                    Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                }
             }
             e.printStackTrace()
         }
@@ -266,7 +279,9 @@ class TrainRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             e.localizedMessage?.let {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                CoroutineScope(Dispatchers.Main).launch {
+                    Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                }
             }
             e.printStackTrace()
         }
@@ -286,7 +301,9 @@ class TrainRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             e.localizedMessage?.let {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                CoroutineScope(Dispatchers.Main).launch {
+                    Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                }
             }
             e.printStackTrace()
         }
@@ -305,7 +322,9 @@ class TrainRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             e.localizedMessage?.let {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                CoroutineScope(Dispatchers.Main).launch {
+                    Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                }
             }
             e.printStackTrace()
         }
@@ -329,7 +348,9 @@ class TrainRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             e.localizedMessage?.let {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                CoroutineScope(Dispatchers.Main).launch {
+                    Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                }
             }
             e.printStackTrace()
         }
@@ -350,7 +371,9 @@ class TrainRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             e.localizedMessage?.let {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                CoroutineScope(Dispatchers.Main).launch {
+                    Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                }
             }
             e.printStackTrace()
         }

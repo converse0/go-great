@@ -16,6 +16,9 @@ import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
 import io.ktor.http.*
 import io.ktor.utils.io.core.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import java.io.ByteArrayOutputStream
 import java.util.*
@@ -85,7 +88,9 @@ class ProfileRepositoryImpl @Inject constructor(
             }
         } catch(e: Exception) {
             e.localizedMessage?.let {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                CoroutineScope(Dispatchers.Main).launch {
+                    Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                }
             }
             e.printStackTrace()
         }
@@ -107,7 +112,9 @@ class ProfileRepositoryImpl @Inject constructor(
             } ?: return ResponseParams()
         } catch (e: Exception) {
             e.localizedMessage?.let {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                CoroutineScope(Dispatchers.Main).launch {
+                    Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                }
             }
             e.printStackTrace()
             return ResponseParams(code = 777)
@@ -127,7 +134,9 @@ class ProfileRepositoryImpl @Inject constructor(
             }
         } catch(e: Exception) {
             e.localizedMessage?.let {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                CoroutineScope(Dispatchers.Main).launch {
+                    Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                }
             }
             e.printStackTrace()
         }
@@ -190,7 +199,9 @@ class ProfileRepositoryImpl @Inject constructor(
             }
         } catch(e: Exception) {
             e.localizedMessage?.let {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                CoroutineScope(Dispatchers.Main).launch {
+                    Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                }
             }
             e.printStackTrace()
             return ResponseParamsIm(code = 777)
