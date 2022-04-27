@@ -1,6 +1,7 @@
 package com.masuta.gogreat.data.repository
 
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
 import com.bumptech.glide.load.HttpException
 import com.masuta.gogreat.R
@@ -16,7 +17,7 @@ import javax.inject.Inject
 
 class TrainRepositoryImpl @Inject constructor(
     client: Client,
-    context: Context,
+    private var context: Context,
 ): TrainRepository {
     private var httpClient: HttpClient? = null
     private var trainUrl = "https://api.gogreat.com/v1/train"
@@ -135,14 +136,26 @@ class TrainRepositoryImpl @Inject constructor(
         }
         } catch (e: HttpRequestTimeoutException) {
             e.printStackTrace()
+            e.localizedMessage?.let {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            }
         } catch (e: HttpException) {
             e.printStackTrace()
+            e.localizedMessage?.let {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            }
         }
         catch (e: ConnectTimeoutException) {
             e.printStackTrace()
+            e.localizedMessage?.let {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            }
         }
         catch (e: SocketTimeoutException) {
             e.printStackTrace()
+            e.localizedMessage?.let {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            }
         }
         return null
     }
@@ -160,14 +173,26 @@ class TrainRepositoryImpl @Inject constructor(
             }
         }
         } catch (e: HttpRequestTimeoutException) {
+            e.localizedMessage?.let {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            }
             e.printStackTrace()
         } catch (e: HttpException) {
+            e.localizedMessage?.let {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            }
             e.printStackTrace()
         }
         catch (e: ConnectTimeoutException) {
+            e.localizedMessage?.let {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            }
             e.printStackTrace()
         }
         catch (e: SocketTimeoutException) {
+            e.localizedMessage?.let {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            }
             e.printStackTrace()
         }
         return null
@@ -243,6 +268,7 @@ class TrainRepositoryImpl @Inject constructor(
 
     }
 
+
     override suspend fun startTraining(uid: String) {
         httpClient?.put<String>("$trainUrl/user/trening/status") {
             contentType(ContentType.Application.Json)
@@ -270,14 +296,26 @@ class TrainRepositoryImpl @Inject constructor(
         }
 
         } catch (e: HttpRequestTimeoutException) {
+            e.localizedMessage?.let {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            }
             e.printStackTrace()
         } catch (e: HttpException) {
+            e.localizedMessage?.let {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            }
             e.printStackTrace()
         }
         catch (e: ConnectTimeoutException) {
+            e.localizedMessage?.let {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            }
             e.printStackTrace()
         }
         catch (e: SocketTimeoutException) {
+            e.localizedMessage?.let {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            }
             e.printStackTrace()
         }
     }
@@ -299,14 +337,26 @@ class TrainRepositoryImpl @Inject constructor(
             }
         }
         } catch (e: HttpRequestTimeoutException) {
+            e.localizedMessage?.let {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            }
             e.printStackTrace()
         } catch (e: HttpException) {
+            e.localizedMessage?.let {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            }
             e.printStackTrace()
         }
         catch (e: ConnectTimeoutException) {
+            e.localizedMessage?.let {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            }
             e.printStackTrace()
         }
         catch (e: SocketTimeoutException) {
+            e.localizedMessage?.let {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            }
             e.printStackTrace()
         }
         return null
@@ -326,14 +376,26 @@ class TrainRepositoryImpl @Inject constructor(
                 println("setExerciseParams: $it")
             }
         } catch (e: HttpRequestTimeoutException) {
+            e.localizedMessage?.let {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            }
             e.printStackTrace()
         } catch (e: HttpException) {
+            e.localizedMessage?.let {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            }
             e.printStackTrace()
         }
         catch (e: ConnectTimeoutException) {
+            e.localizedMessage?.let {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            }
             e.printStackTrace()
         }
         catch (e: SocketTimeoutException) {
+            e.localizedMessage?.let {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            }
             e.printStackTrace()
         }
 
