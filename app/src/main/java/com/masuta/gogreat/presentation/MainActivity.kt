@@ -133,7 +133,7 @@ fun ChoseStartScreen(
         777 -> {
             Toast
                 .makeText(context.applicationContext,
-                "unknown error",
+                "timeout exceeded",
                     Toast.LENGTH_LONG).show()
             startRouteName.value = "sign-in"
 
