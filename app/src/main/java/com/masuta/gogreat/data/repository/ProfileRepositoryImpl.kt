@@ -123,7 +123,7 @@ class ProfileRepositoryImpl @Inject constructor(
         println("userToken: $userToken")
         println("refreshToken: $refreshUserToken")
         println("image: ${convertedImage.size / 1024}")
-        val imageName = getStringRandom()
+        val imageName = "image.jpg"
         val size = convertedImage.size / 1024
         if (size > 3 * 1024) {
             return ResponseParamsIm(
