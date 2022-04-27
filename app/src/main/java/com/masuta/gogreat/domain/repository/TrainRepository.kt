@@ -24,7 +24,7 @@ interface TrainRepository {
     suspend fun setLocalWorkouts(workouts: List<Training>)
 
     suspend fun getLocalCurrentWorkout(): Training?
-    suspend fun setLocalCurrentWorkout(workout: Training)
+    suspend fun setLocalCurrentWorkout(workout: Training?)
 
     suspend fun getLocalPastWorkouts(): List<Training>
     suspend fun setLocalPastWorkouts(workouts: List<Training>)

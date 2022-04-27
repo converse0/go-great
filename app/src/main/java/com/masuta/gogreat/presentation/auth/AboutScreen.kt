@@ -20,6 +20,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.masuta.gogreat.domain.model.UserActivity
 import com.masuta.gogreat.domain.model.UserDiet
+import com.masuta.gogreat.domain.model.userToken
 import com.masuta.gogreat.presentation.components.InputTextField
 import com.masuta.gogreat.presentation.components.MainTextButton
 import com.masuta.gogreat.presentation.components.SliderWithLabelUserActivity
@@ -45,8 +46,10 @@ fun AboutScreen(
         ) {
             IconButton(
                 onClick = {
-                    navController.navigate("sign-up")
+                    if (userToken == null) navController.navigate("sign-in") else
+                        navController.navigate("main")
                 }
+
             ) {
                 Icon(imageVector = Icons.Default.KeyboardArrowLeft, contentDescription = "Back")
             }
@@ -174,6 +177,8 @@ fun AboutForm(
         MainTextButton(
             text = "Save",
             color = Red,
+            enabled = age.value.isNotEmpty() && weight.value.isNotEmpty() && height.value.isNotEmpty()
+                    && desiredWeight.value.isNotEmpty() && timesEat.value.isNotEmpty(),
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)

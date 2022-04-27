@@ -44,7 +44,6 @@ fun MainScreen(
     menuItems: List<BottomNavigationItem>,
     viewModel: MainViewModel
 ) {
-
     viewModel.clearLocalExercises()
 
     val listTrainings = remember { mutableStateOf(emptyList<Training>()) }
@@ -64,7 +63,7 @@ fun MainScreen(
 
     Scaffold(
         bottomBar = {
-            BottomMenuBar(navController = navController, selected = selected, onSelect = onSelect, menuItems = menuItems)
+            BottomMenuBar(navController = navController, selected = "main", onSelect = onSelect, menuItems = menuItems)
         }
     ) {
         Column(

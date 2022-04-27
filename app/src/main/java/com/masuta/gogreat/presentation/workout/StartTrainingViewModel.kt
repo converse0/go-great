@@ -44,6 +44,13 @@ class StartTrainingViewModel @Inject constructor(
         viewModelScope.launch{
             repository.setLocalCurrentExercise(null)
             repository.setLocalCurrentExerciseSets(null)
+
+            repository.setLocalCurrentWorkout(null)
+
+            repository.currentWorkoutDataReload = true
+            repository.pastWorkoutsDataReload = true
+            repository.workoutsDataReload = true
+
             playFinalSound(context)
             delay(500)
             navController.navigate("main")

@@ -149,7 +149,7 @@ class TrainRepositoryImpl @Inject constructor(
         return localCurrentWorkout.value
     }
 
-    override suspend fun setLocalCurrentWorkout(workout: Training) {
+    override suspend fun setLocalCurrentWorkout(workout: Training?) {
         localCurrentWorkout.value = workout
     }
 
