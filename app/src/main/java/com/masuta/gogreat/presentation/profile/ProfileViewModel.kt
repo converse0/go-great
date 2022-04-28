@@ -156,11 +156,14 @@ class ProfileViewModel @Inject constructor(
         isUploadImage.value = false
         resp.data?.let {
             println("uploadImage: $it")
-            userParams.value = userParams.value.copy(
-                image = it
-            )
+//            userParams.value = ParametersUser(image = "https://cdn-icons-png.flaticon.com/512/5110/5110429.png")
+            userParams.value = userParams.value.apply { image = "https://cdn-icons-png.flaticon.com/512/5110/5110429.png" }
+
             println("OLD IMAGE LOCAL: ${repository.getLocalProfileParams()?.image}")
             repository.setLocalProfileParams(userParams.value)
+//            userParams.value = userParams.value.apply { image = it }
+//            repository.setLocalProfileParams(userParams.value)
+
             println("NEW IMAGE LOCAL: ${repository.getLocalProfileParams()?.image}")
             return null
         } ?: resp.message?.let {
