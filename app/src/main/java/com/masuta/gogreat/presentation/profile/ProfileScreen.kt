@@ -36,12 +36,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.graphics.drawable.toBitmap
 import androidx.navigation.NavHostController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions.withCrossFade
 import com.bumptech.glide.request.RequestOptions
+import com.masuta.gogreat.R
 import com.masuta.gogreat.domain.model.ParametersUser
 import com.masuta.gogreat.domain.model.UserActivity
 import com.masuta.gogreat.domain.model.UserDiet
@@ -111,7 +113,7 @@ fun ProfileSection(
     navController: NavHostController
 ) {
 
-    val userParams = remember{viewModel.userParams}
+    val userParams = remember { viewModel.userParams }
 
     val fail = remember {
         mutableStateOf(false)
@@ -146,7 +148,7 @@ fun ProfileSection(
 //            .padding(horizontal = 8.dp)
         ) {
             items(1) {
-                println("imageRec: ${userParams.value.image}")
+                println("imageRec: $userParams")
                 ProfileAvatar(
                     imageUri = imageUri,
                     bitmap = bitmap,
@@ -156,7 +158,7 @@ fun ProfileSection(
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 Text(
-                    text = userParams.value.username,
+                    text = viewModel.userParams.value.username,
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center,
@@ -176,7 +178,7 @@ fun ProfileSection(
                         }
                 )
                 Spacer(modifier = Modifier.height(20.dp))
-                if (userParams.value.uid != null) {
+                if (viewModel.userParams.value.uid != null) {
                     ProfileInfo(
                         lazyListState = lazyListState,
                         viewModel = viewModel,
@@ -197,6 +199,7 @@ fun ProfileAvatar(
     viewModel: ProfileViewModel,
     profileImg: MutableState<ParametersUser>
 ) {
+    var image by remember { mutableStateOf(viewModel.userParams.value.image) }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxWidth()
@@ -225,20 +228,34 @@ fun ProfileAvatar(
                             CoroutineScope(Dispatchers.IO).launch {
                                 val resp = viewModel.uploadImage(btm.asImageBitmap())
                                 withContext(Dispatchers.Main) {
-                                    resp?.let { r ->
+                                    resp.first?.let { r ->
                                         Toast.makeText(context, r, Toast.LENGTH_LONG ).show()
+                                    }?: resp.second?.let { im->
+                                        Toast.makeText(context, "Uploaded success", Toast.LENGTH_LONG ).show()
+                                        println("${viewModel.userParams.value}")
+                                        viewModel.userParams.value = viewModel.userParams.value.apply { image = im +"?${System.currentTimeMillis()}" }
+                                        println("${viewModel.userParams.value}")
                                     }
                                 }
                             }
                         }
                     }
                 }
-                if (profileImg.value.image != null) {
-                    println("PROFILE IMG: ${profileImg.value.image}")
+                if (image != null) {
+                    println("PROFILE IMG: $image")
                         GlideImage(
-                            imageModel = profileImg.value.image,
+                            imageModel = image,
                             contentScale = ContentScale.Crop,
-                            requestOptions = { RequestOptions().diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true) },
+                            loading = {
+                                Box(modifier = Modifier.matchParentSize()) {
+                                    CircularProgressIndicator(
+                                        modifier = Modifier.align(Alignment.Center)
+                                    )
+                                }
+                            },
+                            requestOptions = { RequestOptions()
+                                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                .skipMemoryCache(true) },
                             modifier = Modifier
                                 .size(150.dp)
                                 .clip(shape = CircleShape)

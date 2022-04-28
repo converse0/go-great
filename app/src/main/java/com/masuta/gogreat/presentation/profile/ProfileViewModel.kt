@@ -148,7 +148,7 @@ class ProfileViewModel @Inject constructor(
         return null
     }
 
-    suspend fun uploadImage(im: ImageBitmap): String? {
+    suspend fun uploadImage(im: ImageBitmap): Pair<String?,String?> {
         println("IMAGE BITMAP: $im")
         isDataLoad = true
         val resp = repository.uploadImage(im)
@@ -156,27 +156,30 @@ class ProfileViewModel @Inject constructor(
         isUploadImage.value = false
         resp.data?.let {
             println("uploadImage: $it")
+            return Pair(null, it)
+
 //            userParams.value = ParametersUser(image = "https://cdn-icons-png.flaticon.com/512/5110/5110429.png")
-            userParams.value = userParams.value.apply { image = "https://cdn-icons-png.flaticon.com/512/5110/5110429.png" }
+            //userParams.value = userParams.value.apply { image = "https://cdn-icons-png.flaticon.com/512/5110/5110429.png" }
 
-            println("OLD IMAGE LOCAL: ${repository.getLocalProfileParams()?.image}")
-            repository.setLocalProfileParams(userParams.value)
-//            userParams.value = userParams.value.apply { image = it }
-//            repository.setLocalProfileParams(userParams.value)
+            //println("OLD IMAGE LOCAL: ${repository.getLocalProfileParams()?.image}")
+            //repository.setLocalProfileParams(userParams.value)
 
-            println("NEW IMAGE LOCAL: ${repository.getLocalProfileParams()?.image}")
-            return null
+            //userParams.value = userParams.value.apply { image = "$it?id=1321" }
+            //repository.setLocalProfileParams(userParams.value)
+
+            //println("NEW IMAGE LOCAL: ${repository.getLocalProfileParams()?.image}")
         } ?: resp.message?.let {
             println("uploadImage error: $it")
-            return it
+            return Pair(it, null)
         } ?: resp.code?.let {
             println("uploadImage error: $it")
-            return when(it) {
+            val respErr= when(it) {
                 16 -> "Access Token is expired"
                 5,2 -> "profile is not found"
                 else -> "Request Time out exceeded"
             }
+            return Pair(respErr, null)
         }
-        return null
+        return Pair(null, null)
     }
 }

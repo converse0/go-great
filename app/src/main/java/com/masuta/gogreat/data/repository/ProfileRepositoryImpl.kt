@@ -166,7 +166,7 @@ class ProfileRepositoryImpl @Inject constructor(
 
         println("userToken: $userToken")
         println("image: ${convertedImage.size / 1024}")
-        val imageName = "image.jpg"
+        val imageName = "image3.jpg"
         val imageSizeInKB = convertedImage.size / 1024
         if (imageSizeInKB > maxImageLimit) {
             return ResponseParamsIm(
