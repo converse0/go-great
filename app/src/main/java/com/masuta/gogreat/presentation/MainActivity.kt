@@ -20,6 +20,7 @@ import com.masuta.gogreat.presentation.auth.AboutScreen
 import com.masuta.gogreat.presentation.auth.LaunchScreen
 import com.masuta.gogreat.presentation.auth.SignInScreen
 import com.masuta.gogreat.presentation.auth.SignUpScreen
+import com.masuta.gogreat.presentation.components.AnimatedSplashScreen
 import com.masuta.gogreat.presentation.diet.DietScreen
 import com.masuta.gogreat.presentation.health.HealthScreen
 import com.masuta.gogreat.presentation.main.MainScreen
@@ -142,8 +143,6 @@ fun ChoseStartScreen(
             startRouteName.value = "main"
         }
     }
-
-
 }
 
 @Composable
@@ -160,8 +159,11 @@ fun Navigation(items: List<BottomNavigationItem>) {
     }
     NavHost(
         navController = navController,
-        startDestination = startRouteName.value,
+        startDestination = "splash-screen",
     ) {
+        composable(route = "splash-screen") {
+            AnimatedSplashScreen(navController, startRouteName.value)
+        }
         composable(route = "main") {
             MainScreen(
                 navController = navController,
