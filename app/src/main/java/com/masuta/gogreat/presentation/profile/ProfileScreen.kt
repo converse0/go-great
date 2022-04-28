@@ -111,7 +111,7 @@ fun ProfileSection(
     navController: NavHostController
 ) {
 
-    val userParams = viewModel.userParams
+    val userParams = remember{viewModel.userParams}
 
     val fail = remember {
         mutableStateOf(false)
@@ -146,6 +146,7 @@ fun ProfileSection(
 //            .padding(horizontal = 8.dp)
         ) {
             items(1) {
+                println("imageRec: ${userParams.value.image}")
                 ProfileAvatar(
                     imageUri = imageUri,
                     bitmap = bitmap,
