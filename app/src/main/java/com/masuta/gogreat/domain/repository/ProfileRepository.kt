@@ -1,14 +1,24 @@
 package com.masuta.gogreat.domain.repository
 
-import com.masuta.gogreat.domain.model.ParametersUserGet
+import androidx.compose.ui.graphics.ImageBitmap
+import com.masuta.gogreat.data.repository.ResponseParams
+import com.masuta.gogreat.data.repository.ResponseParamsIm
+import com.masuta.gogreat.domain.model.ParametersUser
 import com.masuta.gogreat.domain.model.ParametersUserSet
 
 interface ProfileRepository {
 
-    suspend fun createParameters(params: ParametersUserSet): String
+    var isLoadData: Boolean
 
-    suspend fun getParameters(): Pair<ParametersUserGet?, String?>
+    suspend fun createParameters(params: ParametersUserSet): String?
 
-    suspend fun updateParameters(params: ParametersUserSet): String
+    suspend fun getParameters(): ResponseParams
 
+    suspend fun updateParameters(params: ParametersUserSet): String?
+
+    suspend fun uploadImage(image: ImageBitmap): ResponseParamsIm
+
+    suspend fun getLocalProfileParams(): ParametersUser?
+
+    suspend fun setLocalProfileParams(params: ParametersUser)
 }

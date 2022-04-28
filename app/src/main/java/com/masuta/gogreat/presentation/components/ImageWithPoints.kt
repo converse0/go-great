@@ -4,14 +4,16 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.BlurredEdgeTreatment
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.painterResource
@@ -19,11 +21,12 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import com.masuta.gogreat.R
-import com.masuta.gogreat.domain.model.ExerciseType
+import com.masuta.gogreat.domain.model.TrainingExercise
+import com.masuta.gogreat.presentation.ui.theme.Red
 
 @Composable
-fun FemalePersonSection(
-    onNewExercise: (ExerciseType) -> Unit
+fun FemalePersonSectionWithPoint(
+    listPoints: List<TrainingExercise>
 ) {
 
     val constraints = ConstraintSet {
@@ -103,29 +106,17 @@ fun FemalePersonSection(
                     .height(350.dp)
                     .width(350.dp)
             )
-            ExerciseType.values().forEach { type ->
-                val layoutId = when(type) {
-                    ExerciseType.ARMS -> "arms"
-                    ExerciseType.LEGS -> "legs"
-                    ExerciseType.PRESS -> "press"
-                    ExerciseType.BACK -> "back"
-                    ExerciseType.CHEST -> "chest"
-                    ExerciseType.SHOULDER -> "shoulder"
-                    ExerciseType.TRICEPS -> "triceps"
-                    ExerciseType.BICEPS -> "biceps"
-                    ExerciseType.OTHER -> "other"
-                }
-                IconButtonAddExercise(modifier = Modifier.layoutId(layoutId), onClick = { onNewExercise(type) })
+            listPoints.forEach { point ->
+                IconPoint(modifier = Modifier.layoutId(point.type))
             }
         }
     }
 }
 
 @Composable
-fun MalePersonSection(
-    onNewExercise: (ExerciseType) -> Unit
+fun MalePersonSectionWithPoint(
+    listPoints: List<TrainingExercise>
 ) {
-
     val constraints = ConstraintSet {
         val topGuidLine = createGuidelineFromTop(0.2f)
         val bottomGuidLine = createGuidelineFromBottom(0.4f)
@@ -203,45 +194,33 @@ fun MalePersonSection(
                     .height(350.dp)
                     .width(350.dp)
             )
-            ExerciseType.values().forEach { type ->
-                val layoutId = when(type) {
-                    ExerciseType.ARMS -> "arms"
-                    ExerciseType.LEGS -> "legs"
-                    ExerciseType.PRESS -> "press"
-                    ExerciseType.BACK -> "back"
-                    ExerciseType.CHEST -> "chest"
-                    ExerciseType.SHOULDER -> "shoulder"
-                    ExerciseType.TRICEPS -> "triceps"
-                    ExerciseType.BICEPS -> "biceps"
-                    ExerciseType.OTHER -> "other"
-                }
-                IconButtonAddExercise(modifier = Modifier.layoutId(layoutId), onClick = { onNewExercise(type) })
+            listPoints.forEach { point ->
+                IconPoint(modifier = Modifier.layoutId(point.type))
             }
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun IconButtonAddExercise(
+fun IconPoint(
     modifier: Modifier = Modifier,
-    onClick: () -> Unit
 ) {
-    Box(
-        contentAlignment = Alignment.Center,
+    val linearGradientBrush = Brush.linearGradient(
+        colors = listOf(
+            Red,
+            Color.Red
+        ),
+        start = Offset(Float.POSITIVE_INFINITY, 0f),
+        end = Offset(0f, 0f)
+    )
+    Card(
         modifier = modifier
-            .background(color = Color.Yellow, shape = CircleShape)
-            .clip(CircleShape)
+            .alpha(0.6f)
             .size(20.dp)
-//            .border(width = 2.dp, color = Color.White, shape = CircleShape)
-    ) {
-        IconButton(
-            onClick = onClick
-        ) {
-            Icon(
-                imageVector = Icons.Default.Add,
-                contentDescription = null,
-                tint = Color.Black,
-            )
-        }
-    }
+            .blur(10.dp, edgeTreatment = BlurredEdgeTreatment.Unbounded)
+            .clip(CircleShape)
+            .background(linearGradientBrush),
+        containerColor = Color.Transparent,
+    ){}
 }

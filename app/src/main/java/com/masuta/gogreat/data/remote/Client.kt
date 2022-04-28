@@ -5,10 +5,9 @@ import io.ktor.client.engine.android.*
 import io.ktor.client.features.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
-import kotlinx.serialization.json.Json
 
 class Client {
-    fun makeClient(): HttpClient {
+    fun makeClient(timeout:Long): HttpClient {
         return HttpClient(Android) {
             expectSuccess = false
 
@@ -21,16 +20,10 @@ class Client {
             }
 
             install(HttpTimeout) {
-                requestTimeoutMillis = 30000
-                connectTimeoutMillis = 30000
-                socketTimeoutMillis = 30000
+                requestTimeoutMillis = timeout
+                connectTimeoutMillis = timeout
+                socketTimeoutMillis = timeout
             }
-//            install(Auth) {
-//                bearer {
-//                    BearerTokens(accessToken = userToken!!, refreshToken = refreshUserToken!!)
-//                }
-//                // Configure authentication
-//            }
         }
     }
 }

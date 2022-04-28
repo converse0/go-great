@@ -1,12 +1,11 @@
 package com.masuta.gogreat.presentation.workout
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.runtime.Composable
@@ -17,13 +16,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.masuta.gogreat.R
 import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.domain.model.gender
+import com.masuta.gogreat.presentation.components.FemalePersonSectionWithPoint
+import com.masuta.gogreat.presentation.components.MainTextButton
+import com.masuta.gogreat.presentation.components.MalePersonSectionWithPoint
 import com.masuta.gogreat.presentation.ui.theme.Red
 import com.skydoves.landscapist.glide.GlideImage
 
@@ -33,15 +33,7 @@ fun WorkoutScreen(
     viewModel: WorkoutViewModel,
     uid: String?
 ) {
-    println("Training uid: $uid")
-//    val listExercises = listOf(
-//        TrainingExercise(1, "2s", 3,
-//            12, name = "Squat", relax = "20s", type = "other",uid= ""),
-//        TrainingExercise(1, "2s", 3,
-//            12, name = "Deadlift", relax = "20s", type = "other",uid= ""),
-//        TrainingExercise(1, "2s", 3, 12,
-//            name = "Bench press",relax = "20s", type = "other",uid= "")
-//    )
+
     val listExercises = remember { mutableStateOf(emptyList<TrainingExercise>()) }
     val name = remember { mutableStateOf("") }
     
@@ -65,11 +57,14 @@ fun WorkoutScreen(
                 IconButton(onClick = {
                     navController.navigate("main")
                 }) {
-                    Icon(imageVector = Icons.Default.KeyboardArrowLeft, contentDescription = "Back")
+                    Icon(
+                        imageVector = Icons.Default.KeyboardArrowLeft,
+                        contentDescription = "Back"
+                    )
                 }
                 Text(
                     text = name.value,
-                    style = MaterialTheme.typography.h4,
+                    style = MaterialTheme.typography.displayMedium,
                     modifier = Modifier.padding(start = 8.dp)
                 )
             }
@@ -78,28 +73,35 @@ fun WorkoutScreen(
             ) {
                 item {
                     Spacer(modifier = Modifier.height(12.dp))
-                    PersonImage()
+                    gender?.let { n ->
+                        if (n == 0) {
+                            MalePersonSectionWithPoint(
+                                listPoints = listExercises.value
+                            )
+                        } else {
+                            FemalePersonSectionWithPoint(
+                                listPoints = listExercises.value
+                            )
+                        }
+
+                    }
                     Spacer(modifier = Modifier.height(12.dp))
-                    WorkoutListExercises(listExercises.value, navController, uid)
+
+                    WorkoutListExercises(listExercises.value)
+
                     Spacer(Modifier.height(30.dp))
                 }
             }
         }
-        TextButton(
-            onClick = {
-                viewModel.startTraining(uid)
-                navController.navigate("start-training/$uid")
-            },
-            colors = ButtonDefaults.buttonColors(backgroundColor = Red),
+        MainTextButton(
+            text = "Start Training",
+            color = Red,
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
         ) {
-            Text(
-                text = "Start training",
-                color = Color.White,
-                modifier = Modifier.padding(vertical = 8.dp)
-            )
+            viewModel.startTraining(uid)
+            navController.navigate("start-training/$uid")
         }
     }
 }
@@ -107,30 +109,9 @@ fun WorkoutScreen(
 @Composable
 fun WorkoutListExercises(
     listExercises: List<TrainingExercise>,
-    navController: NavHostController? = null,
-    uid: String?
 ) {
     listExercises.forEach { exercise ->
         WorkoutExercise(ex = exercise, onSelectExercise = {  })
-    }
-}
-
-@Composable
-fun PersonImage() {
-    Box(
-        contentAlignment = Alignment.TopCenter,
-        modifier = Modifier
-        .fillMaxWidth()
-        .padding(12.dp)) {
-        Image(
-            painter = painterResource(
-                gender?.let {
-                    if (it == 0) R.drawable.human else R.drawable.human_femail
-                } ?: R.drawable.human
-            ),
-            contentDescription = null,
-            modifier = Modifier.height(300.dp).fillMaxWidth()
-        )
     }
 }
 
@@ -154,20 +135,11 @@ fun WorkoutExercise(
                 .width(150.dp)
                 .height(70.dp)
         )
-//        Image(
-//            painter = painterResource(id = R.drawable.muscle_dieta),
-//            contentDescription = null,
-//            contentScale = ContentScale.Crop,
-//            modifier = Modifier
-//                .width(150.dp)
-//                .height(100.dp)
-//        )
         Text(
             text = ex.name,
-            style = MaterialTheme.typography.h5,
+            style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Light,
-            modifier = Modifier
-                .padding(horizontal = 15.dp)
+            modifier = Modifier.padding(horizontal = 15.dp)
         )
     }
 }

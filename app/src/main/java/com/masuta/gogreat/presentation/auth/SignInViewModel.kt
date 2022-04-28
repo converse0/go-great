@@ -15,21 +15,21 @@ class SignInViewModel @Inject constructor(
     private val login: Login
 ): ViewModel() {
 
-//    private val authorization = Authorization()
-
     suspend fun signIn(user: User): Map<String, Any?> {
         return login(user)
     }
 
     fun setToken(context: Context, token: LoginResponse?) {
+
         val sharedPref = context.getSharedPreferences("user", Context.MODE_PRIVATE)
         val editor = sharedPref.edit()
+
         editor.putString("accessToken", token!!.accessToken)
         editor.putString("refreshToken", token.refreshToken)
+
         userToken = token.accessToken
         refreshUserToken = token.refreshToken
         editor.apply()
+
     }
-
-
 }

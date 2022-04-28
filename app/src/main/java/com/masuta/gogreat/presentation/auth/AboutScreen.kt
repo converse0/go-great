@@ -3,33 +3,25 @@ package com.masuta.gogreat.presentation.auth
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.masuta.gogreat.domain.model.UserActivity
 import com.masuta.gogreat.domain.model.UserDiet
+import com.masuta.gogreat.domain.model.userToken
 import com.masuta.gogreat.presentation.components.InputTextField
+import com.masuta.gogreat.presentation.components.MainTextButton
 import com.masuta.gogreat.presentation.components.SliderWithLabelUserActivity
-import com.masuta.gogreat.presentation.components.SliderWithLabelUserDiet
-import com.masuta.gogreat.presentation.profile.LineSelectPoint
-import com.masuta.gogreat.presentation.profile.firstCharToUpperCase
-import com.masuta.gogreat.presentation.profile.normalizeString
 import com.masuta.gogreat.presentation.ui.theme.Red
-import com.masuta.gogreat.presentation.ui.theme.SportTheme
 
 @Composable
 fun AboutScreen(
@@ -48,14 +40,16 @@ fun AboutScreen(
         ) {
             IconButton(
                 onClick = {
-                    navController.navigate("sign-up")
+                    if (userToken == null) navController.navigate("sign-in") else
+                        navController.navigate("main")
                 }
+
             ) {
                 Icon(imageVector = Icons.Default.KeyboardArrowLeft, contentDescription = "Back")
             }
             Text(
                 text = "About you",
-                style = MaterialTheme.typography.h4,
+                style = MaterialTheme.typography.displayMedium,
                 modifier = Modifier.padding(start = 8.dp)
             )
         }
@@ -79,25 +73,32 @@ fun AboutForm(
     val timesEat = remember { mutableStateOf("") }
     val desiredWeight = remember { mutableStateOf("") }
     val gender = remember { mutableStateOf(0) }
-    var physicalActivity = remember { mutableStateOf(UserActivity.BASIC) }
-    var diet = remember { mutableStateOf(UserDiet.BALANCED) }
+    val physicalActivity = remember { mutableStateOf(0.toFloat()) }
+    val diet = remember { mutableStateOf(0.toFloat()) }
 
     val keyboardController = LocalSoftwareKeyboardController.current
+
+    val listActivity = UserActivity.values().toList()
+    val listDiet = UserDiet.values().toList()
 
     Box(
         modifier = Modifier.fillMaxWidth()
     ) {
         LazyColumn(
-            modifier = Modifier.fillMaxWidth().padding(bottom = 100.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 100.dp)
         ) {
             item {
                 Text(
-                    text = "Hello, Maria! To help us create the best workout diary for you, please tell us a few words about you and your preferences"
+                    text = "Hello! To help us create the best workout diary for you, please tell us a few words about you and your preferences",
+                    color = Color.Black
                 )
                 Spacer(Modifier.height(10.dp))
                 Text(
                     text = "Gender",
-                    style = MaterialTheme.typography.body1
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Color.Black
                 )
                 Spacer(Modifier.height(10.dp))
                 GenderChoisen(
@@ -131,37 +132,23 @@ fun AboutForm(
                 Spacer(Modifier.height(20.dp))
                 Text(
                     text = "Physical activity",
-                    style = MaterialTheme.typography.body1
+                    style = MaterialTheme.typography.bodySmall
                 )
                 Spacer(Modifier.height(20.dp))
-//            PhysicalActivitySection(
-//                selected = physicalActivity,
-//                onPhysicalActivitySelect = { physicalActivity = it }
-//            )
-                val listActivity = UserActivity.values().toList()
                 SliderWithLabelUserActivity(
-                    value = 0f,
                     selectedItem = physicalActivity,
                     valueRange = 0f..listActivity.size.minus(1).toFloat(),
-                    finiteEnd = true,
                     items = listActivity
                 )
                 Spacer(Modifier.height(20.dp))
                 Text(
                     text = "Diet",
-                    style = MaterialTheme.typography.body1
+                    style = MaterialTheme.typography.bodySmall
                 )
                 Spacer(Modifier.height(20.dp))
-//            DietSection(
-//                selected = diet,
-//                onDietSelect = { diet = it}
-//            )
-                val listDiet = UserDiet.values().toList()
-                SliderWithLabelUserDiet(
-                    value = 0f,
+                SliderWithLabelUserActivity(
                     selectedItem = diet,
                     valueRange = 0f..listDiet.size.minus(1).toFloat(),
-                    finiteEnd = true,
                     items = listDiet
                 )
                 Spacer(Modifier.height(20.dp))
@@ -182,21 +169,11 @@ fun AboutForm(
                 )
             }
         }
-        TextButton(
-            onClick = {
-                viewModel.setParameters(
-                    age = if(age.value.isNotEmpty()) age.value.toIntOrNull() else 0,
-                    weight = if (weight.value.isNotEmpty()) weight.value.toInt() else 0,
-                    height = if (height.value.isNotEmpty()) height.value.toInt() else 0,
-                    desiredWeight = if (desiredWeight.value.isNotEmpty()) desiredWeight.value.toInt() else 0 ,
-                    timesEat = if(timesEat.value.isNotEmpty()) timesEat.value.toInt() else 0,
-                    diet = diet.value.value,
-                    activity = physicalActivity.value.value,
-                    gender = gender.value
-                )
-                navController.navigate("main")
-            },
-            colors = ButtonDefaults.buttonColors(backgroundColor = Red),
+        MainTextButton(
+            text = "Save",
+            color = Red,
+            enabled = age.value.isNotEmpty() && weight.value.isNotEmpty() && height.value.isNotEmpty()
+                    && desiredWeight.value.isNotEmpty() && timesEat.value.isNotEmpty(),
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
@@ -205,60 +182,18 @@ fun AboutForm(
                     bottom = 20.dp
                 )
         ) {
-            Text(
-                text = "Save",
-                color = Color.White,
-                modifier = Modifier.padding(vertical = 16.dp)
+            viewModel.setParameters(
+                age = if(age.value.isNotEmpty()) age.value.toIntOrNull() else 0,
+                weight = if (weight.value.isNotEmpty()) weight.value.toInt() else 0,
+                height = if (height.value.isNotEmpty()) height.value.toInt() else 0,
+                desiredWeight = if (desiredWeight.value.isNotEmpty()) desiredWeight.value.toInt() else 0 ,
+                timesEat = if(timesEat.value.isNotEmpty()) timesEat.value.toInt() else 0,
+                diet = diet.value.toInt(),
+                activity = physicalActivity.value.toInt(),
+                gender = gender.value
             )
+            navController.navigate("main")
         }
-    }
-}
-
-@Composable
-fun DietSection(
-    selected: UserDiet,
-    onDietSelect: (UserDiet) -> Unit
-) {
-    Column {
-        DefaultRadioButton(text = UserDiet.BALANCED.toString().lowercase(), selected = selected == UserDiet.BALANCED, onSelect = { onDietSelect(UserDiet.BALANCED) })
-        DefaultRadioButton(text = UserDiet.LOW_FAT.toString().lowercase(), selected = selected == UserDiet.LOW_FAT, onSelect = { onDietSelect(UserDiet.LOW_FAT) })
-        DefaultRadioButton(text = UserDiet.LOW_CARBS.toString().lowercase(), selected = selected == UserDiet.LOW_CARBS, onSelect = { onDietSelect(UserDiet.LOW_CARBS) })
-        DefaultRadioButton(text = UserDiet.LOW_PROTEIN.toString().lowercase(), selected = selected == UserDiet.LOW_PROTEIN, onSelect = { onDietSelect(UserDiet.LOW_PROTEIN) })
-    }
-}
-
-@Composable
-fun PhysicalActivitySection(
-    selected: UserActivity,
-    onPhysicalActivitySelect: (UserActivity) -> Unit
-) {
-    val list = UserActivity.values().toList()
-
-    println(list)
-
-    Column() {
-        DefaultRadioButton(text = UserActivity.BASIC.toString()
-            .lowercase().firstCharToUpperCase()
-            .normalizeString(),
-            selected = selected == UserActivity.BASIC,
-            onSelect = { onPhysicalActivitySelect(UserActivity.BASIC) })
-        DefaultRadioButton(text = UserActivity.LOW.toString()
-            .lowercase().firstCharToUpperCase()
-            .normalizeString(),
-            selected = selected == UserActivity.LOW,
-            onSelect = { onPhysicalActivitySelect(UserActivity.LOW) })
-        DefaultRadioButton(text = UserActivity.LIGHT.toString().lowercase()
-            .firstCharToUpperCase().normalizeString(),
-            selected = selected == UserActivity.LIGHT,
-            onSelect = { onPhysicalActivitySelect(UserActivity.LIGHT) })
-        DefaultRadioButton(text = UserActivity.MEDIUM.toString().lowercase()
-            .firstCharToUpperCase().normalizeString(),
-            selected = selected == UserActivity.MEDIUM,
-            onSelect = { onPhysicalActivitySelect(UserActivity.MEDIUM) })
-        DefaultRadioButton(text = UserActivity.HIGH.toString().lowercase()
-            .firstCharToUpperCase().normalizeString(),
-            selected = selected == UserActivity.HIGH,
-            onSelect = { onPhysicalActivitySelect(UserActivity.HIGH) })
     }
 }
 
@@ -279,6 +214,7 @@ fun GenderChoisen(
 
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DefaultRadioButton(
     text: String,
@@ -295,15 +231,8 @@ fun DefaultRadioButton(
         Spacer(modifier = Modifier.width(4.dp))
         Text(
             text = text,
-            style = MaterialTheme.typography.body1
+            style = MaterialTheme.typography.bodyMedium,
+            color = Color.Black
         )
-    }
-}
-
-@Preview
-@Composable
-fun AboutScreenPreview() {
-    SportTheme() {
-        AboutScreen(viewModel = viewModel(), navController = NavHostController(LocalContext.current))
     }
 }

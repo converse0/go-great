@@ -31,10 +31,8 @@ class AboutViewModel @Inject constructor(
                 gender = gender,
                activity = activity, diet = diet
             )
-//            val pUseCase = ProfileUseCase()
             viewModelScope.launch {
-                val resp = createUserParams(parametersUser)
-                println(resp)
+                createUserParams(parametersUser)
             }
         }
     }

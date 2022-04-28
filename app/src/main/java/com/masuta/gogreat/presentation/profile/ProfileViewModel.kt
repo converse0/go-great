@@ -1,11 +1,12 @@
 package com.masuta.gogreat.presentation.profile
 
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.*
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
-import com.masuta.gogreat.domain.handlers.CreateUserParams
 import com.masuta.gogreat.domain.handlers.GetUserParams
+import com.masuta.gogreat.domain.model.ParametersUser
 import com.masuta.gogreat.domain.model.ParametersUserSet
 import com.masuta.gogreat.domain.model.UserActivity
 import com.masuta.gogreat.domain.model.UserDiet
@@ -16,124 +17,129 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val createUserParams: CreateUserParams,
     private val getUserParams: GetUserParams,
     private val repository: ProfileRepository
 ) :ViewModel() {
 
+    var errorMessage by mutableStateOf("")
 
+    var isUploadImage = mutableStateOf(true)
 
-    fun setParameters(
-        age: Int?,
-        weight: Int,
-        height: Int,
-        desiredWeight: Int,
-        timesEat: Int
+    var userParams = mutableStateOf<ParametersUser?>(null)
+
+    var isDataLoad: Boolean = true
+        get() = repository.isLoadData
+        set(value) {
+            field = value
+            repository.isLoadData = value
+        }
+
+    fun getParameters(
+        fail: MutableState<Boolean>,
+        navController: NavHostController,
+        routeTo: (navController: NavHostController, route: String) -> Unit,
     ) {
-        if (age != null) {
-            val parametersUser = ParametersUserSet(
-                age = age,
-                weight = weight, height = height,
-                desiredWeight = desiredWeight, eat = timesEat, gender = 1
-            )
+        if (isDataLoad) {
             viewModelScope.launch {
-                val resp = createUserParams(parametersUser)
-                println(resp)
+                val resp = getUserParams()
+                if (resp.data != null) {
+                    val params = ParametersUser(
+                        username = resp.data.username,
+                        activity = UserActivity.valueOf(resp.data.activity.uppercase()).value,
+                        age = resp.data.age,
+                        desiredWeight = resp.data.desiredWeight,
+                        diet = UserDiet.valueOf(resp.data.diet.uppercase()).value,
+                        eat = resp.data.eat,
+                        gender = resp.data.gender,
+                        height = resp.data.height,
+                        weight = resp.data.weight,
+                        uid = resp.data.uid,
+                        image = resp.data.image
+                    )
+                    userParams.value = params
+                    repository.setLocalProfileParams(params)
+                    isDataLoad = false
+                } else if (resp.code != null) {
+                    resp.message?.let { errorMessage = it }
+                    fail.value = true
+                    when(resp.code) {
+                        16 -> routeTo(navController, "sign_in")
+                        2, 5, 13 -> routeTo(navController, "about")
+                    }
+                }
+            }
+        } else {
+            viewModelScope.launch {
+                repository.getLocalProfileParams()?.let {
+                    userParams.value = it
+                }
             }
         }
     }
-    fun getParameters(
-        username: MutableState<String>,
-        timesEat: MutableState<String>,
-        age: MutableState<String>,
-        weight: MutableState<String>,
-        height: MutableState<String>,
-        desiredWeight: MutableState<String>,
-        gender: MutableState<Int>,
-        diet: MutableState<Int>,
-        activity: MutableState<Int>,
-        routeTo: (navController: NavHostController, route: String) -> Unit,
-        navController: NavHostController,
-        fail: MutableState<Boolean>,
-        uid: MutableState<String>
-    ) {
-        viewModelScope.launch {
-            val (resp, message) = getUserParams()
-            if (resp != null) {
-                println(resp.age)
-                println(resp.username)
-                username.value = resp.username
-                age.value = resp.age.toString()
-                timesEat.value = resp.eat.toString()
-                weight.value = resp.weight.toString()
-                height.value = resp.height.toString()
-                desiredWeight.value = resp.desiredWeight.toString()
-                gender.value = resp.gender
-                diet.value = UserDiet.valueOf(resp.diet.uppercase()).value
-                activity.value = UserActivity.valueOf(resp.activity.uppercase()).value
-                resp.uid?.let {
-                    uid.value = it
-                }
-            } else if (message!=null
-                &&message.isNotEmpty()
-                && message.contains("Authentication failed")) {
-                println("null")
-                fail.value = true
-                routeTo(navController, "sign-in")
-            } else {
-                fail.value = true
-                routeTo(navController, "about")
-            }
-        }
-}
 
     fun getParameters(gender: MutableState<Int>) {
         viewModelScope.launch {
-            val (resp, message) = getUserParams()
-
-           val respInt = when {
-               resp!=null -> null
-               message!!.isNotEmpty() &&
-                        message.contains("Authentication failed") -> -6
-               message.isNotEmpty() &&
-                       !message.contains("Authentication failed") -> 6
-               else -> null
-           }
-            if (respInt==null) {
-                if (resp != null) {
-                    gender.value=resp.gender
+            val resp = getUserParams()
+            resp.data?.let {
+                gender.value = it.gender
+                val params = ParametersUser().copy(image = it.image)
+                repository.setLocalProfileParams(params)
+            } ?: resp.code?.let {
+                resp.message?.let { errorMessage = it }
+                gender.value = when(it){
+                    16 -> -6
+                    2,5 -> 6
+                    else -> 777
                 }
-            } else {
-                gender.value = respInt
             }
         }
     }
 
     suspend fun updateParams(
-        age: Int,
-        weight: Int,
-        height: Int,
-        desiredWeight: Int,
-        timesEat: Int,
-        activity: Int,
-        diet: Int,
-        gender: Int,
-        uid: String
-    ): String {
+        userParams: ParametersUser,
+    ): String? {
         val params = ParametersUserSet (
-            age = age,
-            weight = weight,
-            height = height,
-            desiredWeight = desiredWeight,
-            eat = timesEat,
-            activity = activity,
-            diet = diet,
-            gender = gender,
-            uid=uid
+            age = userParams.age,
+            weight = userParams.weight,
+            height = userParams.height,
+            desiredWeight = userParams.desiredWeight,
+            eat = userParams.eat,
+            activity = userParams.activity,
+            diet = userParams.diet,
+            gender = userParams.gender,
+            uid = userParams.uid
         )
+        repository.setLocalProfileParams(userParams)
         val resp = repository.updateParameters(params)
-        println("Response: $resp")
 
-        return resp
+        if (resp != null) {
+            isDataLoad = true
+            return resp
+        }
+
+        return null
+    }
+
+    suspend fun uploadImage(im: ImageBitmap): Pair<String?,String?> {
+        isDataLoad = true
+        val resp = repository.uploadImage(im)
+        isUploadImage.value = false
+
+        resp.data?.let {
+            return Pair(null, it)
+        } ?: resp.message?.let {
+            return Pair(it, null)
+        } ?: resp.code?.let {
+            val respErr= when(it) {
+                16 -> "Access Token is expired"
+                5,2 -> "profile is not found"
+                else -> "Request Time out exceeded"
+            }
+
+            return Pair(respErr, null)
+        }
+
+        return Pair(null, null)
+
     }
 }

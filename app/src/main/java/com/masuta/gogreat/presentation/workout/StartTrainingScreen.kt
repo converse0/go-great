@@ -8,7 +8,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
@@ -42,7 +42,8 @@ fun StartTrainingScreen(
 ) {
     val isEditModal = remember { mutableStateOf(false) }
     val isModalOpen = remember { mutableStateOf(false) }
-    val isFinalModal = remember { mutableStateOf(false) }
+
+    val context = LocalContext.current
 
     if (viewModel.listExercises.value.isEmpty()) {
         viewModel.getTraining(uid!!)
@@ -52,17 +53,6 @@ fun StartTrainingScreen(
     val indexExercise = viewModel.indexExercise
     val exerciseSets = viewModel.exerciseSets
     val currentExercise = viewModel.currentExercise.value
-//    val interval = remember { mutableStateOf("30") }
-    val navigateMain = {        navController.navigate("main")
-    }
-//    if (indexExercise.value == listExercises.value.size) {
-//        return
-//    }
-
-    println("duration start new tr:" + currentExercise.duration)
-
-
-    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -74,12 +64,15 @@ fun StartTrainingScreen(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
-            IconButton(onClick = { navController.navigate("workout/${uid}") }) {
-                Icon(imageVector = Icons.Default.KeyboardArrowLeft, contentDescription = "Back")
+            IconButton(onClick = { navController.navigate("main") }) {
+                Icon(
+                    imageVector = Icons.Default.KeyboardArrowLeft,
+                    contentDescription = "Back"
+                )
             }
             Text(
                 text = currentExercise.name,
-                style = MaterialTheme.typography.h4,
+                style = MaterialTheme.typography.displayMedium,
                 modifier = Modifier.padding(start = 8.dp)
             )
         }
@@ -94,15 +87,9 @@ fun StartTrainingScreen(
                     currentExercise,
                     exerciseSets = exerciseSets.value,
                     onOpenModal = {
-//                            isModalOpen.value = true
-//                            viewModel.onEvent(TrainingEvent.NextSet)
-//                            if (exerciseSets.value == 0) {
-//                                val resp = viewModel.onEvent(TrainingEvent.NextExercise)
-//                            }
-                        viewModel.nextSetOrTraining(onOpenModal = { isModalOpen.value = true })
-                        println("Exercise Sets: ${exerciseSets.value}")
-                        println("Exercise: ${indexExercise.value}")
-
+                        viewModel.nextSetOrTraining(
+                            onOpenModal = { isModalOpen.value = true }
+                        )
                     },
                     onOpenEdit = {
                         isEditModal.value = true
@@ -115,15 +102,21 @@ fun StartTrainingScreen(
         ModalTimer(
             totalTime = currentExercise.relax.toInteger().toLong(),
             viewModel = viewModel,
-            onDismiss = { isModalOpen.value = false },
-            navController = navController,
-            uid = uid!!
+            onDismiss = {
+                isModalOpen.value = false
+                if (viewModel.indexExercise.value >= viewModel.listExercises.value.size) {
+                    viewModel.endTraining(navController,context)
+                    viewModel.finishTraining(uid!!)
+                }
+            },
         )
     }
     if (isEditModal.value) {
         val weight = remember { mutableStateOf("") }
-        val time = remember { mutableStateOf(currentExercise.relax.toInteger().toString()) }
-        val numberOfSets = remember { mutableStateOf(currentExercise.numberOfSets.toString()) }
+        val time = remember { mutableStateOf(currentExercise.relax.toInteger()) }
+        val numberOfSets = remember {
+            mutableStateOf(currentExercise.numberOfSets.toString())
+        }
         val numberOfRepetitions =
             remember { mutableStateOf(currentExercise.numberOfRepetitions.toString()) }
         StartTrainingModal(
@@ -135,7 +128,7 @@ fun StartTrainingScreen(
                 val listEditExercise = listExercises.value.mapIndexed { index, exercise ->
                     if (index == indexExercise.value) {
                         exercise.copy(
-                            relax = time.value + "s",
+                            relax = time.value.toString() + "s",
                             numberOfSets = numberOfSets.value.toInt(),
                             numberOfRepetitions = numberOfRepetitions.value.toInt()
                         )
@@ -143,27 +136,24 @@ fun StartTrainingScreen(
                         exercise
                     }
                 }
-                viewModel.setExerciseParams(uid = uid!!, listExercises = listEditExercise)
+                viewModel.setExerciseParams(
+                    uid = uid!!,
+                    listExercises = listEditExercise
+                )
                 isEditModal.value = false
             },
             onDismiss = { isEditModal.value = false }
         )
     }
-
-    if (isFinalModal.value) {
-        FinalModal()
-    }
 }
 
 
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun ModalTimer(
     totalTime: Long,
     viewModel: StartTrainingViewModel,
     onDismiss: () -> Unit,
-    navController: NavHostController,
-    uid: String
 ) {
 
     val context = LocalContext.current
@@ -182,28 +172,37 @@ fun ModalTimer(
             .background(color = Color.Black)
             .clickable { }
         )
-//        IconButton(onClick = onDismiss, modifier = Modifier.align(Alignment.TopEnd)) {
-//            Icon(Icons.Default.Close, contentDescription = "Close", tint = Color.White)
-//        }
+        IconButton(
+            onClick = onDismiss,
+            modifier = Modifier.align(Alignment.TopEnd)
+        ) {
+            Icon(
+                Icons.Default.Close,
+                contentDescription = "Close",
+                tint = Color.White
+            )
+        }
         Card(
+            containerColor = Color.White,
             modifier = Modifier
+                .fillMaxWidth()
                 .padding(16.dp)
                 .height(400.dp)
                 .width(300.dp)
                 .clip(RoundedCornerShape(16.dp))
         ) {
-            Timer(
-                totalTime = totalTime * 1000L,
-                onAlarmSound = sound,
-                onTimerEnd = onDismiss,
-                startTimer = true,
-                modifier = Modifier
-                    .size(200.dp)
-                    .align(Alignment.Center),
-                viewModel = viewModel,
-                navController = navController,
-                uid = uid
-            )
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Timer(
+                    totalTime = totalTime * 1000L,
+                    onAlarmSound = sound,
+                    onTimerEnd = onDismiss,
+                    startTimer = true,
+                    modifier = Modifier.size(200.dp),
+                )
+            }
         }
     }
 }
@@ -215,27 +214,13 @@ fun TrainingInfo(
     onOpenModal: () -> Unit,
     onOpenEdit: () -> Unit
 ) {
-//    Row(
-//        verticalAlignment = Alignment.CenterVertically,
-//        modifier = Modifier.padding(vertical = 8.dp)
-//    ) {
-//        Text(
-//            text = "Weight",
-//            style = MaterialTheme.typography.body1,
-//            fontWeight = FontWeight.Bold
-//        )
-//        Text(
-//            text = "5kg",
-//            modifier = Modifier.padding(start = 8.dp)
-//        )
-//    }
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.padding(vertical = 8.dp)
     ) {
         Text(
             text = "Number of repetitions",
-            style = MaterialTheme.typography.body1,
+            style = MaterialTheme.typography.bodySmall,
             fontWeight = FontWeight.Bold
         )
         Text(
@@ -249,7 +234,7 @@ fun TrainingInfo(
     ) {
         Text(
             text = "Number of sets",
-            style = MaterialTheme.typography.body1,
+            style = MaterialTheme.typography.bodySmall,
             fontWeight = FontWeight.Bold
         )
         Text(
@@ -257,32 +242,41 @@ fun TrainingInfo(
             modifier = Modifier.padding(start = 8.dp)
         )
     }
-    ButtonSection(onOpenModal = onOpenModal, onOpenEdit = onOpenEdit)
+    ButtonSection(
+        onOpenModal = onOpenModal,
+        onOpenEdit = onOpenEdit
+    )
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
             text = "Description",
-            style = MaterialTheme.typography.h5,
+            style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold
         )
     }
-
     DescriptionSection(description = exercise.description)
+
     Spacer(Modifier.height(10.dp))
+
     Text(
         text = "Technique",
-        style = MaterialTheme.typography.h5,
+        style = MaterialTheme.typography.headlineSmall,
         fontWeight = FontWeight.Bold
     )
+
     Spacer(Modifier.height(10.dp))
+
     TechniqueSection(technique = exercise.technique)
+
     Spacer(Modifier.height(10.dp))
+
     Text(
         text = "Common mistakes",
-        style = MaterialTheme.typography.h5,
+        style = MaterialTheme.typography.headlineSmall,
         fontWeight = FontWeight.Bold
     )
+
     MistakesSection(mistake = exercise.mistake)
 
 }
@@ -293,7 +287,7 @@ fun MistakesSection(
 ) {
     Text(
         text = mistake,
-        style = MaterialTheme.typography.body1
+        style = MaterialTheme.typography.bodySmall
     )
 }
 
@@ -303,7 +297,7 @@ fun TechniqueSection(
 ) {
     Text(
         text = technique,
-        style = MaterialTheme.typography.body1
+        style = MaterialTheme.typography.bodySmall
     )
 }
 
@@ -313,7 +307,7 @@ fun DescriptionSection(
 ) {
     Text(
         text = description,
-        style = MaterialTheme.typography.body1
+        style = MaterialTheme.typography.bodySmall
     )
 }
 
@@ -332,7 +326,7 @@ fun ButtonSection(
             modifier = Modifier
                 .width(100.dp)
                 .height(50.dp),
-            colors = ButtonDefaults.buttonColors(backgroundColor = Green),
+            colors = ButtonDefaults.buttonColors(containerColor = Green),
             shape = RoundedCornerShape(16.dp)
         ) {
             Text(text = "I managed!", color = Color.White)
@@ -342,7 +336,7 @@ fun ButtonSection(
             modifier = Modifier
                 .width(100.dp)
                 .height(50.dp),
-            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
             border = BorderStroke(1.dp, color = Color.Gray),
             shape = RoundedCornerShape(16.dp)
         ) {

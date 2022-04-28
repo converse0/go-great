@@ -1,5 +1,6 @@
 package com.masuta.gogreat.di
 
+import android.content.Context
 import com.masuta.gogreat.data.remote.Client
 import com.masuta.gogreat.data.repository.AuthRepositoryImpl
 import com.masuta.gogreat.data.repository.ProfileRepositoryImpl
@@ -14,6 +15,7 @@ import com.masuta.gogreat.domain.repository.TrainRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -53,20 +55,20 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideAuthRepository(client: Client): AuthRepository {
-        return AuthRepositoryImpl(client)
+    fun provideAuthRepository(client: Client, @ApplicationContext context: Context): AuthRepository {
+        return AuthRepositoryImpl(client, context)
     }
 
     @Provides
     @Singleton
-    fun provideProfileRepository(client: Client): ProfileRepository {
-        return ProfileRepositoryImpl(client)
+    fun provideProfileRepository(client: Client, @ApplicationContext context: Context): ProfileRepository {
+        return ProfileRepositoryImpl(client, context)
     }
 
     @Provides
     @Singleton
-    fun provideTrainRepository(client: Client): TrainRepository {
-        return TrainRepositoryImpl(client)
+    fun provideTrainRepository(client: Client, @ApplicationContext context: Context): TrainRepository {
+        return TrainRepositoryImpl(client, context)
     }
 
 }
