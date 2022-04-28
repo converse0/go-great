@@ -8,7 +8,6 @@ import com.masuta.gogreat.domain.model.Response
 import com.masuta.gogreat.domain.model.User
 import com.masuta.gogreat.domain.repository.AuthRepository
 import io.ktor.client.*
-import io.ktor.client.features.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*

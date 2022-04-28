@@ -10,7 +10,6 @@ import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import java.util.*
 
-
 fun calendarTraining(
     date: MutableState<String>,
     context: Context

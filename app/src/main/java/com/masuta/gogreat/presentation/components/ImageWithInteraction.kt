@@ -21,22 +21,11 @@ import androidx.constraintlayout.compose.ConstraintSet
 import com.masuta.gogreat.R
 import com.masuta.gogreat.domain.model.ExerciseType
 
-//enum class ExerciseTypeLocal(val value: Int) {
-//    ARMS(0),
-//    LEGS(1),
-//    PRESS(2),
-//    BACK(3),
-//    CHEST(4),
-////    SHOULDER(5),
-////    TRICEPS(6),
-////    BICEPS(7),
-//    OTHER(8)
-//}
-
 @Composable
 fun FemalePersonSection(
     onNewExercise: (ExerciseType) -> Unit
 ) {
+
     val constraints = ConstraintSet {
         val topGuidLine = createGuidelineFromTop(0.2f)
         val bottomGuidLine = createGuidelineFromBottom(0.4f)
@@ -136,6 +125,7 @@ fun FemalePersonSection(
 fun MalePersonSection(
     onNewExercise: (ExerciseType) -> Unit
 ) {
+
     val constraints = ConstraintSet {
         val topGuidLine = createGuidelineFromTop(0.2f)
         val bottomGuidLine = createGuidelineFromBottom(0.4f)

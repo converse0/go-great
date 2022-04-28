@@ -62,29 +62,3 @@ fun BottomMenuBar(
         }
     }
 }
-
-
-// Old bottom bar
-
-//BottomAppBar(
-//backgroundColor = Color.LightGray
-//) {
-//    Row(
-//        modifier = Modifier.fillMaxWidth(),
-//        horizontalArrangement = Arrangement.SpaceAround,
-//        verticalAlignment = Alignment.CenterVertically
-//    ) {
-//        menuItems.forEach { item ->
-//            IconButton(onClick = {
-//                navController.navigate(item.route)
-//                onSelect(item.route)
-//            }) {
-//                Icon(
-//                    imageVector = item.icon,
-//                    contentDescription = item.route,
-//                    tint = if (item.route == selected) Color.Green else Color.Black
-//                )
-//            }
-//        }
-//    }
-//}

@@ -1,14 +1,8 @@
 package com.masuta.gogreat.presentation.main
 
-import android.content.Context
-import android.media.MediaPlayer
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.masuta.gogreat.R
 import com.masuta.gogreat.domain.model.Training
 import com.masuta.gogreat.domain.repository.TrainRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,10 +14,6 @@ import kotlin.system.measureTimeMillis
 class MainViewModel @Inject constructor(
     private val repository: TrainRepository
 ): ViewModel() {
-    private var currSec:Int = 0
-    private var globSec = 0
-    private var count = 0
-    private var job: Job? = null
 
     var workoutsReloadData = false
         get() = repository.workoutsDataReload
@@ -46,57 +36,22 @@ class MainViewModel @Inject constructor(
             repository.pastWorkoutsDataReload = value
         }
 
-    fun getWorkouts(
-        list: MutableState<List<Training>>,
-//        countTotalWorkout: MutableState<Int>
-    ) {
+    fun getWorkouts(list: MutableState<List<Training>>) {
         if (workoutsReloadData) {
             viewModelScope.launch {
-//                val localTrainings = repository.getAllLocalTrainings()
+                val resp = repository.findAll()
+                resp.data?.let { training ->
+                    repository.clearLocalTrainingData()
+                    training.forEach { repository.saveLocal(it.validateExerciseData()) }
+                }
+                val myTrains = repository.getMyTrainings()
+                myTrains?.let { trains ->
+                    workoutsReloadData = false
 
-//            if (localTrainings != null
-//                &&localTrainings.size!=list.value.size
-//                &&list.value.isNotEmpty()) {
-//                println("list.value: ${list.value.size}")
-//                println("localTrainings: ${localTrainings.size}")
-//
-//                println("findAll..${list.value.size}..")
-//
-//                val resp = repository.findAll()
-//                println("fa size..${resp.data?.size ?: 0}..")
-//                repository.clearLocalTrainingData()
-//
-//                resp.data?.let { training ->
-//                 //   list.value = training.map { it.validateExerciseData() }
-//                    training.forEach { repository.saveLocal(it.validateExerciseData()) }
-//                }
-//
-//                val myTrains = repository.getMyTrainings()
-//                myTrains?.let { train ->
-//                    list.value = train.map { it.validateExerciseData() }
-//                }
-//            }
-//            else if (localTrainings != null
-//                &&list.value.isEmpty()) {
-//                list.value = localTrainings
-//                println("localTraining (mem 0): ${localTrainings.size}")
-//            }
-                    val resp = repository.findAll()
-                    resp.data?.let { training ->
-//                    list.value = training.map { it.validateExerciseData() }
-                        repository.clearLocalTrainingData()
-                        training.forEach { repository.saveLocal(it.validateExerciseData()) }
-                    }
-                    val myTrains = repository.getMyTrainings()
-                    myTrains?.let { trains ->
-                        workoutsReloadData = false
-
-                        val localList = trains.map { it.validateExerciseData() }
-                        list.value = localList
-                        repository.setLocalWorkouts(localList)
-                    }
-
-                //    countTotalWorkout.value ++
+                    val localList = trains.map { it.validateExerciseData() }
+                    list.value = localList
+                    repository.setLocalWorkouts(localList)
+                }
             }
         } else {
             viewModelScope.launch {
@@ -104,10 +59,7 @@ class MainViewModel @Inject constructor(
             }
         }
     }
-     fun getCurrentTraining(
-         training: MutableState<Training>,
-//         countCurrentWorkout: MutableState<Int>
-     ) {
+     fun getCurrentTraining(training: MutableState<Training>) {
          if(currentWorkoutReloadData) {
             viewModelScope.launch {
                 repository.getCurrentTraining()?.let {
@@ -117,7 +69,6 @@ class MainViewModel @Inject constructor(
                     training.value = workout
                     repository.setLocalCurrentWorkout(workout)
                 }
-            //   countCurrentWorkout.value++
             }
          } else {
              viewModelScope.launch {
@@ -135,7 +86,6 @@ class MainViewModel @Inject constructor(
                     val resp = repository.getPassTrainings()
                     resp?.let {
                         pastWorkoutsReloadData = false
-
                         list.value = it
                         repository.setLocalPastWorkouts(it)
                     }
@@ -152,30 +102,5 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             repository.clearLocalExerciseData()
         }
-    }
-
-    fun init(sec:Int) {
-        globSec = sec
-    }
-
-    fun playSound(context: Context) {
-        val mp =  MediaPlayer.create(context, R.raw.beep).start()
-    }
-
-    fun start( text: MutableState<String>, context: Context) {
-        job = CoroutineScope(Dispatchers.Main).launch {
-            val seq = 0..globSec - count
-            for (i in seq.reversed()) {
-                currSec = i
-                count++
-                if(i % 10 == 0) playSound(context)
-                text.value = i.toString()
-                delay(1000)
-            }
-
-        }
-    }
-    fun stop() {
-        job?.cancel()
     }
 }

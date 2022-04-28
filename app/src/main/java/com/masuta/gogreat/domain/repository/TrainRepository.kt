@@ -1,6 +1,5 @@
 package com.masuta.gogreat.domain.repository
 
-import android.content.Context
 import com.masuta.gogreat.domain.model.ExerciseResponse
 import com.masuta.gogreat.domain.model.Training
 import com.masuta.gogreat.domain.model.TrainingExercise

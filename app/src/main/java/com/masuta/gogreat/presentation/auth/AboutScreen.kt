@@ -11,12 +11,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.masuta.gogreat.domain.model.UserActivity
 import com.masuta.gogreat.domain.model.UserDiet
@@ -24,10 +21,7 @@ import com.masuta.gogreat.domain.model.userToken
 import com.masuta.gogreat.presentation.components.InputTextField
 import com.masuta.gogreat.presentation.components.MainTextButton
 import com.masuta.gogreat.presentation.components.SliderWithLabelUserActivity
-import com.masuta.gogreat.presentation.profile.firstCharToUpperCase
-import com.masuta.gogreat.presentation.profile.normalizeString
 import com.masuta.gogreat.presentation.ui.theme.Red
-import com.masuta.gogreat.presentation.ui.theme.SportTheme
 
 @Composable
 fun AboutScreen(
@@ -79,10 +73,13 @@ fun AboutForm(
     val timesEat = remember { mutableStateOf("") }
     val desiredWeight = remember { mutableStateOf("") }
     val gender = remember { mutableStateOf(0) }
-    var physicalActivity = remember { mutableStateOf(0.toFloat()) }
-    var diet = remember { mutableStateOf(0.toFloat()) }
+    val physicalActivity = remember { mutableStateOf(0.toFloat()) }
+    val diet = remember { mutableStateOf(0.toFloat()) }
 
     val keyboardController = LocalSoftwareKeyboardController.current
+
+    val listActivity = UserActivity.values().toList()
+    val listDiet = UserDiet.values().toList()
 
     Box(
         modifier = Modifier.fillMaxWidth()
@@ -94,7 +91,7 @@ fun AboutForm(
         ) {
             item {
                 Text(
-                    text = "Hello, Maria! To help us create the best workout diary for you, please tell us a few words about you and your preferences",
+                    text = "Hello! To help us create the best workout diary for you, please tell us a few words about you and your preferences",
                     color = Color.Black
                 )
                 Spacer(Modifier.height(10.dp))
@@ -138,7 +135,6 @@ fun AboutForm(
                     style = MaterialTheme.typography.bodySmall
                 )
                 Spacer(Modifier.height(20.dp))
-                val listActivity = UserActivity.values().toList()
                 SliderWithLabelUserActivity(
                     selectedItem = physicalActivity,
                     valueRange = 0f..listActivity.size.minus(1).toFloat(),
@@ -150,7 +146,6 @@ fun AboutForm(
                     style = MaterialTheme.typography.bodySmall
                 )
                 Spacer(Modifier.height(20.dp))
-                val listDiet = UserDiet.values().toList()
                 SliderWithLabelUserActivity(
                     selectedItem = diet,
                     valueRange = 0f..listDiet.size.minus(1).toFloat(),
@@ -239,13 +234,5 @@ fun DefaultRadioButton(
             style = MaterialTheme.typography.bodyMedium,
             color = Color.Black
         )
-    }
-}
-
-@Preview
-@Composable
-fun AboutScreenPreview() {
-    SportTheme {
-        AboutScreen(viewModel = viewModel(), navController = NavHostController(LocalContext.current))
     }
 }

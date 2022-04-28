@@ -1,6 +1,5 @@
 package com.masuta.gogreat.presentation.workout
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -17,11 +16,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.masuta.gogreat.R
 import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.domain.model.gender
 import com.masuta.gogreat.presentation.components.FemalePersonSectionWithPoint
@@ -73,14 +70,13 @@ fun WorkoutScreen(
             ) {
                 item {
                     Spacer(modifier = Modifier.height(12.dp))
-//                    PersonImage()
                     gender?.let { n ->
                         if (n == 0) MalePersonSectionWithPoint(listPoints = listExercises.value)
                         else FemalePersonSectionWithPoint(listPoints = listExercises.value)
 
                     }
                     Spacer(modifier = Modifier.height(12.dp))
-                    WorkoutListExercises(listExercises.value, navController, uid)
+                    WorkoutListExercises(listExercises.value)
                     Spacer(Modifier.height(30.dp))
                 }
             }
@@ -101,32 +97,9 @@ fun WorkoutScreen(
 @Composable
 fun WorkoutListExercises(
     listExercises: List<TrainingExercise>,
-    navController: NavHostController? = null,
-    uid: String?
 ) {
     listExercises.forEach { exercise ->
         WorkoutExercise(ex = exercise, onSelectExercise = {  })
-    }
-}
-
-@Composable
-fun PersonImage() {
-    Box(
-        contentAlignment = Alignment.TopCenter,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(12.dp)) {
-        Image(
-            painter = painterResource(
-                gender?.let {
-                    if (it == 0) R.drawable.human else R.drawable.human_femail
-                } ?: R.drawable.human
-            ),
-            contentDescription = null,
-            modifier = Modifier
-                .height(300.dp)
-                .fillMaxWidth()
-        )
     }
 }
 
@@ -150,20 +123,11 @@ fun WorkoutExercise(
                 .width(150.dp)
                 .height(70.dp)
         )
-//        Image(
-//            painter = painterResource(id = R.drawable.muscle_dieta),
-//            contentDescription = null,
-//            contentScale = ContentScale.Crop,
-//            modifier = Modifier
-//                .width(150.dp)
-//                .height(100.dp)
-//        )
         Text(
             text = ex.name,
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Light,
-            modifier = Modifier
-                .padding(horizontal = 15.dp)
+            modifier = Modifier.padding(horizontal = 15.dp)
         )
     }
 }

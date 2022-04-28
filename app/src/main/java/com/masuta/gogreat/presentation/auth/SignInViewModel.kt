@@ -15,8 +15,6 @@ class SignInViewModel @Inject constructor(
     private val login: Login
 ): ViewModel() {
 
-//    private val authorization = Authorization()
-
     suspend fun signIn(user: User): Map<String, Any?> {
         return login(user)
     }
@@ -30,6 +28,4 @@ class SignInViewModel @Inject constructor(
         refreshUserToken = token.refreshToken
         editor.apply()
     }
-
-
 }

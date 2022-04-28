@@ -2,11 +2,8 @@ package com.masuta.gogreat.presentation.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,25 +15,20 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import com.masuta.gogreat.R
-import com.masuta.gogreat.domain.model.ExerciseType
 import com.masuta.gogreat.domain.model.TrainingExercise
-import com.masuta.gogreat.presentation.ui.theme.Green
 import com.masuta.gogreat.presentation.ui.theme.Red
-import com.masuta.gogreat.presentation.ui.theme.SportTheme
 
 @Composable
 fun FemalePersonSectionWithPoint(
     listPoints: List<TrainingExercise>
 ) {
+
     val constraints = ConstraintSet {
         val topGuidLine = createGuidelineFromTop(0.2f)
         val bottomGuidLine = createGuidelineFromBottom(0.4f)

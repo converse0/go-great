@@ -7,43 +7,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.masuta.gogreat.domain.model.UserActivity
-import com.masuta.gogreat.domain.model.UserDiet
-import com.masuta.gogreat.presentation.ui.theme.SportTheme
-
-@Composable
-fun SliderWithText(
-//    items: List<String>
-//    selectedItem: MutableState<String>
-) {
-    val sliderPosition = remember { mutableStateOf(0f) }
-//    val items = listOf("Balanced", "Fit", "Normal", "Heavy", "Push", "Dot", "Cat", "Rat", "Bro")
-    val items = listOf(1, 2 , 3, 4)
-    val selectedItem = remember { mutableStateOf(items[0]) }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 20.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        SliderWithLabel(
-            value = sliderPosition.value,
-            selectedItem = selectedItem,
-            finiteEnd = true,
-            valueRange = 0f..items.size.minus(1).toFloat(),
-            items = items
-        )
-    }
-}
 
 @Composable
 fun SliderWithLabel(
@@ -54,7 +22,9 @@ fun SliderWithLabel(
     labelMinWidth: Dp = 24.dp,
     items: List<Int>
 ) {
+
     var sliderPosition by remember { mutableStateOf(value) }
+
     selectedItem.value = items[sliderPosition.toInt()]
 
     Column {
