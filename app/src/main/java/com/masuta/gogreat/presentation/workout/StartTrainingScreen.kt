@@ -47,19 +47,13 @@ fun StartTrainingScreen(
     val context = LocalContext.current
 
     if (viewModel.listExercises.value.isEmpty()) {
-        viewModel.getTraining(uid!!, context)
+        viewModel.getTraining(uid!!)
     }
 
     val listExercises = viewModel.listExercises
     val indexExercise = viewModel.indexExercise
     val exerciseSets = viewModel.exerciseSets
     val currentExercise = viewModel.currentExercise.value
-//    val interval = remember { mutableStateOf("30") }
-    val navigateMain = {        navController.navigate("main")
-    }
-//    if (indexExercise.value == listExercises.value.size) {
-//        return
-//    }
 
     Column(
         modifier = Modifier
@@ -91,11 +85,6 @@ fun StartTrainingScreen(
                     currentExercise,
                     exerciseSets = exerciseSets.value,
                     onOpenModal = {
-//                            isModalOpen.value = true
-//                            viewModel.onEvent(TrainingEvent.NextSet)
-//                            if (exerciseSets.value == 0) {
-//                                val resp = viewModel.onEvent(TrainingEvent.NextExercise)
-//                            }
                         viewModel.nextSetOrTraining(onOpenModal = { isModalOpen.value = true })
                     },
                     onOpenEdit = {
@@ -116,8 +105,6 @@ fun StartTrainingScreen(
                     viewModel.finishTraining(uid!!)
                 }
             },
-            navController = navController,
-            uid = uid!!
         )
     }
     if (isEditModal.value) {
@@ -162,8 +149,6 @@ fun ModalTimer(
     totalTime: Long,
     viewModel: StartTrainingViewModel,
     onDismiss: () -> Unit,
-    navController: NavHostController,
-    uid: String
 ) {
 
     val context = LocalContext.current
@@ -203,11 +188,7 @@ fun ModalTimer(
                     onAlarmSound = sound,
                     onTimerEnd = onDismiss,
                     startTimer = true,
-                    modifier = Modifier
-                        .size(200.dp),
-                    viewModel = viewModel,
-                    navController = navController,
-                    uid = uid
+                    modifier = Modifier.size(200.dp),
                 )
             }
         }
@@ -221,20 +202,6 @@ fun TrainingInfo(
     onOpenModal: () -> Unit,
     onOpenEdit: () -> Unit
 ) {
-//    Row(
-//        verticalAlignment = Alignment.CenterVertically,
-//        modifier = Modifier.padding(vertical = 8.dp)
-//    ) {
-//        Text(
-//            text = "Weight",
-//            style = MaterialTheme.typography.bodySmall,
-//            fontWeight = FontWeight.Bold
-//        )
-//        Text(
-//            text = "5kg",
-//            modifier = Modifier.padding(start = 8.dp)
-//        )
-//    }
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.padding(vertical = 8.dp)

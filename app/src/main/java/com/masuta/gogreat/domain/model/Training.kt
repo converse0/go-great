@@ -1,4 +1,5 @@
 package com.masuta.gogreat.domain.model
+
 @kotlinx.serialization.Serializable
 data class Training(
     var exercises: List<TrainingExercise>,

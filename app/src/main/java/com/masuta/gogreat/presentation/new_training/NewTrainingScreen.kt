@@ -1,8 +1,6 @@
 package com.masuta.gogreat.presentation.new_training
 
 import android.annotation.SuppressLint
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -37,15 +35,8 @@ import com.masuta.gogreat.presentation.ui.theme.Green
 import com.masuta.gogreat.presentation.ui.theme.Red
 import com.skydoves.landscapist.glide.GlideImage
 import kotlinx.datetime.Clock
-import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.*
-
-private fun replaceString(str: String) = str.replace(" ", "_")
 
 @Composable
 fun NewTrainingScreen(
@@ -77,7 +68,10 @@ fun NewTrainingScreen(
                 navController.navigate("main")
                 viewModel.clearLocalExercises()
             }) {
-                Icon(imageVector = Icons.Default.KeyboardArrowLeft, contentDescription = "Back")
+                Icon(
+                    imageVector = Icons.Default.KeyboardArrowLeft,
+                    contentDescription = "Back"
+                )
             }
             Text(
                 text = "New training",
@@ -95,10 +89,21 @@ fun NewTrainingScreen(
                     .padding(bottom = 100.dp)
             ) {
                 item {
-//                    PersonSection(onNewExercise = { navController.navigate("list-exercise/${it.value}") })
                     gender?.let { n ->
-                        if (n == 0) MalePersonSection(onNewExercise = { navController.navigate("list-exercise/${it.value}") }) else
-                            FemalePersonSection(onNewExercise = { navController.navigate("list-exercise/${it.value}") })
+                        if (n == 0) {
+                            MalePersonSection(
+                                onNewExercise = {
+                                    navController.navigate("list-exercise/${it.value}")
+                                }
+                            )
+                        } else {
+                            FemalePersonSection(
+                                onNewExercise = {
+                                    navController.navigate("list-exercise/${it.value}")
+                                }
+                            )
+                        }
+
                     }
                     Text(
                         text = "Please, press + to choose a group of muscles and add exercise",
@@ -122,24 +127,6 @@ fun NewTrainingScreen(
             ) {
                 openModal.value = true
             }
-
-//            TextButton(
-//                onClick = {
-//                    openModal.value = true
-//                },
-//                enabled= listExercises.value.isNotEmpty(),
-//                colors = ButtonDefaults.buttonColors(containerColor = Red),
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(vertical = 16.dp, horizontal = 16.dp)
-//                    .align(Alignment.BottomCenter)
-//            ) {
-//                Text(
-//                    text = "Save",
-//                    color = Color.White,
-//                    modifier = Modifier.padding(vertical = 16.dp, horizontal = 16.dp)
-//                )
-//            }
             Spacer(modifier = Modifier.height(10.dp))
         }
 
@@ -150,13 +137,11 @@ fun NewTrainingScreen(
             date = date,
             onSave = {
                 viewModel.saveTrain(
-                    //TODO: date implementation
                     newTrain = Training(
                         exercises = listExercises.value,
                         interval = "50s",
                         name = name.value,
                         date = date.value
-//                        image = "https://fitseven.ru/wp-content/uploads/2020/07/uprazhneniya-na-press-skruchivaniya.jpg"
                     )
                 )
                 viewModel.clearLocalExercises()
@@ -236,7 +221,6 @@ fun Modal(
                 ) {
                     OutlinedTextField(value = textDate, onValueChange = {}, enabled = false)
                     IconButton(onClick = {
-//                        showCal.value = !showCal.value
                         calendarTraining(date, context).show()
                     }) {
                         Icon(Icons.Default.CalendarToday, contentDescription = "Cal")
@@ -289,125 +273,12 @@ fun ExercisesItem(
                 .width(150.dp)
                 .height(70.dp)
         )
-//        Image(
-//            painter = painterResource(id = R.drawable.muscle_dieta),
-//            contentDescription = null,
-//            contentScale = ContentScale.Crop,
-//            modifier = Modifier
-//                .width(200.dp)
-//                .height(100.dp)
-//        )
         Text(
             text = ex.name,
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Light,
             modifier = Modifier
                 .padding(horizontal = 15.dp)
-//                .clickable {
-//                    //TODO
-//
-//                }
         )
     }
 }
-
-//@Composable
-//fun PersonSection(
-//    onNewExercise: (ExerciseType) -> Unit
-//) {
-//    val constraints = ConstraintSet {
-//        val topGuidLine = createGuidelineFromTop(0.2f)
-//        val bottomGuidLine = createGuidelineFromBottom(0.4f)
-//        val person = createRefFor("person")
-//        val shoulder = createRefFor("shoulder")
-//        val breast = createRefFor("breast")
-//        val forearm = createRefFor("forearm")
-//        val legUp = createRefFor("legUp")
-//        val legDown = createRefFor("legDown")
-//
-//        constrain(person) {
-//            top.linkTo(parent.top)
-//            start.linkTo(parent.start)
-//            end.linkTo(parent.end)
-//        }
-//        constrain(shoulder) {
-//            start.linkTo(person.start, 80.dp)
-//            top.linkTo(topGuidLine)
-//        }
-//        constrain(breast) {
-//            start.linkTo(person.start)
-//            end.linkTo(person.end)
-//            top.linkTo(shoulder.bottom, 10.dp)
-//        }
-//        constrain(forearm) {
-//            start.linkTo(person.start, 80.dp)
-//            top.linkTo(breast.bottom, 10.dp)
-//        }
-//        constrain(legUp) {
-//            top.linkTo(bottomGuidLine, 10.dp)
-//            start.linkTo(person.start, 10.dp)
-//        }
-//        constrain(legDown) {
-//            top.linkTo(legUp.bottom, 40.dp)
-//            start.linkTo(person.start, 80.dp)
-//        }
-//    }
-//
-//    ConstraintLayout(constraintSet = constraints, modifier = Modifier
-//        .fillMaxWidth()
-//        .padding(12.dp)) {
-//        Image(
-//            painter = painterResource(
-//                gender?.let {
-//                    if (it == 0) R.drawable.human else R.drawable.human_femail
-//                } ?: R.drawable.human
-//            ),
-//            contentDescription = null,
-//            modifier = Modifier
-//                .layoutId("person")
-//                .height(300.dp)
-//                .width(300.dp)
-//        )
-//        ExerciseType.values().forEach { type ->
-//            val layoutId = when(type) {
-//                ExerciseType.ARMS -> "shoulder"
-//                ExerciseType.LEGS -> "legDown"
-//                ExerciseType.OTHER -> "forearm"
-//            }
-//            IconButtonAddExercise(modifier = Modifier.layoutId(layoutId), onClick = { onNewExercise(type) })
-//        }
-//
-////        IconButtonAddExercise(modifier = Modifier.layoutId("shoulder"), onClick = onNewExercise)
-////        IconButtonAddExercise(modifier = Modifier.layoutId("breast"), onClick = onNewExercise)
-////        IconButtonAddExercise(modifier = Modifier.layoutId("forearm"), onClick = onNewExercise)
-////        IconButtonAddExercise(modifier = Modifier.layoutId("legUp"), onClick = onNewExercise)
-////        IconButtonAddExercise(modifier = Modifier.layoutId("legDown"), onClick = onNewExercise)
-//    }
-//}
-
-//@Composable
-//fun IconButtonAddExercise(
-//    modifier: Modifier = Modifier,
-//    onClick: () -> Unit
-//) {
-//    Box(
-//        contentAlignment = Alignment.Center,
-//        modifier = modifier
-//            .background(color = Color.Yellow, shape = CircleShape)
-//            .clip(CircleShape)
-//            .size(20.dp)
-////            .border(width = 2.dp, color = Color.White, shape = CircleShape)
-//    ) {
-//        IconButton(
-//            onClick = onClick
-//        ) {
-//            Icon(
-//                imageVector = Icons.Default.Add,
-//                contentDescription = null,
-//                tint = Color.Black,
-//            )
-//        }
-//    }
-//}
-
-

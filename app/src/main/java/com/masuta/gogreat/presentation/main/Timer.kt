@@ -19,16 +19,12 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
-import com.masuta.gogreat.presentation.workout.StartTrainingViewModel
 import kotlinx.coroutines.delay
-
 
 @Composable
 fun Timer(
@@ -41,11 +37,7 @@ fun Timer(
     activeBarColor: Color = Color(0xFF37B900),
     initialValue: Float = 1f,
     strokeWidth: Dp = 5.dp,
-    viewModel: StartTrainingViewModel,
-    navController: NavHostController,
-    uid: String
 ) {
-    val context = LocalContext.current
 
     var size by remember {
         mutableStateOf(IntSize.Zero)
@@ -61,7 +53,6 @@ fun Timer(
     }
 
     if (currentTime % 1000L == 0L && currentTime < 5000L) {
-//            playSound(context)
         onAlarmSound()
     }
 
@@ -170,16 +161,3 @@ fun TimerButtonWithText(
         }
     }
 }
-
-//@Preview
-//@Composable
-//fun TimerPreview() {
-//    SportTheme() {
-//        Timer(
-//            totalTime = 10L * 1000L,
-//            inactiveBarColor = Color.DarkGray,
-//            activeBarColor = Color(0xFF37B900),
-//            modifier = Modifier.size(200.dp).padding(bottom = 60.dp)
-//        )
-//    }
-//}

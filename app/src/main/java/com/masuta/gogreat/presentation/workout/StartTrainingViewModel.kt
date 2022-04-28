@@ -70,7 +70,6 @@ class StartTrainingViewModel @Inject constructor(
 
     fun onEvent(event: TrainingEvent) {
         if (_indexExercise.value==_listExercises.value.size) {
-          //  navigateMain()
            return
         }
         when(event) {
@@ -102,10 +101,8 @@ class StartTrainingViewModel @Inject constructor(
         }
     }
 
-    fun getTraining(uid: String, context: Context) {
+    fun getTraining(uid: String) {
         viewModelScope.launch {
-//            repository.init(context)
-//            val resp = repository.getTrainingDetail(uid)
             val resp = repository.getLocalTrainingByUid(uid)
             val exerciseCurrent = repository.getLocalCurrentExercise()
             val sets = repository.getLocalCurrentExerciseSets()
@@ -126,9 +123,6 @@ class StartTrainingViewModel @Inject constructor(
                 repository.setLocalCurrentExerciseSets(_exerciseSets.value)
                 repository.setLocalCurrentExercise(_indexExercise.value)
             }
-//
-//            listExercises.value = resp.exercises
-//            interval.value = resp.interval.toInteger()
         }
     }
 
@@ -142,7 +136,6 @@ class StartTrainingViewModel @Inject constructor(
             _currentExercise.value = listExercises.get(_indexExercise.value)
             _exerciseSets.value = _currentExercise.value.numberOfSets
 
-            // Update local states
             repository.setLocalCurrentExercise(_indexExercise.value)
             repository.setLocalCurrentExerciseSets(_currentExercise.value.numberOfSets)
 
@@ -169,8 +162,5 @@ class StartTrainingViewModel @Inject constructor(
     fun playFinalSound(context: Context) {
         val mp = MediaPlayer.create(context, R.raw.fanfar)
         mp.start()
-
-      //  mp.
-
     }
 }

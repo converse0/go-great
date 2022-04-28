@@ -22,7 +22,6 @@ import com.masuta.gogreat.presentation.auth.SignInScreen
 import com.masuta.gogreat.presentation.auth.SignUpScreen
 import com.masuta.gogreat.presentation.diet.DietScreen
 import com.masuta.gogreat.presentation.health.HealthScreen
-import com.masuta.gogreat.presentation.launch_training.LaunchTrainingScreen
 import com.masuta.gogreat.presentation.main.MainScreen
 import com.masuta.gogreat.presentation.new_training.ExerciseScreen
 import com.masuta.gogreat.presentation.new_training.NewTrainingScreen
@@ -174,9 +173,6 @@ fun Navigation(items: List<BottomNavigationItem>) {
 
         composable(route = "new-training") {
             NewTrainingScreen(navController = navController, viewModel = hiltViewModel())
-        }
-        composable(route = "launch-training") {
-            LaunchTrainingScreen()
         }
         composable(route = "profile") {
             ProfileScreen(

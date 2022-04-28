@@ -24,12 +24,6 @@ class Client {
                 connectTimeoutMillis = timeout
                 socketTimeoutMillis = timeout
             }
-//            install(Auth) {
-//                bearer {
-//                    BearerTokens(accessToken = userToken!!, refreshToken = refreshUserToken!!)
-//                }
-//                // Configure authentication
-//            }
         }
     }
 }

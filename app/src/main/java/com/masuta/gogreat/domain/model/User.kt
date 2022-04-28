@@ -4,12 +4,9 @@ import kotlinx.serialization.*
 
 @Serializable
 data class User(
-//    val id: Int? = null,
     val username: String? = null,
     val email: String,
     val password: String,
-//    val createdAt: String?=null,
-//    val updatedAt: String?=null
 )
 
 @Serializable

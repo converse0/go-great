@@ -3,16 +3,13 @@ package com.masuta.gogreat.data.repository
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
-import com.bumptech.glide.load.HttpException
 import com.masuta.gogreat.R
 import com.masuta.gogreat.data.remote.Client
 import com.masuta.gogreat.domain.model.*
 import com.masuta.gogreat.domain.repository.TrainRepository
 import io.ktor.client.*
-import io.ktor.client.features.*
 import io.ktor.client.request.*
 import io.ktor.http.*
-import io.ktor.network.sockets.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
