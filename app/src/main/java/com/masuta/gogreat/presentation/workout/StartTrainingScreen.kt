@@ -42,7 +42,6 @@ fun StartTrainingScreen(
 ) {
     val isEditModal = remember { mutableStateOf(false) }
     val isModalOpen = remember { mutableStateOf(false) }
-    val isFinalModal = remember { mutableStateOf(false) }
 
     val context = LocalContext.current
 
@@ -66,7 +65,10 @@ fun StartTrainingScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             IconButton(onClick = { navController.navigate("main") }) {
-                Icon(imageVector = Icons.Default.KeyboardArrowLeft, contentDescription = "Back")
+                Icon(
+                    imageVector = Icons.Default.KeyboardArrowLeft,
+                    contentDescription = "Back"
+                )
             }
             Text(
                 text = currentExercise.name,
@@ -85,7 +87,9 @@ fun StartTrainingScreen(
                     currentExercise,
                     exerciseSets = exerciseSets.value,
                     onOpenModal = {
-                        viewModel.nextSetOrTraining(onOpenModal = { isModalOpen.value = true })
+                        viewModel.nextSetOrTraining(
+                            onOpenModal = { isModalOpen.value = true }
+                        )
                     },
                     onOpenEdit = {
                         isEditModal.value = true
@@ -110,7 +114,9 @@ fun StartTrainingScreen(
     if (isEditModal.value) {
         val weight = remember { mutableStateOf("") }
         val time = remember { mutableStateOf(currentExercise.relax.toInteger()) }
-        val numberOfSets = remember { mutableStateOf(currentExercise.numberOfSets.toString()) }
+        val numberOfSets = remember {
+            mutableStateOf(currentExercise.numberOfSets.toString())
+        }
         val numberOfRepetitions =
             remember { mutableStateOf(currentExercise.numberOfRepetitions.toString()) }
         StartTrainingModal(
@@ -130,15 +136,14 @@ fun StartTrainingScreen(
                         exercise
                     }
                 }
-                viewModel.setExerciseParams(uid = uid!!, listExercises = listEditExercise)
+                viewModel.setExerciseParams(
+                    uid = uid!!,
+                    listExercises = listEditExercise
+                )
                 isEditModal.value = false
             },
             onDismiss = { isEditModal.value = false }
         )
-    }
-
-    if (isFinalModal.value) {
-        FinalModal()
     }
 }
 
@@ -167,8 +172,15 @@ fun ModalTimer(
             .background(color = Color.Black)
             .clickable { }
         )
-        IconButton(onClick = onDismiss, modifier = Modifier.align(Alignment.TopEnd)) {
-            Icon(Icons.Default.Close, contentDescription = "Close", tint = Color.White)
+        IconButton(
+            onClick = onDismiss,
+            modifier = Modifier.align(Alignment.TopEnd)
+        ) {
+            Icon(
+                Icons.Default.Close,
+                contentDescription = "Close",
+                tint = Color.White
+            )
         }
         Card(
             containerColor = Color.White,
@@ -230,7 +242,10 @@ fun TrainingInfo(
             modifier = Modifier.padding(start = 8.dp)
         )
     }
-    ButtonSection(onOpenModal = onOpenModal, onOpenEdit = onOpenEdit)
+    ButtonSection(
+        onOpenModal = onOpenModal,
+        onOpenEdit = onOpenEdit
+    )
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -240,22 +255,28 @@ fun TrainingInfo(
             fontWeight = FontWeight.Bold
         )
     }
-
     DescriptionSection(description = exercise.description)
+
     Spacer(Modifier.height(10.dp))
+
     Text(
         text = "Technique",
         style = MaterialTheme.typography.headlineSmall,
         fontWeight = FontWeight.Bold
     )
+
     Spacer(Modifier.height(10.dp))
+
     TechniqueSection(technique = exercise.technique)
+
     Spacer(Modifier.height(10.dp))
+
     Text(
         text = "Common mistakes",
         style = MaterialTheme.typography.headlineSmall,
         fontWeight = FontWeight.Bold
     )
+
     MistakesSection(mistake = exercise.mistake)
 
 }

@@ -82,7 +82,7 @@ class MainViewModel @Inject constructor(
     fun getPastTrainings(list: MutableState<List<Training>>) {
         if (pastWorkoutsReloadData) {
             viewModelScope.launch {
-                val measureTime = measureTimeMillis {
+                measureTimeMillis {
                     val resp = repository.getPassTrainings()
                     resp?.let {
                         pastWorkoutsReloadData = false

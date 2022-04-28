@@ -24,19 +24,6 @@ import java.util.*
 import javax.inject.Inject
 
 @Serializable
-data class UserProfileResp(val id: String,
-                           val email: String,
-                           val username: String,
-                           var isverified: Boolean)
-
-@Serializable
-data class ResponseProf(
-    val message: String? = null,
-    val status: Boolean? = null,
-    val data: UserProfileResp? = null
-)
-
-@Serializable
 data class ResponseParams(
     val message: String?= null,
     val status: Boolean?= null,
@@ -56,10 +43,12 @@ class ProfileRepositoryImpl @Inject constructor(
     private val client: Client,
     private val context: Context
 ): ProfileRepository {
+
     private var trainUrl = "https://api.gogreat.com/v1/profile"
     private var httpClient: HttpClient? = null
     private val kilobyte = 1024
     private val maxImageLimit = 3 * kilobyte
+
     init {
         context.resources.getInteger(R.integer.request_timeout).let {
             httpClient = client.makeClient(it.toLong())

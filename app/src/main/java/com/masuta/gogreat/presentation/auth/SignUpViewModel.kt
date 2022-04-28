@@ -46,22 +46,25 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
-   suspend fun signUp(username:String?, email: String?, password: String?, passwordConfirm: String?): Boolean {
-        if (checkUsername(username) &&
-            checkEmail(email) &&
-            checkPassword(password) &&
-            checkPasswordConfirm(password,
-                passwordConfirm)) {
+   suspend fun signUp(
+       username: String?,
+       email: String?,
+       password: String?,
+       passwordConfirm: String?
+   ): Boolean {
+
+        if (checkUsername(username) && checkEmail(email) &&
+            checkPassword(password) && checkPasswordConfirm(password, passwordConfirm)
+        ) {
             val user = User(username!!, email!!, password!!)
+            val resp = signUp(user)
 
-                val resp = signUp(user)
-                if(resp) {
-                    return true
-                }
-
+            if(resp) {
+                return true
+            }
         }
-       return false
 
+       return false
    }
 
     suspend fun signIn(user: User): Map<String, Any?> {
@@ -71,8 +74,10 @@ class SignUpViewModel @Inject constructor(
     fun setToken(context: Context, token: LoginResponse?) {
         val sharedPref = context.getSharedPreferences("user", Context.MODE_PRIVATE)
         val editor = sharedPref.edit()
+
         editor.putString("accessToken", token!!.accessToken)
         editor.putString("refreshToken", token.refreshToken)
+
         userToken = token.accessToken
         refreshUserToken = token.refreshToken
         editor.apply()

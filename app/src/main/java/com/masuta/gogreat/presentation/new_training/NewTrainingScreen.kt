@@ -44,10 +44,10 @@ fun NewTrainingScreen(
     viewModel: NewTrainingViewModel
 ) {
 
+    val timeNow = Clock.System.now().toString()
+
     val openModal = remember { mutableStateOf(false) }
     val listExercises = remember { mutableStateOf(listOf<TrainingExercise>()) }
-
-    val timeNow = Clock.System.now().toString()
 
     val name = remember { mutableStateOf("") }
     val date = remember { mutableStateOf(timeNow) }

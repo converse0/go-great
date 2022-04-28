@@ -46,7 +46,10 @@ fun SignUpScreen(
                      navController.navigate("launch-screen")
                 }
             ) {
-                Icon(imageVector = Icons.Default.KeyboardArrowLeft, contentDescription = "Back")
+                Icon(
+                    imageVector = Icons.Default.KeyboardArrowLeft,
+                    contentDescription = "Back"
+                )
             }
             Text(
                 text = "Sign Up",
@@ -87,33 +90,32 @@ fun SignUpForm(
                     text = "UserName",
                     value = username,
                     keyboardController = keyboardController,
-                    onChangeValue = { username = it},
+                    onChangeValue = { username = it },
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 InputTextField(
                     text = "Email",
                     value = email,
                     keyboardController = keyboardController,
-                    onChangeValue = { email = it},
+                    onChangeValue = { email = it },
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 InputTextField(
                     text = "Password",
                     value = password,
                     keyboardController = keyboardController,
-                    onChangeValue = { password = it},
+                    onChangeValue = { password = it },
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 InputTextField(
                     text = "Confirm password",
                     value = passwordConfirm,
                     keyboardController = keyboardController,
-                    onChangeValue = { passwordConfirm = it},
+                    onChangeValue = { passwordConfirm = it },
                 )
                 Spacer(modifier = Modifier.height(16.dp))
             }
         }
-
         MainTextButton(
             text = "Sign up",
             color = Red,
@@ -126,7 +128,7 @@ fun SignUpForm(
                 .align(Alignment.BottomCenter)
         ) {
             CoroutineScope(Dispatchers.IO).launch {
-                val respSignUp = viewModel.signUp(username, email,password,passwordConfirm)
+                val respSignUp = viewModel.signUp(username, email, password, passwordConfirm)
 
                 if (respSignUp) {
                     val res = viewModel.signIn(User(email = email, password = password))

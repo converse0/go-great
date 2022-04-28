@@ -59,7 +59,7 @@ class ProfileViewModel @Inject constructor(
                     userParams.value = params
                     repository.setLocalProfileParams(params)
                     isDataLoad = false
-                } else if (resp.code!=null) {
+                } else if (resp.code != null) {
                     resp.message?.let { errorMessage = it }
                     fail.value = true
                     when(resp.code) {
@@ -111,34 +111,34 @@ class ProfileViewModel @Inject constructor(
         )
         repository.setLocalProfileParams(userParams)
         val resp = repository.updateParameters(params)
+
         if (resp != null) {
             isDataLoad = true
             return resp
         }
+
         return null
     }
 
     suspend fun uploadImage(im: ImageBitmap): Pair<String?,String?> {
-        println("IMAGE BITMAP: $im")
         isDataLoad = true
         val resp = repository.uploadImage(im)
-        println("Response: $resp")
         isUploadImage.value = false
+
         resp.data?.let {
-            println("uploadImage: $it")
             return Pair(null, it)
         } ?: resp.message?.let {
-            println("uploadImage error: $it")
             return Pair(it, null)
         } ?: resp.code?.let {
-            println("uploadImage error: $it")
             val respErr= when(it) {
                 16 -> "Access Token is expired"
                 5,2 -> "profile is not found"
                 else -> "Request Time out exceeded"
             }
+
             return Pair(respErr, null)
         }
+
         return Pair(null, null)
     }
 }

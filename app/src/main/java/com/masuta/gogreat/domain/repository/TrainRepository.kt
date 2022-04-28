@@ -6,6 +6,7 @@ import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.domain.model.TrainingResponse
 
 interface TrainRepository {
+
     var workoutsDataReload: Boolean
     var pastWorkoutsDataReload: Boolean
     var currentWorkoutDataReload: Boolean
@@ -44,6 +45,4 @@ interface TrainRepository {
     suspend fun setExerciseParams(uid: String, listExercises: List<TrainingExercise>)
     suspend fun startTraining(uid: String)
     suspend fun finishTraining(uid: String)
-
-    fun delete(newTrain: Training)
 }

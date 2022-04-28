@@ -167,7 +167,6 @@ fun Navigation(items: List<BottomNavigationItem>) {
                 navController = navController,
                 viewModel = hiltViewModel(),
                 menuItems = items,
-                selected = selected,
                 onSelect = { selected = it })
         }
 

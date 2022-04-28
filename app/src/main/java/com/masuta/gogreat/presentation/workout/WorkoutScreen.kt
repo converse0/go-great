@@ -57,7 +57,10 @@ fun WorkoutScreen(
                 IconButton(onClick = {
                     navController.navigate("main")
                 }) {
-                    Icon(imageVector = Icons.Default.KeyboardArrowLeft, contentDescription = "Back")
+                    Icon(
+                        imageVector = Icons.Default.KeyboardArrowLeft,
+                        contentDescription = "Back"
+                    )
                 }
                 Text(
                     text = name.value,
@@ -71,12 +74,21 @@ fun WorkoutScreen(
                 item {
                     Spacer(modifier = Modifier.height(12.dp))
                     gender?.let { n ->
-                        if (n == 0) MalePersonSectionWithPoint(listPoints = listExercises.value)
-                        else FemalePersonSectionWithPoint(listPoints = listExercises.value)
+                        if (n == 0) {
+                            MalePersonSectionWithPoint(
+                                listPoints = listExercises.value
+                            )
+                        } else {
+                            FemalePersonSectionWithPoint(
+                                listPoints = listExercises.value
+                            )
+                        }
 
                     }
                     Spacer(modifier = Modifier.height(12.dp))
+
                     WorkoutListExercises(listExercises.value)
+
                     Spacer(Modifier.height(30.dp))
                 }
             }

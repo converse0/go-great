@@ -51,7 +51,11 @@ fun LaunchScreen(
                 color = Color.White
             )
             Spacer(Modifier.height(20.dp))
-            MainTextButton(text = "Login", color = Red, modifier = Modifier.fillMaxWidth()) {
+            MainTextButton(
+                text = "Login",
+                color = Red,
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 navController.navigate("sign-in")
             }
             Spacer(Modifier.height(20.dp))

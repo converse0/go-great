@@ -1,6 +1,6 @@
 package com.masuta.gogreat.domain.model
-import kotlinx.serialization.*
 
+import kotlinx.serialization.*
 
 @Serializable
 data class User(

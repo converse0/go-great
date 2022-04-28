@@ -69,7 +69,7 @@ class StartTrainingViewModel @Inject constructor(
     }
 
     fun onEvent(event: TrainingEvent) {
-        if (_indexExercise.value==_listExercises.value.size) {
+        if (_indexExercise.value == _listExercises.value.size) {
            return
         }
         when(event) {
@@ -82,7 +82,6 @@ class StartTrainingViewModel @Inject constructor(
             }
             is TrainingEvent.NextExercise -> {
                     _indexExercise.value++
-
                 if (_indexExercise.value==_listExercises.value.size) {
                     return
                 }
@@ -111,13 +110,10 @@ class StartTrainingViewModel @Inject constructor(
                 _listExercises.value = it.exercises
 
                 exerciseCurrent?.let { exercise ->
-                    println("Index EXERCISE FROM LOCAL: $exercise")
                     _indexExercise.value = exercise
                 }
 
                 _currentExercise.value = it.exercises[indexExercise.value]
-
-                println("NUMBER OF SETS LOCAL: $sets")
                 _exerciseSets.value = sets ?: _currentExercise.value.numberOfSets
 
                 repository.setLocalCurrentExerciseSets(_exerciseSets.value)

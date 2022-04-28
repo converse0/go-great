@@ -52,7 +52,10 @@ fun ExerciseScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             IconButton(onClick = { navController.navigate("new-training") }) {
-                Icon(imageVector = Icons.Default.KeyboardArrowLeft, contentDescription = "Back")
+                Icon(
+                    imageVector = Icons.Default.KeyboardArrowLeft,
+                    contentDescription = "Back"
+                )
             }
             Text(
                 text = "List of exercise",
@@ -173,7 +176,11 @@ fun NewExerciseScreen(
             }
         }
         Spacer(modifier = Modifier.height(20.dp))
-        NewExerciseParameters(exercise = exercise, onSubmit = onSubmit, viewModel = viewModel)
+        NewExerciseParameters(
+            exercise = exercise,
+            onSubmit = onSubmit,
+            viewModel = viewModel
+        )
     }
 }
 

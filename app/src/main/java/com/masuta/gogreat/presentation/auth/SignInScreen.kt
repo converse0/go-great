@@ -46,7 +46,10 @@ fun SignInScreen(
                     navController.navigate("launch-screen")
                 }
             ) {
-                Icon(imageVector = Icons.Default.KeyboardArrowLeft, contentDescription = "Back")
+                Icon(
+                    imageVector = Icons.Default.KeyboardArrowLeft,
+                    contentDescription = "Back"
+                )
             }
             Text(
                 text = "Log in",
@@ -79,14 +82,12 @@ fun SignInForm(
         onChangeValue = { email = it},
     )
     Spacer(modifier = Modifier.height(16.dp))
-
     InputTextField(
         text = "Password",
         value = password,
         keyboardController = keyboardController,
         onChangeValue = { password = it },
     )
-
     MainTextButton(
         text = "Login",
         color = Red,
@@ -94,13 +95,17 @@ fun SignInForm(
             .fillMaxWidth()
             .padding(vertical = 40.dp)
     ) {
-        val user = User(email=email, password=password)
+        val user = User(email = email, password = password)
+
         CoroutineScope(Dispatchers.IO).launch {
             val resp = viewModel.signIn(user)
 
             withContext(Dispatchers.Main) {
                 if(resp["status"] as Boolean){
-                    viewModel.setToken(context = context, token = resp["loginResponse"] as LoginResponse?)
+                    viewModel.setToken(
+                        context = context,
+                        token = resp["loginResponse"] as LoginResponse?
+                    )
                     navController.navigate("main")
                 } else {
                     resp["message"]?.let {

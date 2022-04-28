@@ -19,6 +19,7 @@ class TrainRepositoryImpl @Inject constructor(
     private var client: Client,
     private var context: Context,
 ): TrainRepository {
+
     private var httpClient: HttpClient? = null
     private var trainUrl = "https://api.gogreat.com/v1/train"
     private var localTraining:Map<String,Training> = mutableMapOf()
@@ -33,7 +34,6 @@ class TrainRepositoryImpl @Inject constructor(
     override var currentWorkoutDataReload: Boolean = true
 
     init {
-
         context.resources.getInteger(R.integer.request_timeout).let {
             httpClient = client.makeClient(it.toLong())
         }
@@ -362,7 +362,7 @@ class TrainRepositoryImpl @Inject constructor(
                 headers {
                     append("Authorization", "Bearer $userToken")
                 }
-                body = data // mapOf("uid" to uid, "exercises" to listExercises)
+                body = data
             }?.let {
                 println("setExerciseParams: $it")
             }
@@ -374,9 +374,5 @@ class TrainRepositoryImpl @Inject constructor(
             }
             e.printStackTrace()
         }
-    }
-
-    override fun delete(newTrain: Training) {
-        TODO("Not yet implemented")
     }
 }

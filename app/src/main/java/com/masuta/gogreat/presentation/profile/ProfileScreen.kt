@@ -64,11 +64,21 @@ fun ProfileScreen(
 ) {
 
     if(viewModel.errorMessage.isNotEmpty()) {
-        Toast.makeText(LocalContext.current,viewModel.errorMessage,Toast.LENGTH_SHORT ).show()
+        Toast.makeText(
+            LocalContext.current,
+            viewModel.errorMessage,
+            Toast.LENGTH_SHORT
+        ).show()
     }
+
     Scaffold(
         bottomBar = {
-            BottomMenuBar(navController = navController, selected = selected, onSelect = onSelect, menuItems = menuItems)
+            BottomMenuBar(
+                navController = navController,
+                selected = selected,
+                onSelect = onSelect,
+                menuItems = menuItems
+            )
         }
     ) {
 
@@ -251,7 +261,6 @@ fun ProfileAvatar(
     }
 }
 
-
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ProfileInfo(
@@ -405,8 +414,16 @@ fun GenderChosen(
         horizontalArrangement = Arrangement.SpaceAround,
         modifier = Modifier.fillMaxWidth()
     ) {
-        DefaultRadioButton(text = "Male", selected = selected == 0, onSelect = {onGenderChoose(0)})
-        DefaultRadioButton(text = "Female", selected = selected == 1, onSelect = { onGenderChoose(1) })
+        DefaultRadioButton(
+            text = "Male",
+            selected = selected == 0,
+            onSelect = { onGenderChoose(0) }
+        )
+        DefaultRadioButton(
+            text = "Female",
+            selected = selected == 1,
+            onSelect = { onGenderChoose(1) }
+        )
     }
 }
 

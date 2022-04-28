@@ -35,7 +35,6 @@ import java.util.*
 @Composable
 fun MainScreen(
     navController: NavHostController,
-    selected: String,
     onSelect: (String) -> Unit,
     menuItems: List<BottomNavigationItem>,
     viewModel: MainViewModel

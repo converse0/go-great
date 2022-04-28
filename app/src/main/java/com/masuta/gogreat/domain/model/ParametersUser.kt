@@ -10,7 +10,7 @@ data class ParametersUserSet(
     val gender: Int,
     val height: Int,
     val weight: Int,
-    val uid: String?=null,
+    val uid: String? = null,
     var image: ByteArray? = null
 )
 
@@ -20,7 +20,7 @@ data class ParametersUserGet(
     val activity: String = "Basic",
     val age: Int,
     val desiredWeight: Int,
-    val diet: String="Balanced",
+    val diet: String = "Balanced",
     val eat: Int,
     val gender: Int,
     val height: Int,
