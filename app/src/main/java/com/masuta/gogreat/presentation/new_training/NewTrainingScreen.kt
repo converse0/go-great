@@ -140,7 +140,7 @@ fun NewTrainingScreen(
                     newTrain = Training(
                         exercises = listExercises.value,
                         interval = "50s",
-                        name = name.value,
+                        name = name.value.replace(" ", "_"),
                         date = date.value
                     )
                 )
