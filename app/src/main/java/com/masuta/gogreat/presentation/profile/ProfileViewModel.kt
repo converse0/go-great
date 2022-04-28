@@ -28,7 +28,7 @@ class ProfileViewModel @Inject constructor(
 
     var isUploadImage = mutableStateOf(true)
 
-    var userParams = mutableStateOf(ParametersUser())
+    var userParams = mutableStateOf<ParametersUser?>(null)
 
     var isDataLoad: Boolean = true
         get() = repository.isLoadData
@@ -113,9 +113,10 @@ class ProfileViewModel @Inject constructor(
             val resp = getUserParams()
             resp.data?.let {
                 gender.value = it.gender
+                val params = ParametersUser().copy(image = it.image)
+                repository.setLocalProfileParams(params)
             } ?: resp.code?.let {
                 resp.message?.let { errorMessage = it }
-
                 gender.value = when(it){
                     16 -> -6
                     2,5 -> 6
@@ -159,10 +160,11 @@ class ProfileViewModel @Inject constructor(
             return Pair(null, it)
 
 //            userParams.value = ParametersUser(image = "https://cdn-icons-png.flaticon.com/512/5110/5110429.png")
-            //userParams.value = userParams.value.apply { image = "https://cdn-icons-png.flaticon.com/512/5110/5110429.png" }
+
+            //            userParams.value = userParams.value.apply { image = it }
+//            repository.setLocalProfileParams(userParams.value)
 
             //println("OLD IMAGE LOCAL: ${repository.getLocalProfileParams()?.image}")
-            //repository.setLocalProfileParams(userParams.value)
 
             //userParams.value = userParams.value.apply { image = "$it?id=1321" }
             //repository.setLocalProfileParams(userParams.value)

@@ -141,6 +141,7 @@ fun ProfileSection(
 //        val image = context.contentResolver.openInputStream(uri!!)
     }
 
+    userParams.value?.let { params ->
         LazyColumn(
             state = lazyListState,
             modifier = Modifier
@@ -154,11 +155,10 @@ fun ProfileSection(
                     bitmap = bitmap,
                     context = context,
                     viewModel = viewModel,
-                    profileImg = userParams
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 Text(
-                    text = viewModel.userParams.value.username,
+                    text = params.username,
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center,
@@ -178,14 +178,15 @@ fun ProfileSection(
                         }
                 )
                 Spacer(modifier = Modifier.height(20.dp))
-                if (viewModel.userParams.value.uid != null) {
+//                if (viewModel.userParams.value.uid != null) {
                     ProfileInfo(
                         lazyListState = lazyListState,
                         viewModel = viewModel,
-                        userParams = userParams.value,
+                        userParams = params,
                     )
-                }
+//                }
                 Spacer(Modifier.height(60.dp))
+            }
         }
     }
 }
@@ -197,9 +198,11 @@ fun ProfileAvatar(
     bitmap: MutableState<Bitmap?>,
     context: Context,
     viewModel: ProfileViewModel,
-    profileImg: MutableState<ParametersUser>
+//    profileImg: MutableState<ParametersUser>
 ) {
-    var image by remember { mutableStateOf(viewModel.userParams.value.image) }
+//    println("FIRST RENDER IMAGE: ${profileImg.value}")
+    var image by remember { mutableStateOf(viewModel.userParams.value?.image) }
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxWidth()
