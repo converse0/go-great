@@ -5,7 +5,6 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
-import com.masuta.gogreat.domain.handlers.CreateUserParams
 import com.masuta.gogreat.domain.handlers.GetUserParams
 import com.masuta.gogreat.domain.model.ParametersUser
 import com.masuta.gogreat.domain.model.ParametersUserSet
@@ -13,13 +12,11 @@ import com.masuta.gogreat.domain.model.UserActivity
 import com.masuta.gogreat.domain.model.UserDiet
 import com.masuta.gogreat.domain.repository.ProfileRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val createUserParams: CreateUserParams,
     private val getUserParams: GetUserParams,
     private val repository: ProfileRepository
 ) :ViewModel() {
@@ -78,35 +75,7 @@ class ProfileViewModel @Inject constructor(
                 }
             }
         }
-
-//        viewModelScope.launch {
-//            val resp = getUserParams()
-//            if (resp.data!= null) {
-//
-//                println(resp.data.age)
-//                println(resp.data.username)
-//                username.value = resp.data.username
-//                age.value = resp.data.age.toString()
-//                timesEat.value = resp.data.eat.toString()
-//                weight.value = resp.data.weight.toString()
-//                height.value = resp.data.height.toString()
-//                desiredWeight.value = resp.data.desiredWeight.toString()
-//                gender.value = resp.data.gender
-//                diet.value = UserDiet.valueOf(resp.data.diet.uppercase()).value.toFloat()
-//                activity.value = UserActivity.valueOf(resp.data.activity.uppercase()).value.toFloat()
-//                println("Activity: ${UserActivity.valueOf(resp.data.activity.uppercase()).value}")
-//                resp.data.uid?.let { uid.value = it }
-//            } else if (resp.code!=null) {
-//                resp.message?.let { errorMessage = it }
-//                fail.value = true
-//                when(resp.code) {
-//                    16 -> routeTo(navController, "sign_in")
-//                    2, 5, 13 -> routeTo(navController, "about")
-//                }
-//            }
-//
-//        }
-}
+    }
 
     fun getParameters(gender: MutableState<Int>) {
         viewModelScope.launch {
@@ -158,18 +127,6 @@ class ProfileViewModel @Inject constructor(
         resp.data?.let {
             println("uploadImage: $it")
             return Pair(null, it)
-
-//            userParams.value = ParametersUser(image = "https://cdn-icons-png.flaticon.com/512/5110/5110429.png")
-
-            //            userParams.value = userParams.value.apply { image = it }
-//            repository.setLocalProfileParams(userParams.value)
-
-            //println("OLD IMAGE LOCAL: ${repository.getLocalProfileParams()?.image}")
-
-            //userParams.value = userParams.value.apply { image = "$it?id=1321" }
-            //repository.setLocalProfileParams(userParams.value)
-
-            //println("NEW IMAGE LOCAL: ${repository.getLocalProfileParams()?.image}")
         } ?: resp.message?.let {
             println("uploadImage error: $it")
             return Pair(it, null)

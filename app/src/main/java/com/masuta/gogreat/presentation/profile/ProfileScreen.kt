@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
@@ -18,7 +17,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -35,15 +33,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.core.graphics.drawable.toBitmap
 import androidx.navigation.NavHostController
-import com.bumptech.glide.Glide
-import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions.withCrossFade
 import com.bumptech.glide.request.RequestOptions
-import com.masuta.gogreat.R
 import com.masuta.gogreat.domain.model.ParametersUser
 import com.masuta.gogreat.domain.model.UserActivity
 import com.masuta.gogreat.domain.model.UserDiet
@@ -55,16 +47,10 @@ import com.masuta.gogreat.presentation.components.SliderWithLabelUserActivity
 import com.masuta.gogreat.presentation.ui.theme.Green
 import com.masuta.gogreat.presentation.ui.theme.Red
 import com.skydoves.landscapist.glide.GlideImage
-import com.skydoves.landscapist.glide.LocalGlideRequestBuilder
 import kotlinx.coroutines.*
-
 
 fun String.firstCharToUpperCase(): String {
     return this.substring(0, 1).uppercase() + this.substring(1)
-}
-
-fun String.normalizeString(): String {
-    return this.replace("_", " ")
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -129,16 +115,15 @@ fun ProfileSection(
 
     val lazyListState = rememberLazyListState()
 
-    // Image
-
-    var imageUri by remember { mutableStateOf<Uri?>(null) }
     val context = LocalContext.current
+    var imageUri by remember { mutableStateOf<Uri?>(null) }
     val bitmap = remember { mutableStateOf<Bitmap?>(null) }
 
-    val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
         viewModel.isUploadImage.value = true
         imageUri = uri
-//        val image = context.contentResolver.openInputStream(uri!!)
     }
 
     userParams.value?.let { params ->
@@ -146,7 +131,6 @@ fun ProfileSection(
             state = lazyListState,
             modifier = Modifier
                 .fillMaxWidth()
-//            .padding(horizontal = 8.dp)
         ) {
             items(1) {
                 println("imageRec: $userParams")
@@ -178,13 +162,11 @@ fun ProfileSection(
                         }
                 )
                 Spacer(modifier = Modifier.height(20.dp))
-//                if (viewModel.userParams.value.uid != null) {
                     ProfileInfo(
                         lazyListState = lazyListState,
                         viewModel = viewModel,
                         userParams = params,
                     )
-//                }
                 Spacer(Modifier.height(60.dp))
             }
         }
@@ -198,9 +180,8 @@ fun ProfileAvatar(
     bitmap: MutableState<Bitmap?>,
     context: Context,
     viewModel: ProfileViewModel,
-//    profileImg: MutableState<ParametersUser>
 ) {
-//    println("FIRST RENDER IMAGE: ${profileImg.value}")
+
     var image by remember { mutableStateOf(viewModel.userParams.value?.image) }
 
     Column(
@@ -300,7 +281,10 @@ fun ProfileInfo(
             color = Color.Black
         )
         Spacer(Modifier.height(10.dp))
-        GenderChosen(selected = gender.value, onGenderChoose = { gender.value = it })
+        GenderChosen(
+            selected = gender.value,
+            onGenderChoose = { gender.value = it }
+        )
         Spacer(Modifier.height(10.dp))
         InputTextField(
             text = "Age",
@@ -404,7 +388,6 @@ fun ProfileInfo(
                             ).show()
                         }
                     }
-
                     lazyListState.scrollToItem(0)
                 }
             }
@@ -449,66 +432,4 @@ fun DefaultRadioButton(
         )
     }
 }
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun LineSelectPoint() {
-    Column(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Divider(
-                color = Color.Gray
-            )
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Box(
-                    modifier = Modifier
-                        .size(20.dp)
-                        .clip(CircleShape)
-                        .background(color = Color.DarkGray)
-                )
-                Box(
-                    modifier = Modifier
-                        .size(10.dp)
-                        .clip(CircleShape)
-                        .background(color = Color.Gray)
-                )
-                Box(
-                    modifier = Modifier
-                        .size(10.dp)
-                        .clip(CircleShape)
-                        .background(color = Color.Gray)
-                )
-                Box(
-                    modifier = Modifier
-                        .size(10.dp)
-                        .clip(CircleShape)
-                        .background(color = Color.Gray)
-                )
-            }
-        }
-        Spacer(Modifier.height(10.dp))
-        Card(
-            containerColor = Color.Gray,
-            shape = RoundedCornerShape(14.dp),
-        ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(horizontal = 40.dp, vertical = 10.dp)
-            ) {
-                Text(text = "Basic", fontSize = 14.sp)
-                Text(text = "No Activity", fontSize = 12.sp)
-            }
-        }
-    }
-}
-
-
 

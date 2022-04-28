@@ -58,7 +58,8 @@ class ProfileRepositoryImpl @Inject constructor(
 ): ProfileRepository {
     private var trainUrl = "https://api.gogreat.com/v1/profile"
     private var httpClient: HttpClient? = null
-    private val maxImageLimit = 3 * 1024
+    private val kilobyte = 1024
+    private val maxImageLimit = 3 * kilobyte
     init {
         context.resources.getInteger(R.integer.request_timeout).let {
             httpClient = client.makeClient(it.toLong())
@@ -161,12 +162,12 @@ class ProfileRepositoryImpl @Inject constructor(
 
     override suspend fun uploadImage(image: ImageBitmap): ResponseParamsIm {
 
-    val convertedImage = imageBitmapToByteArray(image.asAndroidBitmap())
+        val convertedImage = imageBitmapToByteArray(image.asAndroidBitmap())
 
         println("userToken: $userToken")
-        println("image: ${convertedImage.size / 1024}")
+        println("image: ${convertedImage.size / kilobyte}")
         val imageName = "image3.jpg"
-        val imageSizeInKB = convertedImage.size / 1024
+        val imageSizeInKB = convertedImage.size / kilobyte
         if (imageSizeInKB > maxImageLimit) {
             return ResponseParamsIm(
                 message = "Image size is too big",
