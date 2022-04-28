@@ -166,6 +166,7 @@ class ProfileRepositoryImpl @Inject constructor(
         }
         try {
            httpClient?.post<ResponseParamsIm>("$trainUrl/v1/files") {
+
                 headers {
                     append("Authorization", "Bearer $userToken")
                 }
@@ -204,6 +205,7 @@ class ProfileRepositoryImpl @Inject constructor(
 
     override suspend fun setLocalProfileParams(params: ParametersUser) {
         profileParams.value = params
+
     }
 
 }

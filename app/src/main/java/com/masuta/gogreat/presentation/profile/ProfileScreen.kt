@@ -12,6 +12,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -48,6 +49,7 @@ import com.masuta.gogreat.presentation.ui.theme.Green
 import com.masuta.gogreat.presentation.ui.theme.Red
 import com.skydoves.landscapist.glide.GlideImage
 import kotlinx.coroutines.*
+
 
 fun String.firstCharToUpperCase(): String {
     return this.substring(0, 1).uppercase() + this.substring(1)
@@ -257,10 +259,12 @@ fun ProfileAvatar(
 
                 }
             }
+
         }
     }
 }
 
+@SuppressLint("ShowToast")
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ProfileInfo(
@@ -294,6 +298,7 @@ fun ProfileInfo(
             selected = gender.value,
             onGenderChoose = { gender.value = it }
         )
+
         Spacer(Modifier.height(10.dp))
         InputTextField(
             text = "Age",
@@ -364,6 +369,7 @@ fun ProfileInfo(
         MainTextButton(
             text = "Save",
             color = Red,
+
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 20.dp)
@@ -408,6 +414,7 @@ fun ProfileInfo(
 fun GenderChosen(
     onGenderChoose: (Int) -> Unit,
     selected: Int,
+    onChooseGender: (Int) -> Unit
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -424,6 +431,7 @@ fun GenderChosen(
             selected = selected == 1,
             onSelect = { onGenderChoose(1) }
         )
+
     }
 }
 
