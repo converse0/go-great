@@ -16,8 +16,11 @@ class ExerciseViewModel @Inject constructor(
     private val listValuesForSliders: ListsValuesForSliders
 ): ViewModel() {
 
-    val listRelax = listValuesForSliders.getRelaxList()
-    val listDuration = listValuesForSliders.getDurationList()
+    val listRelax = listValuesForSliders.getRelaxList
+    val listDuration = listValuesForSliders.getDurationList
+    val listCounts = listValuesForSliders.getCountsList
+    val listRepetitions = listValuesForSliders.getRepetitionsList
+    val listSets = listValuesForSliders.getStepsList
 
     fun getExercises(id: Long, exercisesList: MutableState<List<TrainingExercise>>) {
         viewModelScope.launch {

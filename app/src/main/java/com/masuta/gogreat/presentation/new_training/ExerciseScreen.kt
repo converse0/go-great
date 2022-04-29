@@ -202,9 +202,9 @@ fun NewOtherExerciseParameters(
     exercise: TrainingExercise,
     onSubmit: () -> Unit
 ) {
-    val counts = listOf(10, 20, 30, 40)
-    val sets = listOf(3, 4, 5)
-    val repetitions = listOf(15, 30, 50)
+    val counts = viewModel.listCounts
+    val sets = viewModel.listSets
+    val repetitions = viewModel.listRepetitions
     val relax = viewModel.listRelax
     val duration = viewModel.listDuration
 

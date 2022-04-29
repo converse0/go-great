@@ -1,12 +1,27 @@
 <resources>
     <string name="app_name">GoGreat</string>
     <integer name="request_timeout">50000</integer>
+
     <integer name="relax_min">5</integer>
     <integer name="relax_max">60</integer>
     <integer name="relax_step">5</integer>
-    <integer name="duration_min">5</integer>
+
+    <integer name="duration_min">30</integer>
     <integer name="duration_max">60</integer>
-    <integer name="duration_step">5</integer>
+    <integer name="duration_step">30</integer>
+
+    <integer name="sets_min">1</integer>
+    <integer name="sets_max">10</integer>
+    <integer name="sets_step">1</integer>
+
+    <integer name="repetitions_min">5</integer>
+    <integer name="repetitions_max">30</integer>
+    <integer name="repetitions_step">5</integer>
+
+    <integer name="counts_min">5</integer>
+    <integer name="counts_max">30</integer>
+    <integer name="counts_step">5</integer>
+
     <string name="train_url">https://boilerplate-go-trening.herokuapp.com</string>
     <string name="auth_url">https://boilerplate-go.herokuapp.com</string>
 </resources>
