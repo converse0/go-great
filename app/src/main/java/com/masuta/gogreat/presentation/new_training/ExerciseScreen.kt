@@ -194,7 +194,13 @@ fun NewExerciseScreen(
 }
 
 fun String.toInteger(): Int = this.filter { it.isDigit() }.toIntOrNull() ?: 30
-fun Int.findIndexToFloat(listItems: List<Int>): Float = listItems.indexOf(this).toFloat()
+fun Int.findIndexToFloat(listItems: List<Int>): Float {
+    val index = listItems.indexOf(this)
+    return when(index) {
+        -1 -> 0.toFloat()
+        else -> index.toFloat()
+    }
+}
 
 @Composable
 fun NewOtherExerciseParameters(
