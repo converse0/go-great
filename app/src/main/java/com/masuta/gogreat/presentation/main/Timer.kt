@@ -19,11 +19,13 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.delay
 
 @Composable
@@ -71,57 +73,41 @@ fun Timer(
         }
     }
 
+    val ctx = LocalContext.current
+    val text = remember {
+        mutableStateOf("Start")
+    }
+
+    val viewModel: TimerViewModel = hiltViewModel()
+
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.padding(8.dp)
+        modifier = Modifier.fillMaxWidth()
     ) {
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = modifier
-                .onSizeChanged {
-                    size = it
-                }
-        ) {
-            Canvas(modifier = modifier) {
-                drawArc(
-                    color = inactiveBarColor,
-                    startAngle = -270f,
-                    sweepAngle = 360f,
-                    useCenter = false,
-                    size = Size(size.width.toFloat(), size.height.toFloat()),
-                    style = Stroke(strokeWidth.toPx(), cap = StrokeCap.Round)
-                )
-                drawArc(
-                    color = activeBarColor,
-                    startAngle = -270f,
-                    sweepAngle = 360f * value,
-                    useCenter = false,
-                    size = Size(size.width.toFloat(), size.height.toFloat()),
-                    style = Stroke(strokeWidth.toPx(), cap = StrokeCap.Round)
-                )
-            }
+        Row(horizontalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxWidth()) {
+            viewModel.init((totalTime / 1000L).toInt())
             Text(
-                text = (currentTime / 1000L).toString(),
+                text = text.value,
                 fontSize = 44.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black
             )
         }
+        Spacer(Modifier.height(20.dp))
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxWidth()
         ) {
             TimerButtonWithText(
-                text = if(isTimerRunning) "Pause" else "Start",
-                icon = if(isTimerRunning) Icons.Default.Pause else Icons.Default.PlayArrow,
+                text = "Play",
+                icon = Icons.Default.PlayArrow,
                 color = Color.Green,
                 onClick = {
-                    if(currentTime <= 0L) {
-                        currentTime = totalTime
-                        isTimerRunning = true
-                    } else {
-                        isTimerRunning = !isTimerRunning
-                    }
+                    viewModel.start(text, ctx, onTimerEnd = onTimerEnd)
+//                isTimerRunning = false
+//                currentTime = totalTime
+//                value = 1f
                 }
             )
             TimerButtonWithText(
@@ -129,14 +115,125 @@ fun Timer(
                 icon = Icons.Default.Stop,
                 color = Color.Red,
                 onClick = {
-                    isTimerRunning = false
-                    currentTime = totalTime
-                    value = 1f
+                    viewModel.stop()
+//                isTimerRunning = false
+//                currentTime = totalTime
+//                value = 1f
                 }
             )
         }
     }
+
+//    Column(
+//        horizontalAlignment = Alignment.CenterHorizontally,
+//        modifier = Modifier.padding(8.dp)
+//    ) {
+//        Box(
+//            contentAlignment = Alignment.Center,
+//            modifier = modifier
+//                .onSizeChanged {
+//                    size = it
+//                }
+//        ) {
+//
+////            Canvas(modifier = modifier) {
+////                drawArc(
+////                    color = inactiveBarColor,
+////                    startAngle = -270f,
+////                    sweepAngle = 360f,
+////                    useCenter = false,
+////                    size = Size(size.width.toFloat(), size.height.toFloat()),
+////                    style = Stroke(strokeWidth.toPx(), cap = StrokeCap.Round)
+////                )
+////                drawArc(
+////                    color = activeBarColor,
+////                    startAngle = -270f,
+////                    sweepAngle = 360f * value,
+////                    useCenter = false,
+////                    size = Size(size.width.toFloat(), size.height.toFloat()),
+////                    style = Stroke(strokeWidth.toPx(), cap = StrokeCap.Round)
+////                )
+////            }
+////            Text(
+////                text = (currentTime / 1000L).toString(),
+////                fontSize = 44.sp,
+////                fontWeight = FontWeight.Bold,
+////                color = Color.Black
+////            )
+//        }
+//
+//        Row(
+//            verticalAlignment = Alignment.CenterVertically,
+//            horizontalArrangement = Arrangement.Center
+//        ) {
+//            TimerButtonWithText(
+//                text = if(isTimerRunning) "Pause" else "Start",
+//                icon = if(isTimerRunning) Icons.Default.Pause else Icons.Default.PlayArrow,
+//                color = Color.Green,
+//                onClick = {
+//                    if(currentTime <= 0L) {
+//                        currentTime = totalTime
+//                        isTimerRunning = true
+//                    } else {
+//                        isTimerRunning = !isTimerRunning
+//                    }
+//                }
+//            )
+//            TimerButtonWithText(
+//                text = "Stop",
+//                icon = Icons.Default.Stop,
+//                color = Color.Red,
+//                onClick = {
+//                    isTimerRunning = false
+//                    currentTime = totalTime
+//                    value = 1f
+//                }
+//            )
+//        }
+//    }
 }
+
+//@Composable
+//fun CountDownTraining(sec: Int, viewModel: TimerViewModel) {
+//    val ctx = LocalContext.current
+//    val text = remember {
+//        mutableStateOf("Start")
+//    }
+//
+//    val viewModel: TimerViewModel = hiltViewModel()
+//
+//    var counter by remember {
+//        mutableStateOf(0)
+//    }
+//
+//    Spacer(modifier = Modifier.height(50.0.dp))
+//    Row(horizontalArrangement = Arrangement.Center,
+//        modifier = Modifier.fillMaxWidth()) {
+//        var col by remember {
+//            mutableStateOf(Color(0xFF2ABD20))
+//        }
+//        viewModel.init(sec)
+//        FloatingActionButton(
+//            onClick = {
+//                counter++
+//                if (counter % 2 == 1) {
+//                    text.value = "Stop"
+//                    viewModel.start(text, ctx)
+//                    col = Color(0xFFE53935)
+//                } else {
+//                    text.value = "Start"
+//                    viewModel.stop()
+//                    col = Color(0xFF2ABD20)
+//                }
+//            },
+//            containerColor = col,
+//            modifier = Modifier.size(150.dp)
+//        ) {
+//            Text(text.value, fontSize = 20.sp)
+//        }
+//    }
+//
+//}
 
 @Composable
 fun TimerButtonWithText(
