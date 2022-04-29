@@ -91,14 +91,14 @@ class TrainRepositoryImpl @Inject constructor(
 
     override suspend fun save(newTrain: Training) {
         try {
-            httpClient?.post<String>("$trainUrl/user/trening") {
+           val resp =  httpClient?.post<String>("$trainUrl/user/trening") {
                 contentType(ContentType.Application.Json)
                 headers {
                     append("Authorization", "Bearer $userToken")
                 }
                 body = newTrain
             }
-            saveLocal(newTrain)
+            println("save resp: $resp")
         } catch (e: Exception) {
             e.localizedMessage?.let {
                 CoroutineScope(Dispatchers.Main).launch {

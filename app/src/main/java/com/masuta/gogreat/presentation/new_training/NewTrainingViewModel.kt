@@ -7,6 +7,8 @@ import com.masuta.gogreat.domain.model.Training
 import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.domain.repository.TrainRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -15,13 +17,11 @@ class NewTrainingViewModel @Inject constructor(
     private val repository: TrainRepository
 ): ViewModel() {
 
-    fun saveTrain(newTrain: Training) {
-        viewModelScope.launch {
+   suspend fun saveTrain(newTrain: Training) {
             repository.save(newTrain)
             repository.workoutsDataReload = true
             repository.pastWorkoutsDataReload = true
             repository.currentWorkoutDataReload = true
-        }
     }
 
     fun getLocalExercises(list: MutableState<List<TrainingExercise>>) {

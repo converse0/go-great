@@ -50,6 +50,7 @@ class MainViewModel @Inject constructor(
                 myTrains?.let { trains ->
 
                     val localList = trains.map { it.validateExerciseData() }
+                    println("localList: ${localList.size}")
                     list.value = localList
                     repository.setLocalWorkouts(localList)
                 }
