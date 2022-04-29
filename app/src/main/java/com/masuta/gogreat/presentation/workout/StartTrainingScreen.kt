@@ -42,6 +42,7 @@ fun StartTrainingScreen(
 ) {
     val isEditModal = remember { mutableStateOf(false) }
     val isModalOpen = remember { mutableStateOf(false) }
+    val isDurationTimer = remember { mutableStateOf(false) }
 
     val context = LocalContext.current
 
@@ -93,6 +94,9 @@ fun StartTrainingScreen(
                     },
                     onOpenEdit = {
                         isEditModal.value = true
+                    },
+                    onDurationTimer = {
+                        isDurationTimer.value = true
                     }
                 )
             }
@@ -111,6 +115,17 @@ fun StartTrainingScreen(
             },
         )
     }
+
+    if (isDurationTimer.value) {
+        ModalTimer(
+            totalTime = currentExercise.duration.toInteger().toLong(),
+            viewModel = viewModel,
+            onDismiss = {
+                isDurationTimer.value = false
+            }
+        )
+    }
+
     if (isEditModal.value) {
         val weight = remember { mutableStateOf("") }
         val time = remember { mutableStateOf(currentExercise.relax.toInteger()) }
@@ -212,7 +227,8 @@ fun TrainingInfo(
     exercise: TrainingExercise,
     exerciseSets: Int,
     onOpenModal: () -> Unit,
-    onOpenEdit: () -> Unit
+    onOpenEdit: () -> Unit,
+    onDurationTimer: () -> Unit
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -243,8 +259,10 @@ fun TrainingInfo(
         )
     }
     ButtonSection(
+        exercise = exercise,
         onOpenModal = onOpenModal,
-        onOpenEdit = onOpenEdit
+        onOpenEdit = onOpenEdit,
+        onDurationTimer = onDurationTimer
     )
     Row(
         verticalAlignment = Alignment.CenterVertically
@@ -313,8 +331,10 @@ fun DescriptionSection(
 
 @Composable
 fun ButtonSection(
+    exercise: TrainingExercise,
     onOpenModal: () -> Unit,
-    onOpenEdit: () -> Unit
+    onOpenEdit: () -> Unit,
+    onDurationTimer: () -> Unit
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -331,6 +351,20 @@ fun ButtonSection(
         ) {
             Text(text = "I managed!", color = Color.White)
         }
+
+        if (exercise.type == "other") {
+            TextButton(
+                onClick = onDurationTimer,
+                modifier = Modifier
+                    .width(100.dp)
+                    .height(50.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Green),
+                shape = RoundedCornerShape(16.dp)
+            ) {
+                Text(text = "Go", color = Color.White)
+            }
+        }
+
         TextButton(
             onClick = onOpenEdit,
             modifier = Modifier
