@@ -75,6 +75,8 @@ fun SignInForm(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
+    val isEnabledButton = remember { mutableStateOf(true) }
+
     InputTextField(
         text = "Email",
         value = email,
@@ -91,10 +93,12 @@ fun SignInForm(
     MainTextButton(
         text = "Login",
         color = Red,
+        enabled = isEnabledButton.value,
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 40.dp)
     ) {
+        isEnabledButton.value = false
         val user = User(email = email, password = password)
 
         CoroutineScope(Dispatchers.IO).launch {
@@ -117,6 +121,7 @@ fun SignInForm(
                     }
                 }
             }
+            isEnabledButton.value = true
         }
     }
     Row(
