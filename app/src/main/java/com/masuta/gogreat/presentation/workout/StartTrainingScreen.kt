@@ -31,6 +31,7 @@ import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DefaultDataSource
 import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.presentation.main.Timer
+import com.masuta.gogreat.presentation.new_training.findIndexToFloat
 import com.masuta.gogreat.presentation.new_training.toInteger
 import com.masuta.gogreat.presentation.ui.theme.Green
 
@@ -134,10 +135,18 @@ fun StartTrainingScreen(
         }
         val numberOfRepetitions =
             remember { mutableStateOf(currentExercise.numberOfRepetitions.toString()) }
+
+        val duration = viewModel.listDuration
+
+        val durationTime = remember {
+            mutableStateOf(currentExercise.duration.toInteger().findIndexToFloat(duration))
+        }
+
         StartTrainingModal(
             viewModel,
             weight,
             time,
+            durationTime,
             numberOfSets,
             numberOfRepetitions,
             onSave = {
@@ -146,7 +155,8 @@ fun StartTrainingScreen(
                         exercise.copy(
                             relax = time.value.toString() + "s",
                             numberOfSets = numberOfSets.value.toInt(),
-                            numberOfRepetitions = numberOfRepetitions.value.toInt()
+                            numberOfRepetitions = numberOfRepetitions.value.toInt(),
+                            duration = "${duration.get(durationTime.value.toInt())}s",
                         )
                     } else {
                         exercise
@@ -377,7 +387,10 @@ fun ButtonSection(
         }
 
         TextButton(
-            onClick = onOpenEdit,
+            onClick = {
+                onOpenEdit()
+                isEnabled.value = true
+            },
             modifier = Modifier
                 .width(100.dp)
                 .height(50.dp),

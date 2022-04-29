@@ -29,6 +29,7 @@ class StartTrainingViewModel @Inject constructor(
 ): ViewModel() {
 
     val listRelax = listValuesForSliders.getRelaxList
+    val listDuration = listValuesForSliders.getDurationList
 
     val default = TrainingExercise(0, "20s", 10, 10, "Test", "20s", "other", "")
 
