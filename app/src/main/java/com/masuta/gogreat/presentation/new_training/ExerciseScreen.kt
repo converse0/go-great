@@ -205,8 +205,8 @@ fun NewOtherExerciseParameters(
     val counts = listOf(10, 20, 30, 40)
     val sets = listOf(3, 4, 5)
     val repetitions = listOf(15, 30, 50)
-    val relax = listOf(5, 20, 30, 50)
-    val duration = listOf(5, 20, 30, 60)
+    val relax = viewModel.listRelax
+    val duration = viewModel.listDuration
 
     val count = remember { mutableStateOf(exercise.count.findIndexToFloat(counts)) }
     val numberOfSets = remember {

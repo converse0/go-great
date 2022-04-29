@@ -135,6 +135,7 @@ fun StartTrainingScreen(
         val numberOfRepetitions =
             remember { mutableStateOf(currentExercise.numberOfRepetitions.toString()) }
         StartTrainingModal(
+            viewModel,
             weight,
             time,
             numberOfSets,

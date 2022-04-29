@@ -25,6 +25,7 @@ import com.masuta.gogreat.presentation.ui.theme.Green
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun StartTrainingModal(
+    viewModel: StartTrainingViewModel,
     weight: MutableState<String>,
     time: MutableState<Int>,
     numberOfSets: MutableState<String>,
@@ -32,7 +33,9 @@ fun StartTrainingModal(
     onSave: () -> Unit,
     onDismiss: () -> Unit
 ) {
+
     val keyboardController = LocalSoftwareKeyboardController.current
+    val relax = viewModel.listRelax
 
     Box(
         contentAlignment = Alignment.Center,
@@ -77,7 +80,6 @@ fun StartTrainingModal(
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(10.dp)
                         )
-                        val relax = listOf(5, 15, 30, 50)
                         SliderWithLabel(
                             value = 0f,
                             selectedItem = time,
