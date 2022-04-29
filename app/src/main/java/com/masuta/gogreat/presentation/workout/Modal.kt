@@ -93,6 +93,13 @@ fun StartTrainingModal(
                         )
                         Spacer(Modifier.height(10.dp))
                         if (viewModel.currentExercise.value.type == "other") {
+                            Text(
+                                text = "Choose duration time, sec",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = Color.Black,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier.padding(10.dp)
+                            )
                             SliderWithLabelUserActivity (
                                 selectedItem = durationTime,
                                 valueRange = 0f..duration.size.minus(1).toFloat(),
