@@ -4,10 +4,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,6 +20,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import com.masuta.gogreat.R
 import com.masuta.gogreat.domain.model.ExerciseType
+import com.masuta.gogreat.presentation.ui.theme.Green
 
 @Composable
 fun FemalePersonSection(
@@ -67,20 +68,20 @@ fun FemalePersonSection(
             top.linkTo(press.top)
         }
         constrain(biceps) {
-            start.linkTo(startGuidLine)
-            bottom.linkTo(bottomGuidLine)
+            start.linkTo(startGuidLine, 10.dp)
+            top.linkTo(parent.top, 10.dp)
         }
         constrain(triceps) {
-            start.linkTo(startGuidLine)
-            bottom.linkTo(bottomGuidLine)
+            start.linkTo(startGuidLine, 10.dp)
+            top.linkTo(parent.top, 10.dp)
         }
         constrain(shoulder) {
-            start.linkTo(startGuidLine)
-            bottom.linkTo(bottomGuidLine)
+            start.linkTo(startGuidLine, 10.dp)
+            top.linkTo(parent.top, 10.dp)
         }
         constrain(other) {
             start.linkTo(startGuidLine)
-            bottom.linkTo(bottomGuidLine)
+            top.linkTo(parent.top)
         }
     }
 
@@ -115,7 +116,22 @@ fun FemalePersonSection(
                     ExerciseType.BICEPS -> "biceps"
                     ExerciseType.OTHER -> "other"
                 }
-                IconButtonAddExercise(modifier = Modifier.layoutId(layoutId), onClick = { onNewExercise(type) })
+                if (layoutId == "other") {
+                    TextButton(
+                        onClick = { onNewExercise(type) },
+                        colors = ButtonDefaults.buttonColors(containerColor = Green),
+                        shape = RoundedCornerShape(16.dp),
+                        modifier = Modifier.layoutId(layoutId)
+                    ) {
+                        Text(
+                            text = "Other",
+                            color = Color.White,
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                    }
+                } else {
+                    IconButtonAddExercise(modifier = Modifier.layoutId(layoutId), onClick = { onNewExercise(type) })
+                }
             }
         }
     }
@@ -147,12 +163,12 @@ fun MalePersonSection(
             end.linkTo(parent.end)
         }
         constrain(arms) {
-            end.linkTo(startGuidLine, 25.dp)
+            end.linkTo(startGuidLine, 30.dp)
             top.linkTo(topGuidLine, 15.dp)
         }
         constrain(legs) {
             top.linkTo(bottomGuidLine, 40.dp)
-            start.linkTo(person.start, 55.dp)
+            start.linkTo(person.start, 57.dp)
         }
         constrain(chest) {
             top.linkTo(topGuidLine, 5.dp)
@@ -167,20 +183,20 @@ fun MalePersonSection(
             top.linkTo(press.top)
         }
         constrain(biceps) {
-            start.linkTo(startGuidLine)
-            bottom.linkTo(bottomGuidLine)
+            start.linkTo(startGuidLine, 10.dp)
+            top.linkTo(parent.top, 10.dp)
         }
         constrain(triceps) {
-            start.linkTo(startGuidLine)
-            bottom.linkTo(bottomGuidLine)
+            start.linkTo(startGuidLine, 10.dp)
+            top.linkTo(parent.top, 10.dp)
         }
         constrain(shoulder) {
-            start.linkTo(startGuidLine)
-            bottom.linkTo(bottomGuidLine)
+            start.linkTo(startGuidLine, 10.dp)
+            top.linkTo(parent.top, 10.dp)
         }
         constrain(other) {
-            start.linkTo(startGuidLine)
-            bottom.linkTo(bottomGuidLine)
+            start.linkTo(arms.end, 5.dp)
+            top.linkTo(parent.top)
         }
     }
 
@@ -215,7 +231,22 @@ fun MalePersonSection(
                     ExerciseType.BICEPS -> "biceps"
                     ExerciseType.OTHER -> "other"
                 }
-                IconButtonAddExercise(modifier = Modifier.layoutId(layoutId), onClick = { onNewExercise(type) })
+                if (layoutId == "other") {
+                    TextButton(
+                        onClick = { onNewExercise(type) },
+                        colors = ButtonDefaults.buttonColors(containerColor = Green),
+                        shape = RoundedCornerShape(16.dp),
+                        modifier = Modifier.layoutId(layoutId)
+                    ) {
+                        Text(
+                            text = "Other",
+                            color = Color.White,
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                    }
+                } else {
+                    IconButtonAddExercise(modifier = Modifier.layoutId(layoutId), onClick = { onNewExercise(type) })
+                }
             }
         }
     }

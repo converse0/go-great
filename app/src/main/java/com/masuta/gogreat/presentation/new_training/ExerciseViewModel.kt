@@ -20,6 +20,7 @@ class ExerciseViewModel @Inject constructor(
 
             if(resp.data != null) {
                 exercisesList.value = resp.data
+                println("EXERCISE ${resp.data}")
             }
         }
     }
