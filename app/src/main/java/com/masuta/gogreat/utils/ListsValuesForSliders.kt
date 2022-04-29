@@ -27,12 +27,6 @@ class ListsValuesForSliders(
     private var repetitionsMin: Int = 0
     private var repetitionsStep: Int = 0
 
-    val getRelaxList = getList(relaxMin, relaxMax, relaxStep)
-    val getDurationList = getList(durationMin, durationMax, durationStep)
-    val getStepsList = getList(setsMin, setsMax, setsStep)
-    val getCountsList = getList(countsMin, countsMax, countsStep)
-    val getRepetitionsList = getList(repetitionsMin, repetitionsMax, repetitionsStep)
-
     init {
         context.resources.getInteger(R.integer.relax_max).let {
             relaxMax = it
@@ -84,6 +78,12 @@ class ListsValuesForSliders(
             repetitionsStep = it
         }
     }
+
+    val getRelaxList = getList(relaxMin, relaxMax, relaxStep)
+    val getDurationList = getList(durationMin, durationMax, durationStep)
+    val getStepsList = getList(setsMin, setsMax, setsStep)
+    val getCountsList = getList(countsMin, countsMax, countsStep)
+    val getRepetitionsList = getList(repetitionsMin, repetitionsMax, repetitionsStep)
 
     private fun getList(min: Int, max: Int, step: Int): List<Int> {
         val list: ArrayList<Int> = ArrayList()
