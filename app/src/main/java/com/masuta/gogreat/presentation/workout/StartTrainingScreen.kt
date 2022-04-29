@@ -337,13 +337,19 @@ fun ButtonSection(
     onOpenEdit: () -> Unit,
     onDurationTimer: () -> Unit
 ) {
+
+    val isEnabled = remember { mutableStateOf(true) }
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceEvenly,
         modifier = Modifier.fillMaxWidth()
     ) {
         TextButton(
-            onClick = onOpenModal,
+            onClick = {
+                onOpenModal()
+                isEnabled.value = true
+            },
             modifier = Modifier
                 .width(100.dp)
                 .height(50.dp),
@@ -355,7 +361,11 @@ fun ButtonSection(
 
         if (exercise.type == "other") {
             TextButton(
-                onClick = onDurationTimer,
+                enabled = isEnabled.value,
+                onClick = {
+                    onDurationTimer()
+                    isEnabled.value = false
+                },
                 modifier = Modifier
                     .width(100.dp)
                     .height(50.dp),
