@@ -225,91 +225,101 @@ fun NewOtherExerciseParameters(
         mutableStateOf(exercise.relax.toInteger().findIndexToFloat(relax))
     }
     val durationTime = remember {
-        mutableStateOf(exercise.duration.toInteger().findIndexToFloat(relax))
+        mutableStateOf(exercise.duration.toInteger().findIndexToFloat(duration))
     }
 
-    LazyColumn(
-        modifier = Modifier.fillMaxWidth()
+    Box(
+        modifier = Modifier.fillMaxSize()
     ) {
-        item {
-            Text(
-                text = "Count",
-                style = MaterialTheme.typography.bodySmall,
-            )
-            SliderWithLabelUserActivity (
-                selectedItem = count,
-                valueRange = 0f..counts.size.minus(1).toFloat(),
-                items = counts
-            )
-            Text(
-                text = "Number of sets",
-                style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier.padding(10.dp)
-            )
-            SliderWithLabelUserActivity (
-                selectedItem = numberOfSets,
-                valueRange = 0f..sets.size.minus(1).toFloat(),
-                items = sets
-            )
-            Text(
-                text = "Number of repetitions",
-                style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier.padding(10.dp)
-            )
-            SliderWithLabelUserActivity (
-                selectedItem = numberOfRepetitions,
-                valueRange = 0f..repetitions.size.minus(1).toFloat(),
-                items = repetitions
-            )
-            Text(
-                text = "Choose relax time, sec",
-                style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier.padding(10.dp)
-            )
-            SliderWithLabelUserActivity (
-                selectedItem = relaxTime,
-                valueRange = 0f..relax.size.minus(1).toFloat(),
-                items = relax
-            )
-            // Duration Time
-
-            Text(
-                text = "Choose duration time, sec",
-                style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier.padding(10.dp)
-            )
-            SliderWithLabelUserActivity (
-                selectedItem = durationTime,
-                valueRange = 0f..duration.size.minus(1).toFloat(),
-                items = duration
-            )
-
-            TextButton(
-                onClick = {
-                    onSubmit()
-                    val ex = exercise.copy(
-                        count = counts.get(count.value.toInt()),
-                        numberOfRepetitions = repetitions.get(numberOfRepetitions.value.toInt()),
-                        relax = "${relax.get(relaxTime.value.toInt())}s",
-                        duration = "${duration.get(durationTime.value.toInt())}s",
-                        numberOfSets = sets.get(numberOfSets.value.toInt())
-                    )
-                    println("OTHER EXERCISE: $ex")
-                    viewModel.saveLocalExercise(ex)
-                },
-                colors = ButtonDefaults.buttonColors(containerColor = Red),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(40.dp)
-            ) {
+        LazyColumn(
+            modifier = Modifier.fillMaxWidth().padding(bottom = 100.dp)
+        ) {
+            item {
                 Text(
-                    text = "Submit",
-                    color = Color.White,
-                    modifier = Modifier.padding(vertical = 16.dp)
+                    text = "Count",
+                    style = MaterialTheme.typography.bodySmall,
+                )
+                SliderWithLabelUserActivity (
+                    selectedItem = count,
+                    valueRange = 0f..counts.size.minus(1).toFloat(),
+                    items = counts
+                )
+                Text(
+                    text = "Number of sets",
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.padding(10.dp)
+                )
+                SliderWithLabelUserActivity (
+                    selectedItem = numberOfSets,
+                    valueRange = 0f..sets.size.minus(1).toFloat(),
+                    items = sets
+                )
+                Text(
+                    text = "Number of repetitions",
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.padding(10.dp)
+                )
+                SliderWithLabelUserActivity (
+                    selectedItem = numberOfRepetitions,
+                    valueRange = 0f..repetitions.size.minus(1).toFloat(),
+                    items = repetitions
+                )
+                Text(
+                    text = "Choose relax time, sec",
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.padding(10.dp)
+                )
+                SliderWithLabelUserActivity (
+                    selectedItem = relaxTime,
+                    valueRange = 0f..relax.size.minus(1).toFloat(),
+                    items = relax
+                )
+                // Duration Time
+
+                Text(
+                    text = "Choose duration time, sec",
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.padding(10.dp)
+                )
+                SliderWithLabelUserActivity (
+                    selectedItem = durationTime,
+                    valueRange = 0f..duration.size.minus(1).toFloat(),
+                    items = duration
                 )
             }
         }
+        TextButton(
+            onClick = {
+                onSubmit()
+                val ex = exercise.copy(
+                    count = counts.get(count.value.toInt()),
+                    numberOfRepetitions = repetitions.get(numberOfRepetitions.value.toInt()),
+                    relax = "${relax.get(relaxTime.value.toInt())}s",
+                    duration = "${duration.get(durationTime.value.toInt())}s",
+                    numberOfSets = sets.get(numberOfSets.value.toInt())
+                )
+                println("OTHER EXERCISE: $ex")
+                viewModel.saveLocalExercise(ex)
+            },
+            colors = ButtonDefaults.buttonColors(containerColor = Red),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    start = 40.dp,
+                    end = 40.dp,
+                    top = 40.dp,
+                    bottom = 20.dp
+                )
+                .align(Alignment.BottomCenter)
+        ) {
+            Text(
+                text = "Submit",
+                color = Color.White,
+                modifier = Modifier.padding(vertical = 16.dp)
+            )
+        }
     }
+
 }
 
 @Composable
