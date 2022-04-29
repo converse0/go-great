@@ -7,7 +7,7 @@
     <integer name="relax_step">5</integer>
 
     <integer name="duration_min">30</integer>
-    <integer name="duration_max">60</integer>
+    <integer name="duration_max">90</integer>
     <integer name="duration_step">30</integer>
 
     <integer name="sets_min">1</integer>
