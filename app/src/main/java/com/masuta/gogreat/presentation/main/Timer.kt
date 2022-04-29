@@ -52,7 +52,7 @@ fun Timer(
         mutableStateOf(startTimer)
     }
 
-    if (currentTime % 1000L == 0L && currentTime < 5000L) {
+    if (currentTime % 1000L == 0L && currentTime <= 5000L) {
         onAlarmSound()
     }
 
