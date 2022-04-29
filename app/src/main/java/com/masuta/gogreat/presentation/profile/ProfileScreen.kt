@@ -295,7 +295,6 @@ fun ProfileInfo(
         )
         Spacer(Modifier.height(10.dp))
         GenderChosen(
-            onChooseGender = {},
             selected = gender.value,
             onChooseGender = { gender.value = it }
         )
