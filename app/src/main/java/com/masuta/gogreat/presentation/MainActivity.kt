@@ -135,12 +135,12 @@ fun ChoseStartScreen(
                 .makeText(context.applicationContext,
                 "Request timeout exceeded",
                     Toast.LENGTH_LONG).show()
-            startRouteName.value = "main"
+            startRouteName.value = "splash-screen"
 
         }
         else -> {
             println("Gender $gender")
-            startRouteName.value = "main"
+            startRouteName.value = "splash-screen"
         }
     }
 }
@@ -159,10 +159,10 @@ fun Navigation(items: List<BottomNavigationItem>) {
     }
     NavHost(
         navController = navController,
-        startDestination = "splash-screen",
+        startDestination = startRouteName.value,
     ) {
         composable(route = "splash-screen") {
-            AnimatedSplashScreen(navController, startRouteName.value)
+            AnimatedSplashScreen(navController)
         }
         composable(route = "main") {
             MainScreen(

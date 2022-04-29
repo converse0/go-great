@@ -21,7 +21,6 @@ import kotlinx.coroutines.delay
 @Composable
 fun AnimatedSplashScreen(
     navController: NavHostController,
-    startRouteName: String
 ) {
     var startAnimation by remember {
         mutableStateOf(false)
@@ -35,7 +34,7 @@ fun AnimatedSplashScreen(
     LaunchedEffect(key1 = true) {
         startAnimation = true
         delay(3000)
-        navController.navigate(startRouteName)
+        navController.navigate("main")
     }
     Splash(alphaAnim = alphaAnim.value)
 }
