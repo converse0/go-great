@@ -27,35 +27,34 @@ class TimerViewModel @Inject constructor(): ViewModel() {
     fun start(text: MutableState<String>, context: Context, onTimerEnd: () -> Unit) {
 
         job = CoroutineScope(Dispatchers.Default).launch {
+            delay(100)
             val seq = 0..globSec - count
             for (i in seq.reversed()) {
                 currSec = i
                 count++
-                if(i <= 5) playSound(context)
+                if(i in 1..5) launch {playSound(context)}
                 if(i == 0) {
-                    println("end")
+                    text.value = i.toString()
+
+                    delay(500)
                     stop()
                     currSec = 0
                     globSec = 0
                     count = 0
                     job = null
                     onTimerEnd()
-                    delay(500)
                 }
                 text.value = i.toString()
                 delay(1000)
             }
         }
-        println("time: System.currentTimeMillis() = ${System.currentTimeMillis()}")
-        println(" job: $job")
     }
     fun stop() {
-        println(job?.isActive)
         job?.cancel()
     }
 
     fun playSound(context: Context) {
-        val mp =  MediaPlayer.create(context, R.raw.zvuk41).start()
+        val mp = MediaPlayer.create(context, R.raw.zvuk41).start()
     }
 
     fun playFinalSound(context: Context) {

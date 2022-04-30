@@ -26,7 +26,11 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun Timer(
@@ -91,7 +95,10 @@ fun Timer(
             if (text.value=="Start"&& inniter == 0) {
                 inniter+=1
                 viewModel.init((totalTime / 1000L).toInt())
+                viewModel.start(text, ctx, onTimerEnd = onTimerEnd)
+
             }
+
             Text(
                 text = text.value,
                 fontSize = 44.sp,
