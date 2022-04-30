@@ -58,20 +58,20 @@ fun Timer(
         onAlarmSound()
     }
 
-    LaunchedEffect(key1 = currentTime, key2 = isTimerRunning) {
-        if(currentTime > 0 && isTimerRunning) {
-            delay(100L)
-            currentTime -= 100L
-            value = currentTime / totalTime.toFloat()
-        }
-        if (currentTime/1000L == 0L) {
-            delay(500L)
-            onTimerEnd()
-            value = 1f
-            currentTime = totalTime
-            isTimerRunning = false
-        }
-    }
+//    LaunchedEffect(key1 = currentTime, key2 = isTimerRunning) {
+//        if(currentTime > 0 && isTimerRunning) {
+//            delay(100L)
+//            currentTime -= 100L
+//            value = currentTime / totalTime.toFloat()
+//        }
+//        if (currentTime/1000L == 0L) {
+//            delay(500L)
+//            onTimerEnd()
+//            value = 1f
+//            currentTime = totalTime
+//            isTimerRunning = false
+//        }
+//    }
 
     val ctx = LocalContext.current
     val text = remember {
@@ -85,7 +85,13 @@ fun Timer(
     ) {
         Row(horizontalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxWidth()) {
-            viewModel.init((totalTime / 1000L).toInt())
+            var inniter by remember {
+                mutableStateOf(0)
+            }
+            if (text.value=="Start"&& inniter == 0) {
+                inniter+=1
+                viewModel.init((totalTime / 1000L).toInt())
+            }
             Text(
                 text = text.value,
                 fontSize = 44.sp,

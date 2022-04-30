@@ -16,23 +16,24 @@ class TimerViewModel @Inject constructor(): ViewModel() {
     private var currSec:Int = 0
     private var globSec = 0
     private var count = 0
-    private var job: Job? = null
+    var job: Job? = null
 
     fun init(sec:Int) {
         globSec = sec
         currSec = 0
         count = 0
-        job = null
     }
 
     fun start(text: MutableState<String>, context: Context, onTimerEnd: () -> Unit) {
-        job = CoroutineScope(Dispatchers.Main).launch {
+
+        job = CoroutineScope(Dispatchers.Default).launch {
             val seq = 0..globSec - count
             for (i in seq.reversed()) {
                 currSec = i
                 count++
                 if(i <= 5) playSound(context)
                 if(i == 0) {
+                    println("end")
                     stop()
                     currSec = 0
                     globSec = 0
@@ -45,8 +46,11 @@ class TimerViewModel @Inject constructor(): ViewModel() {
                 delay(1000)
             }
         }
+        println("time: System.currentTimeMillis() = ${System.currentTimeMillis()}")
+        println(" job: $job")
     }
     fun stop() {
+        println(job?.isActive)
         job?.cancel()
     }
 
