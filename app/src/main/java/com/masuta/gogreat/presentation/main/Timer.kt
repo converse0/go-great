@@ -26,11 +26,6 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @Composable
 fun Timer(
@@ -57,7 +52,12 @@ fun Timer(
     var isTimerRunning by remember {
         mutableStateOf(startTimer)
     }
-
+    var started by remember {
+        mutableStateOf(true)
+    }
+    var textBtn by remember {
+        mutableStateOf("Pause")
+    }
     if (currentTime % 1000L == 0L && currentTime <= 5000L) {
         onAlarmSound()
     }
@@ -81,7 +81,21 @@ fun Timer(
     val text = remember {
         mutableStateOf("Start")
     }
+    val iconChoose = fun (): ImageVector {
+        return if (started) {
+            Icons.Default.Pause
+        } else {
+            Icons.Default.PlayArrow
+        }
+    }
 
+    val colorChoose = fun (): Color {
+        return if (started) {
+            Color.Yellow
+        } else {
+            Color.Green
+        }
+    }
     val viewModel: TimerViewModel = hiltViewModel()
 
     Column(
@@ -92,6 +106,7 @@ fun Timer(
             var inniter by remember {
                 mutableStateOf(0)
             }
+
             if (text.value=="Start"&& inniter == 0) {
                 inniter+=1
                 viewModel.init((totalTime / 1000L).toInt())
@@ -112,12 +127,22 @@ fun Timer(
             horizontalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxWidth()
         ) {
+
             TimerButtonWithText(
-                text = "Play",
-                icon = Icons.Default.PlayArrow,
-                color = Color.Green,
+                text = textBtn,
+                icon = iconChoose(),
+                color = colorChoose(),
                 onClick = {
-                    viewModel.start(text, ctx, onTimerEnd = onTimerEnd)
+                    if (started) {
+                        viewModel.pause()
+                        started = false
+                       textBtn = "Resume"
+                    } else {
+                        viewModel.start(text, ctx, onTimerEnd = onTimerEnd)
+                        started = true
+                        textBtn = "Pause"
+                    }
+//                    viewModel.start(text, ctx, onTimerEnd = onTimerEnd)
 //                isTimerRunning = false
 //                currentTime = totalTime
 //                value = 1f
@@ -128,7 +153,7 @@ fun Timer(
                 icon = Icons.Default.Stop,
                 color = Color.Red,
                 onClick = {
-                    viewModel.stop()
+                    viewModel.stop(onTimerEnd = onTimerEnd)
 //                isTimerRunning = false
 //                currentTime = totalTime
 //                value = 1f
@@ -137,43 +162,39 @@ fun Timer(
         }
     }
 
-//    Column(
-//        horizontalAlignment = Alignment.CenterHorizontally,
-//        modifier = Modifier.padding(8.dp)
-//    ) {
-//        Box(
-//            contentAlignment = Alignment.Center,
-//            modifier = modifier
-//                .onSizeChanged {
-//                    size = it
-//                }
-//        ) {
-//
-////            Canvas(modifier = modifier) {
-////                drawArc(
-////                    color = inactiveBarColor,
-////                    startAngle = -270f,
-////                    sweepAngle = 360f,
-////                    useCenter = false,
-////                    size = Size(size.width.toFloat(), size.height.toFloat()),
-////                    style = Stroke(strokeWidth.toPx(), cap = StrokeCap.Round)
-////                )
-////                drawArc(
-////                    color = activeBarColor,
-////                    startAngle = -270f,
-////                    sweepAngle = 360f * value,
-////                    useCenter = false,
-////                    size = Size(size.width.toFloat(), size.height.toFloat()),
-////                    style = Stroke(strokeWidth.toPx(), cap = StrokeCap.Round)
-////                )
-////            }
-////            Text(
-////                text = (currentTime / 1000L).toString(),
-////                fontSize = 44.sp,
-////                fontWeight = FontWeight.Bold,
-////                color = Color.Black
-////            )
-//        }
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.padding(8.dp)
+    ) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = modifier
+                .onSizeChanged {
+                    size = it
+                }
+        ) {
+
+            Canvas(modifier = modifier) {
+                drawArc(
+                    color = inactiveBarColor,
+                    startAngle = -270f,
+                    sweepAngle = 360f,
+                    useCenter = false,
+                    size = Size(size.width.toFloat(), size.height.toFloat()),
+                    style = Stroke(strokeWidth.toPx(), cap = StrokeCap.Round)
+                )
+                drawArc(
+                    color = activeBarColor,
+                    startAngle = -270f,
+                    sweepAngle = 360f * viewModel.currSec * 1000,
+                    useCenter = false,
+                    size = Size(size.width.toFloat(), size.height.toFloat()),
+                    style = Stroke(strokeWidth.toPx(), cap = StrokeCap.Round)
+                )
+            }
+
+       }
+    }
 //
 //        Row(
 //            verticalAlignment = Alignment.CenterVertically,

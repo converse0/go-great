@@ -18,7 +18,7 @@ class TimerViewModel @Inject constructor(): ViewModel() {
     var currSec by mutableStateOf(0)
     private var globSec = 0
     private var count = 0
-    var job: Job? = null
+    var job by mutableStateOf<Job?>(null)
 
     fun init(sec:Int) {
         globSec = sec
@@ -35,20 +35,25 @@ class TimerViewModel @Inject constructor(): ViewModel() {
                 if(i in 1..5) launch {playSound(context)}
                 if(i == 0) {
                     text.value = "0"
-                    delay(500)
-                    stop()
-                    globSec = 0
-                    count = 0
-                    job = null
-                    onTimerEnd()
+//                    onTimerEnd()
+                    stop(onTimerEnd)
                 }
                 text.value = i.toString()
                 delay(1000)
             }
         }
     }
-    fun stop() {
+    fun pause() {
         job?.cancel()
+    }
+
+    fun stop(onTimerEnd: () -> Unit) {
+        onTimerEnd()
+        job?.cancel()
+        currSec = 0
+        count = 0
+        globSec = 0
+        job = null
     }
 
     fun playSound(context: Context) {
