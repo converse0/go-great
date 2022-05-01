@@ -3,7 +3,9 @@ package com.masuta.gogreat.presentation.main
 import android.content.Context
 import android.media.MediaPlayer
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.masuta.gogreat.R
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,7 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class TimerViewModel @Inject constructor(): ViewModel() {
 
-    private var currSec:Int = 0
+    var currSec by mutableStateOf(0)
     private var globSec = 0
     private var count = 0
     var job: Job? = null
@@ -35,7 +37,6 @@ class TimerViewModel @Inject constructor(): ViewModel() {
                     text.value = "0"
                     delay(500)
                     stop()
-                    currSec = 0
                     globSec = 0
                     count = 0
                     job = null
