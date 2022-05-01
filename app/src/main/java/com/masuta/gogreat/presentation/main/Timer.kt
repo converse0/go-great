@@ -43,15 +43,11 @@ fun Timer(
     var size by remember {
         mutableStateOf(IntSize.Zero)
     }
-    var value by remember {
-        mutableStateOf(initialValue)
-    }
-    var currentTime by remember {
+
+    val currentTime by remember {
         mutableStateOf(totalTime)
     }
-    var isTimerRunning by remember {
-        mutableStateOf(startTimer)
-    }
+
     var started by remember {
         mutableStateOf(true)
     }
@@ -62,20 +58,6 @@ fun Timer(
         onAlarmSound()
     }
 
-//    LaunchedEffect(key1 = currentTime, key2 = isTimerRunning) {
-//        if(currentTime > 0 && isTimerRunning) {
-//            delay(100L)
-//            currentTime -= 100L
-//            value = currentTime / totalTime.toFloat()
-//        }
-//        if (currentTime/1000L == 0L) {
-//            delay(500L)
-//            onTimerEnd()
-//            value = 1f
-//            currentTime = totalTime
-//            isTimerRunning = false
-//        }
-//    }
 
     val ctx = LocalContext.current
     val text = remember {
@@ -141,10 +123,7 @@ fun Timer(
                         started = true
                         textBtn = "Pause"
                     }
-//                    viewModel.start(text, ctx, onTimerEnd = onTimerEnd)
-//                isTimerRunning = false
-//                currentTime = totalTime
-//                value = 1f
+
                 }
             )
             TimerButtonWithText(
@@ -153,9 +132,6 @@ fun Timer(
                 color = Color.Red,
                 onClick = {
                     viewModel.stop(onTimerEnd = onTimerEnd)
-//                isTimerRunning = false
-//                currentTime = totalTime
-//                value = 1f
                 }
             )
         }
@@ -194,79 +170,9 @@ fun Timer(
 
        }
     }
-//
-//        Row(
-//            verticalAlignment = Alignment.CenterVertically,
-//            horizontalArrangement = Arrangement.Center
-//        ) {
-//            TimerButtonWithText(
-//                text = if(isTimerRunning) "Pause" else "Start",
-//                icon = if(isTimerRunning) Icons.Default.Pause else Icons.Default.PlayArrow,
-//                color = Color.Green,
-//                onClick = {
-//                    if(currentTime <= 0L) {
-//                        currentTime = totalTime
-//                        isTimerRunning = true
-//                    } else {
-//                        isTimerRunning = !isTimerRunning
-//                    }
-//                }
-//            )
-//            TimerButtonWithText(
-//                text = "Stop",
-//                icon = Icons.Default.Stop,
-//                color = Color.Red,
-//                onClick = {
-//                    isTimerRunning = false
-//                    currentTime = totalTime
-//                    value = 1f
-//                }
-//            )
-//        }
-//    }
+
 }
 
-//@Composable
-//fun CountDownTraining(sec: Int, viewModel: TimerViewModel) {
-//    val ctx = LocalContext.current
-//    val text = remember {
-//        mutableStateOf("Start")
-//    }
-//
-//    val viewModel: TimerViewModel = hiltViewModel()
-//
-//    var counter by remember {
-//        mutableStateOf(0)
-//    }
-//
-//    Spacer(modifier = Modifier.height(50.0.dp))
-//    Row(horizontalArrangement = Arrangement.Center,
-//        modifier = Modifier.fillMaxWidth()) {
-//        var col by remember {
-//            mutableStateOf(Color(0xFF2ABD20))
-//        }
-//        viewModel.init(sec)
-//        FloatingActionButton(
-//            onClick = {
-//                counter++
-//                if (counter % 2 == 1) {
-//                    text.value = "Stop"
-//                    viewModel.start(text, ctx)
-//                    col = Color(0xFFE53935)
-//                } else {
-//                    text.value = "Start"
-//                    viewModel.stop()
-//                    col = Color(0xFF2ABD20)
-//                }
-//            },
-//            containerColor = col,
-//            modifier = Modifier.size(150.dp)
-//        ) {
-//            Text(text.value, fontSize = 20.sp)
-//        }
-//    }
-//
-//}
 
 @Composable
 fun TimerButtonWithText(

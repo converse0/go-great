@@ -35,7 +35,7 @@ class TimerViewModel @Inject constructor(): ViewModel() {
                 if(i in 1..5) launch {playSound(context)}
                 if(i == 0) {
                     text.value = "0"
-//                    onTimerEnd()
+                    delay(500)
                     stop(onTimerEnd)
                 }
                 text.value = i.toString()
@@ -56,8 +56,8 @@ class TimerViewModel @Inject constructor(): ViewModel() {
         job = null
     }
 
-    fun playSound(context: Context) {
-        val mp = MediaPlayer.create(context, R.raw.zvuk41).start()
+    private fun playSound(context: Context) {
+        MediaPlayer.create(context, R.raw.zvuk41).start()
     }
 
     fun playFinalSound(context: Context) {
