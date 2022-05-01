@@ -20,8 +20,6 @@ class TimerViewModel @Inject constructor(): ViewModel() {
 
     fun init(sec:Int) {
         globSec = sec
-        currSec = 0
-        count = 0
     }
 
     fun start(text: MutableState<String>, context: Context, onTimerEnd: () -> Unit) {
@@ -34,8 +32,7 @@ class TimerViewModel @Inject constructor(): ViewModel() {
                 count++
                 if(i in 1..5) launch {playSound(context)}
                 if(i == 0) {
-                    text.value = i.toString()
-
+                    text.value = "0"
                     delay(500)
                     stop()
                     currSec = 0
