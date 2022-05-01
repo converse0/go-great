@@ -10,6 +10,7 @@ import androidx.navigation.NavController
 import com.masuta.gogreat.R
 import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.domain.repository.TrainRepository
+import com.masuta.gogreat.utils.ListsValuesForSliders
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -23,8 +24,12 @@ sealed class TrainingEvent {
 
 @HiltViewModel
 class StartTrainingViewModel @Inject constructor(
-    private val repository: TrainRepository
+    private val repository: TrainRepository,
+    private val listValuesForSliders: ListsValuesForSliders
 ): ViewModel() {
+
+    val listRelax = listValuesForSliders.getRelaxList
+    val listDuration = listValuesForSliders.getDurationList
 
     val default = TrainingExercise(0, "20s", 10, 10, "Test", "20s", "other", "")
 

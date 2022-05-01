@@ -42,7 +42,7 @@ fun FemalePersonSectionWithPoint(
         val shoulder = createRefFor("shoulder")
         val triceps = createRefFor("triceps")
         val biceps = createRefFor("biceps")
-        val other = createRefFor("other")
+//        val other = createRefFor("other")
 
         constrain(person) {
             top.linkTo(parent.top)
@@ -81,10 +81,10 @@ fun FemalePersonSectionWithPoint(
             start.linkTo(startGuidLine)
             bottom.linkTo(bottomGuidLine)
         }
-        constrain(other) {
-            start.linkTo(startGuidLine)
-            bottom.linkTo(bottomGuidLine)
-        }
+//        constrain(other) {
+//            start.linkTo(startGuidLine)
+//            bottom.linkTo(bottomGuidLine)
+//        }
     }
 
     Box(
@@ -107,7 +107,9 @@ fun FemalePersonSectionWithPoint(
                     .width(350.dp)
             )
             listPoints.forEach { point ->
-                IconPoint(modifier = Modifier.layoutId(point.type))
+                if (point.type != "other") {
+                    IconPoint(modifier = Modifier.layoutId(point.type))
+                }
             }
         }
     }
@@ -130,7 +132,7 @@ fun MalePersonSectionWithPoint(
         val shoulder = createRefFor("shoulder")
         val triceps = createRefFor("triceps")
         val biceps = createRefFor("biceps")
-        val other = createRefFor("other")
+//        val other = createRefFor("other")
 
         constrain(person) {
             top.linkTo(parent.top)
@@ -169,10 +171,10 @@ fun MalePersonSectionWithPoint(
             start.linkTo(startGuidLine)
             bottom.linkTo(bottomGuidLine)
         }
-        constrain(other) {
-            start.linkTo(startGuidLine)
-            bottom.linkTo(bottomGuidLine)
-        }
+//        constrain(other) {
+//            start.linkTo(startGuidLine)
+//            bottom.linkTo(bottomGuidLine)
+//        }
     }
 
     Box(
@@ -195,7 +197,9 @@ fun MalePersonSectionWithPoint(
                     .width(350.dp)
             )
             listPoints.forEach { point ->
-                IconPoint(modifier = Modifier.layoutId(point.type))
+                if (point.type != "other") {
+                    IconPoint(modifier = Modifier.layoutId(point.type))
+                }
             }
         }
     }

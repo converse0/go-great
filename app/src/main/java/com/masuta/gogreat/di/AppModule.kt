@@ -12,6 +12,7 @@ import com.masuta.gogreat.domain.handlers.SignUp
 import com.masuta.gogreat.domain.repository.AuthRepository
 import com.masuta.gogreat.domain.repository.ProfileRepository
 import com.masuta.gogreat.domain.repository.TrainRepository
+import com.masuta.gogreat.utils.ListsValuesForSliders
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -69,6 +70,12 @@ object AppModule {
     @Singleton
     fun provideTrainRepository(client: Client, @ApplicationContext context: Context): TrainRepository {
         return TrainRepositoryImpl(client, context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideListValuesForSliders(@ApplicationContext context: Context): ListsValuesForSliders {
+        return ListsValuesForSliders(context)
     }
 
 }

@@ -20,19 +20,26 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.masuta.gogreat.presentation.components.InputTextField
 import com.masuta.gogreat.presentation.components.SliderWithLabel
+import com.masuta.gogreat.presentation.components.SliderWithLabelUserActivity
 import com.masuta.gogreat.presentation.ui.theme.Green
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun StartTrainingModal(
+    viewModel: StartTrainingViewModel,
     weight: MutableState<String>,
     time: MutableState<Int>,
+    durationTime: MutableState<Float>,
     numberOfSets: MutableState<String>,
     numberOfRepetitions: MutableState<String>,
     onSave: () -> Unit,
     onDismiss: () -> Unit
 ) {
+
     val keyboardController = LocalSoftwareKeyboardController.current
+
+    val relax = viewModel.listRelax
+    val duration = viewModel.listDuration
 
     Box(
         contentAlignment = Alignment.Center,
@@ -61,14 +68,14 @@ fun StartTrainingModal(
                     )
                 ){
                     item {
-                        Spacer(Modifier.height(10.dp))
-                        InputTextField(
-                            text = "Weight",
-                            value = weight.value,
-                            keyboardController = keyboardController,
-                            onChangeValue = { weight.value = it },
-                            keyboardType = KeyboardType.Number
-                        )
+//                        Spacer(Modifier.height(10.dp))
+//                        InputTextField(
+//                            text = "Weight",
+//                            value = weight.value,
+//                            keyboardController = keyboardController,
+//                            onChangeValue = { weight.value = it },
+//                            keyboardType = KeyboardType.Number
+//                        )
                         Spacer(Modifier.height(10.dp))
                         Text(
                             text = "Choose relax time, sec",
@@ -77,7 +84,6 @@ fun StartTrainingModal(
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(10.dp)
                         )
-                        val relax = listOf(5, 15, 30, 50)
                         SliderWithLabel(
                             value = 0f,
                             selectedItem = time,
@@ -86,6 +92,21 @@ fun StartTrainingModal(
                             items = relax
                         )
                         Spacer(Modifier.height(10.dp))
+                        if (viewModel.currentExercise.value.type == "other") {
+                            Text(
+                                text = "Choose duration time, sec",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = Color.Black,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier.padding(10.dp)
+                            )
+                            SliderWithLabelUserActivity (
+                                selectedItem = durationTime,
+                                valueRange = 0f..duration.size.minus(1).toFloat(),
+                                items = duration
+                            )
+                            Spacer(Modifier.height(10.dp))
+                        }
                         InputTextField(
                             text = "Number of sets",
                             value = numberOfSets.value,

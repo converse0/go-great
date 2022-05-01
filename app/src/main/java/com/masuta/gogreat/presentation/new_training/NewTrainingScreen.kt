@@ -34,6 +34,10 @@ import com.masuta.gogreat.presentation.components.MalePersonSection
 import com.masuta.gogreat.presentation.ui.theme.Green
 import com.masuta.gogreat.presentation.ui.theme.Red
 import com.skydoves.landscapist.glide.GlideImage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock
 import java.text.SimpleDateFormat
 import java.util.*
@@ -136,16 +140,21 @@ fun NewTrainingScreen(
             name = name,
             date = date,
             onSave = {
-                viewModel.saveTrain(
-                    newTrain = Training(
-                        exercises = listExercises.value,
-                        interval = "50s",
-                        name = name.value.replace(" ", "_"),
-                        date = date.value
+                CoroutineScope(Dispatchers.IO).launch {
+                    viewModel.saveTrain(
+                        newTrain = Training(
+                            exercises = listExercises.value,
+                            interval = "50s",
+                            name = name.value.replace(" ", "_"),
+                            date = date.value
+                        )
                     )
-                )
-                viewModel.clearLocalExercises()
-                navController.navigate("main")
+                    viewModel.clearLocalExercises()
+
+                    withContext(Dispatchers.Main) {
+                        navController.navigate("main")
+                    }
+                }
             },
             onDismiss = { openModal.value = false }
         )

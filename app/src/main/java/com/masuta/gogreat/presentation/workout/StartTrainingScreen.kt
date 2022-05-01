@@ -31,6 +31,7 @@ import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DefaultDataSource
 import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.presentation.main.Timer
+import com.masuta.gogreat.presentation.new_training.findIndexToFloat
 import com.masuta.gogreat.presentation.new_training.toInteger
 import com.masuta.gogreat.presentation.ui.theme.Green
 
@@ -42,6 +43,7 @@ fun StartTrainingScreen(
 ) {
     val isEditModal = remember { mutableStateOf(false) }
     val isModalOpen = remember { mutableStateOf(false) }
+    val isDurationTimer = remember { mutableStateOf(false) }
 
     val context = LocalContext.current
 
@@ -93,6 +95,9 @@ fun StartTrainingScreen(
                     },
                     onOpenEdit = {
                         isEditModal.value = true
+                    },
+                    onDurationTimer = {
+                        isDurationTimer.value = true
                     }
                 )
             }
@@ -111,6 +116,17 @@ fun StartTrainingScreen(
             },
         )
     }
+
+    if (isDurationTimer.value) {
+        ModalTimer(
+            totalTime = currentExercise.duration.toInteger().toLong(),
+            viewModel = viewModel,
+            onDismiss = {
+                isDurationTimer.value = false
+            }
+        )
+    }
+
     if (isEditModal.value) {
         val weight = remember { mutableStateOf("") }
         val time = remember { mutableStateOf(currentExercise.relax.toInteger()) }
@@ -119,9 +135,18 @@ fun StartTrainingScreen(
         }
         val numberOfRepetitions =
             remember { mutableStateOf(currentExercise.numberOfRepetitions.toString()) }
+
+        val duration = viewModel.listDuration
+
+        val durationTime = remember {
+            mutableStateOf(currentExercise.duration.toInteger().findIndexToFloat(duration))
+        }
+
         StartTrainingModal(
+            viewModel,
             weight,
             time,
+            durationTime,
             numberOfSets,
             numberOfRepetitions,
             onSave = {
@@ -130,7 +155,8 @@ fun StartTrainingScreen(
                         exercise.copy(
                             relax = time.value.toString() + "s",
                             numberOfSets = numberOfSets.value.toInt(),
-                            numberOfRepetitions = numberOfRepetitions.value.toInt()
+                            numberOfRepetitions = numberOfRepetitions.value.toInt(),
+                            duration = "${duration.get(durationTime.value.toInt())}s",
                         )
                     } else {
                         exercise
@@ -212,7 +238,8 @@ fun TrainingInfo(
     exercise: TrainingExercise,
     exerciseSets: Int,
     onOpenModal: () -> Unit,
-    onOpenEdit: () -> Unit
+    onOpenEdit: () -> Unit,
+    onDurationTimer: () -> Unit
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -243,8 +270,10 @@ fun TrainingInfo(
         )
     }
     ButtonSection(
+        exercise = exercise,
         onOpenModal = onOpenModal,
-        onOpenEdit = onOpenEdit
+        onOpenEdit = onOpenEdit,
+        onDurationTimer = onDurationTimer
     )
     Row(
         verticalAlignment = Alignment.CenterVertically
@@ -313,16 +342,24 @@ fun DescriptionSection(
 
 @Composable
 fun ButtonSection(
+    exercise: TrainingExercise,
     onOpenModal: () -> Unit,
-    onOpenEdit: () -> Unit
+    onOpenEdit: () -> Unit,
+    onDurationTimer: () -> Unit
 ) {
+
+    val isEnabled = remember { mutableStateOf(true) }
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceEvenly,
         modifier = Modifier.fillMaxWidth()
     ) {
         TextButton(
-            onClick = onOpenModal,
+            onClick = {
+                onOpenModal()
+                isEnabled.value = true
+            },
             modifier = Modifier
                 .width(100.dp)
                 .height(50.dp),
@@ -331,8 +368,29 @@ fun ButtonSection(
         ) {
             Text(text = "I managed!", color = Color.White)
         }
+
+        if (exercise.type == "other") {
+            TextButton(
+                enabled = isEnabled.value,
+                onClick = {
+                    onDurationTimer()
+                    isEnabled.value = false
+                },
+                modifier = Modifier
+                    .width(100.dp)
+                    .height(50.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Green),
+                shape = RoundedCornerShape(16.dp)
+            ) {
+                Text(text = "Go", color = Color.White)
+            }
+        }
+
         TextButton(
-            onClick = onOpenEdit,
+            onClick = {
+                onOpenEdit()
+                isEnabled.value = true
+            },
             modifier = Modifier
                 .width(100.dp)
                 .height(50.dp),

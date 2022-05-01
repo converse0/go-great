@@ -5,14 +5,22 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.domain.repository.TrainRepository
+import com.masuta.gogreat.utils.ListsValuesForSliders
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ExerciseViewModel @Inject constructor(
-    private val repository: TrainRepository
+    private val repository: TrainRepository,
+    private val listValuesForSliders: ListsValuesForSliders
 ): ViewModel() {
+
+    val listRelax = listValuesForSliders.getRelaxList
+    val listDuration = listValuesForSliders.getDurationList
+    val listCounts = listValuesForSliders.getCountsList
+    val listRepetitions = listValuesForSliders.getRepetitionsList
+    val listSets = listValuesForSliders.getStepsList
 
     fun getExercises(id: Long, exercisesList: MutableState<List<TrainingExercise>>) {
         viewModelScope.launch {
@@ -20,6 +28,7 @@ class ExerciseViewModel @Inject constructor(
 
             if(resp.data != null) {
                 exercisesList.value = resp.data
+                println("EXERCISE ${resp.data}")
             }
         }
     }

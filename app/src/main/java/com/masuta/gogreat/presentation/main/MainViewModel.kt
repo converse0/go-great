@@ -38,6 +38,8 @@ class MainViewModel @Inject constructor(
 
     fun getWorkouts(list: MutableState<List<Training>>) {
         if (workoutsReloadData) {
+            workoutsReloadData = false
+
             viewModelScope.launch {
                 val resp = repository.findAll()
                 resp.data?.let { training ->
@@ -46,9 +48,9 @@ class MainViewModel @Inject constructor(
                 }
                 val myTrains = repository.getMyTrainings()
                 myTrains?.let { trains ->
-                    workoutsReloadData = false
 
                     val localList = trains.map { it.validateExerciseData() }
+                    println("localList: ${localList.size}")
                     list.value = localList
                     repository.setLocalWorkouts(localList)
                 }
@@ -61,9 +63,9 @@ class MainViewModel @Inject constructor(
     }
      fun getCurrentTraining(training: MutableState<Training>) {
          if(currentWorkoutReloadData) {
-            viewModelScope.launch {
+             currentWorkoutReloadData = false
+             viewModelScope.launch {
                 repository.getCurrentTraining()?.let {
-                    currentWorkoutReloadData = false
 
                     val workout = it.validateExerciseData()
                     training.value = workout
@@ -81,11 +83,11 @@ class MainViewModel @Inject constructor(
 
     fun getPastTrainings(list: MutableState<List<Training>>) {
         if (pastWorkoutsReloadData) {
+            pastWorkoutsReloadData = false
             viewModelScope.launch {
                 measureTimeMillis {
                     val resp = repository.getPassTrainings()
                     resp?.let {
-                        pastWorkoutsReloadData = false
                         list.value = it
                         repository.setLocalPastWorkouts(it)
                     }

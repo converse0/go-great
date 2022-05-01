@@ -77,6 +77,8 @@ fun SignUpForm(
     var password by remember { mutableStateOf("") }
     var passwordConfirm by remember { mutableStateOf("") }
 
+    val isEnabledButton = remember { mutableStateOf(true) }
+
     Box(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -119,6 +121,7 @@ fun SignUpForm(
         MainTextButton(
             text = "Sign up",
             color = Red,
+            enabled = isEnabledButton.value,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
@@ -127,6 +130,7 @@ fun SignUpForm(
                 )
                 .align(Alignment.BottomCenter)
         ) {
+            isEnabledButton.value = false
             CoroutineScope(Dispatchers.IO).launch {
                 val respSignUp = viewModel.signUp(username, email, password, passwordConfirm)
 
@@ -158,6 +162,7 @@ fun SignUpForm(
                         ).show()
                     }
                 }
+                isEnabledButton.value = true
             }
         }
     }
