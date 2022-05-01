@@ -4,7 +4,7 @@
     <string name="train_url">https://boilerplate-go-trening.herokuapp.com</string>
     <string name="auth_url">https://boilerplate-go.herokuapp.com</string>
 
-    <integer name="relax_min">5</integer>
+    <integer name="relax_min">10</integer>
     <integer name="relax_max">60</integer>
     <integer name="relax_step">5</integer>
 

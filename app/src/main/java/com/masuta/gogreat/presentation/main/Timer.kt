@@ -79,7 +79,7 @@ fun Timer(
 
     val ctx = LocalContext.current
     val text = remember {
-        mutableStateOf("Start")
+        mutableStateOf("")
     }
     val iconChoose = fun (): ImageVector {
         return if (started) {
@@ -107,11 +107,10 @@ fun Timer(
                 mutableStateOf(0)
             }
 
-            if (text.value=="Start"&& inniter == 0) {
+            if (text.value==""&& inniter == 0) {
                 inniter+=1
                 viewModel.init((totalTime / 1000L).toInt())
                 viewModel.start(text, ctx, onTimerEnd = onTimerEnd)
-
             }
 
             Text(
@@ -186,7 +185,7 @@ fun Timer(
                 drawArc(
                     color = activeBarColor,
                     startAngle = -270f,
-                    sweepAngle = 360f * viewModel.currSec * 1000,
+                    sweepAngle = 360f * (viewModel.currSec *  1000).toLong()/(totalTime),
                     useCenter = false,
                     size = Size(size.width.toFloat(), size.height.toFloat()),
                     style = Stroke(strokeWidth.toPx(), cap = StrokeCap.Round)
