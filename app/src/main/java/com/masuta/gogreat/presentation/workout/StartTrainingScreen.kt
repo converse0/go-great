@@ -128,6 +128,7 @@ fun StartTrainingScreen(
             viewModel = viewModel,
             onDismiss = {
                 isDurationTimer.value = false
+                timerViewModel.stopOnClose()
             }
         )
     }
