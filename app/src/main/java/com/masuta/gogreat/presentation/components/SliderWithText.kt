@@ -73,6 +73,7 @@ fun SliderLabel(
         text = label,
         textAlign = TextAlign.Center,
         color = Color.White,
+        softWrap = false,
         modifier = modifier
             .background(
                 color = MaterialTheme.colorScheme.primary,
@@ -97,8 +98,6 @@ private fun getSliderOffset(
 
 private fun calcFraction(a: Float, b: Float, pos: Float) =
     (if (b - a == 0f) 0f else (pos - a) / (b - a)).coerceIn(0f,1f)
-
-// Slider using in profile screen & about screen
 
 @Composable
 fun SliderWithLabelUserActivity(
@@ -139,7 +138,7 @@ fun SliderWithLabelUserActivity(
                     label = endValueText.toString(),
                     minWidth = labelMinWidth,
                     modifier = Modifier
-                        .padding(start = if(selectedItem.value.toInt() != items.size - 1) offset else offset - 16.dp)
+                        .padding(start = offset)
                 )
             }
         }

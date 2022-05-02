@@ -333,6 +333,7 @@ fun ProfileInfo(
         SliderWithLabelUserActivity(
             selectedItem = activity,
             valueRange = 0f..listActivity.size.minus(1).toFloat(),
+            labelMinWidth = 100.dp,
             items = listActivity
         )
         Spacer(Modifier.height(20.dp))
@@ -346,6 +347,7 @@ fun ProfileInfo(
         SliderWithLabelUserActivity(
             selectedItem = diet,
             valueRange = 0f..listDiet.size.minus(1).toFloat(),
+            labelMinWidth = 100.dp,
             items = listDiet
         )
         Spacer(Modifier.height(20.dp))
