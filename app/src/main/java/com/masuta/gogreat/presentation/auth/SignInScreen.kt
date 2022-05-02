@@ -87,6 +87,7 @@ fun SignInForm(
     InputTextField(
         text = "Password",
         value = password,
+        isPassword = true,
         keyboardController = keyboardController,
         onChangeValue = { password = it },
     )

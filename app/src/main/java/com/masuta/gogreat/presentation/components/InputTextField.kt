@@ -15,6 +15,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -23,6 +25,7 @@ fun InputTextField(
     value: String,
     keyboardController: SoftwareKeyboardController?,
     keyboardType: KeyboardType = KeyboardType.Text,
+    isPassword: Boolean = false,
     enabled: Boolean = true,
     onChangeValue: (String) -> Unit
 ) {
@@ -36,6 +39,7 @@ fun InputTextField(
         value = value,
         textStyle = TextStyle(Color.Black),
         onValueChange = { onChangeValue(it) },
+        visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None ,
         enabled = enabled,
         modifier = Modifier.fillMaxWidth(),
         keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),

@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.masuta.gogreat.presentation.ui.theme.Green
 
 @Composable
 fun Timer(
@@ -80,63 +81,29 @@ fun Timer(
     }
     val viewModel: TimerViewModel = hiltViewModel()
 
-    Column(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Row(horizontalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxWidth()) {
-            var inniter by remember {
-                mutableStateOf(0)
-            }
-
-            if (text.value==""&& inniter == 0) {
-                inniter+=1
-                viewModel.init((totalTime / 1000L).toInt())
-                viewModel.start(text, ctx, onTimerEnd = onTimerEnd)
-            }
-
-            Text(
-                text = text.value,
-                fontSize = 44.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.Black
-            )
-        }
-        Spacer(Modifier.height(20.dp))
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-
-            TimerButtonWithText(
-                text = textBtn,
-                icon = iconChoose(),
-                color = colorChoose(),
-                onClick = {
-                    if (started) {
-                        viewModel.pause()
-                        started = false
-                       textBtn = "Resume"
-                    } else {
-                        viewModel.start(text, ctx, onTimerEnd = onTimerEnd)
-                        started = true
-                        textBtn = "Pause"
-                    }
-
-                }
-            )
-            TimerButtonWithText(
-                text = "Stop",
-                icon = Icons.Default.Stop,
-                color = Color.Red,
-                onClick = {
-                    viewModel.stop(onTimerEnd = onTimerEnd)
-                }
-            )
-        }
-    }
-
+//    Column(
+//        modifier = Modifier.fillMaxWidth()
+//    ) {
+//        Row(horizontalArrangement = Arrangement.Center,
+//            modifier = Modifier.fillMaxWidth()) {
+//            var inniter by remember {
+//                mutableStateOf(0)
+//            }
+//
+//            if (text.value==""&& inniter == 0) {
+//                inniter+=1
+//                viewModel.init((totalTime / 1000L).toInt())
+//                viewModel.start(text, ctx, onTimerEnd = onTimerEnd)
+//            }
+//
+//            Text(
+//                text = text.value,
+//                fontSize = 44.sp,
+//                fontWeight = FontWeight.Bold,
+//                color = Color.Black
+//            )
+//        }
+//    }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.padding(8.dp)
@@ -148,7 +115,6 @@ fun Timer(
                     size = it
                 }
         ) {
-
             Canvas(modifier = modifier) {
                 drawArc(
                     color = inactiveBarColor,
@@ -168,9 +134,56 @@ fun Timer(
                 )
             }
 
-       }
-    }
+            var inniter by remember {
+                mutableStateOf(0)
+            }
 
+            if (text.value==""&& inniter == 0) {
+                inniter+=1
+                viewModel.init((totalTime / 1000L).toInt())
+                viewModel.start(text, ctx, onTimerEnd = onTimerEnd)
+            }
+
+            Text(
+                text = text.value,
+                fontSize = 44.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
+            )
+       }
+        Spacer(Modifier.height(20.dp))
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            TimerButtonWithText(
+                text = textBtn,
+                icon = iconChoose(),
+                color = Green,
+                onClick = {
+                    if (started) {
+                        viewModel.pause()
+                        started = false
+                        textBtn = "Resume"
+                    } else {
+                        viewModel.start(text, ctx, onTimerEnd = onTimerEnd)
+                        started = true
+                        textBtn = "Pause"
+                    }
+
+                }
+            )
+            TimerButtonWithText(
+                text = "Stop",
+                icon = Icons.Default.Stop,
+                color = Color.Red,
+                onClick = {
+                    viewModel.stop(onTimerEnd = onTimerEnd)
+                }
+            )
+        }
+    }
 }
 
 
