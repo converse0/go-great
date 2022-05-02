@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
@@ -31,6 +32,7 @@ import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DefaultDataSource
 import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.presentation.main.Timer
+import com.masuta.gogreat.presentation.main.TimerViewModel
 import com.masuta.gogreat.presentation.new_training.findIndexToFloat
 import com.masuta.gogreat.presentation.new_training.toInteger
 import com.masuta.gogreat.presentation.ui.theme.Green
@@ -55,6 +57,8 @@ fun StartTrainingScreen(
     val indexExercise = viewModel.indexExercise
     val exerciseSets = viewModel.exerciseSets
     val currentExercise = viewModel.currentExercise.value
+
+    val timerViewModel: TimerViewModel = hiltViewModel()
 
     Column(
         modifier = Modifier
@@ -109,6 +113,7 @@ fun StartTrainingScreen(
             viewModel = viewModel,
             onDismiss = {
                 isModalOpen.value = false
+                timerViewModel.stopOnClose()
                 if (viewModel.indexExercise.value >= viewModel.listExercises.value.size) {
                     viewModel.endTraining(navController,context)
                     viewModel.finishTraining(uid!!)

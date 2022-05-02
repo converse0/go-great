@@ -30,6 +30,7 @@ class TimerViewModel @Inject constructor(): ViewModel() {
             delay(100)
             val seq = 0..globSec - count
             for (i in seq.reversed()) {
+                println("NUMBER: $i")
                 currSec = i
                 count++
                 if(i in 1..5) launch {playSound(context)}
@@ -49,6 +50,14 @@ class TimerViewModel @Inject constructor(): ViewModel() {
 
     fun stop(onTimerEnd: () -> Unit) {
         onTimerEnd()
+        job?.cancel()
+        currSec = 0
+        count = 0
+        globSec = 0
+        job = null
+    }
+
+    fun stopOnClose() {
         job?.cancel()
         currSec = 0
         count = 0
