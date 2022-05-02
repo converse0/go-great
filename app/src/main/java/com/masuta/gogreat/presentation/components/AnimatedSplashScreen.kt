@@ -16,11 +16,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.masuta.gogreat.R
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun AnimatedSplashScreen(
     navController: NavHostController,
+    startRouteName: String
 ) {
     var startAnimation by remember {
         mutableStateOf(false)
@@ -31,12 +35,25 @@ fun AnimatedSplashScreen(
             durationMillis = 2500
         )
     )
-    LaunchedEffect(key1 = true) {
+    if (startRouteName != "launch-screen") {
         startAnimation = true
-        delay(3000)
-        navController.navigate("main")
+        launch(
+            navController = navController,
+            startRouteName = startRouteName
+        )
     }
+
     Splash(alphaAnim = alphaAnim.value)
+}
+
+fun launch(
+    navController: NavHostController,
+    startRouteName: String
+) {
+    CoroutineScope(Dispatchers.IO).launch {
+        delay(3000)
+        navController.navigate(startRouteName)
+    }
 }
 
 @Composable
