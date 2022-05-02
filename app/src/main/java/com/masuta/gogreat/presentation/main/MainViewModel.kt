@@ -15,21 +15,21 @@ class MainViewModel @Inject constructor(
     private val repository: TrainRepository
 ): ViewModel() {
 
-    var workoutsReloadData = false
+    private var workoutsReloadData = false
         get() = repository.workoutsDataReload
         set(value) {
             field = value
             repository.workoutsDataReload = value
         }
 
-    var currentWorkoutReloadData = false
+    private var currentWorkoutReloadData = false
         get() = repository.currentWorkoutDataReload
         set(value) {
             field = value
             repository.currentWorkoutDataReload = value
         }
 
-    var pastWorkoutsReloadData = false
+    private var pastWorkoutsReloadData = false
         get() = repository.pastWorkoutsDataReload
         set(value) {
             field = value
@@ -97,6 +97,14 @@ class MainViewModel @Inject constructor(
             viewModelScope.launch {
                 list.value = repository.getLocalPastWorkouts()
             }
+        }
+    }
+
+    suspend fun getMyTrainings(){
+       val resp =  repository.getMyTrainings()
+        resp?.let { trains->
+            val localList = trains.map { it.validateExerciseData() }
+            repository.setLocalWorkouts(localList)
         }
     }
 

@@ -80,6 +80,7 @@ class ProfileViewModel @Inject constructor(
     fun getParameters(gender: MutableState<Int>) {
         viewModelScope.launch {
             val resp = getUserParams()
+            println("resp getUserParams: $resp")
             resp.data?.let {
                 gender.value = it.gender
                 val params = ParametersUser().copy(image = it.image)

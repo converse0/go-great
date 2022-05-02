@@ -16,14 +16,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.masuta.gogreat.R
+import com.masuta.gogreat.domain.model.Training
+import com.masuta.gogreat.presentation.main.MainViewModel
 import kotlinx.coroutines.*
 
 @Composable
 fun AnimatedSplashScreen(
     navController: NavHostController,
-    startRouteName: MutableState<String>
+    startRouteName: MutableState<String>,
+    viewModel: MainViewModel
 ) {
-println("AnimatedSplashScreen")
     var count by remember { mutableStateOf(0) }
 
     var startAnimation by remember {
@@ -41,10 +43,12 @@ println("AnimatedSplashScreen")
         if (count == 1) {
             launch(
                 navController = navController,
-                startRouteName = startRouteName.value
+                startRouteName = startRouteName.value,
+                viewModel = null
             )
         }
     } else {
+
         startAnimation = true
         Splash(alphaAnim = alphaAnim.value)
         count+=1
@@ -52,7 +56,7 @@ println("AnimatedSplashScreen")
             launch(
                 navController = navController,
                 startRouteName = startRouteName.value,
-                delay = 3000
+                viewModel = viewModel
             )
         }
     }
@@ -61,11 +65,11 @@ println("AnimatedSplashScreen")
 fun launch(
     navController: NavHostController,
     startRouteName: String,
-    delay: Long = 0,
+    viewModel: MainViewModel?=null,
 ) {
     println("RECOMPOSE $startRouteName")
     CoroutineScope(Dispatchers.IO).launch {
-        delay(delay)
+        viewModel?.getMyTrainings()
         withContext(Dispatchers.Main) {
             navController.navigate(startRouteName)
         }
