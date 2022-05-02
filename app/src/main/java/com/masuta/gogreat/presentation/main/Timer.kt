@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.masuta.gogreat.presentation.ui.theme.Green
 
 @Composable
 fun Timer(
@@ -159,7 +160,7 @@ fun Timer(
             TimerButtonWithText(
                 text = textBtn,
                 icon = iconChoose(),
-                color = colorChoose(),
+                color = Green,
                 onClick = {
                     if (started) {
                         viewModel.pause()

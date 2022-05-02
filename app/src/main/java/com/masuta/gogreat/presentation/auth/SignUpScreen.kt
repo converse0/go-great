@@ -105,6 +105,7 @@ fun SignUpForm(
                 InputTextField(
                     text = "Password",
                     value = password,
+                    isPassword = true,
                     keyboardController = keyboardController,
                     onChangeValue = { password = it },
                 )
@@ -112,6 +113,7 @@ fun SignUpForm(
                 InputTextField(
                     text = "Confirm password",
                     value = passwordConfirm,
+                    isPassword = true,
                     keyboardController = keyboardController,
                     onChangeValue = { passwordConfirm = it },
                 )
