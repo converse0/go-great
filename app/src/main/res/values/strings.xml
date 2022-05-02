@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">GoGreat</string>
-    <integer name="request_timeout">50000</integer>
+    <integer name="request_timeout">15000</integer>
     <string name="train_url">https://boilerplate-go-trening.herokuapp.com</string>
     <string name="auth_url">https://boilerplate-go.herokuapp.com</string>
-
+    <string name="url_video_exercise">https://cdn.videvo.net/videvo_files/video/free/2018-09/large_watermarked/180419_Boxing_06_01_preview.mp4</string>
     <integer name="relax_min">10</integer>
     <integer name="relax_max">60</integer>
     <integer name="relax_step">5</integer>

@@ -1,10 +1,10 @@
 package com.masuta.gogreat.di
 
 import android.content.Context
-import com.masuta.gogreat.data.remote.Client
-import com.masuta.gogreat.data.repository.AuthRepositoryImpl
-import com.masuta.gogreat.data.repository.ProfileRepositoryImpl
-import com.masuta.gogreat.data.repository.TrainRepositoryImpl
+import com.masuta.gogreat.data.http.Client
+import com.masuta.gogreat.data.providers.AuthRepositoryImpl
+import com.masuta.gogreat.data.providers.ProfileRepositoryImpl
+import com.masuta.gogreat.data.providers.TrainRepositoryImpl
 import com.masuta.gogreat.domain.handlers.CreateUserParams
 import com.masuta.gogreat.domain.handlers.GetUserParams
 import com.masuta.gogreat.domain.handlers.Login

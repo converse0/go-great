@@ -1,8 +1,8 @@
 package com.masuta.gogreat.domain.repository
 
 import androidx.compose.ui.graphics.ImageBitmap
-import com.masuta.gogreat.data.repository.ResponseParams
-import com.masuta.gogreat.data.repository.ResponseParamsIm
+import com.masuta.gogreat.data.providers.ResponseParams
+import com.masuta.gogreat.data.providers.ResponseParamsIm
 import com.masuta.gogreat.domain.model.ParametersUser
 import com.masuta.gogreat.domain.model.ParametersUserSet
 
