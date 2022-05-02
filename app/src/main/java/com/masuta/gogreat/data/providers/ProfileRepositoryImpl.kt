@@ -1,4 +1,4 @@
-package com.masuta.gogreat.data.repository
+package com.masuta.gogreat.data.providers
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -7,7 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asAndroidBitmap
 import com.masuta.gogreat.R
-import com.masuta.gogreat.data.remote.Client
+import com.masuta.gogreat.data.http.Client
 import com.masuta.gogreat.domain.model.*
 import com.masuta.gogreat.domain.repository.ProfileRepository
 import io.ktor.client.*
@@ -44,7 +44,7 @@ class ProfileRepositoryImpl @Inject constructor(
     private val context: Context
 ): ProfileRepository {
 
-    private var trainUrl = "https://api.gogreat.com/v1/profile"
+    private var trainUrl = ""
     private var httpClient: HttpClient? = null
     private val kilobyte = 1024
     private val maxImageLimit = 3 * kilobyte

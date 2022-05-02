@@ -1,9 +1,9 @@
-package com.masuta.gogreat.data.repository
+package com.masuta.gogreat.data.providers
 
 import android.content.Context
 import android.widget.Toast
 import com.masuta.gogreat.R
-import com.masuta.gogreat.data.remote.Client
+import com.masuta.gogreat.data.http.Client
 import com.masuta.gogreat.domain.model.Response
 import com.masuta.gogreat.domain.model.User
 import com.masuta.gogreat.domain.repository.AuthRepository
@@ -21,7 +21,7 @@ class AuthRepositoryImpl @Inject constructor(
     private val context: Context
 ) : AuthRepository {
     private var httpClient: HttpClient? = null
-    private var authUrl = "https://api.gogreat.com/v1/train"
+    private var authUrl = ""
 
     init {
         context.resources.getInteger(R.integer.request_timeout).let {

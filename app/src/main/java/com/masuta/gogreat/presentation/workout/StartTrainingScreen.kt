@@ -30,6 +30,7 @@ import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DefaultDataSource
+import com.masuta.gogreat.R
 import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.presentation.main.Timer
 import com.masuta.gogreat.presentation.main.TimerViewModel
@@ -87,7 +88,14 @@ fun StartTrainingScreen(
         ) {
             item {
                 Spacer(modifier = Modifier.height(12.dp))
-                VideoSection(url = currentExercise.video)
+                if (currentExercise.video.isEmpty()){
+                    val cxt = LocalContext.current
+
+                    VideoSection(url = cxt.getString(R.string.url_video_exercise))
+                } else {
+                    VideoSection(url = currentExercise.video)
+                }
+
                 Spacer(modifier = Modifier.height(12.dp))
                 TrainingInfo(
                     currentExercise,
@@ -414,13 +422,13 @@ fun ButtonSection(
 fun VideoSection(
     url: String
 ) {
-    val videoUrl = url.ifEmpty { "https://cdn.videvo.net/videvo_files/video/free/2018-09/large_watermarked/180419_Boxing_06_01_preview.mp4" }
+
     val context = LocalContext.current
     val player = remember {
         ExoPlayer.Builder(context).build().apply {
             val dataSource = DefaultDataSource.Factory(context)
             val source = ProgressiveMediaSource.Factory(dataSource)
-                .createMediaSource(MediaItem.fromUri(Uri.parse(videoUrl)))
+                .createMediaSource(MediaItem.fromUri(Uri.parse(url)))
 
             addMediaSource(source)
             prepare()

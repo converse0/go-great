@@ -1,10 +1,10 @@
-package com.masuta.gogreat.data.repository
+package com.masuta.gogreat.data.providers
 
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
 import com.masuta.gogreat.R
-import com.masuta.gogreat.data.remote.Client
+import com.masuta.gogreat.data.http.Client
 import com.masuta.gogreat.domain.model.*
 import com.masuta.gogreat.domain.repository.TrainRepository
 import io.ktor.client.*
@@ -21,7 +21,7 @@ class TrainRepositoryImpl @Inject constructor(
 ): TrainRepository {
 
     private var httpClient: HttpClient? = null
-    private var trainUrl = "https://api.gogreat.com/v1/train"
+    private var trainUrl = ""
     private var localTraining:Map<String,Training> = mutableMapOf()
     private var localTrainingEx:Map<Int,TrainingExercise> = mutableMapOf()
 
