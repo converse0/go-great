@@ -46,8 +46,7 @@ println("AnimatedSplashScreen")
         }
     } else {
         startAnimation = true
-
-        Splash(alphaAnim = alphaAnim)
+        Splash(alphaAnim = alphaAnim.value)
         count+=1
         if (count == 1) {
             launch(
@@ -76,7 +75,7 @@ fun launch(
 
 @Composable
 fun Splash(
-    alphaAnim: State<Float>
+    alphaAnim: Float
 ) {
     Box(
         contentAlignment = Alignment.Center,
@@ -87,7 +86,7 @@ fun Splash(
         Image(
             painter = painterResource(id = R.drawable.ic_launcher_foreground),
             contentDescription = null,
-            modifier = Modifier.size(250.dp).alpha(alphaAnim.value)
+            modifier = Modifier.size(250.dp).alpha(alphaAnim)
         )
     }
 }
