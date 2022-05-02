@@ -26,6 +26,9 @@ fun AnimatedSplashScreen(
     navController: NavHostController,
     startRouteName: String
 ) {
+
+    var count by remember { mutableStateOf(0) }
+
     var startAnimation by remember {
         mutableStateOf(false)
     }
@@ -37,12 +40,14 @@ fun AnimatedSplashScreen(
     )
     if (startRouteName != "launch-screen") {
         startAnimation = true
-        launch(
-            navController = navController,
-            startRouteName = startRouteName
-        )
+        count++
+        if (count == 1) {
+            launch(
+                navController = navController,
+                startRouteName = startRouteName
+            )
+        }
     }
-
     Splash(alphaAnim = alphaAnim.value)
 }
 
@@ -50,9 +55,12 @@ fun launch(
     navController: NavHostController,
     startRouteName: String
 ) {
+    println("RECOMPOSE $startRouteName")
     CoroutineScope(Dispatchers.IO).launch {
         delay(3000)
-        navController.navigate(startRouteName)
+        CoroutineScope(Dispatchers.Main).launch {
+            navController.navigate(startRouteName)
+        }
     }
 }
 
