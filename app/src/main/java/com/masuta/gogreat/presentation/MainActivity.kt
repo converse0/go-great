@@ -162,7 +162,7 @@ fun Navigation(items: List<BottomNavigationItem>) {
         startDestination = "splash-screen",
     ) {
         composable(route = "splash-screen") {
-            AnimatedSplashScreen(navController, startRouteName.value)
+            AnimatedSplashScreen(navController, startRouteName)
         }
         composable(route = "main") {
             MainScreen(

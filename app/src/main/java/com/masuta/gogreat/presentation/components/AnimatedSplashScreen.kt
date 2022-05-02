@@ -16,17 +16,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.masuta.gogreat.R
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 @Composable
 fun AnimatedSplashScreen(
     navController: NavHostController,
-    startRouteName: String
+    startRouteName: MutableState<String>
 ) {
-
+println("AnimatedSplashScreen")
     var count by remember { mutableStateOf(0) }
 
     var startAnimation by remember {
@@ -38,35 +35,48 @@ fun AnimatedSplashScreen(
             durationMillis = 2500
         )
     )
-    if (startRouteName != "launch-screen") {
-        startAnimation = true
-        count++
+    if (startRouteName.value == "launch-screen") {
+        count+=1
+        startAnimation = false
         if (count == 1) {
             launch(
                 navController = navController,
-                startRouteName = startRouteName
+                startRouteName = startRouteName.value
+            )
+        }
+    } else {
+        startAnimation = true
+
+        Splash(alphaAnim = alphaAnim)
+        count+=1
+        if (count == 1) {
+            launch(
+                navController = navController,
+                startRouteName = startRouteName.value,
+                delay = 3000
             )
         }
     }
-    Splash(alphaAnim = alphaAnim.value)
 }
 
 fun launch(
     navController: NavHostController,
-    startRouteName: String
+    startRouteName: String,
+    delay: Long = 0,
 ) {
     println("RECOMPOSE $startRouteName")
     CoroutineScope(Dispatchers.IO).launch {
-        delay(3000)
-        CoroutineScope(Dispatchers.Main).launch {
+        delay(delay)
+        withContext(Dispatchers.Main) {
             navController.navigate(startRouteName)
         }
+//
     }
 }
 
 @Composable
 fun Splash(
-    alphaAnim: Float
+    alphaAnim: State<Float>
 ) {
     Box(
         contentAlignment = Alignment.Center,
@@ -77,7 +87,7 @@ fun Splash(
         Image(
             painter = painterResource(id = R.drawable.ic_launcher_foreground),
             contentDescription = null,
-            modifier = Modifier.size(250.dp).alpha(alphaAnim)
+            modifier = Modifier.size(250.dp).alpha(alphaAnim.value)
         )
     }
 }
