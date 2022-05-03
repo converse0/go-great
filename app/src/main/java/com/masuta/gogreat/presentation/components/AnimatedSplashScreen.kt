@@ -83,13 +83,22 @@ fun launch(
     context: Context
 ) {
     CoroutineScope(Dispatchers.IO).launch {
-        viewModelUser?.getUserParameters()
-        viewModel?.getMyTrainings(context = context, navController = navController)
-        viewModel?.getPastTrainings(context = context, navController = navController)
-        viewModel?.getCurrentTraining(context = context, navController = navController)
-        withContext(Dispatchers.Main) {
-            navController.navigate(startRouteName)
+        when(viewModelUser?.getUserParameters()){
+            false -> {
+                withContext(Dispatchers.Main) {
+                    navController.navigate("sign-in")
+                }
+            }
+            else -> {
+                viewModel?.getMyTrainings(context = context, navController = navController)
+                viewModel?.getPastTrainings(context = context, navController = navController)
+                viewModel?.getCurrentTraining(context = context, navController = navController)
+                withContext(Dispatchers.Main) {
+                    navController.navigate(startRouteName)
+                }
+            }
         }
+
     }
 }
 
