@@ -41,6 +41,7 @@ fun AnimatedSplashScreen(
             durationMillis = 2500
         )
     )
+
     if (startRouteName.value == "launch-screen") {
         count += 1
         startAnimation = false
@@ -52,7 +53,7 @@ fun AnimatedSplashScreen(
                 viewModelUser = null
             )
         }
-    } else {
+    } else if (startRouteName.value != "") {
         startAnimation = true
         Splash(alphaAnim = alphaAnim.value)
         count += 1
@@ -67,13 +68,14 @@ fun AnimatedSplashScreen(
     }
 }
 
+
+
 fun launch(
     navController: NavHostController,
     startRouteName: String,
     viewModel: MainViewModel? = null,
     viewModelUser: ProfileViewModel? = null
 ) {
-    println("RECOMPOSE $startRouteName")
     CoroutineScope(Dispatchers.IO).launch {
         viewModelUser?.getUserParameters()
         viewModel?.getMyTrainings()

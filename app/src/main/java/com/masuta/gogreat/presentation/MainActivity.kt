@@ -127,6 +127,7 @@ fun ChoseStartScreen(
     if (viewModel.errorMessage.isNotEmpty()) {
         Toast.makeText(LocalContext.current, viewModel.errorMessage, Toast.LENGTH_LONG).show()
     }
+    println("gender ${gender.value}")
     when (gender.value) {
         -6 -> startRouteName.value = "sign-in"
         6 -> startRouteName.value = "about"
@@ -140,7 +141,7 @@ fun ChoseStartScreen(
         }
         else -> {
             println("Gender $gender")
-            startRouteName.value = "main"
+            startRouteName.value = ""
         }
     }
 }
