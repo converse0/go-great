@@ -3,11 +3,11 @@ package com.masuta.gogreat.utils
 
 
 sealed class Errors(val errCode: Int, val errRoute: String)
-class Unknown(val code: Int, val route: String): Errors(code, route)
-class NotFound(val code: Int, val route: String): Errors(code, route)
-class Internal(val code: Int, val route: String):Errors(code, route)
-class Unauthenticated(val code: Int, val route: String): Errors(code, route)
-class Timeout(val code: Int, val route: String = ""): Errors(code, route)
+class Unknown(val code: Int, route: String): Errors(code, route)
+class NotFound(val code: Int, route: String): Errors(code, route)
+class Internal(val code: Int, route: String):Errors(code, route)
+class Unauthenticated(val code: Int, route: String): Errors(code, route)
+class Timeout(val code: Int, private val route: String = ""): Errors(code, route)
 
 fun handleErrors(
     code: Int,
