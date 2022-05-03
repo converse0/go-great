@@ -125,7 +125,9 @@ fun ChoseStartScreen(
     }
     SetSex(context, viewModel = viewModel, gender)
     if (viewModel.errorMessage.isNotEmpty()) {
-        Toast.makeText(LocalContext.current, viewModel.errorMessage, Toast.LENGTH_LONG).show()
+        Toast.makeText(LocalContext.current,
+            viewModel.errorMessage,
+            Toast.LENGTH_LONG).show()
     }
     println("gender ${gender.value}")
     when (gender.value) {
@@ -139,15 +141,9 @@ fun ChoseStartScreen(
                     Toast.LENGTH_LONG
                 ).show()
             startRouteName.value = "main"
-
         }
-        0, 1 -> {
-            startRouteName.value = "main"
-        }
-        else -> {
-            println("Gender $gender")
-            startRouteName.value = ""
-        }
+        0, 1 -> startRouteName.value = "main"
+        else -> startRouteName.value = ""
     }
 }
 
