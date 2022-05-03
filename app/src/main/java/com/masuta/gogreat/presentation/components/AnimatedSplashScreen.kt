@@ -14,10 +14,12 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.masuta.gogreat.R
 import com.masuta.gogreat.domain.model.Training
 import com.masuta.gogreat.presentation.main.MainViewModel
+import com.masuta.gogreat.presentation.profile.ProfileViewModel
 import kotlinx.coroutines.*
 
 @Composable
@@ -26,6 +28,8 @@ fun AnimatedSplashScreen(
     startRouteName: MutableState<String>,
     viewModel: MainViewModel
 ) {
+    val viewModelUser: ProfileViewModel = hiltViewModel()
+
     var count by remember { mutableStateOf(0) }
 
     var startAnimation by remember {
@@ -38,25 +42,26 @@ fun AnimatedSplashScreen(
         )
     )
     if (startRouteName.value == "launch-screen") {
-        count+=1
+        count += 1
         startAnimation = false
         if (count == 1) {
             launch(
                 navController = navController,
                 startRouteName = startRouteName.value,
-                viewModel = null
+                viewModel = null,
+                viewModelUser = null
             )
         }
     } else {
-
         startAnimation = true
         Splash(alphaAnim = alphaAnim.value)
-        count+=1
+        count += 1
         if (count == 1) {
             launch(
                 navController = navController,
                 startRouteName = startRouteName.value,
-                viewModel = viewModel
+                viewModel = viewModel,
+                viewModelUser = viewModelUser
             )
         }
     }
@@ -65,15 +70,18 @@ fun AnimatedSplashScreen(
 fun launch(
     navController: NavHostController,
     startRouteName: String,
-    viewModel: MainViewModel?=null,
+    viewModel: MainViewModel? = null,
+    viewModelUser: ProfileViewModel? = null
 ) {
     println("RECOMPOSE $startRouteName")
     CoroutineScope(Dispatchers.IO).launch {
+        viewModelUser?.getUserParameters()
         viewModel?.getMyTrainings()
+        viewModel?.getPastTrainings()
+        viewModel?.getCurrentTraining()
         withContext(Dispatchers.Main) {
             navController.navigate(startRouteName)
         }
-//
     }
 }
 
@@ -90,7 +98,9 @@ fun Splash(
         Image(
             painter = painterResource(id = R.drawable.ic_launcher_foreground),
             contentDescription = null,
-            modifier = Modifier.size(250.dp).alpha(alphaAnim)
+            modifier = Modifier
+                .size(250.dp)
+                .alpha(alphaAnim)
         )
     }
 }

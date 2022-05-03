@@ -96,6 +96,15 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
+    suspend fun getUserParameters() {
+        val resp = getUserParams()
+        resp.data?.let {
+            val params = ParametersUser().copy(image = it.image)
+            repository.setLocalProfileParams(params)
+        }
+    }
+
+
     suspend fun updateParams(
         userParams: ParametersUser,
     ): String? {
