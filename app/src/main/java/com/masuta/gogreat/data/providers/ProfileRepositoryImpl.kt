@@ -27,7 +27,7 @@ import javax.inject.Inject
 data class ResponseParams(
     val message: String?= null,
     val status: Boolean?= null,
-    val code: Int?= null,
+    val code: Int? = null,
     val data: ParametersUserGet? = null
 )
 

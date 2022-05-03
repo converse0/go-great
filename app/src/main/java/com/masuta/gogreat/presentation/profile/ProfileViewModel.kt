@@ -1,5 +1,6 @@
 package com.masuta.gogreat.presentation.profile
 
+import android.content.Context
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.lifecycle.ViewModel
@@ -11,6 +12,7 @@ import com.masuta.gogreat.domain.model.ParametersUserSet
 import com.masuta.gogreat.domain.model.UserActivity
 import com.masuta.gogreat.domain.model.UserDiet
 import com.masuta.gogreat.domain.repository.ProfileRepository
+import com.masuta.gogreat.utils.handleErrors
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -37,6 +39,7 @@ class ProfileViewModel @Inject constructor(
     fun getParameters(
         fail: MutableState<Boolean>,
         navController: NavHostController,
+        context: Context,
         routeTo: (navController: NavHostController, route: String) -> Unit,
     ) {
         if (isDataLoad) {

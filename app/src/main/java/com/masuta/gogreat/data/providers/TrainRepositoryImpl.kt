@@ -18,7 +18,7 @@ import javax.inject.Inject
 
 class TrainRepositoryImpl @Inject constructor(
     private var client: Client,
-    private var context: Context,
+    private val context: Context,
     private val store: Store
 ): TrainRepository {
 
@@ -78,17 +78,19 @@ class TrainRepositoryImpl @Inject constructor(
                         append("Authorization", "Bearer $userToken")
                     }
                 }!!
+                println("RESPONSE FIND BY ID: $resp")
                 return resp
             }
         } catch (e: Exception) {
+            println("EXCEPTION: $e")
             e.localizedMessage?.let {
                 CoroutineScope(Dispatchers.Main).launch {
                     Toast.makeText(context, it, Toast.LENGTH_LONG).show()
                 }
             }
             e.printStackTrace()
+            return ExerciseResponse(code = 777)
         }
-        return ExerciseResponse()
     }
 
     override suspend fun save(newTrain: Training) {

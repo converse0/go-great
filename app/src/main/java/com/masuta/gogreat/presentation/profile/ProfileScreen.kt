@@ -112,6 +112,7 @@ fun ProfileSection(
 ) {
 
     val userParams = remember { viewModel.userParams }
+    val context = LocalContext.current
 
     val fail = remember {
         mutableStateOf(false)
@@ -121,13 +122,13 @@ fun ProfileSection(
         viewModel.getParameters(
             routeTo = routeTo,
             navController = navController,
-            fail = fail
+            fail = fail,
+            context = context
         )
     }
 
     val lazyListState = rememberLazyListState()
 
-    val context = LocalContext.current
     var imageUri by remember { mutableStateOf<Uri?>(null) }
     val bitmap = remember { mutableStateOf<Bitmap?>(null) }
 

@@ -42,5 +42,6 @@ enum class ExerciseType(val value: Int) {
 data class ExerciseResponse(
     val data: List<TrainingExercise>? = null,
     val message: String? = null,
+    val code: Int? = null,
     val status: Boolean? = null
 )

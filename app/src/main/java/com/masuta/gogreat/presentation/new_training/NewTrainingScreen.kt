@@ -48,7 +48,9 @@ fun NewTrainingScreen(
     viewModel: NewTrainingViewModel
 ) {
 
-    val timeNow = Clock.System.now().toString()
+//    val timeNow = Clock.System.now().toString()
+
+    val timeNow = ""
 
     val openModal = remember { mutableStateOf(false) }
     val listExercises = remember { mutableStateOf(listOf<TrainingExercise>()) }
@@ -173,11 +175,13 @@ fun Modal(
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
 
-        val dateLocal = date.value.split("T").get(0)
-        val formatParse = SimpleDateFormat("yyyy-MM-dd")
-        val format = SimpleDateFormat("dd MMMM yyyy", Locale.ENGLISH)
-        val dateParse = formatParse.parse(dateLocal)
-        val textDate = format.format(dateParse!!)
+    val textDate = ""
+
+//        val dateLocal = date.value.split("T").get(0)
+//        val formatParse = SimpleDateFormat("yyyy-MM-dd")
+//        val format = SimpleDateFormat("dd MMMM yyyy", Locale.ENGLISH)
+//        val dateParse = formatParse.parse(dateLocal)
+//        val textDate = format.format(dateParse!!)
 
     Box(
         contentAlignment = Alignment.Center,
