@@ -179,6 +179,7 @@ fun ProfileSection(
                         lazyListState = lazyListState,
                         viewModel = viewModel,
                         userParams = params,
+                        navController = navController
                     )
                 Spacer(Modifier.height(60.dp))
             }
@@ -272,6 +273,7 @@ fun ProfileInfo(
     lazyListState: LazyListState,
     viewModel: ProfileViewModel,
     userParams: ParametersUser,
+    navController: NavHostController
 ) {
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -378,6 +380,8 @@ fun ProfileInfo(
         ) {
             CoroutineScope(Dispatchers.IO).launch {
                 val resp = viewModel.updateParams(
+                    context = context,
+                    navController = navController,
                     userParams = userParams.copy(
                         age = age.value.toInt(),
                         eat = timesEat.value.toInt(),

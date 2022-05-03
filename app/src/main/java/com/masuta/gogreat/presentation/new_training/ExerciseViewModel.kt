@@ -18,6 +18,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -52,8 +53,10 @@ class ExerciseViewModel @Inject constructor(
                         Toast.makeText(context, resp.message, Toast.LENGTH_LONG).show()
                     }
                     else -> {
-                        routeTo(navController, error.errRoute)
                         isRoute.value = true
+                        withContext(Dispatchers.Main) {
+                            routeTo(navController, error.errRoute)
+                        }
                     }
                 }
             }

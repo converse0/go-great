@@ -16,7 +16,9 @@ import com.masuta.gogreat.domain.repository.ProfileRepository
 import com.masuta.gogreat.utils.Timeout
 import com.masuta.gogreat.utils.handleErrors
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -124,6 +126,8 @@ class ProfileViewModel @Inject constructor(
 
 
     suspend fun updateParams(
+        context: Context,
+        navController: NavHostController,
         userParams: ParametersUser,
     ): String? {
         val params = ParametersUserSet (
@@ -139,13 +143,23 @@ class ProfileViewModel @Inject constructor(
         )
         repository.setLocalProfileParams(userParams)
         val resp = repository.updateParameters(params)
+        println("UPDATE PARAMS: $resp")
 
-        if (resp != null) {
-            isDataLoad = true
-            return resp
+        resp.code?.let { code ->
+            when(val error = handleErrors(code)) {
+                is Timeout -> {
+                    Toast.makeText(context, resp.message, Toast.LENGTH_LONG).show()
+                }
+                else -> {
+                    withContext(Dispatchers.Main) {
+                        routeTo(navController, error.errRoute)
+                    }
+                }
+            }
         }
 
-        return null
+        isDataLoad = true
+        return resp.message
     }
 
     suspend fun uploadImage(im: ImageBitmap): Pair<String?,String?> {

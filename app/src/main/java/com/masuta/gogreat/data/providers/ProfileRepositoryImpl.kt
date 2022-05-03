@@ -110,7 +110,7 @@ class ProfileRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun updateParameters(params: ParametersUserSet): String? {
+    override suspend fun updateParameters(params: ParametersUserSet): UpdateParamsResponse {
         try {
             httpClient?.put<UpdateParamsResponse>("$trainUrl/user/parameters") {
                 contentType(ContentType.Application.Json)
@@ -119,7 +119,7 @@ class ProfileRepositoryImpl @Inject constructor(
                 }
                 body = params
             }?.let {
-                return it.message
+                return it
             }
         } catch(e: Exception) {
             e.localizedMessage?.let {
@@ -129,7 +129,7 @@ class ProfileRepositoryImpl @Inject constructor(
             }
             e.printStackTrace()
         }
-        return null
+        return UpdateParamsResponse()
     }
 
     private fun getStringRandom(): String {

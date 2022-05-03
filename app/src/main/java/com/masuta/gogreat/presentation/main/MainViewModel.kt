@@ -68,7 +68,9 @@ class MainViewModel @Inject constructor(
                             Toast.makeText(context, resp.message, Toast.LENGTH_LONG).show()
                         }
                         else -> {
-                            routeTo(navController, error.errRoute)
+                            withContext(Dispatchers.Main) {
+                                routeTo(navController, error.errRoute)
+                            }
                         }
                     }
                 }
@@ -101,7 +103,9 @@ class MainViewModel @Inject constructor(
                              Toast.makeText(context, resp.message, Toast.LENGTH_LONG).show()
                          }
                          else -> {
-                             routeTo(navController, error.errRoute)
+                             withContext(Dispatchers.Main) {
+                                 routeTo(navController, error.errRoute)
+                             }
                          }
                      }
                  }
@@ -134,7 +138,9 @@ class MainViewModel @Inject constructor(
                                 Toast.makeText(context, resp.message, Toast.LENGTH_LONG).show()
                             }
                             else -> {
-                                routeTo(navController, error.errRoute)
+                                withContext(Dispatchers.Main) {
+                                    routeTo(navController, error.errRoute)
+                                }
                             }
                         }
                     }

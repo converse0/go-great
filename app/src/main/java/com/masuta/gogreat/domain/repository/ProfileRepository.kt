@@ -5,6 +5,7 @@ import com.masuta.gogreat.data.providers.ResponseParams
 import com.masuta.gogreat.data.providers.ResponseParamsIm
 import com.masuta.gogreat.domain.model.ParametersUser
 import com.masuta.gogreat.domain.model.ParametersUserSet
+import com.masuta.gogreat.domain.model.UpdateParamsResponse
 
 interface ProfileRepository {
 
@@ -14,7 +15,7 @@ interface ProfileRepository {
 
     suspend fun getParameters(): ResponseParams
 
-    suspend fun updateParameters(params: ParametersUserSet): String?
+    suspend fun updateParameters(params: ParametersUserSet): UpdateParamsResponse
 
     suspend fun uploadImage(image: ImageBitmap): ResponseParamsIm
 
