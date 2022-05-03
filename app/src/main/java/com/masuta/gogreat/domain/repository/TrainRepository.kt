@@ -18,8 +18,8 @@ interface TrainRepository {
     suspend fun saveLocalEx(ex: TrainingExercise):Int
     suspend fun getLocalEx(id: Int):TrainingExercise?
     suspend fun getAllLocalTrainings(): List<Training>?
-    suspend fun getPassTrainings(): List<Training>?
-    suspend fun getMyTrainings(): List<Training>?
+    suspend fun getPassTrainings(): TrainingResponse
+    suspend fun getMyTrainings(): TrainingResponse
 
     suspend fun getLocalWorkouts(): List<Training>
     suspend fun setLocalWorkouts(workouts: List<Training>)
@@ -41,7 +41,7 @@ interface TrainRepository {
     suspend fun clearLocalExerciseData()
     suspend fun clearLocalTrainingData()
     suspend fun getTrainingDetail(uid: String): Training?
-    suspend fun getCurrentTraining(): Training?
+    suspend fun getCurrentTraining(): TrainingResponse
     suspend fun setExerciseParams(uid: String, listExercises: List<TrainingExercise>)
     suspend fun startTraining(uid: String)
     suspend fun finishTraining(uid: String)

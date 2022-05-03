@@ -147,7 +147,7 @@ class TrainRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getPassTrainings(): List<Training>? {
+    override suspend fun getPassTrainings(): TrainingResponse {
         try {
             httpClient?.get<TrainingResponse>("$trainUrl/user/trenings?status=Finish") {
                 contentType(ContentType.Application.Json)
@@ -155,9 +155,8 @@ class TrainRepositoryImpl @Inject constructor(
                     append("Authorization", "Bearer $userToken")
                 }
             }?.let { tr ->
-                tr.data?.let { trains ->
-                    return trains
-                }
+                println("TRAINING RESPONSE $tr")
+                return tr
             }
         } catch (e: Exception) {
             e.localizedMessage?.let {
@@ -167,10 +166,10 @@ class TrainRepositoryImpl @Inject constructor(
             }
             e.printStackTrace()
         }
-        return null
+        return TrainingResponse()
     }
 
-    override suspend fun getMyTrainings(): List<Training>? {
+    override suspend fun getMyTrainings(): TrainingResponse {
         try {
             httpClient?.get<TrainingResponse>("$trainUrl/user/trenings?status=Create") {
                 contentType(ContentType.Application.Json)
@@ -178,9 +177,7 @@ class TrainRepositoryImpl @Inject constructor(
                     append("Authorization", "Bearer $userToken")
                 }
             }?.let { tr ->
-                tr.data?.let { trains ->
-                    return trains
-                }
+                return tr
             }
         } catch (e: Exception) {
             e.localizedMessage?.let {
@@ -190,7 +187,7 @@ class TrainRepositoryImpl @Inject constructor(
             }
             e.printStackTrace()
         }
-        return null
+        return TrainingResponse()
     }
 
     override suspend fun getLocalWorkouts(): List<Training> {
@@ -314,7 +311,7 @@ class TrainRepositoryImpl @Inject constructor(
     }
 
 
-    override suspend fun getCurrentTraining(): Training? {
+    override suspend fun getCurrentTraining(): TrainingResponse {
         try {
             httpClient?.get<TrainingResponse>("$trainUrl/user/trenings?status=Start") {
                 contentType(ContentType.Application.Json)
@@ -322,12 +319,12 @@ class TrainRepositoryImpl @Inject constructor(
                     append("Authorization", "Bearer $userToken")
                 }
             }?.let { tr ->
-
-                tr.data?.let { train ->
-                    train.getOrNull(0)?.let {
-                        return it
-                    }
-                }
+                return tr
+//                tr.data?.let { train ->
+//                    train.getOrNull(0)?.let {
+//                        return it
+//                    }
+//                }
             }
         } catch (e: Exception) {
             e.localizedMessage?.let {
@@ -337,7 +334,7 @@ class TrainRepositoryImpl @Inject constructor(
             }
             e.printStackTrace()
         }
-        return null
+        return TrainingResponse()
     }
 
     override suspend fun setExerciseParams(uid: String, listExercises: List<TrainingExercise>) {

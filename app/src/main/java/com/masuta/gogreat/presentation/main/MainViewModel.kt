@@ -1,10 +1,16 @@
 package com.masuta.gogreat.presentation.main
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavHostController
 import com.masuta.gogreat.domain.model.Training
 import com.masuta.gogreat.domain.repository.TrainRepository
+import com.masuta.gogreat.presentation.profile.routeTo
+import com.masuta.gogreat.utils.Timeout
+import com.masuta.gogreat.utils.handleErrors
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import javax.inject.Inject
@@ -12,7 +18,7 @@ import kotlin.system.measureTimeMillis
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val repository: TrainRepository
+    private val repository: TrainRepository,
 ): ViewModel() {
 
     private var workoutsReloadData = false
@@ -36,7 +42,11 @@ class MainViewModel @Inject constructor(
             repository.pastWorkoutsDataReload = value
         }
 
-    fun getWorkouts(list: MutableState<List<Training>>) {
+    fun getWorkouts(
+        list: MutableState<List<Training>>,
+        context: Context,
+        navController: NavHostController
+    ) {
         if (workoutsReloadData) {
             workoutsReloadData = false
 
@@ -47,12 +57,20 @@ class MainViewModel @Inject constructor(
                     training.forEach { repository.saveLocal(it.validateExerciseData()) }
                 }
                 val myTrains = repository.getMyTrainings()
-                myTrains?.let { trains ->
-
+                myTrains.data?.let { trains ->
                     val localList = trains.map { it.validateExerciseData() }
                     println("localList: ${localList.size}")
                     list.value = localList
                     repository.setLocalWorkouts(localList)
+                } ?: myTrains.code?.let { code ->
+                    when(val error = handleErrors(code)) {
+                        is Timeout -> {
+                            Toast.makeText(context, resp.message, Toast.LENGTH_LONG).show()
+                        }
+                        else -> {
+                            routeTo(navController, error.errRoute)
+                        }
+                    }
                 }
             }
         } else {
@@ -61,17 +79,32 @@ class MainViewModel @Inject constructor(
             }
         }
     }
-     fun getCurrentTraining(training: MutableState<Training>) {
+
+     fun getCurrentTraining(
+         training: MutableState<Training>,
+         context: Context,
+         navController: NavHostController
+     ) {
          if(currentWorkoutReloadData) {
              println("GET CURRENT")
              currentWorkoutReloadData = false
              viewModelScope.launch {
-                repository.getCurrentTraining()?.let {
-
-                    val workout = it.validateExerciseData()
-                    training.value = workout
-                    repository.setLocalCurrentWorkout(workout)
-                }
+                val resp = repository.getCurrentTraining()
+                 resp.data?.let {
+                     it.getOrNull(0)?.let { train ->
+                         training.value = train
+                         repository.setLocalCurrentWorkout(train.validateExerciseData())
+                     }
+                 } ?: resp.code?.let { code ->
+                     when(val error = handleErrors(code)) {
+                         is Timeout -> {
+                             Toast.makeText(context, resp.message, Toast.LENGTH_LONG).show()
+                         }
+                         else -> {
+                             routeTo(navController, error.errRoute)
+                         }
+                     }
+                 }
             }
          } else {
              viewModelScope.launch {
@@ -82,15 +115,28 @@ class MainViewModel @Inject constructor(
          }
     }
 
-    fun getPastTrainings(list: MutableState<List<Training>>) {
+    fun getPastTrainings(
+        list: MutableState<List<Training>>,
+        context: Context,
+        navController: NavHostController
+    ) {
         if (pastWorkoutsReloadData) {
             pastWorkoutsReloadData = false
             viewModelScope.launch {
                 measureTimeMillis {
                     val resp = repository.getPassTrainings()
-                    resp?.let {
+                    resp.data?.let{
                         list.value = it
                         repository.setLocalPastWorkouts(it)
+                    } ?: resp.code?.let { code ->
+                        when(val error = handleErrors(code)) {
+                            is Timeout -> {
+                                Toast.makeText(context, resp.message, Toast.LENGTH_LONG).show()
+                            }
+                            else -> {
+                                routeTo(navController, error.errRoute)
+                            }
+                        }
                     }
                 }
             }
@@ -101,27 +147,65 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    suspend fun getMyTrainings(){
+    suspend fun getMyTrainings(
+        context: Context,
+        navController: NavHostController
+    ){
        val resp = repository.getMyTrainings()
-        resp?.let { trains->
+        resp.data?.let { trains->
             val localList = trains.map { it.validateExerciseData() }
             repository.setLocalWorkouts(localList)
-        }
-    }
-    suspend fun getPastTrainings() {
-        val resp = repository.getPassTrainings()
-        resp?.let { pastTr ->
-            val pastTrainings = pastTr.map { it.validateExerciseData() }
-            repository.setLocalPastWorkouts(pastTrainings)
+        } ?: resp.code?.let { code ->
+            when(val error = handleErrors(code)) {
+                is Timeout -> {
+                    Toast.makeText(context, resp.message, Toast.LENGTH_LONG).show()
+                }
+                else -> {
+                    routeTo(navController, error.errRoute)
+                }
+            }
         }
     }
 
-    suspend fun getCurrentTraining() {
-        val resp = repository.getCurrentTraining()
-        resp?.let {
-            val workout = it.validateExerciseData()
-            repository.setLocalCurrentWorkout(workout)
+    suspend fun getPastTrainings(
+        context: Context,
+        navController: NavHostController
+    ) {
+        val resp = repository.getPassTrainings()
+        resp.data?.let { pastTr ->
+            val pastTrainings = pastTr.map { it.validateExerciseData() }
+            repository.setLocalPastWorkouts(pastTrainings)
+        } ?: resp.code?.let { code ->
+            when(val error = handleErrors(code)) {
+                is Timeout -> {
+                    Toast.makeText(context, resp.message, Toast.LENGTH_LONG).show()
+                }
+                else -> {
+                    routeTo(navController, error.errRoute)
+                }
+            }
         }
+    }
+
+    suspend fun getCurrentTraining(
+        context: Context,
+        navController: NavHostController
+    ) {
+        val resp = repository.getCurrentTraining()
+        resp.data?.let {
+            it.getOrNull(0)?.let { train ->
+                repository.setLocalCurrentWorkout(train.validateExerciseData())
+            }
+        } ?: resp.code?.let { code ->
+                when(val error = handleErrors(code)) {
+                    is Timeout -> {
+                        Toast.makeText(context, resp.message, Toast.LENGTH_LONG).show()
+                    }
+                    else -> {
+                        routeTo(navController, error.errRoute)
+                    }
+                }
+            }
     }
 
 

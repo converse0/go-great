@@ -20,6 +20,7 @@ data class Training(
 data class TrainingResponse(
     val data: List<Training>? = null,
     val message: String? = null,
+    val code: Int? = null,
     val status: Boolean? = null
 )
 @kotlinx.serialization.Serializable
