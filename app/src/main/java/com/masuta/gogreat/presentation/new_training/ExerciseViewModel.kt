@@ -12,6 +12,7 @@ import com.masuta.gogreat.domain.repository.TrainRepository
 import com.masuta.gogreat.presentation.profile.routeTo
 import com.masuta.gogreat.utils.Errors
 import com.masuta.gogreat.utils.ListsValuesForSliders
+import com.masuta.gogreat.utils.Timeout
 import com.masuta.gogreat.utils.handleErrors
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -47,31 +48,29 @@ class ExerciseViewModel @Inject constructor(
                 exercisesList.value = resp.data
             } ?: resp.code?.let { code ->
 
-//                val error = handleErrors(code)
-//
-//                when(error) {
-//                    is Errors.Timeout -> {
-//                        Toast.makeText(context, resp.message, Toast.LENGTH_LONG).show()
-//                    }
-//                    else -> {
-//                        isRoute.value = true
-//                        routeTo(navController, error.)
-//                    }
-//                }
-
-                when(code) {
-                    16 -> {
-                        isRoute.value = true
-                        routeTo(navController, "sign-in")
-                    }
-                    2, 5, 13 -> {
-                        isRoute.value = true
-                        routeTo(navController, "about")
-                    }
-                    777 -> {
+                when(val error = handleErrors(code)) {
+                    is Timeout -> {
                         Toast.makeText(context, resp.message, Toast.LENGTH_LONG).show()
                     }
+                    else -> {
+                        routeTo(navController, error.errRoute)
+                        isRoute.value = true
+                    }
                 }
+
+//                when(code) {
+//                    16 -> {
+//                        isRoute.value = true
+//                        routeTo(navController, "sign-in")
+//                    }
+//                    2, 5, 13 -> {
+//                        isRoute.value = true
+//                        routeTo(navController, "about")
+//                    }
+//                    777 -> {
+//                        Toast.makeText(context, resp.message, Toast.LENGTH_LONG).show()
+//                    }
+//                }
             }
         }
     }
