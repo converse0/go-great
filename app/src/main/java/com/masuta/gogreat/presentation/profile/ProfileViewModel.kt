@@ -63,7 +63,7 @@ class ProfileViewModel @Inject constructor(
                     resp.message?.let { errorMessage = it }
                     fail.value = true
                     when(resp.code) {
-                        16 -> routeTo(navController, "sign_in")
+                        16 -> routeTo(navController, "sign-in")
                         2, 5, 13 -> routeTo(navController, "about")
                     }
                 }
