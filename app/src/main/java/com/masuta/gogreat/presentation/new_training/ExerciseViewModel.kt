@@ -47,7 +47,6 @@ class ExerciseViewModel @Inject constructor(
             resp.data?.let {
                 exercisesList.value = resp.data
             } ?: resp.code?.let { code ->
-
                 when(val error = handleErrors(code)) {
                     is Timeout -> {
                         Toast.makeText(context, resp.message, Toast.LENGTH_LONG).show()
@@ -57,20 +56,6 @@ class ExerciseViewModel @Inject constructor(
                         isRoute.value = true
                     }
                 }
-
-//                when(code) {
-//                    16 -> {
-//                        isRoute.value = true
-//                        routeTo(navController, "sign-in")
-//                    }
-//                    2, 5, 13 -> {
-//                        isRoute.value = true
-//                        routeTo(navController, "about")
-//                    }
-//                    777 -> {
-//                        Toast.makeText(context, resp.message, Toast.LENGTH_LONG).show()
-//                    }
-//                }
             }
         }
     }

@@ -1,6 +1,7 @@
 package com.masuta.gogreat.presentation.profile
 
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.lifecycle.ViewModel
@@ -12,6 +13,7 @@ import com.masuta.gogreat.domain.model.ParametersUserSet
 import com.masuta.gogreat.domain.model.UserActivity
 import com.masuta.gogreat.domain.model.UserDiet
 import com.masuta.gogreat.domain.repository.ProfileRepository
+import com.masuta.gogreat.utils.Timeout
 import com.masuta.gogreat.utils.handleErrors
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -65,10 +67,19 @@ class ProfileViewModel @Inject constructor(
                 } else if (resp.code != null) {
                     resp.message?.let { errorMessage = it }
                     fail.value = true
-                    when(resp.code) {
-                        16 -> routeTo(navController, "sign-in")
-                        2, 5, 13 -> routeTo(navController, "about")
+                    when(val error = handleErrors(resp.code)) {
+                        is Timeout -> {
+                            Toast.makeText(context, resp.message, Toast.LENGTH_LONG).show()
+                        }
+                        else -> {
+                            routeTo(navController, error.errRoute)
+                        }
                     }
+
+//                    when(resp.code) {
+//                        16 -> routeTo(navController, "sign-in")
+//                        2, 5, 13 -> routeTo(navController, "about")
+//                    }
                 }
             }
         } else {
