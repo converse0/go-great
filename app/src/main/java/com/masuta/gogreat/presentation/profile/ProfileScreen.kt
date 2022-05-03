@@ -146,7 +146,6 @@ fun ProfileSection(
                 .fillMaxWidth()
         ) {
             items(1) {
-                println("imageRec: $userParams")
                 ProfileAvatar(
                     imageUri = imageUri,
                     bitmap = bitmap,
@@ -230,9 +229,7 @@ fun ProfileAvatar(
                                         Toast.makeText(context, r, Toast.LENGTH_LONG ).show()
                                     }?: resp.second?.let { im->
                                         Toast.makeText(context, "Uploaded success", Toast.LENGTH_LONG ).show()
-                                        println("${viewModel.userParams.value}")
                                         viewModel.userParams.value = viewModel.userParams.value.apply { image = im +"?${System.currentTimeMillis()}" }
-                                        println("${viewModel.userParams.value}")
                                     }
                                 }
                             }
@@ -240,7 +237,6 @@ fun ProfileAvatar(
                     }
                 }
                 if (image != null) {
-                    println("PROFILE IMG: $image")
                         GlideImage(
                             imageModel = image,
                             contentScale = ContentScale.Crop,

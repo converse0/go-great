@@ -314,7 +314,6 @@ fun NewOtherExerciseParameters(
                     duration = "${duration.get(durationTime.value.toInt())}s",
                     numberOfSets = sets.get(numberOfSets.value.toInt())
                 )
-                println("OTHER EXERCISE: $ex")
                 viewModel.saveLocalExercise(ex)
             },
             colors = ButtonDefaults.buttonColors(containerColor = Red),

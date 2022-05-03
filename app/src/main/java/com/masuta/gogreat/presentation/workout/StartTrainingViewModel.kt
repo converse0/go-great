@@ -81,7 +81,6 @@ class StartTrainingViewModel @Inject constructor(
             is TrainingEvent.NextSet -> {
                 viewModelScope.launch {
                     _exerciseSets.value--
-                    println("Exercise sets: ${_exerciseSets.value}")
                     repository.setLocalCurrentExerciseSets(_exerciseSets.value)
                 }
             }

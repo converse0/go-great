@@ -78,11 +78,9 @@ class TrainRepositoryImpl @Inject constructor(
                         append("Authorization", "Bearer $userToken")
                     }
                 }!!
-                println("RESPONSE FIND BY ID: $resp")
                 return resp
             }
         } catch (e: Exception) {
-            println("EXCEPTION: $e")
             e.localizedMessage?.let {
                 CoroutineScope(Dispatchers.Main).launch {
                     Toast.makeText(context, it, Toast.LENGTH_LONG).show()
@@ -102,7 +100,6 @@ class TrainRepositoryImpl @Inject constructor(
                 }
                 body = newTrain
             }
-            println("save resp: $resp")
         } catch (e: Exception) {
             e.localizedMessage?.let {
                 CoroutineScope(Dispatchers.Main).launch {
@@ -155,7 +152,6 @@ class TrainRepositoryImpl @Inject constructor(
                     append("Authorization", "Bearer $userToken")
                 }
             }?.let { tr ->
-                println("TRAINING RESPONSE $tr")
                 return tr
             }
         } catch (e: Exception) {
@@ -276,8 +272,6 @@ class TrainRepositoryImpl @Inject constructor(
                     append("Authorization", "Bearer $userToken")
                 }
                 body = mapOf("uid" to uid, "status" to "Start")
-            }?.let {
-                println("startTraining: $it")
             }
         } catch (e: Exception) {
             e.localizedMessage?.let {
@@ -297,8 +291,6 @@ class TrainRepositoryImpl @Inject constructor(
                     append("Authorization", "Bearer $userToken")
                 }
                 body =  mapOf("uid" to uid, "status" to "Finish")
-            }?.let {
-                println("finishTraining: $it")
             }
         } catch (e: Exception) {
             e.localizedMessage?.let {
@@ -346,8 +338,6 @@ class TrainRepositoryImpl @Inject constructor(
                     append("Authorization", "Bearer $userToken")
                 }
                 body = data
-            }?.let {
-                println("setExerciseParams: $it")
             }
         } catch (e: Exception) {
             e.localizedMessage?.let {

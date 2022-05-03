@@ -96,7 +96,6 @@ class ProfileViewModel @Inject constructor(
     fun getParameters(gender: MutableState<Int>) {
         viewModelScope.launch {
             val resp = getUserParams()
-            println("resp getUserParams: $resp")
             resp.data?.let {
                 gender.value = it.gender
                 val params = ParametersUser().copy(image = it.image)
@@ -143,7 +142,6 @@ class ProfileViewModel @Inject constructor(
         )
         repository.setLocalProfileParams(userParams)
         val resp = repository.updateParameters(params)
-        println("UPDATE PARAMS: $resp")
 
         resp.code?.let { code ->
             when(val error = handleErrors(code)) {

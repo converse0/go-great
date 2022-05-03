@@ -42,8 +42,6 @@ class AuthRepositoryImpl @Inject constructor(
             }
             response?.let { res ->
                 res.data?.let {
-                    println(it.accessToken)
-
                     return mapOf<String,Any?>(
                         "status" to res.status,
                         "message" to res.message,
@@ -78,7 +76,6 @@ class AuthRepositoryImpl @Inject constructor(
                 body = user
             }
             response?.let { res ->
-                println(res.status.description)
                 if (res.status.value==201) {
                     return true
                 }

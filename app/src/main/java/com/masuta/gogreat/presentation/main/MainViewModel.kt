@@ -59,7 +59,6 @@ class MainViewModel @Inject constructor(
                 val myTrains = repository.getMyTrainings()
                 myTrains.data?.let { trains ->
                     val localList = trains.map { it.validateExerciseData() }
-                    println("localList: ${localList.size}")
                     list.value = localList
                     repository.setLocalWorkouts(localList)
                 } ?: myTrains.code?.let { code ->
@@ -89,7 +88,6 @@ class MainViewModel @Inject constructor(
          navController: NavHostController
      ) {
          if(currentWorkoutReloadData) {
-             println("GET CURRENT")
              currentWorkoutReloadData = false
              viewModelScope.launch {
                 val resp = repository.getCurrentTraining()

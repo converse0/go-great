@@ -95,7 +95,6 @@ class ProfileRepositoryImpl @Inject constructor(
                         append("Authorization", "Bearer ${userToken}")
                     }
                 }?.let {
-                    println("getParameters: $it")
                     return it
                 }
             } ?: return ResponseParams()
@@ -153,8 +152,6 @@ class ProfileRepositoryImpl @Inject constructor(
 
         val convertedImage = imageBitmapToByteArray(image.asAndroidBitmap())
 
-        println("userToken: $userToken")
-        println("image: ${convertedImage.size / kilobyte}")
         val imageName = "image3.jpg"
         val imageSizeInKB = convertedImage.size / kilobyte
         if (imageSizeInKB > maxImageLimit) {
@@ -184,7 +181,6 @@ class ProfileRepositoryImpl @Inject constructor(
                         ) { buildPacket { writeFully(convertedImage) } }}
                 )
             }?.let {
-                println("Response IMAGE: $it")
                 return it
             }
         } catch(e: Exception) {

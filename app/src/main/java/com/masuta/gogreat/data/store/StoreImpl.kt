@@ -11,7 +11,6 @@ class StoreImpl @Inject constructor(
 
     override suspend fun getLocalCurrentExercise(): Int? {
         val value = sharedPref.getInt("currentExercise", -1)
-        println("LOCAL EXERCISE: ${value}")
         return when (value) {
             -1 -> null
             else -> value
@@ -26,7 +25,6 @@ class StoreImpl @Inject constructor(
 
     override suspend fun getLocalCurrentExerciseSets(): Int? {
         val value = sharedPref.getInt("currentExerciseSets", -1)
-        println("LOCAL SETS: ${value}")
         return when (value) {
             -1 -> null
             else -> value
