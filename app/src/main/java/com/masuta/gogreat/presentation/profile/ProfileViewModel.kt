@@ -153,6 +153,7 @@ class ProfileViewModel @Inject constructor(
                 else -> {
                     withContext(Dispatchers.Main) {
                         routeTo(navController, error.errRoute)
+                        Toast.makeText(context, resp.message, Toast.LENGTH_LONG).show()
                     }
                 }
             }

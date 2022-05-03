@@ -70,6 +70,7 @@ class MainViewModel @Inject constructor(
                         else -> {
                             withContext(Dispatchers.Main) {
                                 routeTo(navController, error.errRoute)
+                                Toast.makeText(context, resp.message, Toast.LENGTH_LONG).show()
                             }
                         }
                     }
@@ -105,6 +106,7 @@ class MainViewModel @Inject constructor(
                          else -> {
                              withContext(Dispatchers.Main) {
                                  routeTo(navController, error.errRoute)
+                                 Toast.makeText(context, resp.message, Toast.LENGTH_LONG).show()
                              }
                          }
                      }
@@ -140,6 +142,7 @@ class MainViewModel @Inject constructor(
                             else -> {
                                 withContext(Dispatchers.Main) {
                                     routeTo(navController, error.errRoute)
+                                    Toast.makeText(context, resp.message, Toast.LENGTH_LONG).show()
                                 }
                             }
                         }
@@ -169,6 +172,7 @@ class MainViewModel @Inject constructor(
                 else -> {
                     withContext(Dispatchers.Main) {
                         routeTo(navController, error.errRoute)
+                        Toast.makeText(context, resp.message, Toast.LENGTH_LONG).show()
                     }
                 }
             }
@@ -191,6 +195,7 @@ class MainViewModel @Inject constructor(
                 else -> {
                     withContext(Dispatchers.Main) {
                         routeTo(navController, error.errRoute)
+                        Toast.makeText(context, resp.message, Toast.LENGTH_LONG).show()
                     }
 //                    routeTo(navController, error.errRoute)
                 }
@@ -215,6 +220,7 @@ class MainViewModel @Inject constructor(
                     else -> {
                         withContext(Dispatchers.Main) {
                             routeTo(navController, error.errRoute)
+                            Toast.makeText(context, resp.message, Toast.LENGTH_LONG).show()
                         }
                     }
                 }

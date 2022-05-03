@@ -56,6 +56,7 @@ class ExerciseViewModel @Inject constructor(
                         isRoute.value = true
                         withContext(Dispatchers.Main) {
                             routeTo(navController, error.errRoute)
+                            Toast.makeText(context, resp.message, Toast.LENGTH_LONG).show()
                         }
                     }
                 }
