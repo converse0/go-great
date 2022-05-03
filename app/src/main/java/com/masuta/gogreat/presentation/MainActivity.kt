@@ -133,11 +133,16 @@ fun ChoseStartScreen(
         6 -> startRouteName.value = "about"
         777 -> {
             Toast
-                .makeText(context.applicationContext,
-                "Request timeout exceeded",
-                    Toast.LENGTH_LONG).show()
+                .makeText(
+                    context.applicationContext,
+                    "Request timeout exceeded",
+                    Toast.LENGTH_LONG
+                ).show()
             startRouteName.value = "main"
 
+        }
+        0, 1 -> {
+            startRouteName.value = "main"
         }
         else -> {
             println("Gender $gender")
