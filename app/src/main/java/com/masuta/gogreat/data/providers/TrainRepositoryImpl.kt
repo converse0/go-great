@@ -312,11 +312,6 @@ class TrainRepositoryImpl @Inject constructor(
                 }
             }?.let { tr ->
                 return tr
-//                tr.data?.let { train ->
-//                    train.getOrNull(0)?.let {
-//                        return it
-//                    }
-//                }
             }
         } catch (e: Exception) {
             e.localizedMessage?.let {

@@ -20,6 +20,7 @@ class AuthRepositoryImpl @Inject constructor(
     private val client: Client,
     private val context: Context
 ) : AuthRepository {
+
     private var httpClient: HttpClient? = null
     private var authUrl = ""
 

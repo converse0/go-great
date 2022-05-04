@@ -1,11 +1,7 @@
 package com.masuta.gogreat.domain.repository
 
 import androidx.compose.ui.graphics.ImageBitmap
-import com.masuta.gogreat.data.providers.ResponseParams
-import com.masuta.gogreat.data.providers.ResponseParamsIm
-import com.masuta.gogreat.domain.model.ParametersUser
-import com.masuta.gogreat.domain.model.ParametersUserSet
-import com.masuta.gogreat.domain.model.UpdateParamsResponse
+import com.masuta.gogreat.domain.model.*
 
 interface ProfileRepository {
 

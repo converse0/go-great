@@ -1,7 +1,6 @@
 package com.masuta.gogreat.data.providers
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.ImageBitmap
@@ -10,6 +9,7 @@ import com.masuta.gogreat.R
 import com.masuta.gogreat.data.http.Client
 import com.masuta.gogreat.domain.model.*
 import com.masuta.gogreat.domain.repository.ProfileRepository
+import com.masuta.gogreat.utils.imageBitmapToByteArray
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
@@ -18,26 +18,7 @@ import io.ktor.utils.io.core.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.serialization.Serializable
-import java.io.ByteArrayOutputStream
-import java.util.*
 import javax.inject.Inject
-
-@Serializable
-data class ResponseParams(
-    val message: String?= null,
-    val status: Boolean?= null,
-    val code: Int? = null,
-    val data: ParametersUserGet? = null
-)
-
-@Serializable
-data class ResponseParamsIm(
-    val message: String?= null,
-    val status: Boolean?= null,
-    val code: Int?= null,
-    val data: String? = null
-)
 
 class ProfileRepositoryImpl @Inject constructor(
     private val client: Client,
@@ -131,23 +112,6 @@ class ProfileRepositoryImpl @Inject constructor(
         return UpdateParamsResponse()
     }
 
-    private fun getStringRandom(): String {
-        val chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-        val random = Random()
-        val sb = StringBuilder(7)
-        for (i in 0 until 7) {
-            val randomChar = chars[random.nextInt(chars.length)]
-            sb.append(randomChar)
-        }
-        return sb.toString()
-    }
-
-    private fun imageBitmapToByteArray(bitmap: Bitmap): ByteArray {
-        val stream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
-        return stream.toByteArray()
-    }
-
     override suspend fun uploadImage(image: ImageBitmap): ResponseParamsIm {
 
         val convertedImage = imageBitmapToByteArray(image.asAndroidBitmap())
@@ -163,7 +127,6 @@ class ProfileRepositoryImpl @Inject constructor(
         }
         try {
            httpClient?.post<ResponseParamsIm>("$trainUrl/v1/files") {
-
                 headers {
                     append("Authorization", "Bearer $userToken")
                 }

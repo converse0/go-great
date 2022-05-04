@@ -7,7 +7,6 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
-import com.masuta.gogreat.domain.handlers.GetUserParams
 import com.masuta.gogreat.domain.model.ParametersUser
 import com.masuta.gogreat.domain.model.ParametersUserSet
 import com.masuta.gogreat.domain.model.UserActivity
@@ -23,7 +22,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val getUserParams: GetUserParams,
     private val repository: ProfileRepository
 ) :ViewModel() {
 
@@ -33,7 +31,7 @@ class ProfileViewModel @Inject constructor(
 
     var userParams = mutableStateOf<ParametersUser?>(null)
 
-    var isDataLoad: Boolean = true
+    private var isDataLoad: Boolean = true
         get() = repository.isLoadData
         set(value) {
             field = value
@@ -48,7 +46,7 @@ class ProfileViewModel @Inject constructor(
     ) {
         if (isDataLoad) {
             viewModelScope.launch {
-                val resp = getUserParams()
+                val resp = repository.getParameters()
                 if (resp.data != null) {
                     val params = ParametersUser(
                         username = resp.data.username,
@@ -77,11 +75,6 @@ class ProfileViewModel @Inject constructor(
                             routeTo(navController, error.errRoute)
                         }
                     }
-
-//                    when(resp.code) {
-//                        16 -> routeTo(navController, "sign-in")
-//                        2, 5, 13 -> routeTo(navController, "about")
-//                    }
                 }
             }
         } else {
@@ -95,7 +88,7 @@ class ProfileViewModel @Inject constructor(
 
     fun getParameters(gender: MutableState<Int>) {
         viewModelScope.launch {
-            val resp = getUserParams()
+            val resp = repository.getParameters()
             resp.data?.let {
                 gender.value = it.gender
                 val params = ParametersUser().copy(image = it.image)
@@ -112,7 +105,7 @@ class ProfileViewModel @Inject constructor(
     }
 
     suspend fun getUserParameters():Boolean {
-        val resp = getUserParams()
+        val resp = repository.getParameters()
         resp.data?.let {
             val params = ParametersUser().copy(image = it.image)
             repository.setLocalProfileParams(params)
@@ -122,7 +115,6 @@ class ProfileViewModel @Inject constructor(
         }
             return false
     }
-
 
     suspend fun updateParams(
         context: Context,
@@ -181,6 +173,5 @@ class ProfileViewModel @Inject constructor(
         }
 
         return Pair(null, null)
-
     }
 }
