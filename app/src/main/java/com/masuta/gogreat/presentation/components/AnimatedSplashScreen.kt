@@ -1,5 +1,6 @@
 package com.masuta.gogreat.presentation.components
 
+import android.content.Context
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -12,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -29,6 +31,7 @@ fun AnimatedSplashScreen(
     viewModel: MainViewModel
 ) {
     val viewModelUser: ProfileViewModel = hiltViewModel()
+    val context = LocalContext.current
 
     var count by remember { mutableStateOf(0) }
 
@@ -50,7 +53,8 @@ fun AnimatedSplashScreen(
                 navController = navController,
                 startRouteName = startRouteName.value,
                 viewModel = null,
-                viewModelUser = null
+                viewModelUser = null,
+                context = context
             )
         }
     } else if (startRouteName.value != "") {
@@ -62,7 +66,8 @@ fun AnimatedSplashScreen(
                 navController = navController,
                 startRouteName = startRouteName.value,
                 viewModel = viewModel,
-                viewModelUser = viewModelUser
+                viewModelUser = viewModelUser,
+                context = context
             )
         }
     }
@@ -74,16 +79,26 @@ fun launch(
     navController: NavHostController,
     startRouteName: String,
     viewModel: MainViewModel? = null,
-    viewModelUser: ProfileViewModel? = null
+    viewModelUser: ProfileViewModel? = null,
+    context: Context
 ) {
     CoroutineScope(Dispatchers.IO).launch {
-        viewModelUser?.getUserParameters()
-        viewModel?.getMyTrainings()
-        viewModel?.getPastTrainings()
-        viewModel?.getCurrentTraining()
-        withContext(Dispatchers.Main) {
-            navController.navigate(startRouteName)
+        when(viewModelUser?.getUserParameters()){
+            false -> {
+                withContext(Dispatchers.Main) {
+                    navController.navigate("sign-in")
+                }
+            }
+            else -> {
+                viewModel?.getMyTrainings(context = context, navController = navController)
+                viewModel?.getPastTrainings(context = context, navController = navController)
+                viewModel?.getCurrentTraining(context = context, navController = navController)
+                withContext(Dispatchers.Main) {
+                    navController.navigate(startRouteName)
+                }
+            }
         }
+
     }
 }
 

@@ -2,19 +2,17 @@ package com.masuta.gogreat.presentation.auth
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
-import com.masuta.gogreat.domain.handlers.Login
-import com.masuta.gogreat.domain.handlers.SignUp
 import com.masuta.gogreat.domain.model.LoginResponse
 import com.masuta.gogreat.domain.model.User
 import com.masuta.gogreat.domain.model.refreshUserToken
 import com.masuta.gogreat.domain.model.userToken
+import com.masuta.gogreat.domain.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val signUp: SignUp,
-    private val login: Login
+    private val repository: AuthRepository
 ) : ViewModel() {
 
     private fun checkUsername(username: String?): Boolean {
@@ -57,7 +55,7 @@ class SignUpViewModel @Inject constructor(
             checkPassword(password) && checkPasswordConfirm(password, passwordConfirm)
         ) {
             val user = User(username!!, email!!, password!!)
-            val resp = signUp(user)
+            val resp = repository.signup(user)
 
             if(resp) {
                 return true
@@ -68,18 +66,10 @@ class SignUpViewModel @Inject constructor(
    }
 
     suspend fun signIn(user: User): Map<String, Any?> {
-        return login(user)
-    }
+        val resp = repository.login(user)
+        val token = resp["loginResponse"] as LoginResponse
+        repository.setLocalToken(token)
 
-    fun setToken(context: Context, token: LoginResponse?) {
-        val sharedPref = context.getSharedPreferences("user", Context.MODE_PRIVATE)
-        val editor = sharedPref.edit()
-
-        editor.putString("accessToken", token!!.accessToken)
-        editor.putString("refreshToken", token.refreshToken)
-
-        userToken = token.accessToken
-        refreshUserToken = token.refreshToken
-        editor.apply()
+        return resp
     }
 }

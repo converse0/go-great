@@ -140,10 +140,6 @@ fun SignUpForm(
                     val res = viewModel.signIn(User(email = email, password = password))
                     withContext(Dispatchers.Main) {
                         if (res["status"] as Boolean) {
-                            viewModel.setToken(
-                                context = context,
-                                token = res["loginResponse"] as LoginResponse?
-                            )
                             navController.navigate("about")
                         } else {
                             res["message"]?.let {

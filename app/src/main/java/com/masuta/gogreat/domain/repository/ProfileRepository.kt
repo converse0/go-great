@@ -1,10 +1,7 @@
 package com.masuta.gogreat.domain.repository
 
 import androidx.compose.ui.graphics.ImageBitmap
-import com.masuta.gogreat.data.providers.ResponseParams
-import com.masuta.gogreat.data.providers.ResponseParamsIm
-import com.masuta.gogreat.domain.model.ParametersUser
-import com.masuta.gogreat.domain.model.ParametersUserSet
+import com.masuta.gogreat.domain.model.*
 
 interface ProfileRepository {
 
@@ -14,7 +11,7 @@ interface ProfileRepository {
 
     suspend fun getParameters(): ResponseParams
 
-    suspend fun updateParameters(params: ParametersUserSet): String?
+    suspend fun updateParameters(params: ParametersUserSet): UpdateParamsResponse
 
     suspend fun uploadImage(image: ImageBitmap): ResponseParamsIm
 

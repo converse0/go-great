@@ -45,7 +45,7 @@ fun Timer(
         mutableStateOf(IntSize.Zero)
     }
 
-    val currentTime by remember {
+    var currentTime by remember {
         mutableStateOf(totalTime)
     }
 
@@ -165,7 +165,7 @@ fun Timer(
                     if (started) {
                         viewModel.pause()
                         started = false
-                        textBtn = "Resume"
+                        textBtn = "Start"
                     } else {
                         viewModel.start(text, ctx, onTimerEnd = onTimerEnd)
                         started = true
@@ -179,7 +179,12 @@ fun Timer(
                 icon = Icons.Default.Stop,
                 color = Color.Red,
                 onClick = {
-                    viewModel.stop(onTimerEnd = onTimerEnd)
+                    started = false
+                    textBtn = "Start"
+                    text.value = (totalTime / 1000L).toInt().toString()
+                    viewModel.stop(onTimerEnd = {  })
+                    currentTime = totalTime
+                    viewModel.init((totalTime / 1000L).toInt())
                 }
             )
         }

@@ -18,12 +18,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.presentation.components.SliderWithLabelUserActivity
 import com.masuta.gogreat.presentation.profile.firstCharToUpperCase
+import com.masuta.gogreat.presentation.profile.routeTo
 import com.masuta.gogreat.presentation.ui.theme.Red
 import com.skydoves.landscapist.glide.GlideImage
 
@@ -33,13 +35,27 @@ fun ExerciseScreen(
     viewModel: ExerciseViewModel,
     typeId: String?
 ) {
+
+    if (viewModel.isRoute.value) {
+        return
+    }
+
     val selectedItems = remember { mutableStateOf(listOf(-1)) }
     val newExercise = remember{ mutableStateOf(false) }
     val exercisesList = remember { mutableStateOf(emptyList<TrainingExercise>())  }
 
     val selectedExerciseId = remember{ mutableStateOf(0) }
+    val context = LocalContext.current
 
-    viewModel.getExercises(typeId!!.toLong(), exercisesList)
+    if (exercisesList.value.isEmpty()) {
+        viewModel.getExercises(
+            typeId!!.toLong(),
+            exercisesList,
+            navController,
+            context,
+            routeTo
+        )
+    }
 
     Column(
         modifier = Modifier
@@ -298,7 +314,6 @@ fun NewOtherExerciseParameters(
                     duration = "${duration.get(durationTime.value.toInt())}s",
                     numberOfSets = sets.get(numberOfSets.value.toInt())
                 )
-                println("OTHER EXERCISE: $ex")
                 viewModel.saveLocalExercise(ex)
             },
             colors = ButtonDefaults.buttonColors(containerColor = Red),

@@ -1,7 +1,6 @@
 package com.masuta.gogreat.data.providers
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.ImageBitmap
@@ -10,6 +9,7 @@ import com.masuta.gogreat.R
 import com.masuta.gogreat.data.http.Client
 import com.masuta.gogreat.domain.model.*
 import com.masuta.gogreat.domain.repository.ProfileRepository
+import com.masuta.gogreat.utils.imageBitmapToByteArray
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
@@ -18,26 +18,7 @@ import io.ktor.utils.io.core.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.serialization.Serializable
-import java.io.ByteArrayOutputStream
-import java.util.*
 import javax.inject.Inject
-
-@Serializable
-data class ResponseParams(
-    val message: String?= null,
-    val status: Boolean?= null,
-    val code: Int?= null,
-    val data: ParametersUserGet? = null
-)
-
-@Serializable
-data class ResponseParamsIm(
-    val message: String?= null,
-    val status: Boolean?= null,
-    val code: Int?= null,
-    val data: String? = null
-)
 
 class ProfileRepositoryImpl @Inject constructor(
     private val client: Client,
@@ -46,8 +27,8 @@ class ProfileRepositoryImpl @Inject constructor(
 
     private var trainUrl = ""
     private var httpClient: HttpClient? = null
-    private val kilobyte = 1024
-    private val maxImageLimit = 3 * kilobyte
+    private val megabyte = 1024
+    private var maxImageLimit = 0
 
     init {
         context.resources.getInteger(R.integer.request_timeout).let {
@@ -57,6 +38,9 @@ class ProfileRepositoryImpl @Inject constructor(
             if (it.isNotEmpty()) {
                 trainUrl = it
             }
+        }
+        context.resources.getInteger(R.integer.max_image_size).let {
+            maxImageLimit = it * megabyte
         }
     }
 
@@ -95,7 +79,6 @@ class ProfileRepositoryImpl @Inject constructor(
                         append("Authorization", "Bearer ${userToken}")
                     }
                 }?.let {
-                    println("getParameters: $it")
                     return it
                 }
             } ?: return ResponseParams()
@@ -110,7 +93,7 @@ class ProfileRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun updateParameters(params: ParametersUserSet): String? {
+    override suspend fun updateParameters(params: ParametersUserSet): UpdateParamsResponse {
         try {
             httpClient?.put<UpdateParamsResponse>("$trainUrl/user/parameters") {
                 contentType(ContentType.Application.Json)
@@ -119,7 +102,7 @@ class ProfileRepositoryImpl @Inject constructor(
                 }
                 body = params
             }?.let {
-                return it.message
+                return it
             }
         } catch(e: Exception) {
             e.localizedMessage?.let {
@@ -129,34 +112,15 @@ class ProfileRepositoryImpl @Inject constructor(
             }
             e.printStackTrace()
         }
-        return null
-    }
-
-    private fun getStringRandom(): String {
-        val chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-        val random = Random()
-        val sb = StringBuilder(7)
-        for (i in 0 until 7) {
-            val randomChar = chars[random.nextInt(chars.length)]
-            sb.append(randomChar)
-        }
-        return sb.toString()
-    }
-
-    private fun imageBitmapToByteArray(bitmap: Bitmap): ByteArray {
-        val stream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
-        return stream.toByteArray()
+        return UpdateParamsResponse()
     }
 
     override suspend fun uploadImage(image: ImageBitmap): ResponseParamsIm {
 
         val convertedImage = imageBitmapToByteArray(image.asAndroidBitmap())
 
-        println("userToken: $userToken")
-        println("image: ${convertedImage.size / kilobyte}")
         val imageName = "image3.jpg"
-        val imageSizeInKB = convertedImage.size / kilobyte
+        val imageSizeInKB = convertedImage.size / megabyte
         if (imageSizeInKB > maxImageLimit) {
             return ResponseParamsIm(
                 message = "Image size is too big",
@@ -166,7 +130,6 @@ class ProfileRepositoryImpl @Inject constructor(
         }
         try {
            httpClient?.post<ResponseParamsIm>("$trainUrl/v1/files") {
-
                 headers {
                     append("Authorization", "Bearer $userToken")
                 }
@@ -184,7 +147,6 @@ class ProfileRepositoryImpl @Inject constructor(
                         ) { buildPacket { writeFully(convertedImage) } }}
                 )
             }?.let {
-                println("Response IMAGE: $it")
                 return it
             }
         } catch(e: Exception) {

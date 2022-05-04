@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
 import com.masuta.gogreat.R
 import com.masuta.gogreat.data.http.Client
+import com.masuta.gogreat.data.store.Store
 import com.masuta.gogreat.domain.model.*
 import com.masuta.gogreat.domain.repository.TrainRepository
 import io.ktor.client.*
@@ -17,7 +18,8 @@ import javax.inject.Inject
 
 class TrainRepositoryImpl @Inject constructor(
     private var client: Client,
-    private var context: Context,
+    private val context: Context,
+    private val store: Store
 ): TrainRepository {
 
     private var httpClient: HttpClient? = null
@@ -85,8 +87,8 @@ class TrainRepositoryImpl @Inject constructor(
                 }
             }
             e.printStackTrace()
+            return ExerciseResponse(code = 777)
         }
-        return ExerciseResponse()
     }
 
     override suspend fun save(newTrain: Training) {
@@ -98,7 +100,6 @@ class TrainRepositoryImpl @Inject constructor(
                 }
                 body = newTrain
             }
-            println("save resp: $resp")
         } catch (e: Exception) {
             e.localizedMessage?.let {
                 CoroutineScope(Dispatchers.Main).launch {
@@ -143,7 +144,7 @@ class TrainRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getPassTrainings(): List<Training>? {
+    override suspend fun getPassTrainings(): TrainingResponse {
         try {
             httpClient?.get<TrainingResponse>("$trainUrl/user/trenings?status=Finish") {
                 contentType(ContentType.Application.Json)
@@ -151,9 +152,7 @@ class TrainRepositoryImpl @Inject constructor(
                     append("Authorization", "Bearer $userToken")
                 }
             }?.let { tr ->
-                tr.data?.let { trains ->
-                    return trains
-                }
+                return tr
             }
         } catch (e: Exception) {
             e.localizedMessage?.let {
@@ -163,10 +162,10 @@ class TrainRepositoryImpl @Inject constructor(
             }
             e.printStackTrace()
         }
-        return null
+        return TrainingResponse()
     }
 
-    override suspend fun getMyTrainings(): List<Training>? {
+    override suspend fun getMyTrainings(): TrainingResponse {
         try {
             httpClient?.get<TrainingResponse>("$trainUrl/user/trenings?status=Create") {
                 contentType(ContentType.Application.Json)
@@ -174,9 +173,7 @@ class TrainRepositoryImpl @Inject constructor(
                     append("Authorization", "Bearer $userToken")
                 }
             }?.let { tr ->
-                tr.data?.let { trains ->
-                    return trains
-                }
+                return tr
             }
         } catch (e: Exception) {
             e.localizedMessage?.let {
@@ -186,7 +183,7 @@ class TrainRepositoryImpl @Inject constructor(
             }
             e.printStackTrace()
         }
-        return null
+        return TrainingResponse()
     }
 
     override suspend fun getLocalWorkouts(): List<Training> {
@@ -214,37 +211,19 @@ class TrainRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getLocalCurrentExercise(): Int? {
-        val sharedPref = context.getSharedPreferences("user", Context.MODE_PRIVATE)
-        val value = sharedPref.getInt("currentExercise", -1)
-        println("LOCAL EXERCISE: ${value}")
-        return when (value) {
-            -1 -> null
-            else -> value
-        }
+        return store.getLocalCurrentExercise()
     }
 
     override suspend fun setLocalCurrentExercise(indexExercise: Int?) {
-        val sharedPref = context.getSharedPreferences("user", Context.MODE_PRIVATE)
-        val editor = sharedPref.edit()
-        editor.putInt("currentExercise", indexExercise ?: -1)
-        editor.apply()
+        store.setLocalCurrentExercise(indexExercise)
     }
 
     override suspend fun getLocalCurrentExerciseSets(): Int? {
-        val sharedPref = context.getSharedPreferences("user", Context.MODE_PRIVATE)
-        val value = sharedPref.getInt("currentExerciseSets", -1)
-        println("LOCAL SETS: ${value}")
-        return when (value) {
-            -1 -> null
-            else -> value
-        }
+        return store.getLocalCurrentExerciseSets()
     }
 
     override suspend fun setLocalCurrentExerciseSets(exerciseSets: Int?) {
-        val sharedPref = context.getSharedPreferences("user", Context.MODE_PRIVATE)
-        val editor = sharedPref.edit()
-        editor.putInt("currentExerciseSets", exerciseSets ?: -1)
-        editor.apply()
+        store.setLocalCurrentExerciseSets(exerciseSets)
     }
 
     override suspend fun getLocalTrainingByUid(uid: String): Training? {
@@ -293,8 +272,6 @@ class TrainRepositoryImpl @Inject constructor(
                     append("Authorization", "Bearer $userToken")
                 }
                 body = mapOf("uid" to uid, "status" to "Start")
-            }?.let {
-                println("startTraining: $it")
             }
         } catch (e: Exception) {
             e.localizedMessage?.let {
@@ -314,8 +291,6 @@ class TrainRepositoryImpl @Inject constructor(
                     append("Authorization", "Bearer $userToken")
                 }
                 body =  mapOf("uid" to uid, "status" to "Finish")
-            }?.let {
-                println("finishTraining: $it")
             }
         } catch (e: Exception) {
             e.localizedMessage?.let {
@@ -328,7 +303,7 @@ class TrainRepositoryImpl @Inject constructor(
     }
 
 
-    override suspend fun getCurrentTraining(): Training? {
+    override suspend fun getCurrentTraining(): TrainingResponse {
         try {
             httpClient?.get<TrainingResponse>("$trainUrl/user/trenings?status=Start") {
                 contentType(ContentType.Application.Json)
@@ -336,12 +311,7 @@ class TrainRepositoryImpl @Inject constructor(
                     append("Authorization", "Bearer $userToken")
                 }
             }?.let { tr ->
-
-                tr.data?.let { train ->
-                    train.getOrNull(0)?.let {
-                        return it
-                    }
-                }
+                return tr
             }
         } catch (e: Exception) {
             e.localizedMessage?.let {
@@ -351,7 +321,7 @@ class TrainRepositoryImpl @Inject constructor(
             }
             e.printStackTrace()
         }
-        return null
+        return TrainingResponse()
     }
 
     override suspend fun setExerciseParams(uid: String, listExercises: List<TrainingExercise>) {
@@ -363,8 +333,6 @@ class TrainRepositoryImpl @Inject constructor(
                     append("Authorization", "Bearer $userToken")
                 }
                 body = data
-            }?.let {
-                println("setExerciseParams: $it")
             }
         } catch (e: Exception) {
             e.localizedMessage?.let {

@@ -4,6 +4,8 @@ import android.content.Context
 import android.widget.Toast
 import com.masuta.gogreat.R
 import com.masuta.gogreat.data.http.Client
+import com.masuta.gogreat.data.store.Store
+import com.masuta.gogreat.domain.model.LoginResponse
 import com.masuta.gogreat.domain.model.Response
 import com.masuta.gogreat.domain.model.User
 import com.masuta.gogreat.domain.repository.AuthRepository
@@ -18,8 +20,10 @@ import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
     private val client: Client,
-    private val context: Context
+    private val context: Context,
+    private val store: Store
 ) : AuthRepository {
+
     private var httpClient: HttpClient? = null
     private var authUrl = ""
 
@@ -42,8 +46,6 @@ class AuthRepositoryImpl @Inject constructor(
             }
             response?.let { res ->
                 res.data?.let {
-                    println(it.accessToken)
-
                     return mapOf<String,Any?>(
                         "status" to res.status,
                         "message" to res.message,
@@ -78,7 +80,6 @@ class AuthRepositoryImpl @Inject constructor(
                 body = user
             }
             response?.let { res ->
-                println(res.status.description)
                 if (res.status.value==201) {
                     return true
                 }
@@ -93,5 +94,9 @@ class AuthRepositoryImpl @Inject constructor(
             e.printStackTrace()
         }
         return false
+    }
+
+    override suspend fun setLocalToken(token: LoginResponse?) {
+        store.setLocalToken(token)
     }
 }

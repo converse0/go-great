@@ -112,6 +112,7 @@ fun ProfileSection(
 ) {
 
     val userParams = remember { viewModel.userParams }
+    val context = LocalContext.current
 
     val fail = remember {
         mutableStateOf(false)
@@ -121,13 +122,13 @@ fun ProfileSection(
         viewModel.getParameters(
             routeTo = routeTo,
             navController = navController,
-            fail = fail
+            fail = fail,
+            context = context
         )
     }
 
     val lazyListState = rememberLazyListState()
 
-    val context = LocalContext.current
     var imageUri by remember { mutableStateOf<Uri?>(null) }
     val bitmap = remember { mutableStateOf<Bitmap?>(null) }
 
@@ -145,7 +146,6 @@ fun ProfileSection(
                 .fillMaxWidth()
         ) {
             items(1) {
-                println("imageRec: $userParams")
                 ProfileAvatar(
                     imageUri = imageUri,
                     bitmap = bitmap,
@@ -178,6 +178,7 @@ fun ProfileSection(
                         lazyListState = lazyListState,
                         viewModel = viewModel,
                         userParams = params,
+                        navController = navController
                     )
                 Spacer(Modifier.height(60.dp))
             }
@@ -228,9 +229,7 @@ fun ProfileAvatar(
                                         Toast.makeText(context, r, Toast.LENGTH_LONG ).show()
                                     }?: resp.second?.let { im->
                                         Toast.makeText(context, "Uploaded success", Toast.LENGTH_LONG ).show()
-                                        println("${viewModel.userParams.value}")
                                         viewModel.userParams.value = viewModel.userParams.value.apply { image = im +"?${System.currentTimeMillis()}" }
-                                        println("${viewModel.userParams.value}")
                                     }
                                 }
                             }
@@ -238,7 +237,6 @@ fun ProfileAvatar(
                     }
                 }
                 if (image != null) {
-                    println("PROFILE IMG: $image")
                         GlideImage(
                             imageModel = image,
                             contentScale = ContentScale.Crop,
@@ -271,6 +269,7 @@ fun ProfileInfo(
     lazyListState: LazyListState,
     viewModel: ProfileViewModel,
     userParams: ParametersUser,
+    navController: NavHostController
 ) {
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -377,6 +376,8 @@ fun ProfileInfo(
         ) {
             CoroutineScope(Dispatchers.IO).launch {
                 val resp = viewModel.updateParams(
+                    context = context,
+                    navController = navController,
                     userParams = userParams.copy(
                         age = age.value.toInt(),
                         eat = timesEat.value.toInt(),
