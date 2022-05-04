@@ -27,8 +27,8 @@ class ProfileRepositoryImpl @Inject constructor(
 
     private var trainUrl = ""
     private var httpClient: HttpClient? = null
-    private val kilobyte = 1024
-    private val maxImageLimit = 3 * kilobyte
+    private val megabyte = 1024
+    private var maxImageLimit = 0
 
     init {
         context.resources.getInteger(R.integer.request_timeout).let {
@@ -38,6 +38,9 @@ class ProfileRepositoryImpl @Inject constructor(
             if (it.isNotEmpty()) {
                 trainUrl = it
             }
+        }
+        context.resources.getInteger(R.integer.max_image_size).let {
+            maxImageLimit = it * megabyte
         }
     }
 
@@ -117,7 +120,7 @@ class ProfileRepositoryImpl @Inject constructor(
         val convertedImage = imageBitmapToByteArray(image.asAndroidBitmap())
 
         val imageName = "image3.jpg"
-        val imageSizeInKB = convertedImage.size / kilobyte
+        val imageSizeInKB = convertedImage.size / megabyte
         if (imageSizeInKB > maxImageLimit) {
             return ResponseParamsIm(
                 message = "Image size is too big",
