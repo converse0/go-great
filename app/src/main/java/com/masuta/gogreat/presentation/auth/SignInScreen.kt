@@ -107,10 +107,6 @@ fun SignInForm(
 
             withContext(Dispatchers.Main) {
                 if(resp["status"] as Boolean){
-                    viewModel.setToken(
-                        context = context,
-                        token = resp["loginResponse"] as LoginResponse?
-                    )
                     navController.navigate("main")
                 } else {
                     resp["message"]?.let {

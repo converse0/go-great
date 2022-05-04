@@ -1,6 +1,9 @@
 package com.masuta.gogreat.data.store
 
 import android.content.Context
+import com.masuta.gogreat.domain.model.LoginResponse
+import com.masuta.gogreat.domain.model.refreshUserToken
+import com.masuta.gogreat.domain.model.userToken
 import javax.inject.Inject
 
 class StoreImpl @Inject constructor(
@@ -35,6 +38,18 @@ class StoreImpl @Inject constructor(
         val editor = sharedPref.edit()
         editor.putInt("currentExerciseSets", exerciseSets ?: -1)
         editor.apply()
+    }
+
+    override suspend fun setLocalToken(token: LoginResponse?) {
+        val editor = sharedPref.edit()
+        editor.putString("accessToken", token!!.accessToken)
+        editor.putString("refreshToken", token.refreshToken)
+
+        userToken = token.accessToken
+        refreshUserToken = token.refreshToken
+
+        editor.apply()
+
     }
 
 }

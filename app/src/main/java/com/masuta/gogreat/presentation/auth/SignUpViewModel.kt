@@ -66,18 +66,10 @@ class SignUpViewModel @Inject constructor(
    }
 
     suspend fun signIn(user: User): Map<String, Any?> {
-        return repository.login(user)
-    }
+        val resp = repository.login(user)
+        val token = resp["loginResponse"] as LoginResponse
+        repository.setLocalToken(token)
 
-    fun setToken(context: Context, token: LoginResponse?) {
-        val sharedPref = context.getSharedPreferences("user", Context.MODE_PRIVATE)
-        val editor = sharedPref.edit()
-
-        editor.putString("accessToken", token!!.accessToken)
-        editor.putString("refreshToken", token.refreshToken)
-
-        userToken = token.accessToken
-        refreshUserToken = token.refreshToken
-        editor.apply()
+        return resp
     }
 }
