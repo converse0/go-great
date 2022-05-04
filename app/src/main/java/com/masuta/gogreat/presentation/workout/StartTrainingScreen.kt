@@ -187,7 +187,6 @@ fun StartTrainingScreen(
     }
 }
 
-
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun ModalTimer(
@@ -195,13 +194,6 @@ fun ModalTimer(
     viewModel: StartTrainingViewModel,
     onDismiss: () -> Unit,
 ) {
-
-    val context = LocalContext.current
-
-    val sound = {
-        viewModel.playSound(context)
-    }
-
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier.fillMaxSize()
@@ -237,7 +229,6 @@ fun ModalTimer(
             ) {
                 Timer(
                     totalTime = totalTime * 1000L,
-                    onAlarmSound = sound,
                     onTimerEnd = onDismiss,
                     startTimer = true,
                     modifier = Modifier.size(200.dp),

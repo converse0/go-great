@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntSize
@@ -31,7 +32,6 @@ import com.masuta.gogreat.presentation.ui.theme.Green
 @Composable
 fun Timer(
     totalTime: Long,
-    onAlarmSound: () -> Unit,
     onTimerEnd: () -> Unit,
     modifier: Modifier = Modifier,
     startTimer: Boolean = false,
@@ -40,13 +40,12 @@ fun Timer(
     initialValue: Float = 1f,
     strokeWidth: Dp = 5.dp,
 ) {
+    KeepScreenOn()
+
+    val viewModel: TimerViewModel = hiltViewModel()
 
     var size by remember {
         mutableStateOf(IntSize.Zero)
-    }
-
-    var currentTime by remember {
-        mutableStateOf(totalTime)
     }
 
     var started by remember {
@@ -55,10 +54,6 @@ fun Timer(
     var textBtn by remember {
         mutableStateOf("Pause")
     }
-    if (currentTime % 1000L == 0L && currentTime <= 5000L) {
-        onAlarmSound()
-    }
-
 
     val ctx = LocalContext.current
     val text = remember {
@@ -72,38 +67,6 @@ fun Timer(
         }
     }
 
-    val colorChoose = fun (): Color {
-        return if (started) {
-            Color.Yellow
-        } else {
-            Color.Green
-        }
-    }
-    val viewModel: TimerViewModel = hiltViewModel()
-
-//    Column(
-//        modifier = Modifier.fillMaxWidth()
-//    ) {
-//        Row(horizontalArrangement = Arrangement.Center,
-//            modifier = Modifier.fillMaxWidth()) {
-//            var inniter by remember {
-//                mutableStateOf(0)
-//            }
-//
-//            if (text.value==""&& inniter == 0) {
-//                inniter+=1
-//                viewModel.init((totalTime / 1000L).toInt())
-//                viewModel.start(text, ctx, onTimerEnd = onTimerEnd)
-//            }
-//
-//            Text(
-//                text = text.value,
-//                fontSize = 44.sp,
-//                fontWeight = FontWeight.Bold,
-//                color = Color.Black
-//            )
-//        }
-//    }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.padding(8.dp)
@@ -183,7 +146,6 @@ fun Timer(
                     textBtn = "Start"
                     text.value = (totalTime / 1000L).toInt().toString()
                     viewModel.stop(onTimerEnd = {  })
-                    currentTime = totalTime
                     viewModel.init((totalTime / 1000L).toInt())
                 }
             )
@@ -212,6 +174,17 @@ fun TimerButtonWithText(
                 .background(color = color, shape = CircleShape)
         ) {
             Icon(icon, contentDescription = text, tint = Color.White)
+        }
+    }
+}
+
+@Composable
+fun KeepScreenOn() {
+    val currentView = LocalView.current
+    DisposableEffect(Unit) {
+        currentView.keepScreenOn = true
+        onDispose {
+            currentView.keepScreenOn = false
         }
     }
 }
