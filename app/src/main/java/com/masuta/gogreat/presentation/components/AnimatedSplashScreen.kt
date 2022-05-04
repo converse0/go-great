@@ -86,7 +86,7 @@ fun launch(
         when(viewModelUser?.getUserParameters()){
             false -> {
                 withContext(Dispatchers.Main) {
-                    navController.navigate("sign-in")
+                    navController.navigate(startRouteName)
                 }
             }
             else -> {
