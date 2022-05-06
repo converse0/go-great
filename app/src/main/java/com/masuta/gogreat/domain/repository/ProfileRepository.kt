@@ -14,8 +14,5 @@ interface ProfileRepository {
     suspend fun updateParameters(params: ParametersUserSet): UpdateParamsResponse
 
     suspend fun uploadImage(image: ImageBitmap): ResponseParamsIm
-//
-//    suspend fun getLocalProfileParams(): ParametersUser?
-//
-//    suspend fun setLocalProfileParams(params: ParametersUser)
+
 }
