@@ -6,8 +6,8 @@ import com.masuta.gogreat.data.providers.AuthRepositoryImpl
 import com.masuta.gogreat.data.providers.ProfileRepositoryImpl
 import com.masuta.gogreat.data.providers.TrainRepositoryImpl
 import com.masuta.gogreat.data.store.*
-import com.masuta.gogreat.domain.handlers.SignIn
-import com.masuta.gogreat.domain.handlers.SignUp
+import com.masuta.gogreat.domain.handlers.auth_handlers.SignIn
+import com.masuta.gogreat.domain.handlers.auth_handlers.SignUp
 import com.masuta.gogreat.domain.repository.AuthRepository
 import com.masuta.gogreat.domain.repository.ProfileRepository
 import com.masuta.gogreat.domain.repository.TrainRepository

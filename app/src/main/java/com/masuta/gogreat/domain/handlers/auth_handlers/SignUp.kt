@@ -1,4 +1,4 @@
-package com.masuta.gogreat.domain.handlers
+package com.masuta.gogreat.domain.handlers.auth_handlers
 
 import com.masuta.gogreat.domain.model.User
 import com.masuta.gogreat.domain.repository.AuthRepository

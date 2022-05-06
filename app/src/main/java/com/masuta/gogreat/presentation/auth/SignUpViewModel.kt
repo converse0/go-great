@@ -1,8 +1,8 @@
 package com.masuta.gogreat.presentation.auth
 
 import androidx.lifecycle.ViewModel
-import com.masuta.gogreat.domain.handlers.SignIn
-import com.masuta.gogreat.domain.handlers.SignUp
+import com.masuta.gogreat.domain.handlers.auth_handlers.SignIn
+import com.masuta.gogreat.domain.handlers.auth_handlers.SignUp
 import com.masuta.gogreat.domain.model.User
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
