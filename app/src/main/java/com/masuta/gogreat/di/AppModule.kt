@@ -8,6 +8,10 @@ import com.masuta.gogreat.data.providers.TrainRepositoryImpl
 import com.masuta.gogreat.data.store.*
 import com.masuta.gogreat.domain.handlers.auth_handlers.SignIn
 import com.masuta.gogreat.domain.handlers.auth_handlers.SignUp
+import com.masuta.gogreat.domain.handlers.profile_handlers.CreateParameters
+import com.masuta.gogreat.domain.handlers.profile_handlers.GetParameters
+import com.masuta.gogreat.domain.handlers.profile_handlers.UpdateParameters
+import com.masuta.gogreat.domain.handlers.profile_handlers.UploadImage
 import com.masuta.gogreat.domain.repository.AuthRepository
 import com.masuta.gogreat.domain.repository.ProfileRepository
 import com.masuta.gogreat.domain.repository.TrainRepository
@@ -83,5 +87,28 @@ object AppModule {
         return SignIn(repository, store)
     }
 
+    @Provides
+    @Singleton
+    fun provideCreateParameters(repository: ProfileRepository): CreateParameters {
+        return CreateParameters(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetParameters(repository: ProfileRepository, store: ProfileStore): GetParameters {
+        return GetParameters(repository, store)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUpdateParameters(repository: ProfileRepository, store: ProfileStore): UpdateParameters {
+        return UpdateParameters(repository, store)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUploadImage(repository: ProfileRepository): UploadImage {
+        return UploadImage(repository)
+    }
 
 }
