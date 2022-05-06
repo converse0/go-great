@@ -44,8 +44,6 @@ class ProfileRepositoryImpl @Inject constructor(
         }
     }
 
-    private var profileParams = mutableStateOf<ParametersUser?>(null)
-
     override var isLoadData: Boolean = true
 
     override suspend fun createParameters(params: ParametersUserSet): String? {
@@ -160,14 +158,4 @@ class ProfileRepositoryImpl @Inject constructor(
         }
         return ResponseParamsIm()
     }
-
-    override suspend fun getLocalProfileParams(): ParametersUser? {
-        return profileParams.value
-    }
-
-    override suspend fun setLocalProfileParams(params: ParametersUser) {
-        profileParams.value = params
-
-    }
-
 }

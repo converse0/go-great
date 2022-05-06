@@ -5,10 +5,7 @@ import com.masuta.gogreat.data.http.Client
 import com.masuta.gogreat.data.providers.AuthRepositoryImpl
 import com.masuta.gogreat.data.providers.ProfileRepositoryImpl
 import com.masuta.gogreat.data.providers.TrainRepositoryImpl
-import com.masuta.gogreat.data.store.AuthStore
-import com.masuta.gogreat.data.store.AuthStoreImpl
-import com.masuta.gogreat.data.store.Store
-import com.masuta.gogreat.data.store.StoreImpl
+import com.masuta.gogreat.data.store.*
 import com.masuta.gogreat.domain.repository.AuthRepository
 import com.masuta.gogreat.domain.repository.ProfileRepository
 import com.masuta.gogreat.domain.repository.TrainRepository
@@ -38,14 +35,21 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideProfileStore(): ProfileStore {
+        return ProfileStoreImpl()
+    }
+
+
+    @Provides
+    @Singleton
     fun provideClient(): Client {
         return Client()
     }
 
     @Provides
     @Singleton
-    fun provideAuthRepository(client: Client, @ApplicationContext context: Context, store: Store): AuthRepository {
-        return AuthRepositoryImpl(client, context, store)
+    fun provideAuthRepository(client: Client, @ApplicationContext context: Context): AuthRepository {
+        return AuthRepositoryImpl(client, context)
     }
 
     @Provides

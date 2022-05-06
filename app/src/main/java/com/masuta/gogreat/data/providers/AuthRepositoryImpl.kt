@@ -21,7 +21,6 @@ import javax.inject.Inject
 class AuthRepositoryImpl @Inject constructor(
     private val client: Client,
     private val context: Context,
-    private val store: Store
 ) : AuthRepository {
 
     private var httpClient: HttpClient? = null

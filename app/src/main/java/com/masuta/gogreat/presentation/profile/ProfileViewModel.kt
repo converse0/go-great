@@ -7,6 +7,7 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
+import com.masuta.gogreat.data.store.ProfileStore
 import com.masuta.gogreat.domain.model.ParametersUser
 import com.masuta.gogreat.domain.model.ParametersUserSet
 import com.masuta.gogreat.domain.model.UserActivity
@@ -22,7 +23,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val repository: ProfileRepository
+    private val repository: ProfileRepository,
+    private val store: ProfileStore
 ) :ViewModel() {
 
     var errorMessage by mutableStateOf("")
@@ -62,7 +64,7 @@ class ProfileViewModel @Inject constructor(
                         image = resp.data.image
                     )
                     userParams.value = params
-                    repository.setLocalProfileParams(params)
+                    store.setLocalProfileParams(params)
                     isDataLoad = false
                 } else if (resp.code != null) {
                     resp.message?.let { errorMessage = it }
@@ -79,7 +81,7 @@ class ProfileViewModel @Inject constructor(
             }
         } else {
             viewModelScope.launch {
-                repository.getLocalProfileParams()?.let {
+                store.getLocalProfileParams()?.let {
                     userParams.value = it
                 }
             }
@@ -92,7 +94,7 @@ class ProfileViewModel @Inject constructor(
             resp.data?.let {
                 gender.value = it.gender
                 val params = ParametersUser().copy(image = it.image)
-                repository.setLocalProfileParams(params)
+                store.setLocalProfileParams(params)
             } ?: resp.code?.let {
                 resp.message?.let { errorMessage = it }
                 gender.value = when(it){
@@ -108,7 +110,7 @@ class ProfileViewModel @Inject constructor(
         val resp = repository.getParameters()
         resp.data?.let {
             val params = ParametersUser().copy(image = it.image)
-            repository.setLocalProfileParams(params)
+            store.setLocalProfileParams(params)
             return true
         }?: resp.code?.let {
             return false
@@ -132,7 +134,7 @@ class ProfileViewModel @Inject constructor(
             gender = userParams.gender,
             uid = userParams.uid
         )
-        repository.setLocalProfileParams(userParams)
+        store.setLocalProfileParams(userParams)
         val resp = repository.updateParameters(params)
 
         resp.code?.let { code ->
