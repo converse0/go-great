@@ -22,8 +22,6 @@ class TrainRepositoryImpl @Inject constructor(
 
     private var httpClient: HttpClient? = null
     private var trainUrl = ""
-    private var localTraining:Map<String,Training> = mutableMapOf()
-    private var localTrainingEx:Map<Int,TrainingExercise> = mutableMapOf()
 
     override var workoutsDataReload: Boolean = true
     override var pastWorkoutsDataReload: Boolean = true
@@ -104,40 +102,6 @@ class TrainRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun saveLocal(newTrain: Training): String {
-        val id = newTrain.uid ?: ""
-        localTraining.get(id)?.apply {
-            this.image = newTrain.image
-            this.uid = id
-            this.name= newTrain.name
-            this.exercises = newTrain.exercises
-
-        } ?: run {
-            localTraining = localTraining.plus(id to newTrain)
-        }
-        return id
-    }
-
-    override suspend fun saveLocalEx(ex: TrainingExercise): Int {
-        val id = localTrainingEx.size.plus(1)
-        localTrainingEx = localTrainingEx.plus(id to ex)
-        return id
-    }
-
-    override suspend fun getLocalEx(id: Int): TrainingExercise? {
-        localTrainingEx.get(id).let {
-            return it
-        }
-    }
-
-    override suspend fun getAllLocalTrainings(): List<Training>? {
-        return if (localTraining.isNotEmpty()) {
-            localTraining.values.toList()
-        } else {
-            null
-        }
-    }
-
     override suspend fun getPassTrainings(): TrainingResponse {
         try {
             httpClient?.get<TrainingResponse>("$trainUrl/user/trenings?status=Finish") {
@@ -178,23 +142,6 @@ class TrainRepositoryImpl @Inject constructor(
             e.printStackTrace()
         }
         return TrainingResponse()
-    }
-
-    override suspend fun getLocalTrainingByUid(uid: String): Training? {
-        localTraining.get(uid).let {
-            return it
-        }
-    }
-
-    override suspend fun getAllLocalEx(): List<TrainingExercise> {
-        return localTrainingEx.values.toList()
-    }
-
-    override suspend fun clearLocalExerciseData() {
-        localTrainingEx = mutableMapOf()
-    }
-    override suspend fun clearLocalTrainingData() {
-        localTraining = mutableMapOf()
     }
 
     override suspend fun getTrainingDetail(uid: String): Training? {

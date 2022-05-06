@@ -108,7 +108,7 @@ class StartTrainingViewModel @Inject constructor(
 
     fun getTraining(uid: String) {
         viewModelScope.launch {
-            val resp = repository.getLocalTrainingByUid(uid)
+            val resp = store.getLocalTrainingByUid(uid)
             val exerciseCurrent = store.getLocalCurrentExercise()
             val sets = store.getLocalCurrentExerciseSets()
 
@@ -141,13 +141,13 @@ class StartTrainingViewModel @Inject constructor(
             store.setLocalCurrentExercise(_indexExercise.value)
             store.setLocalCurrentExerciseSets(_currentExercise.value.numberOfSets)
 
-            val training = repository.getLocalTrainingByUid(uid).let {
+            val training = store.getLocalTrainingByUid(uid).let {
                 it?.copy(
                     exercises = listExercises
                 )
             }
             training?.let {
-                repository.saveLocal(it)
+                store.saveLocalTraining(it)
             }
         }
     }

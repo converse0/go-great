@@ -22,7 +22,7 @@ class WorkoutViewModel @Inject constructor(
         name: MutableState<String>
     ) {
         viewModelScope.launch {
-            val resp = repository.getLocalTrainingByUid(uid)
+            val resp = store.getLocalTrainingByUid(uid)
 
             resp?.let {
                 listExercises.value = it.exercises

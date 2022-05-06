@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
+import com.masuta.gogreat.data.store.TrainStore
 import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.domain.repository.TrainRepository
 import com.masuta.gogreat.presentation.profile.routeTo
@@ -25,6 +26,7 @@ import javax.inject.Inject
 class ExerciseViewModel @Inject constructor(
     private val repository: TrainRepository,
     private val listValuesForSliders: ListsValuesForSliders,
+    private val store: TrainStore
 ): ViewModel() {
 
     val isRoute = mutableStateOf(false)
@@ -66,7 +68,7 @@ class ExerciseViewModel @Inject constructor(
 
     fun saveLocalExercise(exercise: TrainingExercise) {
         viewModelScope.launch {
-            repository.saveLocalEx(exercise)
+            store.saveLocalEx(exercise)
         }
     }
 }

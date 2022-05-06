@@ -55,8 +55,8 @@ class MainViewModel @Inject constructor(
             viewModelScope.launch {
                 val resp = repository.findAll()
                 resp.data?.let { training ->
-                    repository.clearLocalTrainingData()
-                    training.forEach { repository.saveLocal(it.validateExerciseData()) }
+                    store.clearLocalTrainingData()
+                    training.forEach { store.saveLocalTraining(it.validateExerciseData()) }
                 }
                 val myTrains = repository.getMyTrainings()
                 myTrains.data?.let { trains ->
@@ -232,10 +232,9 @@ class MainViewModel @Inject constructor(
             }
     }
 
-
     fun clearLocalExercises() {
         viewModelScope.launch {
-            repository.clearLocalExerciseData()
+            store.clearLocalExerciseData()
         }
     }
 }
