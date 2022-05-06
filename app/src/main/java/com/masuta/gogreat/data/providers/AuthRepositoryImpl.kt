@@ -4,8 +4,6 @@ import android.content.Context
 import android.widget.Toast
 import com.masuta.gogreat.R
 import com.masuta.gogreat.data.http.Client
-import com.masuta.gogreat.data.store.Store
-import com.masuta.gogreat.domain.model.LoginResponse
 import com.masuta.gogreat.domain.model.Response
 import com.masuta.gogreat.domain.model.User
 import com.masuta.gogreat.domain.repository.AuthRepository

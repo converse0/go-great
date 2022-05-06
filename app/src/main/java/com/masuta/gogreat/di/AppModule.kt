@@ -23,14 +23,14 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideStore(@ApplicationContext context: Context): Store {
-        return StoreImpl(context)
+    fun provideAuthStore(@ApplicationContext context: Context): AuthStore {
+        return AuthStoreImpl(context)
     }
 
     @Provides
     @Singleton
-    fun provideAuthStore(@ApplicationContext context: Context): AuthStore {
-        return AuthStoreImpl(context)
+    fun provideTrainStore(@ApplicationContext context: Context): TrainStore {
+        return TrainStoreImpl(context)
     }
 
     @Provides
@@ -60,8 +60,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideTrainRepository(client: Client, @ApplicationContext context: Context, store: Store): TrainRepository {
-        return TrainRepositoryImpl(client, context, store)
+    fun provideTrainRepository(client: Client, @ApplicationContext context: Context): TrainRepository {
+        return TrainRepositoryImpl(client, context)
     }
 
     @Provides

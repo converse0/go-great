@@ -6,6 +6,7 @@ import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
+import com.masuta.gogreat.data.store.TrainStore
 import com.masuta.gogreat.domain.model.Training
 import com.masuta.gogreat.domain.repository.TrainRepository
 import com.masuta.gogreat.presentation.profile.routeTo
@@ -19,6 +20,7 @@ import kotlin.system.measureTimeMillis
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val repository: TrainRepository,
+    private val store: TrainStore
 ): ViewModel() {
 
     private var workoutsReloadData = false
@@ -60,7 +62,7 @@ class MainViewModel @Inject constructor(
                 myTrains.data?.let { trains ->
                     val localList = trains.map { it.validateExerciseData() }
                     list.value = localList
-                    repository.setLocalWorkouts(localList)
+                    store.setLocalWorkouts(localList)
                 } ?: myTrains.code?.let { code ->
                     when(val error = handleErrors(code)) {
                         is Timeout -> {
@@ -77,7 +79,9 @@ class MainViewModel @Inject constructor(
             }
         } else {
             viewModelScope.launch {
-                list.value = repository.getLocalWorkouts()
+                val resp = store.getLocalWorkouts()
+                println("MY WORKOUTS LOCAL : $resp")
+                list.value = resp
             }
         }
     }
@@ -94,7 +98,7 @@ class MainViewModel @Inject constructor(
                  resp.data?.let {
                      it.getOrNull(0)?.let { train ->
                          training.value = train
-                         repository.setLocalCurrentWorkout(train.validateExerciseData())
+                         store.setLocalCurrentWorkout(train.validateExerciseData())
                      }
                  } ?: resp.code?.let { code ->
                      when(val error = handleErrors(code)) {
@@ -112,7 +116,8 @@ class MainViewModel @Inject constructor(
             }
          } else {
              viewModelScope.launch {
-                 repository.getLocalCurrentWorkout()?.let {
+                 store.getLocalCurrentWorkout()?.let {
+                     println("CURRENT WORKOUT LOCAL : $it")
                     training.value = it
                  }
              }
@@ -131,7 +136,7 @@ class MainViewModel @Inject constructor(
                     val resp = repository.getPassTrainings()
                     resp.data?.let{
                         list.value = it
-                        repository.setLocalPastWorkouts(it)
+                        store.setLocalPastWorkouts(it)
                     } ?: resp.code?.let { code ->
                         when(val error = handleErrors(code)) {
                             is Timeout -> {
@@ -149,7 +154,9 @@ class MainViewModel @Inject constructor(
             }
         } else {
             viewModelScope.launch {
-                list.value = repository.getLocalPastWorkouts()
+                val resp = store.getLocalPastWorkouts()
+                println("PAST WORKOUTS LOCAL :$resp")
+                list.value = resp
             }
         }
     }
@@ -161,7 +168,7 @@ class MainViewModel @Inject constructor(
        val resp = repository.getMyTrainings()
         resp.data?.let { trains->
             val localList = trains.map { it.validateExerciseData() }
-            repository.setLocalWorkouts(localList)
+            store.setLocalWorkouts(localList)
         } ?: resp.code?.let { code ->
             when(val error = handleErrors(code)) {
                 is Timeout -> {
@@ -184,7 +191,7 @@ class MainViewModel @Inject constructor(
         val resp = repository.getPassTrainings()
         resp.data?.let { pastTr ->
             val pastTrainings = pastTr.map { it.validateExerciseData() }
-            repository.setLocalPastWorkouts(pastTrainings)
+            store.setLocalPastWorkouts(pastTrainings)
         } ?: resp.code?.let { code ->
             when(val error = handleErrors(code)) {
                 is Timeout -> {
@@ -208,7 +215,7 @@ class MainViewModel @Inject constructor(
         val resp = repository.getCurrentTraining()
         resp.data?.let {
             it.getOrNull(0)?.let { train ->
-                repository.setLocalCurrentWorkout(train.validateExerciseData())
+                store.setLocalCurrentWorkout(train.validateExerciseData())
             }
         } ?: resp.code?.let { code ->
                 when(val error = handleErrors(code)) {

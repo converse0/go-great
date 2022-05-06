@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.masuta.gogreat.R
+import com.masuta.gogreat.data.store.TrainStore
 import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.domain.repository.TrainRepository
 import com.masuta.gogreat.utils.ListsValuesForSliders
@@ -25,7 +26,8 @@ sealed class TrainingEvent {
 @HiltViewModel
 class StartTrainingViewModel @Inject constructor(
     private val repository: TrainRepository,
-    private val listValuesForSliders: ListsValuesForSliders
+    private val listValuesForSliders: ListsValuesForSliders,
+    private val store: TrainStore
 ): ViewModel() {
 
     val listRelax = listValuesForSliders.getRelaxList
@@ -47,10 +49,10 @@ class StartTrainingViewModel @Inject constructor(
 
     fun endTraining(navController: NavController, context: Context) {
         viewModelScope.launch{
-            repository.setLocalCurrentExercise(null)
-            repository.setLocalCurrentExerciseSets(null)
+            store.setLocalCurrentExercise(null)
+            store.setLocalCurrentExerciseSets(null)
 
-            repository.setLocalCurrentWorkout(null)
+            store.setLocalCurrentWorkout(null)
 
             repository.currentWorkoutDataReload = true
             repository.pastWorkoutsDataReload = true
@@ -81,7 +83,7 @@ class StartTrainingViewModel @Inject constructor(
             is TrainingEvent.NextSet -> {
                 viewModelScope.launch {
                     _exerciseSets.value--
-                    repository.setLocalCurrentExerciseSets(_exerciseSets.value)
+                    store.setLocalCurrentExerciseSets(_exerciseSets.value)
                 }
             }
             is TrainingEvent.NextExercise -> {
@@ -93,8 +95,8 @@ class StartTrainingViewModel @Inject constructor(
                     _currentExercise.value = _listExercises.value[_indexExercise.value]
                     _exerciseSets.value = _listExercises.value[_indexExercise.value].numberOfSets
 
-                    repository.setLocalCurrentExercise(_indexExercise.value)
-                    repository.setLocalCurrentExerciseSets(_exerciseSets.value)
+                    store.setLocalCurrentExercise(_indexExercise.value)
+                    store.setLocalCurrentExerciseSets(_exerciseSets.value)
                 }
 
             }
@@ -107,8 +109,8 @@ class StartTrainingViewModel @Inject constructor(
     fun getTraining(uid: String) {
         viewModelScope.launch {
             val resp = repository.getLocalTrainingByUid(uid)
-            val exerciseCurrent = repository.getLocalCurrentExercise()
-            val sets = repository.getLocalCurrentExerciseSets()
+            val exerciseCurrent = store.getLocalCurrentExercise()
+            val sets = store.getLocalCurrentExerciseSets()
 
             resp?.let { it ->
                 _listExercises.value = it.exercises
@@ -120,8 +122,8 @@ class StartTrainingViewModel @Inject constructor(
                 _currentExercise.value = it.exercises[indexExercise.value]
                 _exerciseSets.value = sets ?: _currentExercise.value.numberOfSets
 
-                repository.setLocalCurrentExerciseSets(_exerciseSets.value)
-                repository.setLocalCurrentExercise(_indexExercise.value)
+                store.setLocalCurrentExerciseSets(_exerciseSets.value)
+                store.setLocalCurrentExercise(_indexExercise.value)
             }
         }
     }
@@ -136,8 +138,8 @@ class StartTrainingViewModel @Inject constructor(
             _currentExercise.value = listExercises.get(_indexExercise.value)
             _exerciseSets.value = _currentExercise.value.numberOfSets
 
-            repository.setLocalCurrentExercise(_indexExercise.value)
-            repository.setLocalCurrentExerciseSets(_currentExercise.value.numberOfSets)
+            store.setLocalCurrentExercise(_indexExercise.value)
+            store.setLocalCurrentExerciseSets(_currentExercise.value.numberOfSets)
 
             val training = repository.getLocalTrainingByUid(uid).let {
                 it?.copy(
