@@ -2,6 +2,7 @@ package com.masuta.gogreat.presentation.auth
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
+import com.masuta.gogreat.data.store.AuthStore
 import com.masuta.gogreat.domain.model.LoginResponse
 import com.masuta.gogreat.domain.model.User
 import com.masuta.gogreat.domain.model.refreshUserToken
@@ -12,7 +13,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val repository: AuthRepository
+    private val repository: AuthRepository,
+    private val store: AuthStore
 ) : ViewModel() {
 
     private fun checkUsername(username: String?): Boolean {
@@ -68,8 +70,8 @@ class SignUpViewModel @Inject constructor(
     suspend fun signIn(user: User): Map<String, Any?> {
         val resp = repository.login(user)
         val token = resp["loginResponse"] as LoginResponse
-        repository.setLocalToken(token)
 
+        store.setLocalToken(token)
         return resp
     }
 }

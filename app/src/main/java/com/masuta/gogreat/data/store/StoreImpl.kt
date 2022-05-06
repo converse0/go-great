@@ -39,17 +39,4 @@ class StoreImpl @Inject constructor(
         editor.putInt("currentExerciseSets", exerciseSets ?: -1)
         editor.apply()
     }
-
-    override suspend fun setLocalToken(token: LoginResponse?) {
-        val editor = sharedPref.edit()
-        editor.putString("accessToken", token!!.accessToken)
-        editor.putString("refreshToken", token.refreshToken)
-
-        userToken = token.accessToken
-        refreshUserToken = token.refreshToken
-
-        editor.apply()
-
-    }
-
 }

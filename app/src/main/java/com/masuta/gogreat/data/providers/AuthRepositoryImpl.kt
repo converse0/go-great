@@ -95,8 +95,4 @@ class AuthRepositoryImpl @Inject constructor(
         }
         return false
     }
-
-    override suspend fun setLocalToken(token: LoginResponse?) {
-        store.setLocalToken(token)
-    }
 }

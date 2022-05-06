@@ -1,7 +1,5 @@
 package com.masuta.gogreat.data.store
 
-import com.masuta.gogreat.domain.model.LoginResponse
-
 interface Store {
 
     suspend fun getLocalCurrentExercise(): Int?
@@ -9,7 +7,5 @@ interface Store {
 
     suspend fun getLocalCurrentExerciseSets(): Int?
     suspend fun setLocalCurrentExerciseSets(exerciseSets: Int?)
-
-    suspend fun setLocalToken(token: LoginResponse?)
 
 }
