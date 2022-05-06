@@ -1,24 +1,17 @@
 package com.masuta.gogreat.presentation.auth
 
 import androidx.lifecycle.ViewModel
-import com.masuta.gogreat.data.store.AuthStore
-import com.masuta.gogreat.domain.model.LoginResponse
+import com.masuta.gogreat.domain.handlers.SignIn
 import com.masuta.gogreat.domain.model.User
-import com.masuta.gogreat.domain.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class SignInViewModel @Inject constructor(
-    private val repository: AuthRepository,
-    private val store: AuthStore
+    private val signin: SignIn
 ): ViewModel() {
 
     suspend fun signIn(user: User): Map<String, Any?> {
-        val resp = repository.login(user)
-        val token = resp["loginResponse"] as LoginResponse
-
-        store.setLocalToken(token)
-        return resp
+        return signin(user)
     }
 }

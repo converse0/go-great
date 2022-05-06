@@ -6,6 +6,8 @@ import com.masuta.gogreat.data.providers.AuthRepositoryImpl
 import com.masuta.gogreat.data.providers.ProfileRepositoryImpl
 import com.masuta.gogreat.data.providers.TrainRepositoryImpl
 import com.masuta.gogreat.data.store.*
+import com.masuta.gogreat.domain.handlers.SignIn
+import com.masuta.gogreat.domain.handlers.SignUp
 import com.masuta.gogreat.domain.repository.AuthRepository
 import com.masuta.gogreat.domain.repository.ProfileRepository
 import com.masuta.gogreat.domain.repository.TrainRepository
@@ -39,7 +41,6 @@ object AppModule {
         return ProfileStoreImpl()
     }
 
-
     @Provides
     @Singleton
     fun provideClient(): Client {
@@ -69,5 +70,18 @@ object AppModule {
     fun provideListValuesForSliders(@ApplicationContext context: Context): ListsValuesForSliders {
         return ListsValuesForSliders(context)
     }
+
+    @Provides
+    @Singleton
+    fun provideSignUp(repository: AuthRepository): SignUp {
+        return SignUp(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSignIn(repository: AuthRepository, store: AuthStore): SignIn {
+        return SignIn(repository, store)
+    }
+
 
 }
