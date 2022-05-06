@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.masuta.gogreat.domain.handlers.profile_handlers.CreateParameters
 import com.masuta.gogreat.domain.model.ParametersUserSet
-import com.masuta.gogreat.domain.repository.ProfileRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
