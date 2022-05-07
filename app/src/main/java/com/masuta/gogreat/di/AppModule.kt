@@ -148,5 +148,22 @@ object AppModule {
         return StartTraining(repository, store)
     }
 
+    @Provides
+    @Singleton
+    fun provideSetExerciseParameters(repository: TrainRepository, store: TrainStore): SetExerciseParameters {
+        return SetExerciseParameters(repository, store)
+    }
+
+    @Provides
+    @Singleton
+    fun provideFinishTraining(repository: TrainRepository): FinishTraining {
+        return FinishTraining(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideEndTraining(repository: TrainRepository, store: TrainStore): EndTraining {
+        return EndTraining(repository, store)
+    }
 
 }
