@@ -12,9 +12,7 @@ import com.masuta.gogreat.domain.handlers.profile_handlers.CreateParameters
 import com.masuta.gogreat.domain.handlers.profile_handlers.GetParameters
 import com.masuta.gogreat.domain.handlers.profile_handlers.UpdateParameters
 import com.masuta.gogreat.domain.handlers.profile_handlers.UploadImage
-import com.masuta.gogreat.domain.handlers.train_handlers.GetCurrentWorkout
-import com.masuta.gogreat.domain.handlers.train_handlers.GetPastWorkouts
-import com.masuta.gogreat.domain.handlers.train_handlers.GetWorkouts
+import com.masuta.gogreat.domain.handlers.train_handlers.*
 import com.masuta.gogreat.domain.repository.AuthRepository
 import com.masuta.gogreat.domain.repository.ProfileRepository
 import com.masuta.gogreat.domain.repository.TrainRepository
@@ -131,5 +129,24 @@ object AppModule {
     fun provideGetPastWorkouts(repository: TrainRepository, store: TrainStore): GetPastWorkouts {
         return GetPastWorkouts(repository, store)
     }
+
+    @Provides
+    @Singleton
+    fun provideSaveWorkout(repository: TrainRepository): SaveWorkout {
+        return SaveWorkout(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGerExerciseById(repository: TrainRepository): GetExercisesById {
+        return GetExercisesById(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideStartTraining(repository: TrainRepository, store: TrainStore): StartTraining {
+        return StartTraining(repository, store)
+    }
+
 
 }
