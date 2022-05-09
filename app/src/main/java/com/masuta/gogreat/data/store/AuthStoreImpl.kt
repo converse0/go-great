@@ -6,38 +6,26 @@ import com.masuta.gogreat.domain.model.refreshUserToken
 import com.masuta.gogreat.domain.model.userToken
 import javax.inject.Inject
 
-class StoreImpl @Inject constructor(
+class AuthStoreImpl @Inject constructor(
     private val context: Context
-) : Store {
+) : AuthStore {
 
     private val sharedPref = context.getSharedPreferences("user", Context.MODE_PRIVATE)
 
-    override suspend fun getLocalCurrentExercise(): Int? {
-        val value = sharedPref.getInt("currentExercise", -1)
+    override suspend fun getLocalToken(): String? {
+        val value = sharedPref.getString("accessToken", "")
         return when (value) {
-            -1 -> null
+            "" -> null
             else -> value
         }
     }
 
-    override suspend fun setLocalCurrentExercise(indexExercise: Int?) {
-        val editor = sharedPref.edit()
-        editor.putInt("currentExercise", indexExercise ?: -1)
-        editor.apply()
-    }
-
-    override suspend fun getLocalCurrentExerciseSets(): Int? {
-        val value = sharedPref.getInt("currentExerciseSets", -1)
+    override suspend fun getLocalRefreshToken(): String? {
+        val value = sharedPref.getString("refreshToken", "")
         return when (value) {
-            -1 -> null
+            "" -> null
             else -> value
         }
-    }
-
-    override suspend fun setLocalCurrentExerciseSets(exerciseSets: Int?) {
-        val editor = sharedPref.edit()
-        editor.putInt("currentExerciseSets", exerciseSets ?: -1)
-        editor.apply()
     }
 
     override suspend fun setLocalToken(token: LoginResponse?) {
@@ -49,7 +37,6 @@ class StoreImpl @Inject constructor(
         refreshUserToken = token.refreshToken
 
         editor.apply()
-
     }
 
 }

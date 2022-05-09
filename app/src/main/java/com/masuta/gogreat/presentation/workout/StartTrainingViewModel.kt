@@ -8,6 +8,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.masuta.gogreat.R
+import com.masuta.gogreat.data.store.TrainStore
+import com.masuta.gogreat.domain.handlers.train_handlers.EndTraining
+import com.masuta.gogreat.domain.handlers.train_handlers.FinishTraining
+import com.masuta.gogreat.domain.handlers.train_handlers.GetTraining
+import com.masuta.gogreat.domain.handlers.train_handlers.SetExerciseParameters
 import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.domain.repository.TrainRepository
 import com.masuta.gogreat.utils.ListsValuesForSliders
@@ -24,8 +29,12 @@ sealed class TrainingEvent {
 
 @HiltViewModel
 class StartTrainingViewModel @Inject constructor(
-    private val repository: TrainRepository,
-    private val listValuesForSliders: ListsValuesForSliders
+    private val listValuesForSliders: ListsValuesForSliders,
+    private val store: TrainStore,
+    private val setExerciseParameters: SetExerciseParameters,
+    private val finishTrain: FinishTraining,
+    private val endTrain: EndTraining,
+    private val getTrain: GetTraining
 ): ViewModel() {
 
     val listRelax = listValuesForSliders.getRelaxList
@@ -47,15 +56,7 @@ class StartTrainingViewModel @Inject constructor(
 
     fun endTraining(navController: NavController, context: Context) {
         viewModelScope.launch{
-            repository.setLocalCurrentExercise(null)
-            repository.setLocalCurrentExerciseSets(null)
-
-            repository.setLocalCurrentWorkout(null)
-
-            repository.currentWorkoutDataReload = true
-            repository.pastWorkoutsDataReload = true
-            repository.workoutsDataReload = true
-
+            endTrain()
             playFinalSound(context)
             delay(500)
             navController.navigate("main")
@@ -81,7 +82,7 @@ class StartTrainingViewModel @Inject constructor(
             is TrainingEvent.NextSet -> {
                 viewModelScope.launch {
                     _exerciseSets.value--
-                    repository.setLocalCurrentExerciseSets(_exerciseSets.value)
+                    store.setLocalCurrentExerciseSets(_exerciseSets.value)
                 }
             }
             is TrainingEvent.NextExercise -> {
@@ -93,8 +94,8 @@ class StartTrainingViewModel @Inject constructor(
                     _currentExercise.value = _listExercises.value[_indexExercise.value]
                     _exerciseSets.value = _listExercises.value[_indexExercise.value].numberOfSets
 
-                    repository.setLocalCurrentExercise(_indexExercise.value)
-                    repository.setLocalCurrentExerciseSets(_exerciseSets.value)
+                    store.setLocalCurrentExercise(_indexExercise.value)
+                    store.setLocalCurrentExerciseSets(_exerciseSets.value)
                 }
 
             }
@@ -106,57 +107,41 @@ class StartTrainingViewModel @Inject constructor(
 
     fun getTraining(uid: String) {
         viewModelScope.launch {
-            val resp = repository.getLocalTrainingByUid(uid)
-            val exerciseCurrent = repository.getLocalCurrentExercise()
-            val sets = repository.getLocalCurrentExerciseSets()
+            val resp = getTrain(uid)
 
-            resp?.let { it ->
+            resp.localTraining?.let { it ->
                 _listExercises.value = it.exercises
 
-                exerciseCurrent?.let { exercise ->
+                resp.currentExercise?.let { exercise ->
                     _indexExercise.value = exercise
                 }
 
                 _currentExercise.value = it.exercises[indexExercise.value]
-                _exerciseSets.value = sets ?: _currentExercise.value.numberOfSets
+                _exerciseSets.value = resp.currentExerciseSets ?: _currentExercise.value.numberOfSets
 
-                repository.setLocalCurrentExerciseSets(_exerciseSets.value)
-                repository.setLocalCurrentExercise(_indexExercise.value)
+                store.setLocalCurrentExerciseSets(_exerciseSets.value)
+                store.setLocalCurrentExercise(_indexExercise.value)
             }
         }
     }
 
     fun setExerciseParams(uid: String, listExercises: List<TrainingExercise>) {
         viewModelScope.launch {
-            repository.setExerciseParams(uid, listExercises)
-            repository.workoutsDataReload = true
-            repository.pastWorkoutsDataReload = true
-            repository.currentWorkoutDataReload = true
-
             _currentExercise.value = listExercises.get(_indexExercise.value)
             _exerciseSets.value = _currentExercise.value.numberOfSets
 
-            repository.setLocalCurrentExercise(_indexExercise.value)
-            repository.setLocalCurrentExerciseSets(_currentExercise.value.numberOfSets)
-
-            val training = repository.getLocalTrainingByUid(uid).let {
-                it?.copy(
-                    exercises = listExercises
-                )
-            }
-            training?.let {
-                repository.saveLocal(it)
-            }
+            setExerciseParameters(
+                uid = uid,
+                listExercises = listExercises,
+                indexExercise = _indexExercise.value,
+                exerciseSets = _currentExercise.value.numberOfSets
+            )
         }
-    }
-
-    fun playSound(context: Context) {
-        val mp =  MediaPlayer.create(context, R.raw.zvuk41).start()
     }
 
     fun finishTraining(uid: String) {
         viewModelScope.launch {
-            repository.finishTraining(uid)
+            finishTrain(uid)
         }
     }
     fun playFinalSound(context: Context) {

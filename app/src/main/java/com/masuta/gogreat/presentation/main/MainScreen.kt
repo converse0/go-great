@@ -45,17 +45,14 @@ fun MainScreen(
 
     val context = LocalContext.current
 
-    val listTrainings = remember { mutableStateOf(emptyList<Training>()) }
-    val currentWorkout = remember { mutableStateOf(Training(
-        name = "",
-        exercises = mutableListOf(),
-        interval = ""
-    )) }
-    val listPastTrainings = remember { mutableStateOf(emptyList<Training>()) }
+    viewModel.getCurrentTraining(context, navController)
+    viewModel.getWorkouts(context, navController)
+    viewModel.getPastTrainings(context, navController)
 
-    viewModel.getCurrentTraining(currentWorkout, context, navController)
-    viewModel.getWorkouts(listTrainings, context, navController)
-    viewModel.getPastTrainings(listPastTrainings, context, navController)
+
+    val listTrainings = viewModel.listTrainings
+    val currentWorkout = viewModel.currentWorkout
+    val listPastTrainings = viewModel.listPastTrainings
 
     Scaffold(
         bottomBar = {

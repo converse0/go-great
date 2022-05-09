@@ -90,9 +90,9 @@ fun launch(
                 }
             }
             else -> {
-                viewModel?.getMyTrainings(context = context, navController = navController)
-                viewModel?.getPastTrainings(context = context, navController = navController)
-                viewModel?.getCurrentTraining(context = context, navController = navController)
+                viewModel?.getMyTrainingsStart(context = context, navController = navController)
+                viewModel?.getPastTrainingsStart(context = context, navController = navController)
+                viewModel?.getCurrentTrainingStart(context = context, navController = navController)
                 withContext(Dispatchers.Main) {
                     navController.navigate(startRouteName)
                 }

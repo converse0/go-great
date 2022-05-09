@@ -7,15 +7,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
+import com.masuta.gogreat.data.store.TrainStore
+import com.masuta.gogreat.domain.handlers.train_handlers.GetExercisesById
 import com.masuta.gogreat.domain.model.TrainingExercise
-import com.masuta.gogreat.domain.repository.TrainRepository
-import com.masuta.gogreat.presentation.profile.routeTo
-import com.masuta.gogreat.utils.Errors
 import com.masuta.gogreat.utils.ListsValuesForSliders
 import com.masuta.gogreat.utils.Timeout
 import com.masuta.gogreat.utils.handleErrors
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -23,8 +21,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ExerciseViewModel @Inject constructor(
-    private val repository: TrainRepository,
     private val listValuesForSliders: ListsValuesForSliders,
+    private val store: TrainStore,
+    private val getExercisesById: GetExercisesById
 ): ViewModel() {
 
     val isRoute = mutableStateOf(false)
@@ -43,7 +42,7 @@ class ExerciseViewModel @Inject constructor(
         routeTo: (navController: NavHostController, route: String) -> Unit,
     ) {
         viewModelScope.launch {
-            val resp = repository.findById(id)
+            val resp = getExercisesById(id)
 
             resp.data?.let {
                 exercisesList.value = resp.data
@@ -66,7 +65,7 @@ class ExerciseViewModel @Inject constructor(
 
     fun saveLocalExercise(exercise: TrainingExercise) {
         viewModelScope.launch {
-            repository.saveLocalEx(exercise)
+            store.saveLocalEx(exercise)
         }
     }
 }
