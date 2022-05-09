@@ -166,4 +166,10 @@ object AppModule {
         return EndTraining(repository, store)
     }
 
+    @Provides
+    @Singleton
+    fun provideGetTraining(store: TrainStore): GetTraining {
+        return GetTraining(store)
+    }
+
 }

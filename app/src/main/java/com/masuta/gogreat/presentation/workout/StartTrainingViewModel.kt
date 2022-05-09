@@ -11,6 +11,7 @@ import com.masuta.gogreat.R
 import com.masuta.gogreat.data.store.TrainStore
 import com.masuta.gogreat.domain.handlers.train_handlers.EndTraining
 import com.masuta.gogreat.domain.handlers.train_handlers.FinishTraining
+import com.masuta.gogreat.domain.handlers.train_handlers.GetTraining
 import com.masuta.gogreat.domain.handlers.train_handlers.SetExerciseParameters
 import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.domain.repository.TrainRepository
@@ -32,7 +33,8 @@ class StartTrainingViewModel @Inject constructor(
     private val store: TrainStore,
     private val setExerciseParameters: SetExerciseParameters,
     private val finishTrain: FinishTraining,
-    private val endTrain: EndTraining
+    private val endTrain: EndTraining,
+    private val getTrain: GetTraining
 ): ViewModel() {
 
     val listRelax = listValuesForSliders.getRelaxList
@@ -105,19 +107,17 @@ class StartTrainingViewModel @Inject constructor(
 
     fun getTraining(uid: String) {
         viewModelScope.launch {
-            val resp = store.getLocalTrainingByUid(uid)
-            val exerciseCurrent = store.getLocalCurrentExercise()
-            val sets = store.getLocalCurrentExerciseSets()
+            val resp = getTrain(uid)
 
-            resp?.let { it ->
+            resp.localTraining?.let { it ->
                 _listExercises.value = it.exercises
 
-                exerciseCurrent?.let { exercise ->
+                resp.currentExercise?.let { exercise ->
                     _indexExercise.value = exercise
                 }
 
                 _currentExercise.value = it.exercises[indexExercise.value]
-                _exerciseSets.value = sets ?: _currentExercise.value.numberOfSets
+                _exerciseSets.value = resp.currentExerciseSets ?: _currentExercise.value.numberOfSets
 
                 store.setLocalCurrentExerciseSets(_exerciseSets.value)
                 store.setLocalCurrentExercise(_indexExercise.value)
@@ -127,15 +127,15 @@ class StartTrainingViewModel @Inject constructor(
 
     fun setExerciseParams(uid: String, listExercises: List<TrainingExercise>) {
         viewModelScope.launch {
+            _currentExercise.value = listExercises.get(_indexExercise.value)
+            _exerciseSets.value = _currentExercise.value.numberOfSets
+
             setExerciseParameters(
                 uid = uid,
                 listExercises = listExercises,
                 indexExercise = _indexExercise.value,
                 exerciseSets = _currentExercise.value.numberOfSets
             )
-
-            _currentExercise.value = listExercises.get(_indexExercise.value)
-            _exerciseSets.value = _currentExercise.value.numberOfSets
         }
     }
 
