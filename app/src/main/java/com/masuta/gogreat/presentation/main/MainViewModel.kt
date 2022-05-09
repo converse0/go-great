@@ -3,6 +3,7 @@ package com.masuta.gogreat.presentation.main
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
@@ -26,8 +27,15 @@ class MainViewModel @Inject constructor(
     private val getMyPastWorkouts: GetPastWorkouts
 ): ViewModel() {
 
+    val listTrainings = mutableStateOf(emptyList<Training>())
+    val currentWorkout = mutableStateOf(Training(
+        name = "",
+        exercises = mutableListOf(),
+        interval = ""
+    ))
+    val listPastTrainings = mutableStateOf(emptyList<Training>())
+
     fun getWorkouts(
-        list: MutableState<List<Training>>,
         context: Context,
         navController: NavHostController
     ) {
@@ -35,7 +43,7 @@ class MainViewModel @Inject constructor(
             val resp = getMyWorkouts()
 
             resp.data?.let {
-                list.value = it
+                listTrainings.value = it
             } ?: resp.code?.let { code ->
                 when(val error = handleErrors(code)) {
                     is Timeout -> {
@@ -53,9 +61,8 @@ class MainViewModel @Inject constructor(
     }
 
      fun getCurrentTraining(
-         training: MutableState<Training>,
          context: Context,
-         navController: NavHostController
+         navController: NavHostController,
      ) {
 
          viewModelScope.launch {
@@ -63,7 +70,7 @@ class MainViewModel @Inject constructor(
 
              resp.data?.let {
                  it.getOrNull(0)?.let { train ->
-                     training.value = train
+                     currentWorkout.value = train
                  }
              } ?: resp.code?.let { code ->
                  when(val error = handleErrors(code)) {
@@ -82,16 +89,15 @@ class MainViewModel @Inject constructor(
     }
 
     fun getPastTrainings(
-        list: MutableState<List<Training>>,
         context: Context,
-        navController: NavHostController
+        navController: NavHostController,
     ) {
 
         viewModelScope.launch {
             val resp = getMyPastWorkouts()
 
             resp.data?.let {
-                list.value = it
+                listPastTrainings.value = it
             } ?: resp.code?.let{ code ->
                 when(val error = handleErrors(code)) {
                     is Timeout -> {
@@ -108,7 +114,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    suspend fun getMyTrainings(
+    suspend fun getMyTrainingsStart(
         context: Context,
         navController: NavHostController
     ){
@@ -128,7 +134,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    suspend fun getPastTrainings(
+    suspend fun getPastTrainingsStart(
         context: Context,
         navController: NavHostController
     ) {
@@ -148,7 +154,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    suspend fun getCurrentTraining(
+    suspend fun getCurrentTrainingStart(
         context: Context,
         navController: NavHostController
     ) {
