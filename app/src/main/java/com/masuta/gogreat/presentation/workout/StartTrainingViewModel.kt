@@ -68,7 +68,7 @@ class StartTrainingViewModel @Inject constructor(
         }
     }
 
-    fun onEvent(event: TrainingEvent) {
+    private fun onEvent(event: TrainingEvent) {
         if (_indexExercise.value == _listExercises.value.size) {
            return
         }

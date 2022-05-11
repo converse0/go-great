@@ -12,9 +12,10 @@ class SignIn(
 
     suspend operator fun invoke(user: User): Map<String, Any?> {
         val resp = repository.login(user)
-        val token = resp["loginResponse"] as LoginResponse
-
-        store.setLocalToken(token)
+        val token = resp.getOrDefault("loginResponse", defaultValue = {null})
+        if (token!=null) {
+            store.setLocalToken(token as LoginResponse)
+        }
         return resp
     }
 }
