@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.masuta.gogreat.domain.handlers.auth_handlers.GetToken
 import com.masuta.gogreat.domain.handlers.profile_handlers.GetParameters
+import com.masuta.gogreat.domain.handlers.profile_handlers.ProfileHandlers
 import com.masuta.gogreat.domain.handlers.profile_handlers.UpdateParameters
 import com.masuta.gogreat.domain.handlers.profile_handlers.UploadImage
 import com.masuta.gogreat.domain.model.ParametersUser
@@ -22,9 +23,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val getParams: GetParameters,
-    private val updateParameters: UpdateParameters,
-    private val uploadIm: UploadImage,
+    private val profileHandlers: ProfileHandlers,
     private val getToken: GetToken
 ) :ViewModel() {
 
@@ -41,7 +40,7 @@ class ProfileViewModel @Inject constructor(
         routeTo: (navController: NavHostController, route: String) -> Unit,
     ) {
         viewModelScope.launch {
-            val resp = getParams()
+            val resp = profileHandlers.getParameters()
             resp.data?.let {
                 userParams.value = it
             } ?: resp.code?.let {
@@ -67,7 +66,7 @@ class ProfileViewModel @Inject constructor(
 
     fun getParameters(gender: MutableState<Int>) {
         viewModelScope.launch {
-            val resp = getParams()
+            val resp = profileHandlers.getParameters()
             resp.data?.let {
                 gender.value = it.gender
             } ?: resp.code?.let {
@@ -82,7 +81,7 @@ class ProfileViewModel @Inject constructor(
     }
 
     suspend fun getUserParameters(): Boolean {
-        val resp = getParams()
+        val resp = profileHandlers.getParameters()
         resp.data?.let {
             return true
         } ?: resp.code?.let {
@@ -96,7 +95,7 @@ class ProfileViewModel @Inject constructor(
         navController: NavHostController,
         userParams: ParametersUser,
     ): String? {
-        val resp = updateParameters(userParams)
+        val resp = profileHandlers.updateParameters(userParams)
         resp.code?.let {
             when(val error = handleErrors(it)) {
                 is Timeout -> {
@@ -115,7 +114,7 @@ class ProfileViewModel @Inject constructor(
     }
 
     suspend fun uploadImage(im: ImageBitmap): Pair<String?,String?> {
-        val resp = uploadIm(im)
+        val resp = profileHandlers.uploadImage(im)
         isUploadImage.value = false
 
         resp.data?.let {

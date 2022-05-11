@@ -6,13 +6,11 @@ import com.masuta.gogreat.data.providers.AuthRepositoryImpl
 import com.masuta.gogreat.data.providers.ProfileRepositoryImpl
 import com.masuta.gogreat.data.providers.TrainRepositoryImpl
 import com.masuta.gogreat.data.store.*
+import com.masuta.gogreat.domain.handlers.auth_handlers.AuthHandlers
 import com.masuta.gogreat.domain.handlers.auth_handlers.GetToken
 import com.masuta.gogreat.domain.handlers.auth_handlers.SignIn
 import com.masuta.gogreat.domain.handlers.auth_handlers.SignUp
-import com.masuta.gogreat.domain.handlers.profile_handlers.CreateParameters
-import com.masuta.gogreat.domain.handlers.profile_handlers.GetParameters
-import com.masuta.gogreat.domain.handlers.profile_handlers.UpdateParameters
-import com.masuta.gogreat.domain.handlers.profile_handlers.UploadImage
+import com.masuta.gogreat.domain.handlers.profile_handlers.*
 import com.masuta.gogreat.domain.handlers.train_handlers.*
 import com.masuta.gogreat.domain.repository.AuthRepository
 import com.masuta.gogreat.domain.repository.ProfileRepository
@@ -79,42 +77,6 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideSignUp(repository: AuthRepository): SignUp {
-        return SignUp(repository)
-    }
-
-    @Provides
-    @Singleton
-    fun provideSignIn(repository: AuthRepository, store: AuthStore): SignIn {
-        return SignIn(repository, store)
-    }
-
-    @Provides
-    @Singleton
-    fun provideCreateParameters(repository: ProfileRepository): CreateParameters {
-        return CreateParameters(repository)
-    }
-
-    @Provides
-    @Singleton
-    fun provideGetParameters(repository: ProfileRepository, store: ProfileStore): GetParameters {
-        return GetParameters(repository, store)
-    }
-
-    @Provides
-    @Singleton
-    fun provideUpdateParameters(repository: ProfileRepository, store: ProfileStore): UpdateParameters {
-        return UpdateParameters(repository, store)
-    }
-
-    @Provides
-    @Singleton
-    fun provideUploadImage(repository: ProfileRepository): UploadImage {
-        return UploadImage(repository)
-    }
-
-    @Provides
-    @Singleton
     fun provideGetWorkouts(repository: TrainRepository, store: TrainStore): GetWorkouts {
         return GetWorkouts(repository, store)
     }
@@ -177,6 +139,27 @@ object AppModule {
     @Singleton
     fun provideGetToken(store: AuthStore): GetToken {
         return GetToken(store)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAuthHandlers(store: AuthStore, repository: AuthRepository): AuthHandlers {
+        return AuthHandlers(
+            getToken = GetToken(store),
+            signup = SignUp(repository),
+            signin = SignIn(repository, store)
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideProfileHandlers(store: ProfileStore, repository: ProfileRepository): ProfileHandlers {
+        return ProfileHandlers(
+            createParameters = CreateParameters(repository),
+            updateParameters = UpdateParameters(repository, store),
+            getParameters = GetParameters(repository, store),
+            uploadImage = UploadImage(repository)
+        )
     }
 
 }

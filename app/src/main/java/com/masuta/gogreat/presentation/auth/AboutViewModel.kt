@@ -3,6 +3,7 @@ package com.masuta.gogreat.presentation.auth
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.masuta.gogreat.domain.handlers.profile_handlers.CreateParameters
+import com.masuta.gogreat.domain.handlers.profile_handlers.ProfileHandlers
 import com.masuta.gogreat.domain.model.ParametersUserSet
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -10,7 +11,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AboutViewModel @Inject constructor(
-    private val createParameters: CreateParameters
+    private val profileHandlers: ProfileHandlers
 ) : ViewModel() {
 
     fun setParameters(
@@ -32,7 +33,7 @@ class AboutViewModel @Inject constructor(
                activity = activity, diet = diet
             )
             viewModelScope.launch {
-                createParameters(parametersUser)
+                profileHandlers.createParameters(parametersUser)
             }
         }
     }
