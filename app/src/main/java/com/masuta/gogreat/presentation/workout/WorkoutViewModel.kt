@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.masuta.gogreat.data.store.TrainStore
 import com.masuta.gogreat.domain.handlers.train_handlers.StartTraining
+import com.masuta.gogreat.domain.handlers.train_handlers.TrainHandlers
 import com.masuta.gogreat.domain.model.TrainingExercise
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -12,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WorkoutViewModel @Inject constructor(
-    private val startTrain: StartTraining,
+    private val trainHandlers: TrainHandlers,
     private val store: TrainStore
 ): ViewModel() {
 
@@ -33,7 +34,7 @@ class WorkoutViewModel @Inject constructor(
 
     fun startTraining(uid: String) {
         viewModelScope.launch {
-            startTrain(uid)
+            trainHandlers.startTraining(uid)
         }
     }
 }

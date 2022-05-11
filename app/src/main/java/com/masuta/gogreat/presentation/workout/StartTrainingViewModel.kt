@@ -9,10 +9,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.masuta.gogreat.R
 import com.masuta.gogreat.data.store.TrainStore
-import com.masuta.gogreat.domain.handlers.train_handlers.EndTraining
-import com.masuta.gogreat.domain.handlers.train_handlers.FinishTraining
-import com.masuta.gogreat.domain.handlers.train_handlers.GetTraining
-import com.masuta.gogreat.domain.handlers.train_handlers.SetExerciseParameters
+import com.masuta.gogreat.domain.handlers.train_handlers.*
 import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.domain.repository.TrainRepository
 import com.masuta.gogreat.utils.ListsValuesForSliders
@@ -31,10 +28,7 @@ sealed class TrainingEvent {
 class StartTrainingViewModel @Inject constructor(
     private val listValuesForSliders: ListsValuesForSliders,
     private val store: TrainStore,
-    private val setExerciseParameters: SetExerciseParameters,
-    private val finishTrain: FinishTraining,
-    private val endTrain: EndTraining,
-    private val getTrain: GetTraining
+    private val trainHandlers: TrainHandlers,
 ): ViewModel() {
 
     val listRelax = listValuesForSliders.getRelaxList
@@ -56,7 +50,7 @@ class StartTrainingViewModel @Inject constructor(
 
     fun endTraining(navController: NavController, context: Context) {
         viewModelScope.launch{
-            endTrain()
+            trainHandlers.endTraining()
             playFinalSound(context)
             delay(500)
             navController.navigate("main")
@@ -107,7 +101,7 @@ class StartTrainingViewModel @Inject constructor(
 
     fun getTraining(uid: String) {
         viewModelScope.launch {
-            val resp = getTrain(uid)
+            val resp = trainHandlers.getTraining(uid)
 
             resp.localTraining?.let { it ->
                 _listExercises.value = it.exercises
@@ -130,7 +124,7 @@ class StartTrainingViewModel @Inject constructor(
             _currentExercise.value = listExercises.get(_indexExercise.value)
             _exerciseSets.value = _currentExercise.value.numberOfSets
 
-            setExerciseParameters(
+            trainHandlers.setExerciseParameters(
                 uid = uid,
                 listExercises = listExercises,
                 indexExercise = _indexExercise.value,
@@ -141,7 +135,7 @@ class StartTrainingViewModel @Inject constructor(
 
     fun finishTraining(uid: String) {
         viewModelScope.launch {
-            finishTrain(uid)
+            trainHandlers.finishTraining(uid)
         }
     }
     fun playFinalSound(context: Context) {

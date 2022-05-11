@@ -11,6 +11,7 @@ import com.masuta.gogreat.data.store.TrainStore
 import com.masuta.gogreat.domain.handlers.train_handlers.GetCurrentWorkout
 import com.masuta.gogreat.domain.handlers.train_handlers.GetPastWorkouts
 import com.masuta.gogreat.domain.handlers.train_handlers.GetWorkouts
+import com.masuta.gogreat.domain.handlers.train_handlers.TrainHandlers
 import com.masuta.gogreat.domain.model.Training
 import com.masuta.gogreat.presentation.profile.routeTo
 import com.masuta.gogreat.utils.Timeout
@@ -22,9 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val store: TrainStore,
-    private val getMyWorkouts: GetWorkouts,
-    private val getMyCurrentWorkout: GetCurrentWorkout,
-    private val getMyPastWorkouts: GetPastWorkouts
+    private val trainHandlers: TrainHandlers
 ): ViewModel() {
 
     val listTrainings = mutableStateOf(emptyList<Training>())
@@ -40,7 +39,7 @@ class MainViewModel @Inject constructor(
         navController: NavHostController
     ) {
         viewModelScope.launch {
-            val resp = getMyWorkouts()
+            val resp = trainHandlers.getWorkouts()
 
             resp.data?.let {
                 listTrainings.value = it
@@ -64,9 +63,8 @@ class MainViewModel @Inject constructor(
          context: Context,
          navController: NavHostController,
      ) {
-
          viewModelScope.launch {
-            val resp = getMyCurrentWorkout()
+            val resp = trainHandlers.getCurrentWorkout()
 
              resp.data?.let {
                  it.getOrNull(0)?.let { train ->
@@ -92,9 +90,8 @@ class MainViewModel @Inject constructor(
         context: Context,
         navController: NavHostController,
     ) {
-
         viewModelScope.launch {
-            val resp = getMyPastWorkouts()
+            val resp = trainHandlers.getPastWorkouts()
 
             resp.data?.let {
                 listPastTrainings.value = it
@@ -118,7 +115,8 @@ class MainViewModel @Inject constructor(
         context: Context,
         navController: NavHostController
     ){
-        val resp = getMyWorkouts()
+
+        val resp = trainHandlers.getWorkouts()
         resp.code?.let { code ->
             when(val error = handleErrors(code)) {
                 is Timeout -> {
@@ -138,7 +136,8 @@ class MainViewModel @Inject constructor(
         context: Context,
         navController: NavHostController
     ) {
-        val resp = getMyPastWorkouts()
+
+        val resp = trainHandlers.getPastWorkouts()
         resp.code?.let { code ->
             when(val error = handleErrors(code)) {
                 is Timeout -> {
@@ -158,7 +157,8 @@ class MainViewModel @Inject constructor(
         context: Context,
         navController: NavHostController
     ) {
-        val resp = getMyCurrentWorkout()
+
+        val resp = trainHandlers.getCurrentWorkout()
         resp.code?.let { code ->
             when(val error = handleErrors(code)) {
                 is Timeout -> {

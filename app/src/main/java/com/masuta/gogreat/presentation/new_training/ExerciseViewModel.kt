@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.masuta.gogreat.data.store.TrainStore
 import com.masuta.gogreat.domain.handlers.train_handlers.GetExercisesById
+import com.masuta.gogreat.domain.handlers.train_handlers.TrainHandlers
 import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.utils.ListsValuesForSliders
 import com.masuta.gogreat.utils.Timeout
@@ -23,7 +24,7 @@ import javax.inject.Inject
 class ExerciseViewModel @Inject constructor(
     private val listValuesForSliders: ListsValuesForSliders,
     private val store: TrainStore,
-    private val getExercisesById: GetExercisesById
+    private val trainHandlers: TrainHandlers
 ): ViewModel() {
 
     val isRoute = mutableStateOf(false)
@@ -42,7 +43,7 @@ class ExerciseViewModel @Inject constructor(
         routeTo: (navController: NavHostController, route: String) -> Unit,
     ) {
         viewModelScope.launch {
-            val resp = getExercisesById(id)
+            val resp = trainHandlers.getExercisesById(id)
 
             resp.data?.let {
                 exercisesList.value = resp.data

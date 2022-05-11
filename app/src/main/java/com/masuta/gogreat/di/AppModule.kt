@@ -77,66 +77,6 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideGetWorkouts(repository: TrainRepository, store: TrainStore): GetWorkouts {
-        return GetWorkouts(repository, store)
-    }
-
-    @Provides
-    @Singleton
-    fun provideGetCurrentWorkout(repository: TrainRepository, store: TrainStore): GetCurrentWorkout {
-        return GetCurrentWorkout(repository, store)
-    }
-
-    @Provides
-    @Singleton
-    fun provideGetPastWorkouts(repository: TrainRepository, store: TrainStore): GetPastWorkouts {
-        return GetPastWorkouts(repository, store)
-    }
-
-    @Provides
-    @Singleton
-    fun provideSaveWorkout(repository: TrainRepository): SaveWorkout {
-        return SaveWorkout(repository)
-    }
-
-    @Provides
-    @Singleton
-    fun provideGerExerciseById(repository: TrainRepository): GetExercisesById {
-        return GetExercisesById(repository)
-    }
-
-    @Provides
-    @Singleton
-    fun provideStartTraining(repository: TrainRepository, store: TrainStore): StartTraining {
-        return StartTraining(repository, store)
-    }
-
-    @Provides
-    @Singleton
-    fun provideSetExerciseParameters(repository: TrainRepository, store: TrainStore): SetExerciseParameters {
-        return SetExerciseParameters(repository, store)
-    }
-
-    @Provides
-    @Singleton
-    fun provideFinishTraining(repository: TrainRepository): FinishTraining {
-        return FinishTraining(repository)
-    }
-
-    @Provides
-    @Singleton
-    fun provideEndTraining(repository: TrainRepository, store: TrainStore): EndTraining {
-        return EndTraining(repository, store)
-    }
-
-    @Provides
-    @Singleton
-    fun provideGetTraining(store: TrainStore): GetTraining {
-        return GetTraining(store)
-    }
-
-    @Provides
-    @Singleton
     fun provideGetToken(store: AuthStore): GetToken {
         return GetToken(store)
     }
@@ -159,6 +99,23 @@ object AppModule {
             updateParameters = UpdateParameters(repository, store),
             getParameters = GetParameters(repository, store),
             uploadImage = UploadImage(repository)
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideTrainHandlers(store: TrainStore, repository: TrainRepository): TrainHandlers {
+        return TrainHandlers(
+            endTraining = EndTraining(repository, store),
+            finishTraining = FinishTraining(repository),
+            startTraining = StartTraining(repository, store),
+            getCurrentWorkout = GetCurrentWorkout(repository, store),
+            getPastWorkouts = GetPastWorkouts(repository, store),
+            getWorkouts = GetWorkouts(repository, store),
+            getTraining = GetTraining(store),
+            getExercisesById = GetExercisesById(repository),
+            saveWorkout = SaveWorkout(repository),
+            setExerciseParameters = SetExerciseParameters(repository, store)
         )
     }
 
