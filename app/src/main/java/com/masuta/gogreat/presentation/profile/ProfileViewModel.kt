@@ -7,6 +7,7 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
+import com.masuta.gogreat.domain.handlers.auth_handlers.GetToken
 import com.masuta.gogreat.domain.handlers.profile_handlers.GetParameters
 import com.masuta.gogreat.domain.handlers.profile_handlers.UpdateParameters
 import com.masuta.gogreat.domain.handlers.profile_handlers.UploadImage
@@ -23,7 +24,8 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor(
     private val getParams: GetParameters,
     private val updateParameters: UpdateParameters,
-    private val uploadIm: UploadImage
+    private val uploadIm: UploadImage,
+    private val getToken: GetToken
 ) :ViewModel() {
 
     var errorMessage by mutableStateOf("")
@@ -54,6 +56,12 @@ class ProfileViewModel @Inject constructor(
                     }
                 }
             }
+        }
+    }
+
+    fun getTokens() {
+        viewModelScope.launch {
+            getToken()
         }
     }
 

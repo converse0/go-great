@@ -6,6 +6,7 @@ import com.masuta.gogreat.data.providers.AuthRepositoryImpl
 import com.masuta.gogreat.data.providers.ProfileRepositoryImpl
 import com.masuta.gogreat.data.providers.TrainRepositoryImpl
 import com.masuta.gogreat.data.store.*
+import com.masuta.gogreat.domain.handlers.auth_handlers.GetToken
 import com.masuta.gogreat.domain.handlers.auth_handlers.SignIn
 import com.masuta.gogreat.domain.handlers.auth_handlers.SignUp
 import com.masuta.gogreat.domain.handlers.profile_handlers.CreateParameters
@@ -170,6 +171,12 @@ object AppModule {
     @Singleton
     fun provideGetTraining(store: TrainStore): GetTraining {
         return GetTraining(store)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetToken(store: AuthStore): GetToken {
+        return GetToken(store)
     }
 
 }

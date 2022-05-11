@@ -74,16 +74,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-fun getToken(context: Context): String {
-    val sharedPref = context.getSharedPreferences("user", Context.MODE_PRIVATE)
-    return sharedPref.getString("accessToken", "")!!
-}
-
-fun getTokenR(context: Context): String {
-    val sharedPref = context.getSharedPreferences("user", Context.MODE_PRIVATE)
-    return sharedPref.getString("refreshToken", "")!!
-}
-
 fun getSex(context: Context): Int {
     val sharedPref = context.getSharedPreferences("user", Context.MODE_PRIVATE)
     return sharedPref.getInt("sex", 0)
@@ -109,10 +99,10 @@ fun ChoseStartScreen(
     context: Context, viewModel: ProfileViewModel,
     startRouteName: MutableState<String>
 ) {
-    val token = getToken(context)
-    userToken = token
-    val r = getTokenR(context)
-    refreshUserToken = r
+
+    viewModel.getTokens()
+
+    val token = userToken ?: ""
     val g = getSex(context)
     gender = g
 
