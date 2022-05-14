@@ -175,4 +175,8 @@ class TrainServiceImpl(
         return store.getAllLocalEx()
     }
 
+    override suspend fun getLocalTrainingByUid(uid: String): Training? {
+        return store.getLocalTrainingByUid(uid)
+    }
+
 }

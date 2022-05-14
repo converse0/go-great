@@ -13,7 +13,6 @@ import javax.inject.Inject
 @HiltViewModel
 class WorkoutViewModel @Inject constructor(
     private val trainHandlers: TrainHandlers,
-    private val store: TrainStore
 ): ViewModel() {
 
     fun getExercises(
@@ -22,7 +21,7 @@ class WorkoutViewModel @Inject constructor(
         name: MutableState<String>
     ) {
         viewModelScope.launch {
-            val resp = store.getLocalTrainingByUid(uid)
+            val resp = trainHandlers.getLocalTrainingByUid(uid)
 
             resp?.let {
                 listExercises.value = it.exercises

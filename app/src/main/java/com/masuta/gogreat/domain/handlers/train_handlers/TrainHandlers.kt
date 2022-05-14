@@ -13,5 +13,6 @@ data class TrainHandlers(
     val startTraining: StartTraining,
     val clearLocalExerciseData: ClearLocalExerciseData,
     val saveLocalExercise: SaveLocalExercise,
-    val getAllLocalExercise: GetAllLocalExercise
+    val getAllLocalExercise: GetAllLocalExercise,
+    val getLocalTrainingByUid: GetLocalTrainingByUid
 )
