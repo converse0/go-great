@@ -7,6 +7,7 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
+import com.masuta.gogreat.domain.handlers.auth_handlers.AuthHandlers
 import com.masuta.gogreat.domain.handlers.auth_handlers.GetToken
 import com.masuta.gogreat.domain.handlers.profile_handlers.GetParameters
 import com.masuta.gogreat.domain.handlers.profile_handlers.ProfileHandlers
@@ -24,7 +25,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val profileHandlers: ProfileHandlers,
-    private val getToken: GetToken
+    private val authHandlers: AuthHandlers,
 ) :ViewModel() {
 
     var errorMessage by mutableStateOf("")
@@ -60,7 +61,7 @@ class ProfileViewModel @Inject constructor(
 
     fun getTokens() {
         viewModelScope.launch {
-            getToken()
+            authHandlers.getToken()
         }
     }
 

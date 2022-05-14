@@ -26,14 +26,14 @@ class AboutViewModel @Inject constructor(
     ) {
         viewModelScope.launch {
             profileHandlers.createParameters(
-                age,
-                gender,
-                weight,
-                height,
-                desiredWeight,
-                timesEat,
-                activity,
-                diet
+                age = age,
+                gender = gender,
+                weight = weight,
+                height = height,
+                desiredWeight = desiredWeight,
+                timesEat = timesEat,
+                activity = activity,
+                diet = diet
             )
         }
     }
