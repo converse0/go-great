@@ -171,4 +171,8 @@ class TrainServiceImpl(
         store.saveLocalEx(exercise)
     }
 
+    override suspend fun getAllLocalExercise(): List<TrainingExercise> {
+        return store.getAllLocalEx()
+    }
+
 }

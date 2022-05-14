@@ -18,5 +18,6 @@ interface TrainService {
     suspend fun setExerciseParameters(params: SetExerciseParamsRequest)
     suspend fun clearLocalExerciseData()
     suspend fun saveLocalExercise(exercise: TrainingExercise)
+    suspend fun getAllLocalExercise(): List<TrainingExercise>
 
 }

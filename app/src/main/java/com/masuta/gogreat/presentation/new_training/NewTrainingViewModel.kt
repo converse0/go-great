@@ -14,7 +14,6 @@ import javax.inject.Inject
 @HiltViewModel
 class NewTrainingViewModel @Inject constructor(
     private val trainHandlers: TrainHandlers,
-    private val store: TrainStore
 ): ViewModel() {
 
    suspend fun saveTrain(newTrain: Training) {
@@ -23,14 +22,14 @@ class NewTrainingViewModel @Inject constructor(
 
     fun getLocalExercises(list: MutableState<List<TrainingExercise>>) {
         viewModelScope.launch {
-            val data = store.getAllLocalEx()
+            val data = trainHandlers.getAllLocalExercise()
             list.value = data
         }
     }
 
     fun clearLocalExercises() {
         viewModelScope.launch {
-            store.clearLocalExerciseData()
+            trainHandlers.clearLocalExerciseData()
         }
     }
 }
