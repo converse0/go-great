@@ -35,3 +35,22 @@ data class TrainingExerciseUpdate(
     val exercises: List<TrainingExercise>,
     val uid: String? = null
 )
+
+data class TrainResponse(
+    val data: List<Training>? = null,
+    val code: Int? = null,
+    val message: String? = null
+)
+
+data class GetTrainingResponse(
+    val localTraining: Training?,
+    val currentExercise: Int?,
+    val currentExerciseSets: Int?
+)
+
+data class SetExerciseParamsRequest(
+    val uid: String,
+    val listExercises: List<TrainingExercise>,
+    val indexExercise: Int,
+    val exerciseSets: Int
+)

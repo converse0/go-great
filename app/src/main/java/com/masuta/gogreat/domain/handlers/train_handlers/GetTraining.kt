@@ -1,24 +1,14 @@
 package com.masuta.gogreat.domain.handlers.train_handlers
 
-import com.masuta.gogreat.core.store.TrainStore
-import com.masuta.gogreat.domain.model.Training
-
-data class GetTrainingResponse(
-    val localTraining: Training?,
-    val currentExercise: Int?,
-    val currentExerciseSets: Int?
-)
+import com.masuta.gogreat.core.service.train_service.TrainService
+import com.masuta.gogreat.domain.model.GetTrainingResponse
 
 class GetTraining(
-    private val store: TrainStore
+    private val trainService: TrainService
 ) {
 
     suspend operator fun invoke(uid: String): GetTrainingResponse {
-        val training = store.getLocalTrainingByUid(uid)
-        val exerciseCurrent = store.getLocalCurrentExercise()
-        val sets = store.getLocalCurrentExerciseSets()
-
-        return GetTrainingResponse(training, exerciseCurrent, sets)
+        return trainService.getLocalTrainings(uid)
     }
 
 }

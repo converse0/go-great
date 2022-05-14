@@ -9,6 +9,8 @@ import com.masuta.gogreat.core.service.auth_service.AuthService
 import com.masuta.gogreat.core.service.auth_service.AuthServiceImpl
 import com.masuta.gogreat.core.service.profile_service.ProfileService
 import com.masuta.gogreat.core.service.profile_service.ProfileServiceImpl
+import com.masuta.gogreat.core.service.train_service.TrainService
+import com.masuta.gogreat.core.service.train_service.TrainServiceImpl
 import com.masuta.gogreat.core.store.*
 import com.masuta.gogreat.domain.handlers.auth_handlers.AuthHandlers
 import com.masuta.gogreat.domain.handlers.auth_handlers.GetToken
@@ -99,6 +101,12 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideTrainService(repository: TrainRepository, store: TrainStore): TrainService {
+        return TrainServiceImpl(repository, store)
+    }
+
+    @Provides
+    @Singleton
     fun provideAuthHandlers(authService: AuthService, store: AuthStore): AuthHandlers {
         return AuthHandlers(
             getToken = GetToken(store),
@@ -120,18 +128,18 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideTrainHandlers(store: TrainStore, repository: TrainRepository): TrainHandlers {
+    fun provideTrainHandlers(trainService: TrainService): TrainHandlers {
         return TrainHandlers(
-            endTraining = EndTraining(repository, store),
-            finishTraining = FinishTraining(repository),
-            startTraining = StartTraining(repository, store),
-            getCurrentWorkout = GetCurrentWorkout(repository, store),
-            getPastWorkouts = GetPastWorkouts(repository, store),
-            getWorkouts = GetWorkouts(repository, store),
-            getTraining = GetTraining(store),
-            getExercisesById = GetExercisesById(repository),
-            saveWorkout = SaveWorkout(repository),
-            setExerciseParameters = SetExerciseParameters(repository, store)
+            endTraining = EndTraining(trainService),
+            finishTraining = FinishTraining(trainService),
+            startTraining = StartTraining(trainService),
+            getCurrentWorkout = GetCurrentWorkout(trainService),
+            getPastWorkouts = GetPastWorkouts(trainService),
+            getWorkouts = GetWorkouts(trainService),
+            getTraining = GetTraining(trainService),
+            getExercisesById = GetExercisesById(trainService),
+            saveWorkout = SaveWorkout(trainService),
+            setExerciseParameters = SetExerciseParameters(trainService)
         )
     }
 
