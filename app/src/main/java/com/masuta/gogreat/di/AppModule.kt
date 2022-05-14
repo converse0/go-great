@@ -5,6 +5,8 @@ import com.masuta.gogreat.core.http.Client
 import com.masuta.gogreat.core.providers.AuthRepositoryImpl
 import com.masuta.gogreat.core.providers.ProfileRepositoryImpl
 import com.masuta.gogreat.core.providers.TrainRepositoryImpl
+import com.masuta.gogreat.core.service.auth_service.AuthService
+import com.masuta.gogreat.core.service.auth_service.AuthServiceImpl
 import com.masuta.gogreat.core.service.profile_service.ProfileService
 import com.masuta.gogreat.core.service.profile_service.ProfileServiceImpl
 import com.masuta.gogreat.core.store.*
@@ -91,11 +93,17 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideAuthHandlers(store: AuthStore, repository: AuthRepository): AuthHandlers {
+    fun provideAuthService(repository: AuthRepository, store: AuthStore): AuthService {
+        return AuthServiceImpl(repository, store)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAuthHandlers(authService: AuthService, store: AuthStore): AuthHandlers {
         return AuthHandlers(
             getToken = GetToken(store),
-            signup = SignUp(repository),
-            signin = SignIn(repository, store)
+            signup = SignUp(authService),
+            signin = SignIn(authService)
         )
     }
 

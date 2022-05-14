@@ -100,26 +100,8 @@ fun SignInForm(
             .padding(vertical = 40.dp)
     ) {
         isEnabledButton.value = false
-        val user = User(email = email, password = password)
-
-        CoroutineScope(Dispatchers.IO).launch {
-            val resp = viewModel.signIn(user)
-
-            withContext(Dispatchers.Main) {
-                if(resp["status"] as Boolean){
-                    navController.navigate("main")
-                } else {
-                    resp["message"]?.let {
-                        Toast.makeText(
-                            context,
-                            it as String,
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-            }
-            isEnabledButton.value = true
-        }
+        viewModel.signIn(email, password, navController, context)
+        isEnabledButton.value = true
     }
     Row(
         verticalAlignment = Alignment.CenterVertically

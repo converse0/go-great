@@ -133,35 +133,8 @@ fun SignUpForm(
                 .align(Alignment.BottomCenter)
         ) {
             isEnabledButton.value = false
-            CoroutineScope(Dispatchers.IO).launch {
-                val respSignUp = viewModel.signUp(username, email, password, passwordConfirm)
-
-                if (respSignUp) {
-                    val res = viewModel.signIn(User(email = email, password = password))
-                    withContext(Dispatchers.Main) {
-                        if (res["status"] as Boolean) {
-                            navController.navigate("about")
-                        } else {
-                            res["message"]?.let {
-                                Toast.makeText(
-                                    context,
-                                    it as String,
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        }
-                    }
-                } else {
-                    withContext(Dispatchers.Main) {
-                        Toast.makeText(
-                            context,
-                            "Sign up failed, fill all fields, and enter the same password twice",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-                isEnabledButton.value = true
-            }
+            viewModel.signUp(username, email, password, passwordConfirm, navController, context)
+            isEnabledButton.value = true
         }
     }
     Text(

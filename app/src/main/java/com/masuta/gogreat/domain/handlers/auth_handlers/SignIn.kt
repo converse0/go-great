@@ -1,21 +1,13 @@
 package com.masuta.gogreat.domain.handlers.auth_handlers
 
-import com.masuta.gogreat.core.store.AuthStore
-import com.masuta.gogreat.domain.model.LoginResponse
+import com.masuta.gogreat.core.service.auth_service.AuthService
 import com.masuta.gogreat.domain.model.User
-import com.masuta.gogreat.domain.repository.AuthRepository
 
 class SignIn(
-    private val repository: AuthRepository,
-    private val store: AuthStore
+    private val authService: AuthService
 ) {
-
-    suspend operator fun invoke(user: User): Map<String, Any?> {
-        val resp = repository.login(user)
-        val token = resp.getOrDefault("loginResponse", defaultValue = {null})
-        if (token!=null) {
-            store.setLocalToken(token as LoginResponse)
-        }
-        return resp
+    suspend operator fun invoke(email: String, password: String): Map<String, Any?> {
+        val user = User(email = email, password = password)
+        return authService.signin(user)
     }
 }

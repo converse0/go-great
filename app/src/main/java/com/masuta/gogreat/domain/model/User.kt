@@ -7,6 +7,7 @@ data class User(
     val username: String? = null,
     val email: String,
     val password: String,
+    val passwordConfirm: String? = null
 )
 
 @Serializable
