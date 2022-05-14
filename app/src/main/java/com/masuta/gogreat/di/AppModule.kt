@@ -139,7 +139,8 @@ object AppModule {
             getTraining = GetTraining(trainService),
             getExercisesById = GetExercisesById(trainService),
             saveWorkout = SaveWorkout(trainService),
-            setExerciseParameters = SetExerciseParameters(trainService)
+            setExerciseParameters = SetExerciseParameters(trainService),
+            clearLocalExerciseData = ClearLocalExerciseData(trainService)
         )
     }
 

@@ -15,5 +15,6 @@ interface TrainService {
     suspend fun getLocalTrainings(uid: String): GetTrainingResponse
     suspend fun getExercisesById(id: Long): ExerciseResponse
     suspend fun setExerciseParameters(params: SetExerciseParamsRequest)
+    suspend fun clearLocalExerciseData()
 
 }

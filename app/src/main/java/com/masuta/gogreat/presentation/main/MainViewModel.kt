@@ -18,7 +18,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val store: TrainStore,
     private val trainHandlers: TrainHandlers
 ): ViewModel() {
 
@@ -172,7 +171,7 @@ class MainViewModel @Inject constructor(
 
     fun clearLocalExercises() {
         viewModelScope.launch {
-            store.clearLocalExerciseData()
+            trainHandlers.clearLocalExerciseData()
         }
     }
 }

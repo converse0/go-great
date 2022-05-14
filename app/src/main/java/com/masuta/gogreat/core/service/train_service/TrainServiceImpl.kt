@@ -144,6 +144,7 @@ class TrainServiceImpl(
 
     override suspend fun setExerciseParameters(params: SetExerciseParamsRequest) {
         repository.setExerciseParams(params.uid, params.listExercises)
+
         repository.workoutsDataReload = true
         repository.pastWorkoutsDataReload = true
         repository.currentWorkoutDataReload = true
@@ -159,6 +160,10 @@ class TrainServiceImpl(
         training?.let {
             store.saveLocalTraining(it)
         }
+    }
+
+    override suspend fun clearLocalExerciseData() {
+        store.clearLocalExerciseData()
     }
 
 }
