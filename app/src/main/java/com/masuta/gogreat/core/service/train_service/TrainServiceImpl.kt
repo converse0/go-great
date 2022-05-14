@@ -1,6 +1,7 @@
 package com.masuta.gogreat.core.service.train_service
 
 import com.masuta.gogreat.core.store.TrainStore
+import com.masuta.gogreat.domain.handlers.train_handlers.SaveLocalExercise
 import com.masuta.gogreat.domain.model.*
 import com.masuta.gogreat.domain.repository.TrainRepository
 
@@ -164,6 +165,10 @@ class TrainServiceImpl(
 
     override suspend fun clearLocalExerciseData() {
         store.clearLocalExerciseData()
+    }
+
+    override suspend fun saveLocalExercise(exercise: TrainingExercise) {
+        store.saveLocalEx(exercise)
     }
 
 }

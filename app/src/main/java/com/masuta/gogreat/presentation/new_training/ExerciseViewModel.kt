@@ -7,7 +7,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
-import com.masuta.gogreat.core.store.TrainStore
 import com.masuta.gogreat.domain.handlers.train_handlers.TrainHandlers
 import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.utils.ListsValuesForSliders
@@ -22,7 +21,6 @@ import javax.inject.Inject
 @HiltViewModel
 class ExerciseViewModel @Inject constructor(
     private val listValuesForSliders: ListsValuesForSliders,
-    private val store: TrainStore,
     private val trainHandlers: TrainHandlers
 ): ViewModel() {
 
@@ -65,7 +63,7 @@ class ExerciseViewModel @Inject constructor(
 
     fun saveLocalExercise(exercise: TrainingExercise) {
         viewModelScope.launch {
-            store.saveLocalEx(exercise)
+            trainHandlers.saveLocalExercise(exercise)
         }
     }
 }

@@ -11,5 +11,6 @@ data class TrainHandlers(
     val saveWorkout: SaveWorkout,
     val setExerciseParameters: SetExerciseParameters,
     val startTraining: StartTraining,
-    val clearLocalExerciseData: ClearLocalExerciseData
+    val clearLocalExerciseData: ClearLocalExerciseData,
+    val saveLocalExercise: SaveLocalExercise
 )
