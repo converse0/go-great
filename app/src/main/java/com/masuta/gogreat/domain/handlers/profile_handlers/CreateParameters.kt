@@ -1,13 +1,33 @@
 package com.masuta.gogreat.domain.handlers.profile_handlers
 
+import com.masuta.gogreat.core.service.profile_service.ProfileService
 import com.masuta.gogreat.domain.model.ParametersUserSet
-import com.masuta.gogreat.domain.repository.ProfileRepository
 
 class CreateParameters(
-    private val repository: ProfileRepository
+     private val profileService: ProfileService
 ) {
 
-    suspend operator fun invoke(parametersUser: ParametersUserSet) {
-        repository.createParameters(parametersUser)
+    suspend operator fun invoke(
+        age: Int?,
+        weight: Int,
+        height: Int,
+        desiredWeight: Int,
+        timesEat: Int,
+        activity: Int,
+        diet: Int,
+        gender: Int
+    ) {
+        if (age != null) {
+            val parametersUser = ParametersUserSet(
+                age = age,
+                weight = weight, height = height,
+                desiredWeight = desiredWeight, eat = timesEat,
+                gender = gender,
+                activity = activity, diet = diet
+            )
+
+            profileService.createParameters(parametersUser)
+        }
+
     }
 }

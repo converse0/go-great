@@ -1,12 +1,11 @@
-package com.masuta.gogreat.data.providers
+package com.masuta.gogreat.core.providers
 
 import android.content.Context
 import android.widget.Toast
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asAndroidBitmap
 import com.masuta.gogreat.R
-import com.masuta.gogreat.data.http.Client
+import com.masuta.gogreat.core.http.Client
 import com.masuta.gogreat.domain.model.*
 import com.masuta.gogreat.domain.repository.ProfileRepository
 import com.masuta.gogreat.utils.imageBitmapToByteArray

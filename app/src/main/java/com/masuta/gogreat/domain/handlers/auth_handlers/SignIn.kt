@@ -1,6 +1,6 @@
 package com.masuta.gogreat.domain.handlers.auth_handlers
 
-import com.masuta.gogreat.data.store.AuthStore
+import com.masuta.gogreat.core.store.AuthStore
 import com.masuta.gogreat.domain.model.LoginResponse
 import com.masuta.gogreat.domain.model.User
 import com.masuta.gogreat.domain.repository.AuthRepository

@@ -24,17 +24,17 @@ class AboutViewModel @Inject constructor(
         diet: Int,
         gender: Int
     ) {
-        if (age != null) {
-            val parametersUser = ParametersUserSet(
-                age = age,
-                weight = weight, height = height,
-                desiredWeight = desiredWeight, eat = timesEat,
-                gender = gender,
-               activity = activity, diet = diet
+        viewModelScope.launch {
+            profileHandlers.createParameters(
+                age,
+                gender,
+                weight,
+                height,
+                desiredWeight,
+                timesEat,
+                activity,
+                diet
             )
-            viewModelScope.launch {
-                profileHandlers.createParameters(parametersUser)
-            }
         }
     }
 }

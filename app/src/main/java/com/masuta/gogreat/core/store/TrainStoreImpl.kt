@@ -1,4 +1,4 @@
-package com.masuta.gogreat.data.store
+package com.masuta.gogreat.core.store
 
 import android.content.Context
 import androidx.compose.runtime.mutableStateOf

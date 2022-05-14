@@ -3,8 +3,7 @@ package com.masuta.gogreat.presentation.new_training
 import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.masuta.gogreat.data.store.TrainStore
-import com.masuta.gogreat.domain.handlers.train_handlers.SaveWorkout
+import com.masuta.gogreat.core.store.TrainStore
 import com.masuta.gogreat.domain.handlers.train_handlers.TrainHandlers
 import com.masuta.gogreat.domain.model.Training
 import com.masuta.gogreat.domain.model.TrainingExercise

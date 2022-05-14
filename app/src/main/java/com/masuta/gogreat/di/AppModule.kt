@@ -1,11 +1,13 @@
 package com.masuta.gogreat.di
 
 import android.content.Context
-import com.masuta.gogreat.data.http.Client
-import com.masuta.gogreat.data.providers.AuthRepositoryImpl
-import com.masuta.gogreat.data.providers.ProfileRepositoryImpl
-import com.masuta.gogreat.data.providers.TrainRepositoryImpl
-import com.masuta.gogreat.data.store.*
+import com.masuta.gogreat.core.http.Client
+import com.masuta.gogreat.core.providers.AuthRepositoryImpl
+import com.masuta.gogreat.core.providers.ProfileRepositoryImpl
+import com.masuta.gogreat.core.providers.TrainRepositoryImpl
+import com.masuta.gogreat.core.service.profile_service.ProfileService
+import com.masuta.gogreat.core.service.profile_service.ProfileServiceImpl
+import com.masuta.gogreat.core.store.*
 import com.masuta.gogreat.domain.handlers.auth_handlers.AuthHandlers
 import com.masuta.gogreat.domain.handlers.auth_handlers.GetToken
 import com.masuta.gogreat.domain.handlers.auth_handlers.SignIn
@@ -83,6 +85,12 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideProfileService(repository: ProfileRepository, store: ProfileStore): ProfileService {
+        return ProfileServiceImpl(repository, store)
+    }
+
+    @Provides
+    @Singleton
     fun provideAuthHandlers(store: AuthStore, repository: AuthRepository): AuthHandlers {
         return AuthHandlers(
             getToken = GetToken(store),
@@ -93,12 +101,12 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideProfileHandlers(store: ProfileStore, repository: ProfileRepository): ProfileHandlers {
+    fun provideProfileHandlers(profileService: ProfileService): ProfileHandlers {
         return ProfileHandlers(
-            createParameters = CreateParameters(repository),
-            updateParameters = UpdateParameters(repository, store),
-            getParameters = GetParameters(repository, store),
-            uploadImage = UploadImage(repository)
+            createParameters = CreateParameters(profileService),
+            updateParameters = UpdateParameters(profileService),
+            getParameters = GetParameters(profileService),
+            uploadImage = UploadImage(profileService)
         )
     }
 

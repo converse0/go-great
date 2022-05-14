@@ -1,9 +1,9 @@
-package com.masuta.gogreat.data.providers
+package com.masuta.gogreat.core.providers
 
 import android.content.Context
 import android.widget.Toast
 import com.masuta.gogreat.R
-import com.masuta.gogreat.data.http.Client
+import com.masuta.gogreat.core.http.Client
 import com.masuta.gogreat.domain.model.Response
 import com.masuta.gogreat.domain.model.User
 import com.masuta.gogreat.domain.repository.AuthRepository

@@ -1,10 +1,9 @@
-package com.masuta.gogreat.data.providers
+package com.masuta.gogreat.core.providers
 
 import android.content.Context
 import android.widget.Toast
-import androidx.compose.runtime.mutableStateOf
 import com.masuta.gogreat.R
-import com.masuta.gogreat.data.http.Client
+import com.masuta.gogreat.core.http.Client
 import com.masuta.gogreat.domain.model.*
 import com.masuta.gogreat.domain.repository.TrainRepository
 import io.ktor.client.*

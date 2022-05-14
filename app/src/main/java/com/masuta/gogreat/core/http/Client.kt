@@ -1,4 +1,4 @@
-package com.masuta.gogreat.data.http
+package com.masuta.gogreat.core.http
 
 import io.ktor.client.*
 import io.ktor.client.engine.android.*
