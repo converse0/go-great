@@ -68,7 +68,6 @@ fun SignInForm(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
-    val isEnabledButton = remember { mutableStateOf(true) }
 
     InputTextField(
         text = "Email",
@@ -87,14 +86,12 @@ fun SignInForm(
     MainTextButton(
         text = "Login",
         color = Red,
-        enabled = isEnabledButton.value,
+        enabled = viewModel.isEnabledButton.value,
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 40.dp)
     ) {
-        isEnabledButton.value = false
         viewModel.signIn(email, password, navController, context)
-        isEnabledButton.value = true
     }
     Row(
         verticalAlignment = Alignment.CenterVertically

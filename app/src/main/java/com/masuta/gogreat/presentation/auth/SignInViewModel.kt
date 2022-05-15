@@ -2,6 +2,9 @@ package com.masuta.gogreat.presentation.auth
 
 import android.content.Context
 import android.widget.Toast
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
@@ -18,13 +21,16 @@ class SignInViewModel @Inject constructor(
     private val authHandlers: AuthHandlers,
 ): ViewModel() {
 
+    val isEnabledButton = mutableStateOf(true)
+
     fun signIn(
         email: String,
         password: String,
         navController: NavHostController,
-        context: Context
+        context: Context,
     ) {
         viewModelScope.launch {
+            isEnabledButton.value = false
             val resp = authHandlers.signin(email, password)
 
             if(resp["status"] as Boolean){
@@ -40,6 +46,7 @@ class SignInViewModel @Inject constructor(
                     ).show()
                 }
             }
+            isEnabledButton.value = true
         }
     }
 }
