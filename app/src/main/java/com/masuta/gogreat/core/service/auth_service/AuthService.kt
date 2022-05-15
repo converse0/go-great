@@ -1,6 +1,6 @@
 package com.masuta.gogreat.core.service.auth_service
 
-import com.masuta.gogreat.domain.model.User
+import com.masuta.gogreat.core.model.User
 
 interface AuthService {
 

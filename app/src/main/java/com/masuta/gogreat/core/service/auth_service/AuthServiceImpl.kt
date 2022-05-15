@@ -1,9 +1,9 @@
 package com.masuta.gogreat.core.service.auth_service
 
 import com.masuta.gogreat.core.store.AuthStore
-import com.masuta.gogreat.domain.model.LoginResponse
-import com.masuta.gogreat.domain.model.User
-import com.masuta.gogreat.domain.repository.AuthRepository
+import com.masuta.gogreat.core.model.LoginResponse
+import com.masuta.gogreat.core.model.User
+import com.masuta.gogreat.core.providers.AuthRepository
 
 class AuthServiceImpl(
     private val repository: AuthRepository,

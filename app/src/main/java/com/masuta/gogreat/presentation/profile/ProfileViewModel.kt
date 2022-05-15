@@ -7,13 +7,9 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
-import com.masuta.gogreat.domain.handlers.auth_handlers.AuthHandlers
-import com.masuta.gogreat.domain.handlers.auth_handlers.GetToken
-import com.masuta.gogreat.domain.handlers.profile_handlers.GetParameters
-import com.masuta.gogreat.domain.handlers.profile_handlers.ProfileHandlers
-import com.masuta.gogreat.domain.handlers.profile_handlers.UpdateParameters
-import com.masuta.gogreat.domain.handlers.profile_handlers.UploadImage
-import com.masuta.gogreat.domain.model.ParametersUser
+import com.masuta.gogreat.core.handlers.auth_handlers.AuthHandlers
+import com.masuta.gogreat.core.handlers.profile_handlers.ProfileHandlers
+import com.masuta.gogreat.core.model.ParametersUser
 import com.masuta.gogreat.utils.Timeout
 import com.masuta.gogreat.utils.handleErrors
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -31,7 +31,7 @@ import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DefaultDataSource
 import com.masuta.gogreat.R
-import com.masuta.gogreat.domain.model.TrainingExercise
+import com.masuta.gogreat.core.model.TrainingExercise
 import com.masuta.gogreat.presentation.main.Timer
 import com.masuta.gogreat.presentation.main.TimerViewModel
 import com.masuta.gogreat.presentation.new_training.findIndexToFloat

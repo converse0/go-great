@@ -5,7 +5,7 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
-import com.masuta.gogreat.domain.handlers.auth_handlers.AuthHandlers
+import com.masuta.gogreat.core.handlers.auth_handlers.AuthHandlers
 import com.masuta.gogreat.presentation.profile.routeTo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

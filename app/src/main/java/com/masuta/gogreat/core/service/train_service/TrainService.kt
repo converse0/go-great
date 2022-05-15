@@ -1,7 +1,7 @@
 package com.masuta.gogreat.core.service.train_service
 
-import com.masuta.gogreat.domain.handlers.train_handlers.LocalExerciseAndSets
-import com.masuta.gogreat.domain.model.*
+import com.masuta.gogreat.core.handlers.train_handlers.LocalExerciseAndSets
+import com.masuta.gogreat.core.model.*
 
 interface TrainService {
 

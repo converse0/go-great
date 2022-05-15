@@ -6,9 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
-import com.masuta.gogreat.core.store.TrainStore
-import com.masuta.gogreat.domain.handlers.train_handlers.TrainHandlers
-import com.masuta.gogreat.domain.model.Training
+import com.masuta.gogreat.core.handlers.train_handlers.TrainHandlers
+import com.masuta.gogreat.core.model.Training
 import com.masuta.gogreat.presentation.profile.routeTo
 import com.masuta.gogreat.utils.Timeout
 import com.masuta.gogreat.utils.handleErrors

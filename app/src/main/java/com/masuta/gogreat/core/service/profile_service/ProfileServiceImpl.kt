@@ -2,8 +2,8 @@ package com.masuta.gogreat.core.service.profile_service
 
 import androidx.compose.ui.graphics.ImageBitmap
 import com.masuta.gogreat.core.store.ProfileStore
-import com.masuta.gogreat.domain.model.*
-import com.masuta.gogreat.domain.repository.ProfileRepository
+import com.masuta.gogreat.core.model.*
+import com.masuta.gogreat.core.providers.ProfileRepository
 
 data class GetParametersResponse(
     val data: ParametersUser? = null,

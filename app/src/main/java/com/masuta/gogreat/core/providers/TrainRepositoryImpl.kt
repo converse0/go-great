@@ -4,8 +4,7 @@ import android.content.Context
 import android.widget.Toast
 import com.masuta.gogreat.R
 import com.masuta.gogreat.core.http.Client
-import com.masuta.gogreat.domain.model.*
-import com.masuta.gogreat.domain.repository.TrainRepository
+import com.masuta.gogreat.core.model.*
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.http.*

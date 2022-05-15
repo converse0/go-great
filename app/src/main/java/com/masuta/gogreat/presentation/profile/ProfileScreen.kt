@@ -37,9 +37,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
-import com.masuta.gogreat.domain.model.ParametersUser
-import com.masuta.gogreat.domain.model.UserActivity
-import com.masuta.gogreat.domain.model.UserDiet
+import com.masuta.gogreat.core.model.ParametersUser
+import com.masuta.gogreat.core.model.UserActivity
+import com.masuta.gogreat.core.model.UserDiet
 import com.masuta.gogreat.presentation.BottomNavigationItem
 import com.masuta.gogreat.presentation.components.BottomMenuBar
 import com.masuta.gogreat.presentation.components.InputTextField

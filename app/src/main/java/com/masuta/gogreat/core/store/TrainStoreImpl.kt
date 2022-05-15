@@ -2,8 +2,8 @@ package com.masuta.gogreat.core.store
 
 import android.content.Context
 import androidx.compose.runtime.mutableStateOf
-import com.masuta.gogreat.domain.model.Training
-import com.masuta.gogreat.domain.model.TrainingExercise
+import com.masuta.gogreat.core.model.Training
+import com.masuta.gogreat.core.model.TrainingExercise
 import javax.inject.Inject
 
 class TrainStoreImpl @Inject constructor(

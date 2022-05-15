@@ -1,7 +1,7 @@
 package com.masuta.gogreat.core.service.profile_service
 
 import androidx.compose.ui.graphics.ImageBitmap
-import com.masuta.gogreat.domain.model.*
+import com.masuta.gogreat.core.model.*
 
 interface ProfileService {
 

@@ -25,9 +25,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.masuta.gogreat.domain.model.Training
-import com.masuta.gogreat.domain.model.TrainingExercise
-import com.masuta.gogreat.domain.model.gender
+import com.masuta.gogreat.core.model.Training
+import com.masuta.gogreat.core.model.TrainingExercise
+import com.masuta.gogreat.core.model.gender
 import com.masuta.gogreat.presentation.components.FemalePersonSection
 import com.masuta.gogreat.presentation.components.MainTextButton
 import com.masuta.gogreat.presentation.components.MalePersonSection

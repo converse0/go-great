@@ -1,9 +1,9 @@
 package com.masuta.gogreat.core.store
 
 import android.content.Context
-import com.masuta.gogreat.domain.model.LoginResponse
-import com.masuta.gogreat.domain.model.refreshUserToken
-import com.masuta.gogreat.domain.model.userToken
+import com.masuta.gogreat.core.model.LoginResponse
+import com.masuta.gogreat.core.model.refreshUserToken
+import com.masuta.gogreat.core.model.userToken
 import javax.inject.Inject
 
 class AuthStoreImpl @Inject constructor(

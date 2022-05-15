@@ -1,9 +1,9 @@
 package com.masuta.gogreat.core.service.train_service
 
 import com.masuta.gogreat.core.store.TrainStore
-import com.masuta.gogreat.domain.handlers.train_handlers.LocalExerciseAndSets
-import com.masuta.gogreat.domain.model.*
-import com.masuta.gogreat.domain.repository.TrainRepository
+import com.masuta.gogreat.core.handlers.train_handlers.LocalExerciseAndSets
+import com.masuta.gogreat.core.model.*
+import com.masuta.gogreat.core.providers.TrainRepository
 
 class TrainServiceImpl(
     private val repository: TrainRepository,

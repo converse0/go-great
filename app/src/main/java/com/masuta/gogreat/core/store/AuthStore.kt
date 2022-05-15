@@ -1,6 +1,6 @@
 package com.masuta.gogreat.core.store
 
-import com.masuta.gogreat.domain.model.LoginResponse
+import com.masuta.gogreat.core.model.LoginResponse
 
 interface AuthStore {
 

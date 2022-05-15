@@ -1,6 +1,6 @@
 package com.masuta.gogreat.core.store
 
-import com.masuta.gogreat.domain.model.ParametersUser
+import com.masuta.gogreat.core.model.ParametersUser
 
 interface ProfileStore {
 

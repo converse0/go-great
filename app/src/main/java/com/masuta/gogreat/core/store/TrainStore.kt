@@ -1,7 +1,7 @@
 package com.masuta.gogreat.core.store
 
-import com.masuta.gogreat.domain.model.Training
-import com.masuta.gogreat.domain.model.TrainingExercise
+import com.masuta.gogreat.core.model.Training
+import com.masuta.gogreat.core.model.TrainingExercise
 
 interface TrainStore {
 

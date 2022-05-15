@@ -8,8 +8,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.masuta.gogreat.R
-import com.masuta.gogreat.domain.handlers.train_handlers.*
-import com.masuta.gogreat.domain.model.TrainingExercise
+import com.masuta.gogreat.core.handlers.train_handlers.*
+import com.masuta.gogreat.core.model.TrainingExercise
 import com.masuta.gogreat.utils.ListsValuesForSliders
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay

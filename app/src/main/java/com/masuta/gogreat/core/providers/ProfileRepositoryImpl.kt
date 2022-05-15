@@ -6,8 +6,7 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asAndroidBitmap
 import com.masuta.gogreat.R
 import com.masuta.gogreat.core.http.Client
-import com.masuta.gogreat.domain.model.*
-import com.masuta.gogreat.domain.repository.ProfileRepository
+import com.masuta.gogreat.core.model.*
 import com.masuta.gogreat.utils.imageBitmapToByteArray
 import io.ktor.client.*
 import io.ktor.client.request.*
