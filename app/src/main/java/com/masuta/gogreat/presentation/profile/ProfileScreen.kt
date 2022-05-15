@@ -120,7 +120,6 @@ fun ProfileSection(
 
     if (!fail.value) {
         viewModel.getParameters(
-            routeTo = routeTo,
             navController = navController,
             fail = fail,
             context = context

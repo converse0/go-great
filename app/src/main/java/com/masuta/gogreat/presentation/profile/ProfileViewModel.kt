@@ -34,7 +34,6 @@ class ProfileViewModel @Inject constructor(
         fail: MutableState<Boolean>,
         navController: NavHostController,
         context: Context,
-        routeTo: (navController: NavHostController, route: String) -> Unit,
     ) {
         viewModelScope.launch {
             val resp = profileHandlers.getParameters()
@@ -48,7 +47,10 @@ class ProfileViewModel @Inject constructor(
                         Toast.makeText(context, resp.message, Toast.LENGTH_LONG).show()
                     }
                     else -> {
-                        routeTo(navController, error.errRoute)
+                        withContext(Dispatchers.Main) {
+                            routeTo(navController, error.errRoute)
+                            Toast.makeText(context, resp.message, Toast.LENGTH_LONG).show()
+                        }
                     }
                 }
             }

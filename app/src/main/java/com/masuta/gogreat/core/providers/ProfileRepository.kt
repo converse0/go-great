@@ -5,8 +5,6 @@ import com.masuta.gogreat.core.model.*
 
 interface ProfileRepository {
 
-    var isLoadData: Boolean
-
     suspend fun createParameters(params: ParametersUserSet): String?
 
     suspend fun getParameters(): ResponseParams

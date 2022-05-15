@@ -42,8 +42,6 @@ class ProfileRepositoryImpl @Inject constructor(
         }
     }
 
-    override var isLoadData: Boolean = true
-
     override suspend fun createParameters(params: ParametersUserSet): String? {
         try {
             httpClient?.post<String>("$trainUrl/user/parameters") {
@@ -112,7 +110,6 @@ class ProfileRepositoryImpl @Inject constructor(
     }
 
     override suspend fun uploadImage(image: ImageBitmap): ResponseParamsIm {
-
         val convertedImage = imageBitmapToByteArray(image.asAndroidBitmap())
 
         val imageName = "image3.jpg"
