@@ -6,5 +6,5 @@ interface ProfileStore {
 
     suspend fun getLocalProfileParams(): ParametersUser?
 
-    suspend fun setLocalProfileParams(params: ParametersUser)
+    suspend fun setLocalProfileParams(params: ParametersUser?)
 }

@@ -16,15 +16,10 @@ class ProfileServiceImpl(
     private val store: ProfileStore
 ): ProfileService {
 
-    private var isDataLoad: Boolean = true
-        get() = repository.isLoadData
-        set(value) {
-            field = value
-            repository.isLoadData = value
-        }
-
     override suspend fun getParameters(): GetParametersResponse {
-        if (isDataLoad) {
+        val localProfileParams = store.getLocalProfileParams()
+
+        if (localProfileParams == null) {
             val resp = repository.getParameters()
             if (resp.data != null) {
                 val params = ParametersUser(
@@ -41,18 +36,14 @@ class ProfileServiceImpl(
                     image = resp.data.image
                 )
                 store.setLocalProfileParams(params)
-                isDataLoad = false
                 return GetParametersResponse(params)
 
             } else if (resp.code != null) {
                 return GetParametersResponse(code = resp.code, message = resp.message)
             }
-        } else {
-            store.getLocalProfileParams()?.let {
-                return GetParametersResponse(it)
-            }
         }
-        return GetParametersResponse()
+
+        return GetParametersResponse(localProfileParams)
     }
 
     override suspend fun createParameters(parametersUser: ParametersUserSet) {
@@ -73,13 +64,13 @@ class ProfileServiceImpl(
         )
         store.setLocalProfileParams(userParams)
         val resp = repository.updateParameters(params)
-        isDataLoad = true
+        store.setLocalProfileParams(null)
 
         return resp
     }
 
     override suspend fun uploadImage(im: ImageBitmap): ResponseParamsIm {
-        isDataLoad = true
+        store.setLocalProfileParams(null)
         return repository.uploadImage(im)
     }
 

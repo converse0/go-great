@@ -12,7 +12,7 @@ class ProfileStoreImpl: ProfileStore {
         return profileParams.value
     }
 
-    override suspend fun setLocalProfileParams(params: ParametersUser) {
+    override suspend fun setLocalProfileParams(params: ParametersUser?) {
         profileParams.value = params
     }
 }
