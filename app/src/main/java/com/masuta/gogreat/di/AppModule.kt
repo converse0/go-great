@@ -143,7 +143,8 @@ object AppModule {
             clearLocalExerciseData = ClearLocalExerciseData(trainService),
             saveLocalExercise = SaveLocalExercise(trainService),
             getAllLocalExercise = GetAllLocalExercise(trainService),
-            getLocalTrainingByUid = GetLocalTrainingByUid(trainService)
+            getLocalTrainingByUid = GetLocalTrainingByUid(trainService),
+            setLocalExerciseAndSets = SetLocalExerciseAndSets(trainService)
         )
     }
 

@@ -1,5 +1,6 @@
 package com.masuta.gogreat.core.service.train_service
 
+import com.masuta.gogreat.domain.handlers.train_handlers.LocalExerciseAndSets
 import com.masuta.gogreat.domain.model.*
 
 interface TrainService {
@@ -19,5 +20,6 @@ interface TrainService {
     suspend fun saveLocalExercise(exercise: TrainingExercise)
     suspend fun getAllLocalExercise(): List<TrainingExercise>
     suspend fun getLocalTrainingByUid(uid: String): Training?
+    suspend fun setLocalExerciseAndSets(exerciseAndSets: LocalExerciseAndSets)
 
 }

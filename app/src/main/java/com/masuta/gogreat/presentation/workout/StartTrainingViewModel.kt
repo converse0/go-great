@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.masuta.gogreat.R
-import com.masuta.gogreat.core.store.TrainStore
 import com.masuta.gogreat.domain.handlers.train_handlers.*
 import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.utils.ListsValuesForSliders
@@ -26,7 +25,6 @@ sealed class TrainingEvent {
 @HiltViewModel
 class StartTrainingViewModel @Inject constructor(
     private val listValuesForSliders: ListsValuesForSliders,
-    private val store: TrainStore,
     private val trainHandlers: TrainHandlers,
 ): ViewModel() {
 
@@ -75,7 +73,11 @@ class StartTrainingViewModel @Inject constructor(
             is TrainingEvent.NextSet -> {
                 viewModelScope.launch {
                     _exerciseSets.value--
-                    store.setLocalCurrentExerciseSets(_exerciseSets.value)
+
+                    trainHandlers.setLocalExerciseAndSets(
+                        indexExercise = _indexExercise.value,
+                        sets = _exerciseSets.value
+                    )
                 }
             }
             is TrainingEvent.NextExercise -> {
@@ -87,8 +89,10 @@ class StartTrainingViewModel @Inject constructor(
                     _currentExercise.value = _listExercises.value[_indexExercise.value]
                     _exerciseSets.value = _listExercises.value[_indexExercise.value].numberOfSets
 
-                    store.setLocalCurrentExercise(_indexExercise.value)
-                    store.setLocalCurrentExerciseSets(_exerciseSets.value)
+                    trainHandlers.setLocalExerciseAndSets(
+                        indexExercise = _indexExercise.value,
+                        sets = _exerciseSets.value
+                    )
                 }
 
             }
@@ -112,8 +116,10 @@ class StartTrainingViewModel @Inject constructor(
                 _currentExercise.value = it.exercises[indexExercise.value]
                 _exerciseSets.value = resp.currentExerciseSets ?: _currentExercise.value.numberOfSets
 
-                store.setLocalCurrentExerciseSets(_exerciseSets.value)
-                store.setLocalCurrentExercise(_indexExercise.value)
+                trainHandlers.setLocalExerciseAndSets(
+                    indexExercise = _indexExercise.value,
+                    sets = _exerciseSets.value
+                )
             }
         }
     }
