@@ -11,14 +11,14 @@ interface TrainStore {
     suspend fun getLocalCurrentExerciseSets(): Int?
     suspend fun setLocalCurrentExerciseSets(exerciseSets: Int?)
 
-    suspend fun getLocalWorkouts(): List<Training>
-    suspend fun setLocalWorkouts(workouts: List<Training>)
+    suspend fun getLocalWorkouts(): List<Training>?
+    suspend fun setLocalWorkouts(workouts: List<Training>?)
 
     suspend fun getLocalCurrentWorkout(): Training?
     suspend fun setLocalCurrentWorkout(workout: Training?)
 
-    suspend fun getLocalPastWorkouts(): List<Training>
-    suspend fun setLocalPastWorkouts(workouts: List<Training>)
+    suspend fun getLocalPastWorkouts(): List<Training>?
+    suspend fun setLocalPastWorkouts(workouts: List<Training>?)
 
     suspend fun saveLocalTraining(newTrain: Training): String
     suspend fun getAllLocalTrainings(): List<Training>?

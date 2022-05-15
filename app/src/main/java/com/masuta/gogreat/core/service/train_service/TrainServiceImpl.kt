@@ -10,54 +10,30 @@ class TrainServiceImpl(
     private val store: TrainStore
 ): TrainService {
 
-    private var currentWorkoutReloadData = false
-        get() = repository.currentWorkoutDataReload
-        set(value) {
-            field = value
-            repository.currentWorkoutDataReload = value
-        }
-
-    private var workoutsReloadData = false
-        get() = repository.workoutsDataReload
-        set(value) {
-            field = value
-            repository.workoutsDataReload = value
-        }
-
-    private var pastWorkoutsReloadData = false
-        get() = repository.pastWorkoutsDataReload
-        set(value) {
-            field = value
-            repository.pastWorkoutsDataReload = value
-        }
-
     override suspend fun getCurrentWorkout(): TrainResponse {
-        var currentTrain: List<Training>? = null
-        if(currentWorkoutReloadData) {
-            currentWorkoutReloadData = false
+        val localCurrentWorkout = store.getLocalCurrentWorkout()
+
+        if (localCurrentWorkout == null) {
             val resp = repository.getCurrentTraining()
             resp.data?.let {
-                it.getOrNull(0)?.let { train ->
+                val data = it.getOrNull(0)?.let { train ->
                     store.setLocalCurrentWorkout(train.validateExerciseData())
-                    currentTrain = listOf(train)
+                    listOf(train)
                 }
-                return TrainResponse(data = it)
+                return TrainResponse(data = data)
             } ?: resp.code?.let { code ->
                 return TrainResponse(code = code, message = resp.message)
             }
-        } else {
-            store.getLocalCurrentWorkout()?.let {
-                currentTrain = listOf(it)
-                return TrainResponse(data = currentTrain)
-            }
         }
-        return TrainResponse()
+
+        return TrainResponse(data = listOf(localCurrentWorkout!!))
     }
 
     override suspend fun getWorkouts(): TrainResponse {
-        if (workoutsReloadData) {
-            workoutsReloadData = false
 
+        val localWorkouts = store.getLocalWorkouts()
+
+        if (localWorkouts == null) {
             val resp = repository.findAll()
             resp.data?.let { training ->
                 store.clearLocalTrainingData()
@@ -72,17 +48,16 @@ class TrainServiceImpl(
             } ?: myTrains.code?.let { code ->
                 return TrainResponse(code = code, message = resp.message)
             }
-        } else {
-            val resp = store.getLocalWorkouts()
-            return TrainResponse(data = resp)
         }
 
-        return TrainResponse()
+        return TrainResponse(data = localWorkouts)
     }
 
     override suspend fun getPastWorkouts(): TrainResponse {
-        if (pastWorkoutsReloadData) {
-            pastWorkoutsReloadData = false
+
+        val localPastWorkouts = store.getLocalPastWorkouts()
+
+        if (localPastWorkouts == null) {
             val resp = repository.getPassTrainings()
             resp.data?.let{
                 store.setLocalPastWorkouts(it)
@@ -90,19 +65,17 @@ class TrainServiceImpl(
             } ?: resp.code?.let { code ->
                 return TrainResponse(code = code, message = resp.message)
             }
-        } else {
-            val resp = store.getLocalPastWorkouts()
-            return TrainResponse(data = resp)
         }
 
-        return TrainResponse()
+        return TrainResponse(data = localPastWorkouts)
     }
 
     override suspend fun saveTraining(newTrain: Training) {
         repository.save(newTrain)
-        repository.workoutsDataReload = true
-        repository.pastWorkoutsDataReload = true
-        repository.currentWorkoutDataReload = true
+
+        store.setLocalPastWorkouts(null)
+        store.setLocalWorkouts(null)
+        store.setLocalCurrentWorkout(null)
     }
 
     override suspend fun startTraining(uid: String) {
@@ -111,9 +84,9 @@ class TrainServiceImpl(
 
         repository.startTraining(uid)
 
-        repository.workoutsDataReload = true
-        repository.pastWorkoutsDataReload = true
-        repository.currentWorkoutDataReload = true
+        store.setLocalPastWorkouts(null)
+        store.setLocalWorkouts(null)
+        store.setLocalCurrentWorkout(null)
     }
 
     override suspend fun finishTraining(uid: String) {
@@ -125,10 +98,8 @@ class TrainServiceImpl(
         store.setLocalCurrentExerciseSets(null)
 
         store.setLocalCurrentWorkout(null)
-
-        repository.currentWorkoutDataReload = true
-        repository.pastWorkoutsDataReload = true
-        repository.workoutsDataReload = true
+        store.setLocalPastWorkouts(null)
+        store.setLocalWorkouts(null)
     }
 
     override suspend fun getLocalTrainings(uid: String): GetTrainingResponse {
@@ -146,9 +117,9 @@ class TrainServiceImpl(
     override suspend fun setExerciseParameters(params: SetExerciseParamsRequest) {
         repository.setExerciseParams(params.uid, params.listExercises)
 
-        repository.workoutsDataReload = true
-        repository.pastWorkoutsDataReload = true
-        repository.currentWorkoutDataReload = true
+        store.setLocalPastWorkouts(null)
+        store.setLocalWorkouts(null)
+        store.setLocalCurrentWorkout(null)
 
         store.setLocalCurrentExercise(params.indexExercise)
         store.setLocalCurrentExerciseSets(params.exerciseSets)

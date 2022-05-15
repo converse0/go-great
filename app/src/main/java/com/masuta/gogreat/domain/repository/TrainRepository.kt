@@ -6,11 +6,6 @@ import com.masuta.gogreat.domain.model.TrainingExercise
 import com.masuta.gogreat.domain.model.TrainingResponse
 
 interface TrainRepository {
-
-    var workoutsDataReload: Boolean
-    var pastWorkoutsDataReload: Boolean
-    var currentWorkoutDataReload: Boolean
-
     suspend fun findAll(): TrainingResponse
     suspend fun findById(id: Long): ExerciseResponse
     suspend fun save(newTrain: Training)

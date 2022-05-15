@@ -13,9 +13,9 @@ class TrainStoreImpl @Inject constructor(
     private var localTraining:Map<String,Training> = mutableMapOf()
     private var localTrainingEx: Map<Int, TrainingExercise> = mutableMapOf()
 
-    private var localWorkouts: List<Training> = mutableListOf()
+    private var localWorkouts: List<Training>? = null //mutableListOf()
     private var localCurrentWorkout = mutableStateOf<Training?>(null)
-    private var localPastWorkouts: List<Training> = mutableListOf()
+    private var localPastWorkouts: List<Training>? = null //mutableListOf()
 
     private val sharedPref = context.getSharedPreferences("user", Context.MODE_PRIVATE)
 
@@ -47,11 +47,11 @@ class TrainStoreImpl @Inject constructor(
         editor.apply()
     }
 
-    override suspend fun getLocalWorkouts(): List<Training> {
+    override suspend fun getLocalWorkouts(): List<Training>? {
         return localWorkouts
     }
 
-    override suspend fun setLocalWorkouts(workouts: List<Training>) {
+    override suspend fun setLocalWorkouts(workouts: List<Training>?) {
         localWorkouts = workouts
     }
 
@@ -63,11 +63,11 @@ class TrainStoreImpl @Inject constructor(
         localCurrentWorkout.value = workout
     }
 
-    override suspend fun getLocalPastWorkouts(): List<Training> {
+    override suspend fun getLocalPastWorkouts(): List<Training>? {
         return localPastWorkouts
     }
 
-    override suspend fun setLocalPastWorkouts(workouts: List<Training>) {
+    override suspend fun setLocalPastWorkouts(workouts: List<Training>?) {
         localPastWorkouts = workouts
     }
 

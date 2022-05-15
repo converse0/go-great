@@ -22,10 +22,6 @@ class TrainRepositoryImpl @Inject constructor(
     private var httpClient: HttpClient? = null
     private var trainUrl = ""
 
-    override var workoutsDataReload: Boolean = true
-    override var pastWorkoutsDataReload: Boolean = true
-    override var currentWorkoutDataReload: Boolean = true
-
     init {
         context.resources.getInteger(R.integer.request_timeout).let {
             httpClient = client.makeClient(it.toLong())
