@@ -15,6 +15,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.masuta.gogreat.core.model.userToken
 import com.masuta.gogreat.presentation.components.InputTextField
 import com.masuta.gogreat.presentation.components.MainTextButton
 import com.masuta.gogreat.presentation.ui.theme.Red
@@ -24,6 +25,9 @@ fun SignInScreen(
     viewModel: SignInViewModel,
     navController: NavHostController
 ) {
+
+    println("Sign In Screen")
+
     Column(
         modifier = Modifier
             .fillMaxSize()

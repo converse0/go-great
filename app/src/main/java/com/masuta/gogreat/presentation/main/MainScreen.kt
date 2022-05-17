@@ -41,14 +41,11 @@ fun MainScreen(
     viewModel: MainViewModel
 ) {
 
+    println("Main Screen")
+
     viewModel.clearLocalExercises()
 
-    val context = LocalContext.current
-
-    viewModel.getCurrentTraining(context, navController)
-    viewModel.getWorkouts(context, navController)
-    viewModel.getPastTrainings(context, navController)
-
+    viewModel.getData(navController)
 
     val listTrainings = viewModel.listTrainings
     val currentWorkout = viewModel.currentWorkout

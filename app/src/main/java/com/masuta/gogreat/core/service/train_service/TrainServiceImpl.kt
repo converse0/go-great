@@ -13,8 +13,15 @@ class TrainServiceImpl(
     override suspend fun getCurrentWorkout(): TrainResponse {
         val localCurrentWorkout = store.getLocalCurrentWorkout()
 
-        if (localCurrentWorkout == null) {
+        println("SERVICE CURRENT WORKOUT: $localCurrentWorkout")
+        println("USER TOKEN: $userToken")
+
+        if (localCurrentWorkout == null && userToken != null) {
+
             val resp = repository.getCurrentTraining()
+
+            println("SERVICE CURRENT WORKOUT REQUEST: $resp")
+
             resp.data?.let {
                 val data = it.getOrNull(0)?.let { train ->
                     store.setLocalCurrentWorkout(train.validateExerciseData())
@@ -26,15 +33,21 @@ class TrainServiceImpl(
             }
         }
 
-        return TrainResponse(data = listOf(localCurrentWorkout!!))
+        return TrainResponse(data = localCurrentWorkout?.let { listOf(it) })
     }
 
     override suspend fun getWorkouts(): TrainResponse {
 
         val localWorkouts = store.getLocalWorkouts()
 
-        if (localWorkouts == null) {
+        println("SERVICE WORKOUTS: $localWorkouts")
+
+        if (localWorkouts == null && userToken != null) {
+
             val resp = repository.findAll()
+
+            println("SERVICE WORKOUT REQUEST: $resp")
+
             resp.data?.let { training ->
                 store.clearLocalTrainingData()
                 training.forEach { store.saveLocalTraining(it.validateExerciseData()) }
@@ -57,8 +70,13 @@ class TrainServiceImpl(
 
         val localPastWorkouts = store.getLocalPastWorkouts()
 
-        if (localPastWorkouts == null) {
+        println("SERVICE PAST WORKOUTS: $localPastWorkouts")
+
+        if (localPastWorkouts == null && userToken != null) {
             val resp = repository.getPassTrainings()
+
+            println("SERVICE PAST WORKOUT REQUEST")
+
             resp.data?.let{
                 store.setLocalPastWorkouts(it)
                 return TrainResponse(data = it)
@@ -78,19 +96,19 @@ class TrainServiceImpl(
         store.setLocalCurrentWorkout(null)
     }
 
-    override suspend fun startTraining(uid: String) {
+    override suspend fun startTraining(uid: String): StartTrainingResponse {
         store.setLocalCurrentExercise(null)
         store.setLocalCurrentExerciseSets(null)
-
-        repository.startTraining(uid)
 
         store.setLocalPastWorkouts(null)
         store.setLocalWorkouts(null)
         store.setLocalCurrentWorkout(null)
+
+        return repository.startTraining(uid)
     }
 
-    override suspend fun finishTraining(uid: String) {
-        repository.finishTraining(uid)
+    override suspend fun finishTraining(uid: String): FinishTrainingResponse {
+       return repository.finishTraining(uid)
     }
 
     override suspend fun endTraining() {
@@ -114,24 +132,28 @@ class TrainServiceImpl(
         return repository.findById(id)
     }
 
-    override suspend fun setExerciseParameters(params: SetExerciseParamsRequest) {
-        repository.setExerciseParams(params.uid, params.listExercises)
+    override suspend fun setExerciseParameters(params: SetExerciseParamsRequest): SetExerciseParamsResponse {
 
-        store.setLocalPastWorkouts(null)
-        store.setLocalWorkouts(null)
-        store.setLocalCurrentWorkout(null)
+        val resp = repository.setExerciseParams(params.uid, params.listExercises)
 
-        store.setLocalCurrentExercise(params.indexExercise)
-        store.setLocalCurrentExerciseSets(params.exerciseSets)
+        if (resp.status != null) {
+            store.setLocalPastWorkouts(null)
+            store.setLocalWorkouts(null)
+            store.setLocalCurrentWorkout(null)
 
-        val training = store.getLocalTrainingByUid(params.uid).let {
-            it?.copy(
-                exercises = params.listExercises
-            )
+            store.setLocalCurrentExercise(params.indexExercise)
+            store.setLocalCurrentExerciseSets(params.exerciseSets)
+
+            val training = store.getLocalTrainingByUid(params.uid).let {
+                it?.copy(
+                    exercises = params.listExercises
+                )
+            }
+            training?.let {
+                store.saveLocalTraining(it)
+            }
         }
-        training?.let {
-            store.saveLocalTraining(it)
-        }
+        return resp
     }
 
     override suspend fun clearLocalExerciseData() {

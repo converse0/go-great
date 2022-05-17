@@ -3,6 +3,7 @@ package com.masuta.gogreat.presentation.workout
 import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavHostController
 import com.masuta.gogreat.core.handlers.train_handlers.TrainHandlers
 import com.masuta.gogreat.core.model.TrainingExercise
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,9 +30,12 @@ class WorkoutViewModel @Inject constructor(
         }
     }
 
-    fun startTraining(uid: String) {
+    fun startTraining(uid: String, navController: NavHostController) {
         viewModelScope.launch {
-            trainHandlers.startTraining(uid)
+            val resp = trainHandlers.startTraining(uid)
+            resp.code?.let { code ->
+                trainHandlers.errorHandler(code, resp.message, navController)
+            }
         }
     }
 }

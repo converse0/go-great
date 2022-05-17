@@ -159,14 +159,17 @@ class TrainRepositoryImpl @Inject constructor(
         return null
     }
 
-    override suspend fun startTraining(uid: String) {
+    override suspend fun startTraining(uid: String): StartTrainingResponse {
         try {
-            httpClient?.put<String>("$trainUrl/user/trening/status") {
+            httpClient?.put<StartTrainingResponse>("$trainUrl/user/trening/status") {
                 contentType(ContentType.Application.Json)
                 headers {
                     append("Authorization", "Bearer $userToken")
                 }
                 body = mapOf("uid" to uid, "status" to "Start")
+            }?.let {
+                println("START TRAINING: $it")
+                return it
             }
         } catch (e: Exception) {
             e.localizedMessage?.let {
@@ -176,16 +179,20 @@ class TrainRepositoryImpl @Inject constructor(
             }
             e.printStackTrace()
         }
+        return StartTrainingResponse()
     }
 
-    override suspend fun finishTraining(uid: String) {
+    override suspend fun finishTraining(uid: String): FinishTrainingResponse {
         try {
-            httpClient?.put<String>("$trainUrl/user/trening/status") {
+            httpClient?.put<FinishTrainingResponse>("$trainUrl/user/trening/status") {
                 contentType(ContentType.Application.Json)
                 headers {
                     append("Authorization", "Bearer $userToken")
                 }
                 body =  mapOf("uid" to uid, "status" to "Finish")
+            }?.let {
+                println("FINISH TRAINING: $it")
+                return it
             }
         } catch (e: Exception) {
             e.localizedMessage?.let {
@@ -195,8 +202,9 @@ class TrainRepositoryImpl @Inject constructor(
             }
             e.printStackTrace()
         }
-    }
 
+        return FinishTrainingResponse()
+    }
 
     override suspend fun getCurrentTraining(): TrainingResponse {
         try {
@@ -219,15 +227,18 @@ class TrainRepositoryImpl @Inject constructor(
         return TrainingResponse()
     }
 
-    override suspend fun setExerciseParams(uid: String, listExercises: List<TrainingExercise>) {
+    override suspend fun setExerciseParams(uid: String, listExercises: List<TrainingExercise>): SetExerciseParamsResponse {
         val data = TrainingExerciseUpdate(uid=uid, exercises = listExercises)
         try {
-            httpClient?.put<String>("$trainUrl/user/trening/exercises") {
+            httpClient?.put<SetExerciseParamsResponse>("$trainUrl/user/trening/exercises") {
                 contentType(ContentType.Application.Json)
                 headers {
                     append("Authorization", "Bearer $userToken")
                 }
                 body = data
+            }?.let {
+                println("SET EXERCISE PARAMS: $it")
+                return it
             }
         } catch (e: Exception) {
             e.localizedMessage?.let {
@@ -237,5 +248,7 @@ class TrainRepositoryImpl @Inject constructor(
             }
             e.printStackTrace()
         }
+
+        return SetExerciseParamsResponse()
     }
 }

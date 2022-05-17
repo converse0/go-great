@@ -2,6 +2,7 @@ package com.masuta.gogreat.core.handlers.train_handlers
 
 import com.masuta.gogreat.core.service.train_service.TrainService
 import com.masuta.gogreat.core.model.SetExerciseParamsRequest
+import com.masuta.gogreat.core.model.SetExerciseParamsResponse
 import com.masuta.gogreat.core.model.TrainingExercise
 
 class SetExerciseParameters(
@@ -13,9 +14,9 @@ class SetExerciseParameters(
         listExercises: List<TrainingExercise>,
         indexExercise: Int,
         exerciseSets: Int
-    ) {
+    ): SetExerciseParamsResponse {
         val params = SetExerciseParamsRequest(uid, listExercises, indexExercise, exerciseSets)
-        trainService.setExerciseParameters(params)
+        return trainService.setExerciseParameters(params)
     }
 
 }

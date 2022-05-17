@@ -1,6 +1,7 @@
 package com.masuta.gogreat.di
 
 import android.content.Context
+import com.masuta.gogreat.core.handlers.ErrorHandler
 import com.masuta.gogreat.core.http.Client
 import com.masuta.gogreat.core.providers.AuthRepositoryImpl
 import com.masuta.gogreat.core.providers.ProfileRepositoryImpl
@@ -107,28 +108,30 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideAuthHandlers(authService: AuthService, store: AuthStore): AuthHandlers {
+    fun provideAuthHandlers(authService: AuthService, store: AuthStore, @ApplicationContext context: Context): AuthHandlers {
         return AuthHandlers(
             getToken = GetToken(store),
             signup = SignUp(authService),
-            signin = SignIn(authService)
+            signin = SignIn(authService),
+            errorHandler = ErrorHandler(context)
         )
     }
 
     @Provides
     @Singleton
-    fun provideProfileHandlers(profileService: ProfileService): ProfileHandlers {
+    fun provideProfileHandlers(profileService: ProfileService, @ApplicationContext context: Context): ProfileHandlers {
         return ProfileHandlers(
             createParameters = CreateParameters(profileService),
             updateParameters = UpdateParameters(profileService),
             getParameters = GetParameters(profileService),
-            uploadImage = UploadImage(profileService)
+            uploadImage = UploadImage(profileService),
+            errorHandler = ErrorHandler(context)
         )
     }
 
     @Provides
     @Singleton
-    fun provideTrainHandlers(trainService: TrainService): TrainHandlers {
+    fun provideTrainHandlers(trainService: TrainService, @ApplicationContext context: Context): TrainHandlers {
         return TrainHandlers(
             endTraining = EndTraining(trainService),
             finishTraining = FinishTraining(trainService),
@@ -144,8 +147,8 @@ object AppModule {
             saveLocalExercise = SaveLocalExercise(trainService),
             getAllLocalExercise = GetAllLocalExercise(trainService),
             getLocalTrainingByUid = GetLocalTrainingByUid(trainService),
-            setLocalExerciseAndSets = SetLocalExerciseAndSets(trainService)
+            setLocalExerciseAndSets = SetLocalExerciseAndSets(trainService),
+            errorHandler = ErrorHandler(context)
         )
     }
-
 }

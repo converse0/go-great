@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.masuta.gogreat.R
 import com.masuta.gogreat.core.handlers.train_handlers.*
 import com.masuta.gogreat.core.model.TrainingExercise
@@ -124,23 +125,29 @@ class StartTrainingViewModel @Inject constructor(
         }
     }
 
-    fun setExerciseParams(uid: String, listExercises: List<TrainingExercise>) {
+    fun setExerciseParams(uid: String, listExercises: List<TrainingExercise>, navController: NavHostController) {
         viewModelScope.launch {
             _currentExercise.value = listExercises.get(_indexExercise.value)
             _exerciseSets.value = _currentExercise.value.numberOfSets
 
-            trainHandlers.setExerciseParameters(
+            val resp = trainHandlers.setExerciseParameters(
                 uid = uid,
                 listExercises = listExercises,
                 indexExercise = _indexExercise.value,
                 exerciseSets = _currentExercise.value.numberOfSets
             )
+            resp.code?.let { code ->
+                trainHandlers.errorHandler(code, resp.message, navController)
+            }
         }
     }
 
-    fun finishTraining(uid: String) {
+    fun finishTraining(uid: String, navController: NavHostController) {
         viewModelScope.launch {
-            trainHandlers.finishTraining(uid)
+            val resp = trainHandlers.finishTraining(uid)
+            resp.code?.let{ code ->
+                trainHandlers.errorHandler(code, resp.message, navController)
+            }
         }
     }
     fun playFinalSound(context: Context) {

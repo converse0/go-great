@@ -36,6 +36,27 @@ data class TrainingExerciseUpdate(
     val uid: String? = null
 )
 
+@kotlinx.serialization.Serializable
+data class StartTrainingResponse(
+    val code: Int? = null,
+    val message: String? = null,
+    val status: Boolean? = null
+)
+
+@kotlinx.serialization.Serializable
+data class FinishTrainingResponse(
+    val code: Int? = null,
+    val message: String? = null,
+    val status: Boolean? = null
+)
+
+@kotlinx.serialization.Serializable
+data class SetExerciseParamsResponse(
+    val code: Int? = null,
+    val message: String? = null,
+    val status: Boolean? = null
+)
+
 data class TrainResponse(
     val data: List<Training>? = null,
     val code: Int? = null,

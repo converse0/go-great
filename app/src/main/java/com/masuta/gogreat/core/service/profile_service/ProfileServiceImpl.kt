@@ -19,8 +19,14 @@ class ProfileServiceImpl(
     override suspend fun getParameters(): GetParametersResponse {
         val localProfileParams = store.getLocalProfileParams()
 
-        if (localProfileParams == null) {
+        println("GET PARAMETERS: $localProfileParams")
+        println("USER TOKEN FROM PROFILE: $userToken")
+
+        if (localProfileParams == null && userToken != null) {
             val resp = repository.getParameters()
+
+            println("GET PARAMETERS REQUEST: $resp")
+
             if (resp.data != null) {
                 val params = ParametersUser(
                     username = resp.data.username,
@@ -62,9 +68,14 @@ class ProfileServiceImpl(
             gender = userParams.gender,
             uid = userParams.uid
         )
-        store.setLocalProfileParams(userParams)
-        val resp = repository.updateParameters(params)
         store.setLocalProfileParams(null)
+        println("UPDATE PARAMS")
+
+        var resp = UpdateParamsResponse()
+        if (userToken != null) {
+            resp = repository.updateParameters(params)
+            println("UPDATE PARAMS REQUEST: $resp")
+        }
 
         return resp
     }

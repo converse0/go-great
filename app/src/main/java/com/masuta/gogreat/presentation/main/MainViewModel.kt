@@ -17,8 +17,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val trainHandlers: TrainHandlers
+    private val trainHandlers: TrainHandlers,
 ): ViewModel() {
+
+    private var isDataLoad = true
 
     val listTrainings = mutableStateOf(emptyList<Training>())
     val currentWorkout = mutableStateOf(Training(
@@ -28,79 +30,69 @@ class MainViewModel @Inject constructor(
     ))
     val listPastTrainings = mutableStateOf(emptyList<Training>())
 
-    fun getWorkouts(
-        context: Context,
-        navController: NavHostController
-    ) {
+    fun getData(navController: NavHostController) {
         viewModelScope.launch {
-            val resp = trainHandlers.getWorkouts()
-
-            resp.data?.let {
-                listTrainings.value = it
-            } ?: resp.code?.let { code ->
-                when(val error = handleErrors(code)) {
-                    is Timeout -> {
-                        Toast.makeText(context, resp.message, Toast.LENGTH_LONG).show()
-                    }
-                    else -> {
-                        withContext(Dispatchers.Main) {
-                            routeTo(navController, error.errRoute)
-                            Toast.makeText(context, resp.message, Toast.LENGTH_LONG).show()
-                        }
-                    }
+            if (isDataLoad) {
+                isDataLoad = false
+                val first = getWorkouts(navController)
+                if (first) {
+                    getCurrentTraining(navController)
+                    getPastTrainings(navController)
                 }
             }
         }
     }
 
-     fun getCurrentTraining(
-         context: Context,
+   private suspend fun getWorkouts(
+        navController: NavHostController
+    ): Boolean {
+        val resp = trainHandlers.getWorkouts()
+
+        println("GET WORKOUTS RESP: $resp")
+
+        resp.data?.let {
+            if (listTrainings.value.isEmpty()) {
+                listTrainings.value = it
+            }
+            return true
+        } ?: resp.code?.let { code ->
+            trainHandlers.errorHandler(code, resp.message, navController)
+            return false
+        }
+
+        return true
+    }
+
+    private fun getCurrentTraining(
          navController: NavHostController,
      ) {
          viewModelScope.launch {
-            val resp = trainHandlers.getCurrentWorkout()
+             val resp = trainHandlers.getCurrentWorkout()
 
              resp.data?.let {
                  it.getOrNull(0)?.let { train ->
-                     currentWorkout.value = train
+                     if (currentWorkout.value.name.isEmpty()) {
+                         currentWorkout.value = train
+                     }
                  }
              } ?: resp.code?.let { code ->
-                 when(val error = handleErrors(code)) {
-                     is Timeout -> {
-                         Toast.makeText(context, resp.message, Toast.LENGTH_LONG).show()
-                     }
-                     else -> {
-                         withContext(Dispatchers.Main) {
-                             routeTo(navController, error.errRoute)
-                             Toast.makeText(context, resp.message, Toast.LENGTH_LONG).show()
-                         }
-                     }
-                 }
+                 trainHandlers.errorHandler(code, resp.message, navController)
              }
          }
     }
 
-    fun getPastTrainings(
-        context: Context,
+    private fun getPastTrainings(
         navController: NavHostController,
     ) {
         viewModelScope.launch {
             val resp = trainHandlers.getPastWorkouts()
 
             resp.data?.let {
-                listPastTrainings.value = it
-            } ?: resp.code?.let{ code ->
-                when(val error = handleErrors(code)) {
-                    is Timeout -> {
-                        Toast.makeText(context, resp.message, Toast.LENGTH_LONG).show()
-                    }
-                    else -> {
-                        withContext(Dispatchers.Main) {
-                            routeTo(navController, error.errRoute)
-                            Toast.makeText(context, resp.message, Toast.LENGTH_LONG).show()
-                        }
-                    }
+                if (listPastTrainings.value.isEmpty()) {
+                    listPastTrainings.value = it
                 }
+            } ?: resp.code?.let{ code ->
+                trainHandlers.errorHandler(code, resp.message, navController)
             }
         }
     }

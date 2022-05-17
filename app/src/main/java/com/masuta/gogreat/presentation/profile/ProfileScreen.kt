@@ -65,13 +65,11 @@ fun ProfileScreen(
     menuItems: List<BottomNavigationItem>
 ) {
 
-    if(viewModel.errorMessage.isNotEmpty()) {
-        Toast.makeText(
-            LocalContext.current,
-            viewModel.errorMessage,
-            Toast.LENGTH_SHORT
-        ).show()
-    }
+    val context = LocalContext.current
+
+    viewModel.getParameters(navController)
+
+    println("Profile Screen")
 
     Scaffold(
         bottomBar = {
@@ -96,7 +94,7 @@ fun ProfileScreen(
                 modifier = Modifier.padding(start = 8.dp)
             )
             Spacer(modifier = Modifier.height(12.dp))
-            ProfileSection(viewModel, navController)
+            ProfileSection(viewModel, navController, context)
         }
     }
 }
@@ -108,23 +106,11 @@ val routeTo :(navController: NavHostController, route:String) -> Unit = { navCon
 @Composable
 fun ProfileSection(
     viewModel: ProfileViewModel,
-    navController: NavHostController
+    navController: NavHostController,
+    context: Context
 ) {
 
     val userParams = remember { viewModel.userParams }
-    val context = LocalContext.current
-
-    val fail = remember {
-        mutableStateOf(false)
-    }
-
-    if (!fail.value) {
-        viewModel.getParameters(
-            navController = navController,
-            fail = fail,
-            context = context
-        )
-    }
 
     val lazyListState = rememberLazyListState()
 
@@ -368,15 +354,14 @@ fun ProfileInfo(
         MainTextButton(
             text = "Save",
             color = Red,
-
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 20.dp)
         ) {
             CoroutineScope(Dispatchers.IO).launch {
-                val resp = viewModel.updateParams(
-                    context = context,
+                viewModel.updateParams(
                     navController = navController,
+                    context = context,
                     userParams = userParams.copy(
                         age = age.value.toInt(),
                         eat = timesEat.value.toInt(),
@@ -388,24 +373,7 @@ fun ProfileInfo(
                         gender = gender.value,
                     )
                 )
-                withContext(Dispatchers.Main) {
-                    resp?.let {
-                        if (it.isNotEmpty()) {
-                            Toast.makeText(
-                                context,
-                                resp,
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        } else {
-                            Toast.makeText(
-                                context,
-                                "Update user parameters Success",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
-                    lazyListState.scrollToItem(0)
-                }
+                lazyListState.scrollToItem(0)
             }
         }
     }

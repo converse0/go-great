@@ -29,6 +29,9 @@ fun AnimatedSplashScreen(
     startRouteName: MutableState<String>,
     viewModel: MainViewModel
 ) {
+
+    println("Splash Screen")
+
     val viewModelUser: ProfileViewModel = hiltViewModel()
     val context = LocalContext.current
 

@@ -124,7 +124,7 @@ fun StartTrainingScreen(
                 timerViewModel.stopOnClose()
                 if (viewModel.indexExercise.value >= viewModel.listExercises.value.size) {
                     viewModel.endTraining(navController,context)
-                    viewModel.finishTraining(uid!!)
+                    viewModel.finishTraining(uid!!, navController)
                 }
             },
         )
@@ -178,7 +178,8 @@ fun StartTrainingScreen(
                 }
                 viewModel.setExerciseParams(
                     uid = uid!!,
-                    listExercises = listEditExercise
+                    listExercises = listEditExercise,
+                    navController = navController
                 )
                 isEditModal.value = false
             },

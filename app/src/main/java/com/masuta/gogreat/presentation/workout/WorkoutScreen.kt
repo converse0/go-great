@@ -100,7 +100,7 @@ fun WorkoutScreen(
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
         ) {
-            viewModel.startTraining(uid)
+            viewModel.startTraining(uid, navController)
             navController.navigate("start-training/$uid")
         }
     }

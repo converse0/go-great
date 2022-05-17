@@ -113,11 +113,6 @@ fun ChoseStartScreen(
         mutableStateOf(888)
     }
     SetSex(context, viewModel = viewModel, gender)
-    if (viewModel.errorMessage.isNotEmpty()) {
-        Toast.makeText(LocalContext.current,
-            viewModel.errorMessage,
-            Toast.LENGTH_LONG).show()
-    }
     when (gender.value) {
         -6 -> startRouteName.value = "sign-in"
         6 -> startRouteName.value = "about"

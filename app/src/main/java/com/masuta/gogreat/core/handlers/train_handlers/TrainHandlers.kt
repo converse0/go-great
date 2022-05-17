@@ -1,5 +1,7 @@
 package com.masuta.gogreat.core.handlers.train_handlers
 
+import com.masuta.gogreat.core.handlers.ErrorHandler
+
 data class TrainHandlers(
     val endTraining: EndTraining,
     val finishTraining: FinishTraining,
@@ -15,5 +17,6 @@ data class TrainHandlers(
     val saveLocalExercise: SaveLocalExercise,
     val getAllLocalExercise: GetAllLocalExercise,
     val getLocalTrainingByUid: GetLocalTrainingByUid,
-    val setLocalExerciseAndSets: SetLocalExerciseAndSets
+    val setLocalExerciseAndSets: SetLocalExerciseAndSets,
+    val errorHandler: ErrorHandler
 )
