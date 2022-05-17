@@ -19,7 +19,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.masuta.gogreat.R
-import com.masuta.gogreat.domain.model.Training
 import com.masuta.gogreat.presentation.main.MainViewModel
 import com.masuta.gogreat.presentation.profile.ProfileViewModel
 import kotlinx.coroutines.*
@@ -30,6 +29,9 @@ fun AnimatedSplashScreen(
     startRouteName: MutableState<String>,
     viewModel: MainViewModel
 ) {
+
+    println("Splash Screen")
+
     val viewModelUser: ProfileViewModel = hiltViewModel()
     val context = LocalContext.current
 

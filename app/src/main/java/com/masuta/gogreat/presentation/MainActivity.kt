@@ -13,9 +13,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.masuta.gogreat.R
-import com.masuta.gogreat.domain.model.gender
-import com.masuta.gogreat.domain.model.refreshUserToken
-import com.masuta.gogreat.domain.model.userToken
+import com.masuta.gogreat.core.model.gender
+import com.masuta.gogreat.core.model.userToken
 import com.masuta.gogreat.presentation.auth.AboutScreen
 import com.masuta.gogreat.presentation.auth.LaunchScreen
 import com.masuta.gogreat.presentation.auth.SignInScreen
@@ -114,11 +113,6 @@ fun ChoseStartScreen(
         mutableStateOf(888)
     }
     SetSex(context, viewModel = viewModel, gender)
-    if (viewModel.errorMessage.isNotEmpty()) {
-        Toast.makeText(LocalContext.current,
-            viewModel.errorMessage,
-            Toast.LENGTH_LONG).show()
-    }
     when (gender.value) {
         -6 -> startRouteName.value = "sign-in"
         6 -> startRouteName.value = "about"

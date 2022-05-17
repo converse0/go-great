@@ -15,9 +15,9 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.masuta.gogreat.domain.model.UserActivity
-import com.masuta.gogreat.domain.model.UserDiet
-import com.masuta.gogreat.domain.model.userToken
+import com.masuta.gogreat.core.model.UserActivity
+import com.masuta.gogreat.core.model.UserDiet
+import com.masuta.gogreat.core.model.userToken
 import com.masuta.gogreat.presentation.components.InputTextField
 import com.masuta.gogreat.presentation.components.MainTextButton
 import com.masuta.gogreat.presentation.components.SliderWithLabelUserActivity

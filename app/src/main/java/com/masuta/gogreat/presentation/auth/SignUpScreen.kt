@@ -1,6 +1,5 @@
 package com.masuta.gogreat.presentation.auth
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -16,15 +15,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.masuta.gogreat.domain.model.LoginResponse
-import com.masuta.gogreat.domain.model.User
 import com.masuta.gogreat.presentation.components.InputTextField
 import com.masuta.gogreat.presentation.components.MainTextButton
 import com.masuta.gogreat.presentation.ui.theme.Red
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @Composable
 fun SignUpScreen(
@@ -77,8 +70,6 @@ fun SignUpForm(
     var password by remember { mutableStateOf("") }
     var passwordConfirm by remember { mutableStateOf("") }
 
-    val isEnabledButton = remember { mutableStateOf(true) }
-
     Box(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -123,7 +114,7 @@ fun SignUpForm(
         MainTextButton(
             text = "Sign up",
             color = Red,
-            enabled = isEnabledButton.value,
+            enabled = viewModel.isEnabledButton.value,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
@@ -132,36 +123,7 @@ fun SignUpForm(
                 )
                 .align(Alignment.BottomCenter)
         ) {
-            isEnabledButton.value = false
-            CoroutineScope(Dispatchers.IO).launch {
-                val respSignUp = viewModel.signUp(username, email, password, passwordConfirm)
-
-                if (respSignUp) {
-                    val res = viewModel.signIn(User(email = email, password = password))
-                    withContext(Dispatchers.Main) {
-                        if (res["status"] as Boolean) {
-                            navController.navigate("about")
-                        } else {
-                            res["message"]?.let {
-                                Toast.makeText(
-                                    context,
-                                    it as String,
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        }
-                    }
-                } else {
-                    withContext(Dispatchers.Main) {
-                        Toast.makeText(
-                            context,
-                            "Sign up failed, fill all fields, and enter the same password twice",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-                isEnabledButton.value = true
-            }
+            viewModel.signUp(username, email, password, passwordConfirm, navController, context)
         }
     }
     Text(

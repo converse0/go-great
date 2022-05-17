@@ -2,9 +2,7 @@ package com.masuta.gogreat.presentation.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.masuta.gogreat.domain.handlers.profile_handlers.CreateParameters
-import com.masuta.gogreat.domain.handlers.profile_handlers.ProfileHandlers
-import com.masuta.gogreat.domain.model.ParametersUserSet
+import com.masuta.gogreat.core.handlers.profile_handlers.ProfileHandlers
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,17 +22,17 @@ class AboutViewModel @Inject constructor(
         diet: Int,
         gender: Int
     ) {
-        if (age != null) {
-            val parametersUser = ParametersUserSet(
+        viewModelScope.launch {
+            profileHandlers.createParameters(
                 age = age,
-                weight = weight, height = height,
-                desiredWeight = desiredWeight, eat = timesEat,
                 gender = gender,
-               activity = activity, diet = diet
+                weight = weight,
+                height = height,
+                desiredWeight = desiredWeight,
+                timesEat = timesEat,
+                activity = activity,
+                diet = diet
             )
-            viewModelScope.launch {
-                profileHandlers.createParameters(parametersUser)
-            }
         }
     }
 }

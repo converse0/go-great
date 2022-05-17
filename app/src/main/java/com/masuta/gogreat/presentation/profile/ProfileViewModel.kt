@@ -7,14 +7,9 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
-import com.masuta.gogreat.domain.handlers.auth_handlers.GetToken
-import com.masuta.gogreat.domain.handlers.profile_handlers.GetParameters
-import com.masuta.gogreat.domain.handlers.profile_handlers.ProfileHandlers
-import com.masuta.gogreat.domain.handlers.profile_handlers.UpdateParameters
-import com.masuta.gogreat.domain.handlers.profile_handlers.UploadImage
-import com.masuta.gogreat.domain.model.ParametersUser
-import com.masuta.gogreat.utils.Timeout
-import com.masuta.gogreat.utils.handleErrors
+import com.masuta.gogreat.core.handlers.auth_handlers.AuthHandlers
+import com.masuta.gogreat.core.handlers.profile_handlers.ProfileHandlers
+import com.masuta.gogreat.core.model.ParametersUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,35 +19,26 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val profileHandlers: ProfileHandlers,
-    private val getToken: GetToken
+    private val authHandlers: AuthHandlers,
 ) :ViewModel() {
 
-    var errorMessage by mutableStateOf("")
+    private var isDataLoad = true
 
     var isUploadImage = mutableStateOf(true)
 
     var userParams = mutableStateOf<ParametersUser?>(null)
 
     fun getParameters(
-        fail: MutableState<Boolean>,
         navController: NavHostController,
-        context: Context,
-        routeTo: (navController: NavHostController, route: String) -> Unit,
     ) {
-        viewModelScope.launch {
-            val resp = profileHandlers.getParameters()
-            resp.data?.let {
-                userParams.value = it
-            } ?: resp.code?.let {
-                resp.message?.let { errorMessage = it }
-                fail.value = true
-                when(val error = handleErrors(resp.code)) {
-                    is Timeout -> {
-                        Toast.makeText(context, resp.message, Toast.LENGTH_LONG).show()
-                    }
-                    else -> {
-                        routeTo(navController, error.errRoute)
-                    }
+        if (isDataLoad) {
+            isDataLoad = false
+            viewModelScope.launch {
+                val resp = profileHandlers.getParameters()
+                resp.data?.let {
+                    userParams.value = it
+                } ?: resp.code?.let { code ->
+                    profileHandlers.errorHandler(code, resp.message, navController)
                 }
             }
         }
@@ -60,17 +46,18 @@ class ProfileViewModel @Inject constructor(
 
     fun getTokens() {
         viewModelScope.launch {
-            getToken()
+            authHandlers.getToken()
         }
     }
 
     fun getParameters(gender: MutableState<Int>) {
         viewModelScope.launch {
             val resp = profileHandlers.getParameters()
+            println("GET PARAMETERS GENDER: $resp")
+
             resp.data?.let {
                 gender.value = it.gender
             } ?: resp.code?.let {
-                resp.message?.let { errorMessage = it }
                 gender.value = when(it){
                     16 -> -6
                     2,5 -> 6
@@ -90,27 +77,25 @@ class ProfileViewModel @Inject constructor(
             return false
     }
 
-    suspend fun updateParams(
-        context: Context,
+    fun updateParams(
         navController: NavHostController,
-        userParams: ParametersUser,
-    ): String? {
-        val resp = profileHandlers.updateParameters(userParams)
-        resp.code?.let {
-            when(val error = handleErrors(it)) {
-                is Timeout -> {
-                    Toast.makeText(context, resp.message, Toast.LENGTH_LONG).show()
-                }
-                else -> {
-                    withContext(Dispatchers.Main) {
-                        routeTo(navController, error.errRoute)
-                        Toast.makeText(context, resp.message, Toast.LENGTH_LONG).show()
-                    }
-                }
-            }
-        }
-
-        return resp.message
+        context: Context,
+        userParams: ParametersUser
+    ) {
+       viewModelScope.launch {
+           val resp = profileHandlers.updateParameters(userParams)
+           resp.code?.let { code ->
+               profileHandlers.errorHandler(code, resp.message, navController)
+           } ?: withContext(Dispatchers.Main) {
+               resp.let {
+                   Toast.makeText(
+                       context,
+                       "Update user parameters Success",
+                       Toast.LENGTH_SHORT
+                   ).show()
+               }
+           }
+       }
     }
 
     suspend fun uploadImage(im: ImageBitmap): Pair<String?,String?> {
