@@ -3,7 +3,7 @@ package com.masuta.gogreat.core.service.profile_service
 import androidx.compose.ui.graphics.ImageBitmap
 import com.masuta.gogreat.core.store.ProfileStore
 import com.masuta.gogreat.core.model.*
-import com.masuta.gogreat.core.providers.ProfileRepository
+import com.masuta.gogreat.core.providers.Profile
 
 data class GetParametersResponse(
     val data: ParametersUser? = null,
@@ -12,20 +12,15 @@ data class GetParametersResponse(
 )
 
 class ProfileServiceImpl(
-    private val repository: ProfileRepository,
+    private val profile: Profile,
     private val store: ProfileStore
 ): ProfileService {
 
     override suspend fun getParameters(): GetParametersResponse {
         val localProfileParams = store.getLocalProfileParams()
 
-        println("GET PARAMETERS: $localProfileParams")
-        println("USER TOKEN FROM PROFILE: $userToken")
-
         if (localProfileParams == null && userToken != null) {
-            val resp = repository.getParameters()
-
-            println("GET PARAMETERS REQUEST: $resp")
+            val resp = profile.getParameters()
 
             if (resp.data != null) {
                 val params = ParametersUser(
@@ -53,7 +48,7 @@ class ProfileServiceImpl(
     }
 
     override suspend fun createParameters(parametersUser: ParametersUserSet) {
-        repository.createParameters(parametersUser)
+        profile.createParameters(parametersUser)
     }
 
     override suspend fun updateParameters(userParams: ParametersUser): UpdateParamsResponse {
@@ -69,12 +64,10 @@ class ProfileServiceImpl(
             uid = userParams.uid
         )
         store.setLocalProfileParams(null)
-        println("UPDATE PARAMS")
 
         var resp = UpdateParamsResponse()
         if (userToken != null) {
-            resp = repository.updateParameters(params)
-            println("UPDATE PARAMS REQUEST: $resp")
+            resp = profile.updateParameters(params)
         }
 
         return resp
@@ -82,7 +75,7 @@ class ProfileServiceImpl(
 
     override suspend fun uploadImage(im: ImageBitmap): ResponseParamsIm {
         store.setLocalProfileParams(null)
-        return repository.uploadImage(im)
+        return profile.uploadImage(im)
     }
 
 }

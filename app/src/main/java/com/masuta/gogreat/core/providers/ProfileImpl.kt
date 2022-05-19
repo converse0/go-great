@@ -18,10 +18,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class ProfileRepositoryImpl @Inject constructor(
+class ProfileImpl @Inject constructor(
     private val client: Client,
     private val context: Context
-): ProfileRepository {
+): Profile {
 
     private var trainUrl = ""
     private var httpClient: HttpClient? = null

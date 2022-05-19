@@ -4,7 +4,7 @@ import android.content.Context
 import com.masuta.gogreat.core.handlers.ErrorHandler
 import com.masuta.gogreat.core.http.Client
 import com.masuta.gogreat.core.providers.AuthImpl
-import com.masuta.gogreat.core.providers.ProfileRepositoryImpl
+import com.masuta.gogreat.core.providers.ProfileImpl
 import com.masuta.gogreat.core.providers.TrainRepositoryImpl
 import com.masuta.gogreat.core.service.auth_service.AuthService
 import com.masuta.gogreat.core.service.auth_service.AuthServiceImpl
@@ -20,7 +20,7 @@ import com.masuta.gogreat.core.handlers.auth_handlers.SignUp
 import com.masuta.gogreat.core.handlers.profile_handlers.*
 import com.masuta.gogreat.core.handlers.train_handlers.*
 import com.masuta.gogreat.core.providers.Auth
-import com.masuta.gogreat.core.providers.ProfileRepository
+import com.masuta.gogreat.core.providers.Profile
 import com.masuta.gogreat.core.providers.TrainRepository
 import com.masuta.gogreat.utils.ListsValuesForSliders
 import dagger.Module
@@ -66,8 +66,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideProfileRepository(client: Client, @ApplicationContext context: Context): ProfileRepository {
-        return ProfileRepositoryImpl(client, context)
+    fun provideProfileRepository(client: Client, @ApplicationContext context: Context): Profile {
+        return ProfileImpl(client, context)
     }
 
     @Provides
@@ -90,7 +90,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideProfileService(repository: ProfileRepository, store: ProfileStore): ProfileService {
+    fun provideProfileService(repository: Profile, store: ProfileStore): ProfileService {
         return ProfileServiceImpl(repository, store)
     }
 

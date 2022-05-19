@@ -3,7 +3,7 @@ package com.masuta.gogreat.core.providers
 import androidx.compose.ui.graphics.ImageBitmap
 import com.masuta.gogreat.core.model.*
 
-interface ProfileRepository {
+interface Profile {
 
     suspend fun createParameters(params: ParametersUserSet): String?
 
