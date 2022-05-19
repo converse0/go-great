@@ -3,6 +3,8 @@ package com.masuta.gogreat.core.service.auth_service
 import com.masuta.gogreat.core.store.AuthStore
 import com.masuta.gogreat.core.model.LoginResponse
 import com.masuta.gogreat.core.model.User
+import com.masuta.gogreat.core.model.refreshUserToken
+import com.masuta.gogreat.core.model.userToken
 import com.masuta.gogreat.core.providers.Auth
 
 class AuthServiceImpl(
@@ -59,6 +61,14 @@ class AuthServiceImpl(
         }
 
         return false
+    }
+
+    override suspend fun getToken() {
+        val token = store.getLocalToken()
+        val refreshToken = store.getLocalRefreshToken()
+
+        userToken = token
+        refreshUserToken = refreshToken
     }
 
 }

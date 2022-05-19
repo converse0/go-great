@@ -82,11 +82,11 @@ object AppModule {
         return ListsValuesForSliders(context)
     }
 
-    @Provides
-    @Singleton
-    fun provideGetToken(store: AuthStore): GetToken {
-        return GetToken(store)
-    }
+//    @Provides
+//    @Singleton
+//    fun provideGetToken(store: AuthStore): GetToken {
+//        return GetToken(store)
+//    }
 
     @Provides
     @Singleton
@@ -108,9 +108,9 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideAuthHandlers(authService: AuthService, store: AuthStore, @ApplicationContext context: Context): AuthHandlers {
+    fun provideAuthHandlers(authService: AuthService, @ApplicationContext context: Context): AuthHandlers {
         return AuthHandlers(
-            getToken = GetToken(store),
+            getToken = GetToken(authService),
             signup = SignUp(authService),
             signin = SignIn(authService),
             errorHandler = ErrorHandler(context)

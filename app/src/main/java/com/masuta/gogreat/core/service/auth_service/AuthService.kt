@@ -8,4 +8,6 @@ interface AuthService {
 
     suspend fun signup(user: User): Boolean
 
+    suspend fun getToken()
+
 }
