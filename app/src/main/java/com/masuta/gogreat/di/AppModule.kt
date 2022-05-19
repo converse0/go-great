@@ -3,7 +3,7 @@ package com.masuta.gogreat.di
 import android.content.Context
 import com.masuta.gogreat.core.handlers.ErrorHandler
 import com.masuta.gogreat.core.http.Client
-import com.masuta.gogreat.core.providers.AuthRepositoryImpl
+import com.masuta.gogreat.core.providers.AuthImpl
 import com.masuta.gogreat.core.providers.ProfileRepositoryImpl
 import com.masuta.gogreat.core.providers.TrainRepositoryImpl
 import com.masuta.gogreat.core.service.auth_service.AuthService
@@ -19,7 +19,7 @@ import com.masuta.gogreat.core.handlers.auth_handlers.SignIn
 import com.masuta.gogreat.core.handlers.auth_handlers.SignUp
 import com.masuta.gogreat.core.handlers.profile_handlers.*
 import com.masuta.gogreat.core.handlers.train_handlers.*
-import com.masuta.gogreat.core.providers.AuthRepository
+import com.masuta.gogreat.core.providers.Auth
 import com.masuta.gogreat.core.providers.ProfileRepository
 import com.masuta.gogreat.core.providers.TrainRepository
 import com.masuta.gogreat.utils.ListsValuesForSliders
@@ -60,8 +60,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideAuthRepository(client: Client, @ApplicationContext context: Context): AuthRepository {
-        return AuthRepositoryImpl(client, context)
+    fun provideAuthRepository(client: Client, @ApplicationContext context: Context): Auth {
+        return AuthImpl(client, context)
     }
 
     @Provides
@@ -96,7 +96,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideAuthService(repository: AuthRepository, store: AuthStore): AuthService {
+    fun provideAuthService(repository: Auth, store: AuthStore): AuthService {
         return AuthServiceImpl(repository, store)
     }
 

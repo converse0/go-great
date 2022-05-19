@@ -15,10 +15,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class AuthRepositoryImpl @Inject constructor(
+class AuthImpl @Inject constructor(
     private val client: Client,
     private val context: Context,
-) : AuthRepository {
+) : Auth {
 
     private var httpClient: HttpClient? = null
     private var authUrl = ""

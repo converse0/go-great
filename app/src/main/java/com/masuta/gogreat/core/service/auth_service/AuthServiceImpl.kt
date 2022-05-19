@@ -3,10 +3,10 @@ package com.masuta.gogreat.core.service.auth_service
 import com.masuta.gogreat.core.store.AuthStore
 import com.masuta.gogreat.core.model.LoginResponse
 import com.masuta.gogreat.core.model.User
-import com.masuta.gogreat.core.providers.AuthRepository
+import com.masuta.gogreat.core.providers.Auth
 
 class AuthServiceImpl(
-    private val repository: AuthRepository,
+    private val auth: Auth,
     private val store: AuthStore
 ): AuthService {
 
@@ -40,7 +40,7 @@ class AuthServiceImpl(
     }
 
     override suspend fun signin(user: User): Map<String, Any?> {
-        val resp = repository.login(user)
+        val resp = auth.login(user)
         val token = resp.getOrDefault("loginResponse", defaultValue = {null})
         if (token != null) {
             store.setLocalToken(token as LoginResponse)
@@ -52,7 +52,7 @@ class AuthServiceImpl(
         if (checkUsername(user.username) && checkEmail(user.email) &&
             checkPassword(user.password) && checkPasswordConfirm(user.password, user.passwordConfirm)
         ) {
-            val resp = repository.signup(user)
+            val resp = auth.signup(user)
             if(resp) {
                 return true
             }
