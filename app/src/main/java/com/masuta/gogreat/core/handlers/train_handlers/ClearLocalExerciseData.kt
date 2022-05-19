@@ -7,6 +7,6 @@ class ClearLocalExerciseData(
 ) {
 
     suspend operator fun invoke() {
-        trainService.clearLocalExerciseData()
+        trainService.clearExerciseData()
     }
 }

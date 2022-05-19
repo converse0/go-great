@@ -8,6 +8,6 @@ class GetAllLocalExercise(
 ) {
 
     suspend operator fun invoke(): List<TrainingExercise> {
-        return trainService.getAllLocalExercise()
+        return trainService.getAllExercise()
     }
 }

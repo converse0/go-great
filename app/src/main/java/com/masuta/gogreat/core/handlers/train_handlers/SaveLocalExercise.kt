@@ -8,7 +8,7 @@ class SaveLocalExercise(
 ) {
 
     suspend operator fun invoke(exercise: TrainingExercise) {
-        trainService.saveLocalExercise(exercise)
+        trainService.saveExercise(exercise)
     }
 
 }

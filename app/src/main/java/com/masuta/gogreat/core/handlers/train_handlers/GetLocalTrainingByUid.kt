@@ -8,7 +8,7 @@ class GetLocalTrainingByUid(
 ) {
 
     suspend operator fun invoke(uid: String): Training? {
-        return trainService.getLocalTrainingByUid(uid)
+        return trainService.getTrainingByUid(uid)
     }
 
 }

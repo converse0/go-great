@@ -13,7 +13,7 @@ class SetLocalExerciseAndSets(
 
     suspend operator fun invoke(indexExercise: Int, sets: Int) {
         val exerciseAndSets = LocalExerciseAndSets(indexExercise, sets)
-        trainService.setLocalExerciseAndSets(exerciseAndSets)
+        trainService.setCurrentExerciseAndSets(exerciseAndSets)
     }
 
 }

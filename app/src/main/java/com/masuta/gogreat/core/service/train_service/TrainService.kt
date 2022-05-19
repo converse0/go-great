@@ -13,13 +13,13 @@ interface TrainService {
     suspend fun finishTraining(uid: String): FinishTrainingResponse
     suspend fun endTraining()
 
-    suspend fun getLocalTrainings(uid: String): GetTrainingResponse
+    suspend fun getTrainings(uid: String): GetTrainingResponse
     suspend fun getExercisesById(id: Long): ExerciseResponse
     suspend fun setExerciseParameters(params: SetExerciseParamsRequest): SetExerciseParamsResponse
-    suspend fun clearLocalExerciseData()
-    suspend fun saveLocalExercise(exercise: TrainingExercise)
-    suspend fun getAllLocalExercise(): List<TrainingExercise>
-    suspend fun getLocalTrainingByUid(uid: String): Training?
-    suspend fun setLocalExerciseAndSets(exerciseAndSets: LocalExerciseAndSets)
+    suspend fun clearExerciseData()
+    suspend fun saveExercise(exercise: TrainingExercise)
+    suspend fun getAllExercise(): List<TrainingExercise>
+    suspend fun getTrainingByUid(uid: String): Training?
+    suspend fun setCurrentExerciseAndSets(exerciseAndSets: LocalExerciseAndSets)
 
 }

@@ -107,7 +107,7 @@ class TrainServiceImpl(
         store.setLocalWorkouts(null)
     }
 
-    override suspend fun getLocalTrainings(uid: String): GetTrainingResponse {
+    override suspend fun getTrainings(uid: String): GetTrainingResponse {
         val training = store.getLocalTrainingByUid(uid)
         val exerciseCurrent = store.getLocalCurrentExercise()
         val sets = store.getLocalCurrentExerciseSets()
@@ -143,23 +143,23 @@ class TrainServiceImpl(
         return resp
     }
 
-    override suspend fun clearLocalExerciseData() {
+    override suspend fun clearExerciseData() {
         store.clearLocalExerciseData()
     }
 
-    override suspend fun saveLocalExercise(exercise: TrainingExercise) {
+    override suspend fun saveExercise(exercise: TrainingExercise) {
         store.saveLocalEx(exercise)
     }
 
-    override suspend fun getAllLocalExercise(): List<TrainingExercise> {
+    override suspend fun getAllExercise(): List<TrainingExercise> {
         return store.getAllLocalEx()
     }
 
-    override suspend fun getLocalTrainingByUid(uid: String): Training? {
+    override suspend fun getTrainingByUid(uid: String): Training? {
         return store.getLocalTrainingByUid(uid)
     }
 
-    override suspend fun setLocalExerciseAndSets(exerciseAndSets: LocalExerciseAndSets) {
+    override suspend fun setCurrentExerciseAndSets(exerciseAndSets: LocalExerciseAndSets) {
         store.setLocalCurrentExerciseSets(exerciseAndSets.sets)
         store.setLocalCurrentExercise(exerciseAndSets.indexExercise)
     }
