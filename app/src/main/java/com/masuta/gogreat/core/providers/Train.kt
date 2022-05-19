@@ -2,7 +2,7 @@ package com.masuta.gogreat.core.providers
 
 import com.masuta.gogreat.core.model.*
 
-interface TrainRepository {
+interface Train {
     suspend fun findAll(): TrainingResponse
     suspend fun findById(id: Long): ExerciseResponse
     suspend fun save(newTrain: Training)

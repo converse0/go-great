@@ -3,24 +3,19 @@ package com.masuta.gogreat.core.service.train_service
 import com.masuta.gogreat.core.store.TrainStore
 import com.masuta.gogreat.core.handlers.train_handlers.LocalExerciseAndSets
 import com.masuta.gogreat.core.model.*
-import com.masuta.gogreat.core.providers.TrainRepository
+import com.masuta.gogreat.core.providers.Train
 
 class TrainServiceImpl(
-    private val repository: TrainRepository,
+    private val train: Train,
     private val store: TrainStore
 ): TrainService {
 
     override suspend fun getCurrentWorkout(): TrainResponse {
         val localCurrentWorkout = store.getLocalCurrentWorkout()
 
-        println("SERVICE CURRENT WORKOUT: $localCurrentWorkout")
-        println("USER TOKEN: $userToken")
-
         if (localCurrentWorkout == null && userToken != null) {
 
-            val resp = repository.getCurrentTraining()
-
-            println("SERVICE CURRENT WORKOUT REQUEST: $resp")
+            val resp = train.getCurrentTraining()
 
             resp.data?.let {
                 val data = it.getOrNull(0)?.let { train ->
@@ -40,19 +35,15 @@ class TrainServiceImpl(
 
         val localWorkouts = store.getLocalWorkouts()
 
-        println("SERVICE WORKOUTS: $localWorkouts")
-
         if (localWorkouts == null && userToken != null) {
 
-            val resp = repository.findAll()
-
-            println("SERVICE WORKOUT REQUEST: $resp")
+            val resp = train.findAll()
 
             resp.data?.let { training ->
                 store.clearLocalTrainingData()
                 training.forEach { store.saveLocalTraining(it.validateExerciseData()) }
             }
-            val myTrains = repository.getMyTrainings()
+            val myTrains = train.getMyTrainings()
             myTrains.data?.let { trains ->
                 val localList = trains.map { it.validateExerciseData() }
                 store.setLocalWorkouts(localList)
@@ -70,12 +61,8 @@ class TrainServiceImpl(
 
         val localPastWorkouts = store.getLocalPastWorkouts()
 
-        println("SERVICE PAST WORKOUTS: $localPastWorkouts")
-
         if (localPastWorkouts == null && userToken != null) {
-            val resp = repository.getPassTrainings()
-
-            println("SERVICE PAST WORKOUT REQUEST")
+            val resp = train.getPassTrainings()
 
             resp.data?.let{
                 store.setLocalPastWorkouts(it)
@@ -89,7 +76,7 @@ class TrainServiceImpl(
     }
 
     override suspend fun saveTraining(newTrain: Training) {
-        repository.save(newTrain)
+        train.save(newTrain)
 
         store.setLocalPastWorkouts(null)
         store.setLocalWorkouts(null)
@@ -104,11 +91,11 @@ class TrainServiceImpl(
         store.setLocalWorkouts(null)
         store.setLocalCurrentWorkout(null)
 
-        return repository.startTraining(uid)
+        return train.startTraining(uid)
     }
 
     override suspend fun finishTraining(uid: String): FinishTrainingResponse {
-       return repository.finishTraining(uid)
+       return train.finishTraining(uid)
     }
 
     override suspend fun endTraining() {
@@ -129,12 +116,12 @@ class TrainServiceImpl(
     }
 
     override suspend fun getExercisesById(id: Long): ExerciseResponse {
-        return repository.findById(id)
+        return train.findById(id)
     }
 
     override suspend fun setExerciseParameters(params: SetExerciseParamsRequest): SetExerciseParamsResponse {
 
-        val resp = repository.setExerciseParams(params.uid, params.listExercises)
+        val resp = train.setExerciseParams(params.uid, params.listExercises)
 
         if (resp.status != null) {
             store.setLocalPastWorkouts(null)

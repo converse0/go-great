@@ -13,10 +13,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class TrainRepositoryImpl @Inject constructor(
+class TrainImpl @Inject constructor(
     private var client: Client,
     private val context: Context,
-): TrainRepository {
+): Train {
 
     private var httpClient: HttpClient? = null
     private var trainUrl = ""

@@ -5,7 +5,7 @@ import com.masuta.gogreat.core.handlers.ErrorHandler
 import com.masuta.gogreat.core.http.Client
 import com.masuta.gogreat.core.providers.AuthImpl
 import com.masuta.gogreat.core.providers.ProfileImpl
-import com.masuta.gogreat.core.providers.TrainRepositoryImpl
+import com.masuta.gogreat.core.providers.TrainImpl
 import com.masuta.gogreat.core.service.auth_service.AuthService
 import com.masuta.gogreat.core.service.auth_service.AuthServiceImpl
 import com.masuta.gogreat.core.service.profile_service.ProfileService
@@ -21,7 +21,7 @@ import com.masuta.gogreat.core.handlers.profile_handlers.*
 import com.masuta.gogreat.core.handlers.train_handlers.*
 import com.masuta.gogreat.core.providers.Auth
 import com.masuta.gogreat.core.providers.Profile
-import com.masuta.gogreat.core.providers.TrainRepository
+import com.masuta.gogreat.core.providers.Train
 import com.masuta.gogreat.utils.ListsValuesForSliders
 import dagger.Module
 import dagger.Provides
@@ -72,8 +72,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideTrainRepository(client: Client, @ApplicationContext context: Context): TrainRepository {
-        return TrainRepositoryImpl(client, context)
+    fun provideTrainRepository(client: Client, @ApplicationContext context: Context): Train {
+        return TrainImpl(client, context)
     }
 
     @Provides
@@ -102,7 +102,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideTrainService(repository: TrainRepository, store: TrainStore): TrainService {
+    fun provideTrainService(repository: Train, store: TrainStore): TrainService {
         return TrainServiceImpl(repository, store)
     }
 
