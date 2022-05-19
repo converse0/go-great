@@ -143,11 +143,11 @@ object AppModule {
             getExercisesById = GetExercisesById(trainService),
             saveWorkout = SaveWorkout(trainService),
             setExerciseParameters = SetExerciseParameters(trainService),
-            clearLocalExerciseData = ClearLocalExerciseData(trainService),
-            saveLocalExercise = SaveLocalExercise(trainService),
-            getAllLocalExercise = GetAllLocalExercise(trainService),
-            getLocalTrainingByUid = GetLocalTrainingByUid(trainService),
-            setLocalExerciseAndSets = SetLocalExerciseAndSets(trainService),
+            clearExerciseData = ClearExerciseData(trainService),
+            saveExercise = SaveExercise(trainService),
+            getAllExercise = GetAllExercise(trainService),
+            getTrainingByUid = GetTrainingByUid(trainService),
+            setCurrentExerciseAndSets = SetCurrentExerciseAndSets(trainService),
             errorHandler = ErrorHandler(context)
         )
     }

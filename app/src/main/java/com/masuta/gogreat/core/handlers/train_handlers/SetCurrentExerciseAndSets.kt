@@ -7,7 +7,7 @@ data class LocalExerciseAndSets(
     val sets: Int
 )
 
-class SetLocalExerciseAndSets(
+class SetCurrentExerciseAndSets(
     private val trainService: TrainService
 ) {
 

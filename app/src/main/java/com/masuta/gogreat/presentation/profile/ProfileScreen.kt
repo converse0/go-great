@@ -358,23 +358,21 @@ fun ProfileInfo(
                 .fillMaxWidth()
                 .padding(vertical = 20.dp)
         ) {
-            CoroutineScope(Dispatchers.IO).launch {
-                viewModel.updateParams(
-                    navController = navController,
-                    context = context,
-                    userParams = userParams.copy(
-                        age = age.value.toInt(),
-                        eat = timesEat.value.toInt(),
-                        height = height.value.toInt(),
-                        weight = weight.value.toInt(),
-                        activity = activity.value.toInt(),
-                        diet = diet.value.toInt(),
-                        desiredWeight = desiredWeight.value.toInt(),
-                        gender = gender.value,
-                    )
-                )
-                lazyListState.scrollToItem(0)
-            }
+            viewModel.updateParams(
+                navController = navController,
+                context = context,
+                userParams = userParams.copy(
+                    age = age.value.toInt(),
+                    eat = timesEat.value.toInt(),
+                    height = height.value.toInt(),
+                    weight = weight.value.toInt(),
+                    activity = activity.value.toInt(),
+                    diet = diet.value.toInt(),
+                    desiredWeight = desiredWeight.value.toInt(),
+                    gender = gender.value,
+                ),
+                lazyListState = lazyListState
+            )
         }
     }
 }

@@ -2,6 +2,7 @@ package com.masuta.gogreat.presentation.profile
 
 import android.content.Context
 import android.widget.Toast
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.lifecycle.ViewModel
@@ -80,20 +81,20 @@ class ProfileViewModel @Inject constructor(
     fun updateParams(
         navController: NavHostController,
         context: Context,
-        userParams: ParametersUser
+        userParams: ParametersUser,
+        lazyListState: LazyListState
     ) {
        viewModelScope.launch {
            val resp = profileHandlers.updateParameters(userParams)
            resp.code?.let { code ->
                profileHandlers.errorHandler(code, resp.message, navController)
            } ?: withContext(Dispatchers.Main) {
-               resp.let {
                    Toast.makeText(
                        context,
                        "Update user parameters Success",
                        Toast.LENGTH_SHORT
                    ).show()
-               }
+               lazyListState.scrollToItem(0)
            }
        }
     }

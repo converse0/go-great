@@ -3,7 +3,7 @@ package com.masuta.gogreat.core.handlers.train_handlers
 import com.masuta.gogreat.core.service.train_service.TrainService
 import com.masuta.gogreat.core.model.TrainingExercise
 
-class GetAllLocalExercise(
+class GetAllExercise(
     private val trainService: TrainService
 ) {
 

@@ -75,7 +75,7 @@ class StartTrainingViewModel @Inject constructor(
                 viewModelScope.launch {
                     _exerciseSets.value--
 
-                    trainHandlers.setLocalExerciseAndSets(
+                    trainHandlers.setCurrentExerciseAndSets(
                         indexExercise = _indexExercise.value,
                         sets = _exerciseSets.value
                     )
@@ -90,7 +90,7 @@ class StartTrainingViewModel @Inject constructor(
                     _currentExercise.value = _listExercises.value[_indexExercise.value]
                     _exerciseSets.value = _listExercises.value[_indexExercise.value].numberOfSets
 
-                    trainHandlers.setLocalExerciseAndSets(
+                    trainHandlers.setCurrentExerciseAndSets(
                         indexExercise = _indexExercise.value,
                         sets = _exerciseSets.value
                     )
@@ -117,7 +117,7 @@ class StartTrainingViewModel @Inject constructor(
                 _currentExercise.value = it.exercises[indexExercise.value]
                 _exerciseSets.value = resp.currentExerciseSets ?: _currentExercise.value.numberOfSets
 
-                trainHandlers.setLocalExerciseAndSets(
+                trainHandlers.setCurrentExerciseAndSets(
                     indexExercise = _indexExercise.value,
                     sets = _exerciseSets.value
                 )

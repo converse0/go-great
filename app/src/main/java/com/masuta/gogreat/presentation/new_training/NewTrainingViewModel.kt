@@ -21,14 +21,14 @@ class NewTrainingViewModel @Inject constructor(
 
     fun getLocalExercises(list: MutableState<List<TrainingExercise>>) {
         viewModelScope.launch {
-            val data = trainHandlers.getAllLocalExercise()
+            val data = trainHandlers.getAllExercise()
             list.value = data
         }
     }
 
     fun clearLocalExercises() {
         viewModelScope.launch {
-            trainHandlers.clearLocalExerciseData()
+            trainHandlers.clearExerciseData()
         }
     }
 }

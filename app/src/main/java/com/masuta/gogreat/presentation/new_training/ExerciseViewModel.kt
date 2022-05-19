@@ -63,7 +63,7 @@ class ExerciseViewModel @Inject constructor(
 
     fun saveLocalExercise(exercise: TrainingExercise) {
         viewModelScope.launch {
-            trainHandlers.saveLocalExercise(exercise)
+            trainHandlers.saveExercise(exercise)
         }
     }
 }

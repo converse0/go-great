@@ -162,7 +162,7 @@ class MainViewModel @Inject constructor(
 
     fun clearLocalExercises() {
         viewModelScope.launch {
-            trainHandlers.clearLocalExerciseData()
+            trainHandlers.clearExerciseData()
         }
     }
 }
