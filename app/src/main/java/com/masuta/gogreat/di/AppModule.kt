@@ -82,12 +82,6 @@ object AppModule {
         return ListsValuesForSliders(context)
     }
 
-//    @Provides
-//    @Singleton
-//    fun provideGetToken(store: AuthStore): GetToken {
-//        return GetToken(store)
-//    }
-
     @Provides
     @Singleton
     fun provideProfileService(repository: Profile, store: ProfileStore): ProfileService {
