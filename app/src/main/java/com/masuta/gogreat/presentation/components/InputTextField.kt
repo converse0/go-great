@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -35,14 +36,23 @@ fun InputTextField(
         fontWeight = FontWeight.Bold,
         color = Color.Black
     )
+    val focusManager = LocalFocusManager.current
+
     OutlinedTextField(
         value = value,
         textStyle = TextStyle(Color.Black),
-        onValueChange = { onChangeValue(it) },
+        onValueChange = {
+            onChangeValue(it) },
         visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None ,
         enabled = enabled,
         modifier = Modifier.fillMaxWidth(),
-        keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
+        keyboardActions = KeyboardActions(
+            onNext = {
+                focusManager.clearFocus()
+            },
+            onDone = { focusManager.clearFocus()  }
+        ),
+//        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus()  }),
         keyboardOptions = KeyboardOptions.Default.copy(
             imeAction = ImeAction.Done,
             keyboardType = keyboardType

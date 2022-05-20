@@ -13,6 +13,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -91,6 +92,8 @@ fun SignInForm(
         keyboardController = keyboardController,
         onChangeValue = { password = it },
     )
+    val focusManager = LocalFocusManager.current
+
     MainTextButton(
         text = "Login",
         color = Red,
@@ -101,7 +104,7 @@ fun SignInForm(
     ) {
         isEnabledButton.value = false
         val user = User(email = email, password = password)
-
+focusManager.clearFocus()
         CoroutineScope(Dispatchers.IO).launch {
             val resp = viewModel.signIn(user)
 
