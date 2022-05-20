@@ -47,8 +47,8 @@ fun FemalePersonSection(
             top.linkTo(topGuidLine)
         }
         constrain(legs) {
-            top.linkTo(bottomGuidLine, 40.dp)
-            start.linkTo(person.start, 45.dp)
+            bottom.linkTo(bottomGuidLine)
+            end.linkTo(back.start, 12.dp)
         }
         constrain(chest) {
             top.linkTo(topGuidLine, 5.dp)
@@ -124,7 +124,7 @@ fun MalePersonSection(
             top.linkTo(topGuidLine, 15.dp)
         }
         constrain(legs) {
-            top.linkTo(bottomGuidLine, 40.dp)
+            bottom.linkTo(bottomGuidLine)
             start.linkTo(person.start, 57.dp)
         }
         constrain(chest) {
