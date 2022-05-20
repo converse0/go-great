@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import com.masuta.gogreat.R
-import com.masuta.gogreat.domain.model.TrainingExercise
+import com.masuta.gogreat.core.model.TrainingExercise
 import com.masuta.gogreat.presentation.ui.theme.Red
 
 @Composable

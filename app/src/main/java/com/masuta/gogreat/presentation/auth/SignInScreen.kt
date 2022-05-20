@@ -1,6 +1,5 @@
 package com.masuta.gogreat.presentation.auth
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -13,25 +12,22 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.masuta.gogreat.domain.model.LoginResponse
-import com.masuta.gogreat.domain.model.User
+import com.masuta.gogreat.core.model.userToken
 import com.masuta.gogreat.presentation.components.InputTextField
 import com.masuta.gogreat.presentation.components.MainTextButton
 import com.masuta.gogreat.presentation.ui.theme.Red
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @Composable
 fun SignInScreen(
     viewModel: SignInViewModel,
     navController: NavHostController
 ) {
+
+    println("Sign In Screen")
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -76,7 +72,6 @@ fun SignInForm(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
-    val isEnabledButton = remember { mutableStateOf(true) }
 
     InputTextField(
         text = "Email",
@@ -92,37 +87,15 @@ fun SignInForm(
         keyboardController = keyboardController,
         onChangeValue = { password = it },
     )
-    val focusManager = LocalFocusManager.current
-
     MainTextButton(
         text = "Login",
         color = Red,
-        enabled = isEnabledButton.value,
+        enabled = viewModel.isEnabledButton.value,
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 40.dp)
     ) {
-        isEnabledButton.value = false
-        val user = User(email = email, password = password)
-focusManager.clearFocus()
-        CoroutineScope(Dispatchers.IO).launch {
-            val resp = viewModel.signIn(user)
-
-            withContext(Dispatchers.Main) {
-                if(resp["status"] as Boolean){
-                    navController.navigate("main")
-                } else {
-                    resp["message"]?.let {
-                        Toast.makeText(
-                            context,
-                            it as String,
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-            }
-            isEnabledButton.value = true
-        }
+        viewModel.signIn(email, password, navController, context)
     }
     Row(
         verticalAlignment = Alignment.CenterVertically

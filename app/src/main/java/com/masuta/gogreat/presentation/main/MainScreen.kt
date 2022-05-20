@@ -23,7 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.masuta.gogreat.R
-import com.masuta.gogreat.domain.model.Training
+import com.masuta.gogreat.core.model.Training
 import com.masuta.gogreat.presentation.BottomNavigationItem
 import com.masuta.gogreat.presentation.components.BottomMenuBar
 import com.masuta.gogreat.presentation.components.MainTextButton
@@ -41,14 +41,11 @@ fun MainScreen(
     viewModel: MainViewModel
 ) {
 
+    println("Main Screen")
+
     viewModel.clearLocalExercises()
 
-    val context = LocalContext.current
-
-    viewModel.getCurrentTraining(context, navController)
-    viewModel.getWorkouts(context, navController)
-    viewModel.getPastTrainings(context, navController)
-
+    viewModel.getData(navController)
 
     val listTrainings = viewModel.listTrainings
     val currentWorkout = viewModel.currentWorkout

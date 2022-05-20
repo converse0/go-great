@@ -13,9 +13,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.masuta.gogreat.R
-import com.masuta.gogreat.domain.model.gender
-import com.masuta.gogreat.domain.model.refreshUserToken
-import com.masuta.gogreat.domain.model.userToken
+import com.masuta.gogreat.core.model.gender
+import com.masuta.gogreat.core.model.userToken
 import com.masuta.gogreat.presentation.auth.AboutScreen
 import com.masuta.gogreat.presentation.auth.LaunchScreen
 import com.masuta.gogreat.presentation.auth.SignInScreen
@@ -79,15 +78,14 @@ fun getSex(context: Context): Int {
     return sharedPref.getInt("sex", 0)
 }
 
-@Composable
-fun SetSex(context: Context, viewModel: ProfileViewModel, gender: MutableState<Int>) {
-
-    viewModel.getParameters(gender = gender)
-    when (gender.value) {
+fun setSex(context: Context, gender: Int) {
+//    viewModel: ProfileViewModel,
+//    viewModel.getParameters(gender = gender)
+    when (gender) {
         0, 1 -> {
             val sharedPref = context.getSharedPreferences("user", Context.MODE_PRIVATE)
             val editor = sharedPref.edit()
-            editor.putInt("sex", gender.value)
+            editor.putInt("sex", gender)
             editor.apply()
         }
     }
@@ -102,6 +100,7 @@ fun ChoseStartScreen(
 
     viewModel.getTokens()
 
+
     val token = userToken ?: ""
     val g = getSex(context)
     gender = g
@@ -113,12 +112,10 @@ fun ChoseStartScreen(
     val gender = remember {
         mutableStateOf(888)
     }
-    SetSex(context, viewModel = viewModel, gender)
-    if (viewModel.errorMessage.isNotEmpty()) {
-        Toast.makeText(LocalContext.current,
-            viewModel.errorMessage,
-            Toast.LENGTH_LONG).show()
-    }
+
+    viewModel.getParameters(gender)
+    setSex(context, gender.value)
+
     when (gender.value) {
         -6 -> startRouteName.value = "sign-in"
         6 -> startRouteName.value = "about"

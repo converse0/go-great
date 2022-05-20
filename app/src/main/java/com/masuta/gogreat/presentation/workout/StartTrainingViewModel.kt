@@ -7,11 +7,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.masuta.gogreat.R
-import com.masuta.gogreat.data.store.TrainStore
-import com.masuta.gogreat.domain.handlers.train_handlers.*
-import com.masuta.gogreat.domain.model.TrainingExercise
-import com.masuta.gogreat.domain.repository.TrainRepository
+import com.masuta.gogreat.core.handlers.train_handlers.*
+import com.masuta.gogreat.core.model.TrainingExercise
 import com.masuta.gogreat.utils.ListsValuesForSliders
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -27,7 +26,6 @@ sealed class TrainingEvent {
 @HiltViewModel
 class StartTrainingViewModel @Inject constructor(
     private val listValuesForSliders: ListsValuesForSliders,
-    private val store: TrainStore,
     private val trainHandlers: TrainHandlers,
 ): ViewModel() {
 
@@ -76,7 +74,11 @@ class StartTrainingViewModel @Inject constructor(
             is TrainingEvent.NextSet -> {
                 viewModelScope.launch {
                     _exerciseSets.value--
-                    store.setLocalCurrentExerciseSets(_exerciseSets.value)
+
+                    trainHandlers.setCurrentExerciseAndSets(
+                        indexExercise = _indexExercise.value,
+                        sets = _exerciseSets.value
+                    )
                 }
             }
             is TrainingEvent.NextExercise -> {
@@ -88,8 +90,10 @@ class StartTrainingViewModel @Inject constructor(
                     _currentExercise.value = _listExercises.value[_indexExercise.value]
                     _exerciseSets.value = _listExercises.value[_indexExercise.value].numberOfSets
 
-                    store.setLocalCurrentExercise(_indexExercise.value)
-                    store.setLocalCurrentExerciseSets(_exerciseSets.value)
+                    trainHandlers.setCurrentExerciseAndSets(
+                        indexExercise = _indexExercise.value,
+                        sets = _exerciseSets.value
+                    )
                 }
 
             }
@@ -113,29 +117,37 @@ class StartTrainingViewModel @Inject constructor(
                 _currentExercise.value = it.exercises[indexExercise.value]
                 _exerciseSets.value = resp.currentExerciseSets ?: _currentExercise.value.numberOfSets
 
-                store.setLocalCurrentExerciseSets(_exerciseSets.value)
-                store.setLocalCurrentExercise(_indexExercise.value)
+                trainHandlers.setCurrentExerciseAndSets(
+                    indexExercise = _indexExercise.value,
+                    sets = _exerciseSets.value
+                )
             }
         }
     }
 
-    fun setExerciseParams(uid: String, listExercises: List<TrainingExercise>) {
+    fun setExerciseParams(uid: String, listExercises: List<TrainingExercise>, navController: NavHostController) {
         viewModelScope.launch {
             _currentExercise.value = listExercises.get(_indexExercise.value)
             _exerciseSets.value = _currentExercise.value.numberOfSets
 
-            trainHandlers.setExerciseParameters(
+            val resp = trainHandlers.setExerciseParameters(
                 uid = uid,
                 listExercises = listExercises,
                 indexExercise = _indexExercise.value,
                 exerciseSets = _currentExercise.value.numberOfSets
             )
+            resp.code?.let { code ->
+                trainHandlers.errorHandler(code, resp.message, navController)
+            }
         }
     }
 
-    fun finishTraining(uid: String) {
+    fun finishTraining(uid: String, navController: NavHostController) {
         viewModelScope.launch {
-            trainHandlers.finishTraining(uid)
+            val resp = trainHandlers.finishTraining(uid)
+            resp.code?.let{ code ->
+                trainHandlers.errorHandler(code, resp.message, navController)
+            }
         }
     }
     fun playFinalSound(context: Context) {

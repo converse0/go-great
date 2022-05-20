@@ -3,11 +3,9 @@ package com.masuta.gogreat.presentation.new_training
 import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.masuta.gogreat.data.store.TrainStore
-import com.masuta.gogreat.domain.handlers.train_handlers.SaveWorkout
-import com.masuta.gogreat.domain.handlers.train_handlers.TrainHandlers
-import com.masuta.gogreat.domain.model.Training
-import com.masuta.gogreat.domain.model.TrainingExercise
+import com.masuta.gogreat.core.handlers.train_handlers.TrainHandlers
+import com.masuta.gogreat.core.model.Training
+import com.masuta.gogreat.core.model.TrainingExercise
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -15,7 +13,6 @@ import javax.inject.Inject
 @HiltViewModel
 class NewTrainingViewModel @Inject constructor(
     private val trainHandlers: TrainHandlers,
-    private val store: TrainStore
 ): ViewModel() {
 
    suspend fun saveTrain(newTrain: Training) {
@@ -24,14 +21,14 @@ class NewTrainingViewModel @Inject constructor(
 
     fun getLocalExercises(list: MutableState<List<TrainingExercise>>) {
         viewModelScope.launch {
-            val data = store.getAllLocalEx()
+            val data = trainHandlers.getAllExercise()
             list.value = data
         }
     }
 
     fun clearLocalExercises() {
         viewModelScope.launch {
-            store.clearLocalExerciseData()
+            trainHandlers.clearExerciseData()
         }
     }
 }

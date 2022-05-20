@@ -1,20 +1,27 @@
 package com.masuta.gogreat.di
 
 import android.content.Context
-import com.masuta.gogreat.data.http.Client
-import com.masuta.gogreat.data.providers.AuthRepositoryImpl
-import com.masuta.gogreat.data.providers.ProfileRepositoryImpl
-import com.masuta.gogreat.data.providers.TrainRepositoryImpl
-import com.masuta.gogreat.data.store.*
-import com.masuta.gogreat.domain.handlers.auth_handlers.AuthHandlers
-import com.masuta.gogreat.domain.handlers.auth_handlers.GetToken
-import com.masuta.gogreat.domain.handlers.auth_handlers.SignIn
-import com.masuta.gogreat.domain.handlers.auth_handlers.SignUp
-import com.masuta.gogreat.domain.handlers.profile_handlers.*
-import com.masuta.gogreat.domain.handlers.train_handlers.*
-import com.masuta.gogreat.domain.repository.AuthRepository
-import com.masuta.gogreat.domain.repository.ProfileRepository
-import com.masuta.gogreat.domain.repository.TrainRepository
+import com.masuta.gogreat.core.handlers.ErrorHandler
+import com.masuta.gogreat.core.http.Client
+import com.masuta.gogreat.core.providers.AuthImpl
+import com.masuta.gogreat.core.providers.ProfileImpl
+import com.masuta.gogreat.core.providers.TrainImpl
+import com.masuta.gogreat.core.service.auth_service.AuthService
+import com.masuta.gogreat.core.service.auth_service.AuthServiceImpl
+import com.masuta.gogreat.core.service.profile_service.ProfileService
+import com.masuta.gogreat.core.service.profile_service.ProfileServiceImpl
+import com.masuta.gogreat.core.service.train_service.TrainService
+import com.masuta.gogreat.core.service.train_service.TrainServiceImpl
+import com.masuta.gogreat.core.store.*
+import com.masuta.gogreat.core.handlers.auth_handlers.AuthHandlers
+import com.masuta.gogreat.core.handlers.auth_handlers.GetToken
+import com.masuta.gogreat.core.handlers.auth_handlers.SignIn
+import com.masuta.gogreat.core.handlers.auth_handlers.SignUp
+import com.masuta.gogreat.core.handlers.profile_handlers.*
+import com.masuta.gogreat.core.handlers.train_handlers.*
+import com.masuta.gogreat.core.providers.Auth
+import com.masuta.gogreat.core.providers.Profile
+import com.masuta.gogreat.core.providers.Train
 import com.masuta.gogreat.utils.ListsValuesForSliders
 import dagger.Module
 import dagger.Provides
@@ -53,20 +60,20 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideAuthRepository(client: Client, @ApplicationContext context: Context): AuthRepository {
-        return AuthRepositoryImpl(client, context)
+    fun provideAuthRepository(client: Client, @ApplicationContext context: Context): Auth {
+        return AuthImpl(client, context)
     }
 
     @Provides
     @Singleton
-    fun provideProfileRepository(client: Client, @ApplicationContext context: Context): ProfileRepository {
-        return ProfileRepositoryImpl(client, context)
+    fun provideProfileRepository(client: Client, @ApplicationContext context: Context): Profile {
+        return ProfileImpl(client, context)
     }
 
     @Provides
     @Singleton
-    fun provideTrainRepository(client: Client, @ApplicationContext context: Context): TrainRepository {
-        return TrainRepositoryImpl(client, context)
+    fun provideTrainRepository(client: Client, @ApplicationContext context: Context): Train {
+        return TrainImpl(client, context)
     }
 
     @Provides
@@ -77,46 +84,65 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideGetToken(store: AuthStore): GetToken {
-        return GetToken(store)
+    fun provideProfileService(repository: Profile, store: ProfileStore): ProfileService {
+        return ProfileServiceImpl(repository, store)
     }
 
     @Provides
     @Singleton
-    fun provideAuthHandlers(store: AuthStore, repository: AuthRepository): AuthHandlers {
+    fun provideAuthService(repository: Auth, store: AuthStore): AuthService {
+        return AuthServiceImpl(repository, store)
+    }
+
+    @Provides
+    @Singleton
+    fun provideTrainService(repository: Train, store: TrainStore): TrainService {
+        return TrainServiceImpl(repository, store)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAuthHandlers(authService: AuthService, @ApplicationContext context: Context): AuthHandlers {
         return AuthHandlers(
-            getToken = GetToken(store),
-            signup = SignUp(repository),
-            signin = SignIn(repository, store)
+            getToken = GetToken(authService),
+            signup = SignUp(authService),
+            signin = SignIn(authService),
+            errorHandler = ErrorHandler(context)
         )
     }
 
     @Provides
     @Singleton
-    fun provideProfileHandlers(store: ProfileStore, repository: ProfileRepository): ProfileHandlers {
+    fun provideProfileHandlers(profileService: ProfileService, @ApplicationContext context: Context): ProfileHandlers {
         return ProfileHandlers(
-            createParameters = CreateParameters(repository),
-            updateParameters = UpdateParameters(repository, store),
-            getParameters = GetParameters(repository, store),
-            uploadImage = UploadImage(repository)
+            createParameters = CreateParameters(profileService),
+            updateParameters = UpdateParameters(profileService),
+            getParameters = GetParameters(profileService),
+            uploadImage = UploadImage(profileService),
+            errorHandler = ErrorHandler(context)
         )
     }
 
     @Provides
     @Singleton
-    fun provideTrainHandlers(store: TrainStore, repository: TrainRepository): TrainHandlers {
+    fun provideTrainHandlers(trainService: TrainService, @ApplicationContext context: Context): TrainHandlers {
         return TrainHandlers(
-            endTraining = EndTraining(repository, store),
-            finishTraining = FinishTraining(repository),
-            startTraining = StartTraining(repository, store),
-            getCurrentWorkout = GetCurrentWorkout(repository, store),
-            getPastWorkouts = GetPastWorkouts(repository, store),
-            getWorkouts = GetWorkouts(repository, store),
-            getTraining = GetTraining(store),
-            getExercisesById = GetExercisesById(repository),
-            saveWorkout = SaveWorkout(repository),
-            setExerciseParameters = SetExerciseParameters(repository, store)
+            endTraining = EndTraining(trainService),
+            finishTraining = FinishTraining(trainService),
+            startTraining = StartTraining(trainService),
+            getCurrentWorkout = GetCurrentWorkout(trainService),
+            getPastWorkouts = GetPastWorkouts(trainService),
+            getWorkouts = GetWorkouts(trainService),
+            getTraining = GetTraining(trainService),
+            getExercisesById = GetExercisesById(trainService),
+            saveWorkout = SaveWorkout(trainService),
+            setExerciseParameters = SetExerciseParameters(trainService),
+            clearExerciseData = ClearExerciseData(trainService),
+            saveExercise = SaveExercise(trainService),
+            getAllExercise = GetAllExercise(trainService),
+            getTrainingByUid = GetTrainingByUid(trainService),
+            setCurrentExerciseAndSets = SetCurrentExerciseAndSets(trainService),
+            errorHandler = ErrorHandler(context)
         )
     }
-
 }

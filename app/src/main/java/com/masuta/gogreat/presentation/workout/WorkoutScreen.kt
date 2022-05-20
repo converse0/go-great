@@ -19,8 +19,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.masuta.gogreat.domain.model.TrainingExercise
-import com.masuta.gogreat.domain.model.gender
+import com.masuta.gogreat.core.model.TrainingExercise
+import com.masuta.gogreat.core.model.gender
 import com.masuta.gogreat.presentation.components.FemalePersonSectionWithPoint
 import com.masuta.gogreat.presentation.components.MainTextButton
 import com.masuta.gogreat.presentation.components.MalePersonSectionWithPoint
@@ -100,7 +100,7 @@ fun WorkoutScreen(
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
         ) {
-            viewModel.startTraining(uid)
+            viewModel.startTraining(uid, navController)
             navController.navigate("start-training/$uid")
         }
     }
