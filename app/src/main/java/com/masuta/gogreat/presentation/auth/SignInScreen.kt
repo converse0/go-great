@@ -12,7 +12,9 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.masuta.gogreat.core.model.userToken
@@ -66,6 +68,7 @@ fun SignInForm(
     navController: NavHostController
 ) {
 
+    val focusManager = LocalFocusManager.current
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -85,6 +88,7 @@ fun SignInForm(
         value = password,
         isPassword = true,
         keyboardController = keyboardController,
+        imeAction = ImeAction.Done,
         onChangeValue = { password = it },
     )
     MainTextButton(
@@ -95,6 +99,7 @@ fun SignInForm(
             .fillMaxWidth()
             .padding(vertical = 40.dp)
     ) {
+        focusManager.clearFocus()
         viewModel.signIn(email, password, navController, context)
     }
     Row(

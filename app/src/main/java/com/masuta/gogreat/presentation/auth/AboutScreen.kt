@@ -12,6 +12,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -167,6 +168,7 @@ fun AboutForm(
                     value = desiredWeight.value,
                     keyboardController = keyboardController,
                     keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Done,
                     onChangeValue = { desiredWeight.value = it},
                 )
             }
