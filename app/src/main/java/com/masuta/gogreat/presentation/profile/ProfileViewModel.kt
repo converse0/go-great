@@ -11,6 +11,8 @@ import androidx.navigation.NavHostController
 import com.masuta.gogreat.core.handlers.auth_handlers.AuthHandlers
 import com.masuta.gogreat.core.handlers.profile_handlers.ProfileHandlers
 import com.masuta.gogreat.core.model.ParametersUser
+import com.masuta.gogreat.core.model.gender
+import com.masuta.gogreat.presentation.setSex
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -89,6 +91,8 @@ class ProfileViewModel @Inject constructor(
            resp.code?.let { code ->
                profileHandlers.errorHandler(code, resp.message, navController)
            } ?: withContext(Dispatchers.Main) {
+               gender = userParams.gender
+               setSex(context = context, gender = userParams.gender)
                    Toast.makeText(
                        context,
                        "Update user parameters Success",
