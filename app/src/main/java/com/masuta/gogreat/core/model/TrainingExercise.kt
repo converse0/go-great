@@ -32,10 +32,6 @@ enum class ExerciseType(val value: Int) {
     PRESS(2),
     BACK(3),
     CHEST(4),
-    SHOULDER(5),
-    TRICEPS(6),
-    BICEPS(7),
-    OTHER(8)
 }
 
 @kotlinx.serialization.Serializable
