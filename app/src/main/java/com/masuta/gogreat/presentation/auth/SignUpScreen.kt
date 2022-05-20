@@ -12,7 +12,9 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.masuta.gogreat.presentation.components.InputTextField
@@ -63,6 +65,7 @@ fun SignUpForm(
 ) {
 
     val context = LocalContext.current
+    val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
 
     var username by remember { mutableStateOf("") }
@@ -106,6 +109,7 @@ fun SignUpForm(
                     value = passwordConfirm,
                     isPassword = true,
                     keyboardController = keyboardController,
+                    imeAction = ImeAction.Done,
                     onChangeValue = { passwordConfirm = it },
                 )
                 Spacer(modifier = Modifier.height(16.dp))
@@ -123,6 +127,7 @@ fun SignUpForm(
                 )
                 .align(Alignment.BottomCenter)
         ) {
+            focusManager.clearFocus()
             viewModel.signUp(username, email, password, passwordConfirm, navController, context)
         }
     }

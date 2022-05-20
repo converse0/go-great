@@ -9,6 +9,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.SoftwareKeyboardController
@@ -28,33 +30,37 @@ fun InputTextField(
     keyboardType: KeyboardType = KeyboardType.Text,
     isPassword: Boolean = false,
     enabled: Boolean = true,
+//    focusManager: FocusManager,
+    imeAction: ImeAction = ImeAction.Next,
     onChangeValue: (String) -> Unit
 ) {
+
+    val focusManager = LocalFocusManager.current
+
     Text(
         text = text,
         style = MaterialTheme.typography.bodySmall,
         fontWeight = FontWeight.Bold,
         color = Color.Black
     )
-    val focusManager = LocalFocusManager.current
-
     OutlinedTextField(
         value = value,
         textStyle = TextStyle(Color.Black),
-        onValueChange = {
-            onChangeValue(it) },
+        onValueChange = { onChangeValue(it) },
         visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None ,
         enabled = enabled,
         modifier = Modifier.fillMaxWidth(),
         keyboardActions = KeyboardActions(
-            onNext = {
+            onDone = {
                 focusManager.clearFocus()
+                keyboardController?.hide()
             },
-            onDone = { focusManager.clearFocus()  }
+            onNext = {
+                focusManager.moveFocus(FocusDirection.Down)
+            }
         ),
-//        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus()  }),
         keyboardOptions = KeyboardOptions.Default.copy(
-            imeAction = ImeAction.Done,
+            imeAction = imeAction,
             keyboardType = keyboardType
         )
     )

@@ -28,8 +28,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
@@ -257,6 +259,7 @@ fun ProfileInfo(
     navController: NavHostController
 ) {
     val context = LocalContext.current
+    val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
 
     val timesEat = remember{ mutableStateOf(userParams.eat.toString()) }
@@ -348,6 +351,7 @@ fun ProfileInfo(
             value = desiredWeight.value,
             keyboardController = keyboardController,
             keyboardType = KeyboardType.Number,
+            imeAction = ImeAction.Done,
             onChangeValue = { desiredWeight.value = it }
         )
 
@@ -358,6 +362,7 @@ fun ProfileInfo(
                 .fillMaxWidth()
                 .padding(vertical = 20.dp)
         ) {
+            focusManager.clearFocus()
             viewModel.updateParams(
                 navController = navController,
                 context = context,
