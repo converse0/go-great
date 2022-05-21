@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        window.setSoftInputMode(WindowManager.LayoutParams.FLAG_LOCAL_FOCUS_MODE);
+        window.setSoftInputMode(WindowManager.LayoutParams.FLAG_LOCAL_FOCUS_MODE)
 
         setContent {
             SportTheme {
