@@ -2,6 +2,7 @@ package com.masuta.gogreat.presentation
 
 import android.content.Context
 import android.os.Bundle
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -37,6 +38,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        window.setSoftInputMode(WindowManager.LayoutParams.FLAG_LOCAL_FOCUS_MODE);
+
         setContent {
             SportTheme {
                 Navigation(
