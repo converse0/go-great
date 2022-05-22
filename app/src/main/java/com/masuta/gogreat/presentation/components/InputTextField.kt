@@ -37,6 +37,8 @@ fun InputTextField(
 
     val focusManager = LocalFocusManager.current
 
+    val visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None
+
     Text(
         text = text,
         style = MaterialTheme.typography.bodySmall,
@@ -47,7 +49,7 @@ fun InputTextField(
         value = value,
         textStyle = TextStyle(Color.Black),
         onValueChange = { onChangeValue(it) },
-        visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None ,
+        visualTransformation = visualTransformation,
         enabled = enabled,
         modifier = Modifier.fillMaxWidth(),
         keyboardActions = KeyboardActions(
