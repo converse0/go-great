@@ -16,6 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.masuta.gogreat.presentation.components.InputTextField
@@ -120,6 +121,7 @@ fun StartTrainingModal(
                             value = numberOfRepetitions.value,
                             keyboardController = keyboardController,
                             onChangeValue = { numberOfRepetitions.value = it },
+                            imeAction = ImeAction.Done,
                             keyboardType = KeyboardType.Number
                         )
                     }

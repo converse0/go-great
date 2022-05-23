@@ -30,7 +30,6 @@ fun InputTextField(
     keyboardType: KeyboardType = KeyboardType.Text,
     isPassword: Boolean = false,
     enabled: Boolean = true,
-//    focusManager: FocusManager,
     imeAction: ImeAction = ImeAction.Next,
     onChangeValue: (String) -> Unit
 ) {
