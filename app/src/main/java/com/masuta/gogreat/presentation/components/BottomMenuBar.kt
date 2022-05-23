@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -23,6 +24,9 @@ fun BottomMenuBar(
     onSelect: (String) -> Unit,
     menuItems: List<BottomNavigationItem>
 ) {
+
+    val focusManager = LocalFocusManager.current
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceAround,
@@ -36,6 +40,7 @@ fun BottomMenuBar(
                 modifier = Modifier
                     .weight(1f)
                     .clickable {
+                        focusManager.clearFocus()
                         onSelect(item.route)
                         navController.navigate(item.route)
                     }
