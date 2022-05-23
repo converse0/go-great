@@ -38,8 +38,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        window.setSoftInputMode(WindowManager.LayoutParams.FLAG_LOCAL_FOCUS_MODE)
-
         setContent {
             SportTheme {
                 Navigation(
@@ -82,8 +80,6 @@ fun getSex(context: Context): Int {
 }
 
 fun setSex(context: Context, gender: Int) {
-//    viewModel: ProfileViewModel,
-//    viewModel.getParameters(gender = gender)
     when (gender) {
         0, 1 -> {
             val sharedPref = context.getSharedPreferences("user", Context.MODE_PRIVATE)
